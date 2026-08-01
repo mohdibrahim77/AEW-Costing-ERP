@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Dashboard — AEW Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;background:#eef2f7;color:#0f172a;-webkit-font-smoothing:antialiased;min-height:100vh}
+/* HEADER */
+.hdr{background:linear-gradient(135deg,#0d1b2a,#1e3a5f);color:#fff;padding:0 32px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,.3)}
+.hdr-l{display:flex;align-items:center;gap:12px}
+.hdr-logo{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#059669,#34d399);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.15)}
+.hdr-name{font-size:14px;font-weight:700;letter-spacing:-.01em}
+.hdr-r{display:flex;align-items:center;gap:10px}
+.uchip{display:flex;align-items:center;gap:8px;padding:5px 12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:20px;font-size:12px;color:rgba(255,255,255,.8)}
+.uav{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff}
+.hdr-btn{padding:6px 14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.8);border-radius:7px;cursor:pointer;font-size:12px;font-weight:500;transition:all .2s;font-family:inherit}
+.hdr-btn:hover{background:rgba(255,255,255,.16);color:#fff}
+/* BODY */
+.body{max-width:1080px;margin:0 auto;padding:32px 24px}
+.welcome{margin-bottom:32px}
+.welcome-tag{font-size:11px;font-weight:700;color:#059669;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.welcome-h{font-size:28px;font-weight:800;color:#0f172a;letter-spacing:-.02em;margin-bottom:4px}
+.welcome-sub{font-size:14px;color:#64748b}
+/* PRODUCT GRID */
+.section-t{font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
+.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px}
+.prod-card{background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;padding:24px;transition:all .2s;cursor:pointer;position:relative;overflow:hidden;text-decoration:none;display:block}
+.prod-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0}
+.pc-g::before{background:linear-gradient(90deg,#059669,#34d399)}
+.pc-a::before{background:linear-gradient(90deg,#d97706,#fbbf24)}
+.pc-b::before{background:linear-gradient(90deg,#2563eb,#60a5fa)}
+.pc-p::before{background:linear-gradient(90deg,#7c3aed,#a78bfa)}
+.prod-card:hover{border-color:#059669;box-shadow:0 8px 30px rgba(5,150,105,.1);transform:translateY(-2px)}
+.prod-card.locked{cursor:not-allowed;opacity:.55}
+.prod-card.locked:hover{transform:none;box-shadow:none;border-color:#e2e8f0}
+.prod-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px}
+.pi-g{background:#ecfdf5}.pi-a{background:#fffbeb}.pi-b{background:#eff6ff}.pi-p{background:#f5f3ff}
+.prod-h{font-size:16px;font-weight:700;color:#0f172a;margin-bottom:6px;letter-spacing:-.01em}
+.prod-p{font-size:13px;color:#64748b;line-height:1.6;margin-bottom:16px}
+.prod-status{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:12px}
+.ps-live{background:#ecfdf5;color:#064e3b}
+.ps-soon{background:#f1f5f9;color:#64748b}
+.prod-arrow{position:absolute;bottom:20px;right:20px;font-size:16px;color:#94a3b8;transition:all .2s}
+.prod-card:not(.locked):hover .prod-arrow{color:#059669;transform:translateX(3px)}
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px}
+.stat{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.stat-l{font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.stat-v{font-size:22px;font-weight:800;color:#0f172a;letter-spacing:-.03em}
+.stat-s{font-size:11px;color:#94a3b8;margin-top:3px}
+/* LOADING */
+#loading{position:fixed;inset:0;background:#0d1b2a;display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column;gap:16px}
+.load-logo{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#1e3a5f,#059669);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.1),0 8px 24px rgba(5,150,105,.4);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.load-t{font-size:14px;font-weight:500;color:rgba(255,255,255,.5);font-family:'Inter',sans-serif}
+@media(max-width:768px){.prod-grid{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}}
+@media(max-width:500px){.prod-grid,.stats{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- LOADING OVERLAY (shown until auth check completes) -->
+<div id="loading">
+  <div class="load-logo">A</div>
+  <div class="load-t">Loading your dashboard...</div>
+</div>
+
+<header class="hdr" id="hdr" style="display:none">
+  <div class="hdr-l">
+    <div class="hdr-logo">A</div>
+    <div class="hdr-name">AEW Manufacturing Intelligence</div>
+  </div>
+  <div class="hdr-r">
+    <div class="uchip">
+      <div class="uav" id="uav" style="background:#059669">A</div>
+      <span id="uname">Loading...</span>
+    </div>
+    <button class="hdr-btn" onclick="signOut()">Sign out</button>
+  </div>
+</header>
+
+<div class="body" id="body" style="display:none">
+  <div class="welcome">
+    <div class="welcome-tag" id="company-tag">Your Company</div>
+    <div class="welcome-h">Welcome back, <span id="first-name">there</span>. 👋</div>
+    <div class="welcome-sub" id="welcome-sub">Here are your tools and dashboards.</div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-l">Products Active</div><div class="stat-v" id="stat-products">0</div><div class="stat-s">in your account</div></div>
+    <div class="stat"><div class="stat-l">Quotations</div><div class="stat-v">—</div><div class="stat-s">coming soon</div></div>
+    <div class="stat"><div class="stat-l">Last Login</div><div class="stat-v" id="stat-login">—</div><div class="stat-s">your account</div></div>
+    <div class="stat"><div class="stat-l">Account Role</div><div class="stat-v" id="stat-role">—</div><div class="stat-s">access level</div></div>
+  </div>
+
+  <div class="section-t">Your Products</div>
+  <div class="prod-grid" id="prod-grid"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="assets/js/config.js?v=2026.07.31-2"></script>
+<script src="assets/js/supabase.js?v=2026.07.31-2"></script>
+<script src="assets/js/session.js?v=2026.07.31-2"></script>
+<script src="assets/js/router.js?v=2026.07.31-2"></script>
+<script src="assets/js/auth.js?v=2026.07.31-2"></script>
+<script src="assets/js/ui.js?v=2026.07.31-2"></script>
+<script src="assets/js/api.js?v=2026.07.31-2"></script>
+<script src="assets/js/common.js?v=2026.07.31-2"></script>
+<script>
+/* dashboard.html */
+var _PRODS = {
+  costing:  { label:'Product Costing ERP',    icon:'₹', desc:'Calculates costs from dimensions. PDF quotations in 30 seconds.',  live:true,  cc:'pc-g', ic:'pi-g' },
+  cbam:     { label:'Carbon Tracking (CBAM)', icon:'CO₂', desc:'CBAM carbon footprint per tonne. EU compliance declaration PDF.', live:false, cc:'pc-a', ic:'pi-a' },
+  vibration:{ label:'Vibration AI',           icon:'~',      desc:'Upload an FFT photo. AI identifies faults before machines fail.',  live:false, cc:'pc-b', ic:'pi-b' },
+  asset:    { label:'Asset Management',       icon:'⚙', desc:'QR codes per machine. Maintenance history. Depreciation.',         live:false, cc:'pc-p', ic:'pi-p' }
+};
+
+document.addEventListener('DOMContentLoaded', function () {
+  AEW.auth.requireAuth(function (user) { renderDashboard(user); });
+});
+
+function renderDashboard(user) {
+  var meta    = (user && user.user_metadata) || {};
+  var name    = meta.name    || (user && user.email) || 'User';
+  var first   = name.split(' ')[0];
+  var company = meta.company || 'Your Company';
+  var role    = meta.role    || 'viewer';
+  var prods   = Array.isArray(meta.products) ? meta.products : ['costing'];
+  var avatar  = meta.avatar  || first[0].toUpperCase();
+  var color   = meta.color   || '#059669';
+
+  AEW.ui.setText('uname', name);       AEW.ui.setText('uav', avatar);
+  AEW.ui.setStyle('uav','background',color);
+  AEW.ui.setText('company-tag', company); AEW.ui.setText('first-name', first);
+  AEW.ui.setText('welcome-sub',
+    company + ' · ' + role[0].toUpperCase() + role.slice(1) +
+    ' · ' + prods.length + ' product' + (prods.length > 1 ? 's' : '') + ' active');
+  AEW.ui.setText('stat-products', prods.length);
+  AEW.ui.setText('stat-role', role[0].toUpperCase() + role.slice(1));
+  AEW.ui.setText('stat-login', new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short'}));
+
+  var isAdmin = (role === 'admin');
+  var keys    = isAdmin ? Object.keys(_PRODS) : prods;
+  var routes  = window.AEW.config.ROUTES.products;
+  var grid    = document.getElementById('prod-grid');
+  if (!grid) { showApp(); return; }
+
+  grid.innerHTML = keys.map(function (key) {
+    var p   = _PRODS[key]; if (!p) return '';
+    var has = isAdmin || (prods.indexOf(key) !== -1);
+    var locked = !has || !p.live;
+    var href   = locked ? '#' : (routes[key] || '#');
+    var oc = '';
+    if (!has)       oc = ' onclick="lockedAlert(event)"';
+    else if (!p.live) oc = ' onclick="event.preventDefault()"';
+    var badge = p.live && has ? 'Active' : p.live ? 'Locked' : 'Coming Soon';
+    var bClass = p.live && has ? 'ps-live' : 'ps-soon';
+    return '<a href="' + href + '" class="prod-card ' + p.cc + (locked ? ' locked' : '') + '"' + oc + '>' +
+      '<div class="prod-icon ' + p.ic + '">' + p.icon + '</div>' +
+      '<div class="prod-h">' + p.label + '</div>' +
+      '<div class="prod-p">' + p.desc  + '</div>' +
+      '<span class="prod-status ' + bClass + '">' + badge + '</span>' +
+      (!locked ? '<div class="prod-arrow">→</div>' : '') + '</a>';
+  }).join('');
+  showApp();
+}
+
+function lockedAlert(e) { e.preventDefault(); alert('Not in your plan. Contact AEW to upgrade.'); }
+function showApp() {
+  AEW.ui.hide('loading'); AEW.ui.show('hdr','flex'); AEW.ui.show('body','block');
+}
+function doSignOut() { AEW.auth.logout(); }
+window.doSignOut   = doSignOut;
+window.signOut     = doSignOut;
+window.lockedAlert = lockedAlert;
+</script>
+</body>
+</html>

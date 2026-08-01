@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Asset Management — AEW</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,system-ui,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0d1b2a,#1e3a5f);color:#fff}#loading{position:fixed;inset:0;background:#0d1b2a;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px}.sp{width:40px;height:40px;border:3px solid rgba(255,255,255,.1);border-top-color:#34d399;border-radius:50%;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.lt{font-size:13px;color:rgba(255,255,255,.4)}.box{text-align:center;padding:48px;display:none}.ico{font-size:52px;margin-bottom:24px}h1{font-size:28px;font-weight:800;margin-bottom:10px}p{font-size:15px;color:rgba(255,255,255,.5);max-width:380px;line-height:1.7;margin:0 auto 32px}.btn{padding:12px 24px;background:linear-gradient(135deg,#059669,#047857);color:#fff;border-radius:10px;font-size:14px;font-weight:700;border:none;cursor:pointer;font-family:inherit}</style></head><body>
+<div id="loading"><div class="sp"></div><div class="lt">Verifying session...</div></div>
+<div class="box" id="content"><div class="ico">⚙</div><h1>Asset Management</h1><p>Asset management is being built. You will be notified when it is ready.</p><button class="btn" onclick="goBack()">Back to Dashboard</button></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../../assets/js/config.js?v=2026.07.31-2"></script>
+<script src="../../assets/js/supabase.js?v=2026.07.31-2"></script>
+<script src="../../assets/js/session.js?v=2026.07.31-2"></script>
+<script src="../../assets/js/router.js?v=2026.07.31-2"></script>
+<script src="../../assets/js/auth.js?v=2026.07.31-2"></script>
+<script src="../../assets/js/ui.js?v=2026.07.31-2"></script>
+<script src="../../assets/js/api.js?v=2026.07.31-2"></script>
+<script src="../../assets/js/common.js?v=2026.07.31-2"></script>
+<script>
+/* asset placeholder */
+document.addEventListener('DOMContentLoaded', function () {
+  AEW.auth.requireAuth(function (user) {
+    AEW.ui.hide('loading');
+    AEW.ui.show('content', 'block');
+  });
+});
+function goBack() { AEW.router.gotoDashboard(); }
+window.goBack = goBack;
+</script>
+</body>
+</html>

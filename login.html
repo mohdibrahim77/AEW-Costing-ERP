@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Sign In — AEW Manufacturing Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;min-height:100vh;display:flex;background:#0d1b2a;-webkit-font-smoothing:antialiased}
+.left{flex:1;display:flex;flex-direction:column;padding:48px;position:relative;overflow:hidden}
+.lbg{position:absolute;inset:0;background:linear-gradient(135deg,#0d1b2a 0%,#1e3a5f 100%)}
+.lbg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 20%,rgba(5,150,105,.12) 0%,transparent 60%)}
+.lc{position:absolute;border-radius:50%;animation:pulse 8s ease-in-out infinite}
+.lc1{width:500px;height:500px;background:rgba(5,150,105,.05);top:-200px;right:-150px}
+.lc2{width:300px;height:300px;background:rgba(37,99,235,.05);bottom:-100px;left:-80px;animation-delay:3s}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.lz{position:relative;z-index:1;display:flex;flex-direction:column;height:100%;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-m{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#1e3a5f,#059669);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.1),0 6px 16px rgba(5,150,105,.4)}
+.logo-t{font-size:20px;font-weight:800;color:#fff;letter-spacing:-.02em}
+.logo-s{font-size:11px;color:rgba(255,255,255,.4);font-weight:400;display:block;margin-top:-2px}
+.lmid{padding:40px 0}
+.lm-tag{font-size:11px;font-weight:700;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.1em;margin-bottom:20px}
+.lm-h{font-size:36px;font-weight:800;color:#fff;line-height:1.15;letter-spacing:-.03em;margin-bottom:14px}
+.lm-h em{color:#34d399;font-style:normal}
+.lm-p{font-size:15px;color:rgba(255,255,255,.5);line-height:1.7;max-width:380px}
+.feats{display:flex;flex-direction:column;gap:14px;margin-top:36px}
+.feat{display:flex;align-items:flex-start;gap:14px}
+.fi{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;margin-top:1px}
+.ft h4{font-size:13px;font-weight:600;color:#fff;margin-bottom:2px}
+.ft p{font-size:12px;color:rgba(255,255,255,.4);line-height:1.5}
+.lbot{border-top:1px solid rgba(255,255,255,.08);padding-top:24px;display:flex;gap:20px}
+.lbot a{font-size:12px;color:rgba(255,255,255,.3);text-decoration:none;transition:color .15s}
+.lbot a:hover{color:rgba(255,255,255,.6)}
+.right{width:480px;background:#fff;display:flex;align-items:center;justify-content:center;padding:48px}
+.ri{width:100%;max-width:380px}
+.back{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#64748b;margin-bottom:36px;text-decoration:none;transition:color .15s}
+.back:hover{color:#0d1b2a}
+.back::before{content:'←';font-size:14px}
+.form-t{font-size:26px;font-weight:800;color:#0f172a;letter-spacing:-.03em;margin-bottom:4px}
+.form-s{font-size:14px;color:#64748b;margin-bottom:28px;line-height:1.5}
+.alert{border-radius:10px;padding:12px 14px;font-size:13px;margin-bottom:18px;display:none;align-items:center;gap:10px;line-height:1.5}
+.a-err{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c}
+.a-ok{background:#f0fdf4;border:1px solid #a7f3d0;color:#064e3b}
+.a-warn{background:#fffbeb;border:1.5px dashed #fde68a;color:#92400e}
+.field{margin-bottom:18px}
+.field label{display:block;font-size:11px;font-weight:700;color:#374151;letter-spacing:.04em;text-transform:uppercase;margin-bottom:7px}
+.field input{width:100%;padding:11px 14px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:14px;font-weight:500;color:#0f172a;font-family:inherit;transition:all .15s;background:#fff}
+.field input:focus{outline:none;border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,.1)}
+.field input.ferr{border-color:#dc2626;box-shadow:0 0 0 3px rgba(220,38,38,.1)}
+.field input::placeholder{color:#94a3b8;font-weight:400}
+.row{display:flex;justify-content:flex-end;margin-top:-12px;margin-bottom:20px}
+.fgt{font-size:12px;color:#64748b;text-decoration:none;font-weight:500;transition:color .15s}
+.fgt:hover{color:#059669}
+.sbtn{width:100%;padding:13px;border:none;border-radius:10px;font-size:15px;font-weight:700;color:#fff;background:linear-gradient(135deg,#059669,#047857);cursor:pointer;font-family:inherit;box-shadow:0 4px 16px rgba(5,150,105,.3);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.sbtn:hover:not(:disabled){box-shadow:0 6px 24px rgba(5,150,105,.45);transform:translateY(-1px)}
+.sbtn:disabled{opacity:.7;cursor:not-allowed;transform:none}
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none}
+.sbtn.loading .spinner{display:block}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sec{display:flex;align-items:center;justify-content:center;gap:8px;font-size:11px;color:#94a3b8;margin-top:20px}
+@media(max-width:900px){.left{display:none}.right{width:100%}}
+</style>
+</head>
+<body>
+
+<div class="left">
+  <div class="lbg"><div class="lc lc1"></div><div class="lc lc2"></div></div>
+  <div class="lz">
+    <div class="logo"><div class="logo-m">A</div><div class="logo-t">AEW<span class="logo-s">Manufacturing Intelligence</span></div></div>
+    <div class="lmid">
+      <div class="lm-tag">Built for Peenya factories</div>
+      <div class="lm-h">The costing tool<br>your factory <em>deserves.</em></div>
+      <p class="lm-p">Professional product costing, CBAM carbon tracking, and predictive maintenance — built for how Indian factories actually work.</p>
+      <div class="feats">
+        <div class="feat"><div class="fi">₹</div><div class="ft"><h4>Product Costing ERP</h4><p>Auto-calculates from dimensions. Professional PDF quotations in 30 seconds.</p></div></div>
+        <div class="feat"><div class="fi">🌿</div><div class="ft"><h4>CBAM Carbon Tracking</h4><p>Get your EU carbon number. Stop losing contracts over missing data.</p></div></div>
+        <div class="feat"><div class="fi">〜</div><div class="ft"><h4>Vibration AI</h4><p>Photograph the graph. AI diagnoses faults before machines fail.</p></div></div>
+      </div>
+    </div>
+    <div class="lbot"><a href="index.html">← Home</a><a href="mailto:hello@aew.in">Contact</a><a href="#">Privacy</a></div>
+  </div>
+</div>
+
+<div class="right">
+  <div class="ri">
+    <a href="index.html" class="back">Back to home</a>
+    <div class="form-t">Sign in</div>
+    <div class="form-s">Access your factory's tools and dashboards.</div>
+
+    <div class="alert a-warn" id="a-setup" style="display:flex">
+      <span>⚙</span>
+      <div><strong>Setup needed:</strong> Connect Supabase to enable secure login. Open <code style="background:#fef3c7;padding:1px 5px;border-radius:3px;font-size:11px">SETUP_GUIDE.md</code> for step-by-step instructions.</div>
+    </div>
+    <div class="alert a-err" id="a-err"><span>⚠</span><span id="err-msg">Incorrect email or password.</span></div>
+    <div class="alert a-ok" id="a-ok"><span>✓</span><span id="ok-msg">Signed in. Redirecting...</span></div>
+
+    <div class="field"><label>Email</label><input id="email" type="email" placeholder="you@yourfactory.com" autocomplete="email"></div>
+    <div class="field"><label>Password</label><input id="password" type="password" placeholder="Enter your password" autocomplete="current-password" onkeydown="if(event.key==='Enter')signIn()"></div>
+    <div class="row"><a href="#" class="fgt" id="fgt-link">Forgot password?</a></div>
+
+    <button class="sbtn" id="sbtn" onclick="signIn()">
+      <div class="spinner" id="spinner"></div>
+      <span id="btn-text">Sign in →</span>
+    </button>
+
+    <div class="sec">🔒 Passwords encrypted · Secured by Supabase · Never visible in source code</div>
+    <div class="sec" id="build-stamp" style="opacity:.45;font-size:11px;margin-top:6px"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="assets/js/config.js?v=2026.07.31-2"></script>
+<script src="assets/js/supabase.js?v=2026.07.31-2"></script>
+<script src="assets/js/session.js?v=2026.07.31-2"></script>
+<script src="assets/js/router.js?v=2026.07.31-2"></script>
+<script src="assets/js/auth.js?v=2026.07.31-2"></script>
+<script src="assets/js/ui.js?v=2026.07.31-2"></script>
+<script src="assets/js/api.js?v=2026.07.31-2"></script>
+<script src="assets/js/common.js?v=2026.07.31-2"></script>
+<script>
+/* login.html */
+document.addEventListener('DOMContentLoaded', function () {
+  AEW.ui.hide('a-setup');
+
+  /* Show which build is running, so a stale cached copy is obvious */
+  AEW.ui.setText('build-stamp', 'build ' + AEW.config.BUILD);
+  console.info('[AEW:login] Sign-in form shown. Credentials are required — ' +
+               'this page never navigates on load.');
+
+  AEW.auth.checkExistingSession();
+
+  var emailEl = document.getElementById('email');
+  var passEl  = document.getElementById('password');
+  var fgtLink = document.getElementById('fgt-link');
+
+  if (emailEl) emailEl.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); if (passEl) passEl.focus(); }
+  });
+  if (passEl) passEl.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); doSignIn(); }
+  });
+  if (fgtLink) fgtLink.addEventListener('click', function (e) {
+    e.preventDefault(); doForgotPwd();
+  });
+});
+
+function doSignIn() {
+  var email = (document.getElementById('email').value || '').trim();
+  var pass  =  document.getElementById('password').value || '';
+  _clearAlerts(); AEW.ui.clearFieldErrors();
+  if (!email) { _fieldErr('email',    'Enter your email address.'); return; }
+  if (!pass)  { _fieldErr('password', 'Enter your password.');      return; }
+  AEW.ui.setLoading('sbtn', 'spinner', 'btn-text', true, 'Sign in');
+  AEW.auth.login(email, pass).then(function (r) {
+    if (r.error) {
+      AEW.ui.setLoading('sbtn', 'spinner', 'btn-text', false, 'Sign in');
+      _fieldErr('password', 'Incorrect email or password.');
+      var p = document.getElementById('password'); if (p) p.value = '';
+      return;
+    }
+    AEW.router.routeUser(r.data.user);
+  });
+}
+
+function doForgotPwd() {
+  var email = (document.getElementById('email').value || '').trim();
+  if (!email) { _fieldErr('email', 'Enter your email address first.'); return; }
+  AEW.auth.sendPasswordReset(email).then(function (r) {
+    _clearAlerts();
+    if (r && r.error) {
+      AEW.ui.show('a-err','flex'); AEW.ui.setText('err-msg','Could not send reset email. Try again.');
+    } else {
+      AEW.ui.show('a-ok','flex'); AEW.ui.setText('ok-msg','Reset email sent — check your inbox.');
+    }
+  });
+}
+
+function _fieldErr(id, msg) {
+  AEW.ui.markFieldError(id); AEW.ui.show('a-err','flex');
+  AEW.ui.setText('err-msg', msg);
+  var el = document.getElementById(id); if (el) el.focus();
+}
+function _clearAlerts() {
+  AEW.ui.hide('a-err'); AEW.ui.hide('a-ok'); AEW.ui.hide('a-setup');
+  AEW.ui.clearFieldErrors();
+}
+/* Expose for the onclick= / onkeydown= attributes in the markup above.
+   Both names are bound: the markup calls signIn(), and doSignIn is kept
+   for any code that references it. A missing binding here silently
+   disables the Sign In button — see tests/handlers.js, which guards it. */
+window.doSignIn = doSignIn;
+window.signIn   = doSignIn;
+window.forgotPassword = doForgotPwd;
+</script>
+</body>
+</html>
