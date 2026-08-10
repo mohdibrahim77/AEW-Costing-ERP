@@ -1,0 +1,12 @@
+{
+  "name": "aew-platform-tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Test suite for the AEW Manufacturing Intelligence Platform. Testing only — the application itself has zero dependencies and no build step.",
+  "scripts": {
+    "test": "bash run-all.sh"
+  },
+  "devDependencies": {
+    "jsdom": "^24.0.0"
+  }
+}

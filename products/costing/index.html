@@ -1,0 +1,2927 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>HISPL — Hydraulic Cylinder Costing ERP v4</title>
+<script>
+/* Error capture. Installed before every other script so it observes
+   parse failures in the blocks that follow. A script that fails to
+   parse never runs, and its functions never reach global scope — the
+   exact symptom of "updHdr is not defined" while the page still
+   renders. This records what the browser actually objected to. */
+window.__aewErrors = [];
+window.addEventListener('error', function (e) {
+  window.__aewErrors.push({
+    message: e.message || String(e.error || 'unknown'),
+    file:    (e.filename || '').split('/').pop(),
+    line:    e.lineno,
+    col:     e.colno,
+    stack:   e.error && e.error.stack ? String(e.error.stack).split('\n')[0] : ''
+  });
+}, true);
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../../assets/js/config.js?v=2026.08.02-1"></script>
+<script src="../../assets/js/supabase.js?v=2026.08.02-1"></script>
+<script src="../../assets/js/session.js?v=2026.08.02-1"></script>
+<script src="../../assets/js/router.js?v=2026.08.02-1"></script>
+<script src="../../assets/js/auth.js?v=2026.08.02-1"></script>
+<script src="../../assets/js/ui.js?v=2026.08.02-1"></script>
+<script src="../../assets/js/api.js?v=2026.08.02-1"></script>
+<script src="../../assets/js/common.js?v=2026.08.02-1"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+[data-theme="light"]{--bg:#eef2f7;--surf:#fff;--surf2:#f8fafc;--txt:#0f172a;--txt2:#334155;--mut:#64748b;--brd:#e2e8f0;--brds:#cbd5e1;--inp:#fff;--sh:0 1px 3px rgba(0,0,0,.08);--shm:0 4px 12px rgba(0,0,0,.08);--shl:0 20px 40px rgba(0,0,0,.12)}
+[data-theme="dark"]{--bg:#0a0f1a;--surf:#111827;--surf2:#1f2937;--txt:#f9fafb;--txt2:#e5e7eb;--mut:#9ca3af;--brd:#374151;--brds:#4b5563;--inp:#1f2937;--sh:0 1px 3px rgba(0,0,0,.3);--shm:0 4px 12px rgba(0,0,0,.3);--shl:0 20px 40px rgba(0,0,0,.5)}
+:root{--p1:#0d1b2a;--p2:#1e3a5f;--p3:#2563eb;--gr:#059669;--gr-l:#ecfdf5;--gr-d:#064e3b;--gr-m:#34d399;--am:#d97706;--am-l:#fffbeb;--am-d:#78350f;--rd:#dc2626;--rd-l:#fef2f2;--bl-l:#eff6ff;--r4:4px;--r8:8px;--r12:12px;--r16:16px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',system-ui,sans-serif;font-size:13px;background:var(--bg);color:var(--txt);line-height:1.5;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s}
+input,select,button{font-family:inherit;font-size:13px;color:var(--txt)}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-thumb{background:var(--brds);border-radius:10px}
+/* HEADER */
+#app{display:none;min-height:100vh}
+.hdr{background:linear-gradient(135deg,var(--p1) 0%,#152237 50%,var(--p2) 100%);color:#fff;padding:0 20px;display:flex;align-items:center;justify-content:space-between;min-height:56px;position:sticky;top:0;z-index:200;box-shadow:0 2px 20px rgba(0,0,0,.4)}
+.hdr-l{display:flex;align-items:center;gap:12px}
+.hdr-logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--gr),var(--gr-m));display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.15),0 4px 10px rgba(5,150,105,.4)}
+.hdr-n{font-size:14px;font-weight:700;color:#fff;letter-spacing:-.01em}
+.hdr-s{font-size:10px;color:rgba(255,255,255,.45)}
+.hdr-r{display:flex;align-items:center;gap:8px}
+.hdr-inq{font-size:11px;color:rgba(255,255,255,.5);padding-right:12px;border-right:1px solid rgba(255,255,255,.1)}
+.hdr-inq strong{color:rgba(255,255,255,.85)}
+.hb{padding:6px 12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.8);border-radius:var(--r8);cursor:pointer;font-size:11px;font-weight:500;transition:all .2s;display:flex;align-items:center;gap:5px}
+.hb:hover{background:rgba(255,255,255,.16);color:#fff}
+.uchip{display:flex;align-items:center;gap:8px;padding:5px 10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:20px;font-size:11px;color:rgba(255,255,255,.8)}
+.uav{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--gr),var(--gr-m));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff}
+/* NAV */
+.nwrap{background:var(--surf);border-bottom:1px solid var(--brd);position:sticky;top:56px;z-index:100;box-shadow:var(--sh)}
+.nav{display:flex;overflow-x:auto;padding:0 16px;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.ntab{padding:12px 13px;font-size:11px;font-weight:500;color:var(--mut);cursor:pointer;border:none;background:none;border-bottom:2.5px solid transparent;white-space:nowrap;transition:all .18s;display:flex;align-items:center;gap:5px}
+.ntab:hover{color:var(--p3)}
+.ntab.active{color:var(--p3);border-bottom-color:var(--p3);font-weight:700}
+.ndot{width:5px;height:5px;border-radius:50%;background:var(--brds);transition:background .2s}
+.done .ndot{background:var(--gr)}
+/* PANELS */
+.panel{display:none;padding:16px 20px;max-width:1140px;margin:0 auto}
+.panel.active{display:block;animation:fu .2s ease}
+@keyframes fu{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+/* CARDS */
+.card{background:var(--surf);border:1px solid var(--brd);border-radius:var(--r12);padding:16px 18px;margin-bottom:12px;box-shadow:var(--sh);transition:all .3s}
+.card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--brd)}
+.ct{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--p2);display:flex;align-items:center;gap:7px}
+[data-theme="dark"] .ct{color:#93c5fd}
+.ci{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.ci-b{background:#dbeafe;color:#1d4ed8}[data-theme="dark"] .ci-b{background:#1e3a5f;color:#93c5fd}
+.ci-g{background:var(--gr-l);color:var(--gr-d)}[data-theme="dark"] .ci-g{background:#064e3b;color:#6ee7b7}
+.ci-a{background:var(--am-l);color:var(--am-d)}[data-theme="dark"] .ci-a{background:#451a03;color:#fbbf24}
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:.04em}
+.b-a{background:var(--gr-l);color:var(--gr-d)}[data-theme="dark"] .b-a{background:#064e3b;color:#6ee7b7}
+.b-m{background:var(--am-l);color:var(--am-d)}[data-theme="dark"] .b-m{background:#451a03;color:#fbbf24}
+.b-i{background:var(--bl-l);color:#1d4ed8}[data-theme="dark"] .b-i{background:#1e3a5f;color:#93c5fd}
+/* GRID */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+@media(max-width:900px){.g4,.g5{grid-template-columns:1fr 1fr 1fr}}
+@media(max-width:600px){.g2,.g3,.g4,.g5{grid-template-columns:1fr 1fr}}
+/* FIELDS */
+.field{display:flex;flex-direction:column;gap:3px}
+.field label{font-size:11px;font-weight:600;color:var(--mut);letter-spacing:.02em;display:flex;align-items:center;gap:4px}
+.hint{font-weight:400;color:#94a3b8;font-size:10px}
+.fi{width:100%;padding:7px 10px;border:1.5px solid var(--brd);border-radius:var(--r8);background:var(--inp);color:var(--txt);transition:all .15s;height:33px}
+.fi:focus{outline:none;border-color:var(--p3);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+.fi-a{background:var(--gr-l);border-color:#a7f3d0;color:var(--gr-d);font-weight:600}
+/* CALCULATED — the ERP fills and locks these. Grey and not clickable so
+   they never look like a field you are supposed to type into. */
+.fi-a[readonly]{background:#f1f5f9;border-color:#cbd5e1;color:#475569;cursor:not-allowed;font-weight:600}
+/* SUGGESTED — a sensible starting value you are expected to change. */
+.fi-s{background:#fffbeb;border-color:#fcd34d;color:#92400e;font-weight:600}
+.fi-s:focus{background:#fff;border-color:#f59e0b}
+/* Legend shown at the top of each panel. */
+.lgd{display:flex;gap:16px;flex-wrap:wrap;align-items:center;margin:0 0 14px;padding:9px 13px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;font-size:11.5px;color:#475569}
+.lgd b{font-weight:700;color:#0f172a}
+.lgd i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px;border:1px solid;font-style:normal}
+.lgd .i-calc{background:#f1f5f9;border-color:#cbd5e1}
+.lgd .i-sugg{background:#fffbeb;border-color:#fcd34d}
+.lgd .i-you{background:#fff;border-color:#cbd5e1}
+[data-theme="dark"] .fi-a[readonly]{background:#1e293b;border-color:#334155;color:#94a3b8}
+[data-theme="dark"] .fi-s{background:#422006;border-color:#a16207;color:#fcd34d}
+[data-theme="dark"] .lgd{background:#1e293b;border-color:#334155;color:#94a3b8}
+/* Auto fields are calculated for you. Those that are readonly are truly
+   locked; the rest may be overridden by typing. pointer-events:none was
+   removed because it also blocked the four that ARE editable. */
+.fi-a[readonly]{cursor:not-allowed;opacity:.9}
+.fi-a:not([readonly]){cursor:text}
+.fi-a:not([readonly]):focus{background:#fff;border-color:var(--bl);box-shadow:0 0 0 3px rgba(37,99,235,.12);color:var(--tx)}
+.fi-a.overridden{background:#fef9c3;border-color:#facc15;color:#854d0e}[data-theme="dark"] .fi-a{background:#064e3b;border-color:#065f46;color:#6ee7b7}
+.fi-c{background:var(--am-l);border-color:#fde68a;color:var(--am-d);font-weight:700;pointer-events:none}[data-theme="dark"] .fi-c{background:#451a03;border-color:#92400e;color:#fbbf24}
+.fi-t{background:linear-gradient(135deg,var(--p1),var(--p2));border-color:var(--p2);color:#fff;font-weight:800;font-size:15px;pointer-events:none}
+.fi-sm{width:60px!important}.fi-md{width:76px!important}
+.ftag{font-size:10px;font-family:monospace;color:var(--gr-d);background:var(--gr-l);border:1px solid #a7f3d0;padding:3px 8px;border-radius:3px;line-height:1.6;display:inline-block;margin-top:3px}
+[data-theme="dark"] .ftag{color:#6ee7b7;background:#064e3b;border-color:#065f46}
+.mt8{margin-top:8px}.mt12{margin-top:12px}.divider{height:1px;background:var(--brd);margin:12px 0}
+/* INFO & FORMULA */
+.ib{display:flex;gap:8px;align-items:flex-start;background:var(--bl-l);border:1px solid #bfdbfe;border-radius:var(--r8);padding:10px 13px;font-size:12px;color:#1e40af;margin-bottom:12px;line-height:1.6}
+[data-theme="dark"] .ib{background:#1e3a5f;border-color:#2563eb;color:#93c5fd}
+.fbox{background:var(--gr-l);border:1px solid #a7f3d0;border-radius:var(--r8);padding:11px 14px;font-size:11px;color:var(--gr-d);margin-bottom:12px;font-family:monospace;line-height:1.9}
+[data-theme="dark"] .fbox{background:#064e3b;border-color:#065f46;color:#6ee7b7}
+.fbox strong{font-family:'Inter',sans-serif;font-size:10px;letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:4px;color:var(--gr)}
+/* PROCESS TABLE */
+.ptbl{width:100%;border-collapse:separate;border-spacing:0;font-size:11px}
+.ptbl thead th{padding:8px 10px;background:var(--p1);color:rgba(255,255,255,.85);font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;border:none;text-align:left}
+.ptbl thead th:first-child{border-radius:var(--r8) 0 0 0}
+.ptbl thead th:last-child{border-radius:0 var(--r8) 0 0;text-align:right}
+.ptbl tbody tr:nth-child(even){background:var(--surf2)}
+.ptbl tbody tr:hover{background:var(--bl-l)}[data-theme="dark"] .ptbl tbody tr:hover{background:#1e3a5f}
+.ptbl tbody td{padding:7px 10px;border-bottom:1px solid var(--brd);vertical-align:middle}
+.ptbl tbody td:last-child{text-align:right;font-weight:700}
+.ptbl td input,.ptbl td select{border:1.5px solid transparent;border-radius:4px;padding:3px 5px;background:transparent;color:var(--txt);transition:all .15s;width:100%;font-size:11px}
+.ptbl td input:focus,.ptbl td select:focus{background:var(--inp);border-color:var(--p3);outline:none;box-shadow:0 0 0 2px rgba(37,99,235,.1)}
+.rsub td{background:var(--surf2);font-weight:700;color:var(--p2);border-top:2px solid var(--brds);font-size:13px}
+[data-theme="dark"] .rsub td{color:#93c5fd}
+.rsub td:last-child{color:var(--am)}
+.rtot td{background:linear-gradient(135deg,var(--p1),#1e3a5f);color:#fff;font-weight:800;font-size:13px;padding:11px 10px}
+.rtot td:last-child{font-size:16px;color:var(--gr-m);text-align:right}
+.va{color:var(--gr);font-weight:600}.vc{color:var(--am);font-weight:700;font-size:12px}.vn{color:#94a3b8;font-size:10px;font-style:italic}
+/* KPI */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.kpi{background:var(--surf);border:1px solid var(--brd);border-radius:var(--r12);padding:14px 16px;box-shadow:var(--sh);position:relative;overflow:hidden}
+.kpi::after{content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:var(--r12) var(--r12) 0 0}
+.kpi-a::after{background:linear-gradient(90deg,var(--am),#fbbf24)}
+.kpi-g::after{background:linear-gradient(90deg,var(--gr),var(--gr-m))}
+.kpi-b::after{background:linear-gradient(90deg,var(--p3),#60a5fa)}
+.kl{font-size:10px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.kv{font-size:21px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.kv.g{color:var(--gr)}.kv.a{color:var(--am)}.kv.b{color:var(--p3)}
+.ks{font-size:11px;color:var(--mut);margin-top:5px}
+/* SUMMARY */
+.sbl{background:var(--surf);border:1px solid var(--brd);border-radius:var(--r12);overflow:hidden;box-shadow:var(--sh);margin-bottom:10px}
+.sr{display:flex;justify-content:space-between;align-items:center;padding:9px 16px;border-bottom:1px solid var(--brd);font-size:12px}
+.sr:last-child{border-bottom:none}
+.sri{padding-left:28px;background:var(--surf2);color:var(--mut)}
+.srh{background:linear-gradient(90deg,var(--bl-l),var(--surf));color:var(--p2);font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.07em;padding:7px 16px;border-left:3px solid var(--p3)}
+[data-theme="dark"] .srh{background:linear-gradient(90deg,#1e3a5f,var(--surf));color:#93c5fd}
+.srsb{font-weight:700;background:var(--surf2);border-top:2px solid var(--brds);color:var(--p2)}
+[data-theme="dark"] .srsb{color:#93c5fd}
+.srt{font-weight:700;font-size:14px;color:var(--p2);background:var(--bl-l);padding:11px 16px}
+[data-theme="dark"] .srt{color:#93c5fd;background:#1e3a5f}
+.srp{font-weight:800;font-size:16px;color:var(--gr);background:var(--gr-l);padding:13px 16px}
+[data-theme="dark"] .srp{background:#064e3b}
+.sv{font-weight:600;font-size:13px}.sv.g{color:var(--gr)}.sv.b{color:var(--p3)}.sv.a{color:var(--am)}
+/* BUTTONS */
+.btn{padding:8px 18px;border-radius:var(--r8);font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .18s;display:inline-flex;align-items:center;gap:6px;letter-spacing:.01em}
+.btn-p{background:linear-gradient(135deg,var(--gr),#059669);color:#fff;box-shadow:0 4px 12px rgba(5,150,105,.25)}
+.btn-p:hover{box-shadow:0 6px 20px rgba(5,150,105,.4);transform:translateY(-1px)}
+.btn-s{background:var(--surf);color:var(--p2);border:1.5px solid var(--brds)}
+.btn-s:hover{border-color:var(--p3);color:var(--p3);background:var(--bl-l)}
+.btn-pdf{background:linear-gradient(135deg,var(--rd),#b91c1c);color:#fff;box-shadow:0 4px 12px rgba(220,38,38,.25)}
+.btn-pdf:hover{box-shadow:0 6px 20px rgba(220,38,38,.4);transform:translateY(-1px)}
+.btn-n{background:linear-gradient(135deg,var(--p1),var(--p2));color:#fff;box-shadow:0 4px 12px rgba(13,27,42,.3)}
+.btn-n:hover{box-shadow:0 6px 18px rgba(13,27,42,.45);transform:translateY(-1px)}
+.btn-sm{padding:5px 11px;font-size:11px}
+.btn-x{background:var(--rd-l);color:var(--rd);border:1px solid #fecaca;padding:3px 8px;font-size:11px}
+.btn-x:hover{background:var(--rd);color:#fff}
+.fe{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
+.fb{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:12px}
+/* BOM TABLE */
+.btbl{width:100%;border-collapse:separate;border-spacing:0;font-size:11px}
+.btbl th{padding:8px 10px;background:var(--p1);color:rgba(255,255,255,.85);font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;text-align:left}
+.btbl th:first-child{border-radius:var(--r8) 0 0 0}.btbl th:last-child{border-radius:0 var(--r8) 0 0}
+.btbl td{padding:6px 10px;border-bottom:1px solid var(--brd);vertical-align:middle;background:var(--surf)}
+.btbl tr:nth-child(even) td{background:var(--surf2)}
+.btbl td input,.btbl td select{border:1.5px solid transparent;border-radius:4px;padding:3px 5px;background:transparent;color:var(--txt);transition:all .15s;width:100%;font-size:11px}
+.btbl td input:focus,.btbl td select:focus{background:var(--inp);border-color:var(--p3);outline:none}
+.btsub td{background:var(--surf2);font-weight:700;border-top:2px solid var(--brds);color:var(--p2)}
+[data-theme="dark"] .btsub td{color:#93c5fd}
+.btsub td:last-child{color:var(--gr)}
+.ubtn{padding:4px 9px;background:var(--bl-l);border:1px solid #bfdbfe;color:#1d4ed8;border-radius:4px;cursor:pointer;font-size:10px;font-weight:600;white-space:nowrap}
+[data-theme="dark"] .ubtn{background:#1e3a5f;border-color:var(--p3);color:#93c5fd}
+.fin{display:none}.fnm{font-size:10px;color:var(--gr);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* RATES PANEL */
+.rp{background:var(--surf2);border:1px solid var(--brd);border-radius:var(--r12);padding:16px;margin-top:12px}
+.rpt{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--mut);margin-bottom:12px}
+.rf{display:flex;flex-direction:column;gap:3px}
+.rf label{font-size:10px;font-weight:600;color:#94a3b8;letter-spacing:.03em}
+.rf input{padding:5px 8px;border:1.5px solid var(--brd);border-radius:6px;background:var(--inp);color:var(--txt);font-size:12px;font-weight:500;width:100%;transition:all .15s}
+.rf input:focus{outline:none;border-color:var(--p3)}
+/* CHARTS */
+.chgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.chcard{background:var(--surf);border:1px solid var(--brd);border-radius:var(--r12);padding:16px;box-shadow:var(--sh)}
+.cht{font-size:11px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+.chw{position:relative;height:200px}
+/* QUOTATION */
+.qwrap{background:var(--surf2);padding:16px;min-height:60vh}
+.qdoc{background:#fff;max-width:820px;margin:0 auto;border-radius:var(--r16);overflow:hidden;box-shadow:var(--shm)}
+.qlh{background:linear-gradient(135deg,var(--p1) 0%,#152237 60%,var(--p2) 100%);color:#fff;padding:26px 30px;display:flex;justify-content:space-between;align-items:flex-start;position:relative;overflow:hidden}
+.qlh::before{content:'';position:absolute;width:300px;height:300px;top:-120px;right:-80px;border-radius:50%;background:rgba(255,255,255,.04);pointer-events:none}
+.ql-l{position:relative;z-index:1}.ql-co{font-size:20px;font-weight:800;letter-spacing:-.02em}.ql-tg{font-size:11px;color:rgba(255,255,255,.5);margin-top:3px}.ql-ad{font-size:10px;color:rgba(255,255,255,.35);margin-top:2px}
+.ql-r{text-align:right;font-size:11px;color:rgba(255,255,255,.55);line-height:1.9;position:relative;z-index:1}
+.ql-r strong{color:rgba(255,255,255,.85);font-size:12px;display:block}
+.qrib{background:linear-gradient(90deg,var(--gr),#059669);color:#fff;padding:9px 30px;display:flex;justify-content:space-between;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase}
+.qbody{padding:24px 30px}
+.qmeta{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:var(--r8);padding:14px;margin-bottom:18px}
+.qmr{display:flex;gap:8px;font-size:12px;padding:2px 0}
+.qmk{color:#64748b;width:130px;flex-shrink:0;font-weight:500}.qmv{font-weight:700;color:#0f172a}
+.qtbl{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:14px;overflow:hidden;border-radius:var(--r8)}
+.qtbl thead th{background:var(--p1);color:rgba(255,255,255,.85);padding:9px 12px;font-size:10px;font-weight:700;letter-spacing:.05em;text-align:left}
+.qtbl thead th:last-child{text-align:right}
+.qtbl tbody td{padding:8px 12px;border-bottom:1px solid #e2e8f0;color:#0f172a}
+.qtbl tbody td:last-child{text-align:right;font-weight:600}
+.qtbl tr:nth-child(even) td{background:#f8fafc}
+.qtbl .qsub td{background:#f1f5f9;font-weight:800;border-top:2px solid #cbd5e1;color:#1e3a5f}
+.qtbl .qmg td{color:#64748b}
+.qtbl .qsp td{background:var(--gr);color:#fff;font-weight:800;font-size:14px;padding:11px 12px}
+.qtbl .qov td{background:var(--p1);color:#fff;font-weight:800;font-size:15px;padding:12px}
+.qft{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:18px;padding-top:16px;border-top:1.5px solid #e2e8f0}
+.qtr{font-size:11px;color:#64748b;line-height:1.9}.qtr strong{color:#0f172a;font-size:12px;display:block;margin-bottom:4px}
+.qsb{margin-top:28px;padding-top:6px;border-top:1.5px solid #0f172a;font-size:11px;color:#64748b;line-height:1.6}
+.qseal{margin-top:10px;border:2px solid var(--p1);border-radius:var(--r8);padding:9px;text-align:center;font-size:10px;font-weight:700;color:var(--p1);letter-spacing:.1em;text-transform:uppercase}
+@media print{*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}body>*{display:none!important}#print-root{display:block!important;position:fixed;inset:0;z-index:9999;background:#fff;overflow:auto}.print-qdoc{box-shadow:none!important;border-radius:0!important;max-width:100%!important;margin:0!important}.print-hide{display:none!important}}
+</style>
+</head>
+<body>
+<!-- AUTH LOADING OVERLAY — hidden once Supabase session is confirmed -->
+<div id="auth-loading" style="position:fixed;inset:0;background:#0d1b2a;display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:16px">
+  <div style="width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#1e3a5f,#059669);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.1),0 8px 24px rgba(5,150,105,.4)">H</div>
+  <div style="font-size:14px;font-weight:500;color:rgba(255,255,255,.5);font-family:Inter,sans-serif;letter-spacing:.01em">Verifying your session…</div>
+</div>
+
+<!-- APP -->
+<div id="app">
+<header class="hdr">
+  <div class="hdr-l">
+    <div class="hdr-logo">H</div>
+    <div><div class="hdr-n">Hydraulics India Services Pvt. Ltd.</div><div class="hdr-s">Cylinder Costing ERP · v4.0 Professional</div></div>
+  </div>
+  <div class="hdr-r">
+    <div class="hdr-inq">Inquiry: <strong id="hdr-inq">—</strong> · <strong id="hdr-dt">—</strong></div>
+    <button class="hb" onclick="toggleTheme()" id="theme-btn">🌙</button>
+    <div class="uchip"><div class="uav" id="uav">A</div><span id="uname">Admin</span></div>
+    <button class="hb" onclick="doLogout()">Logout</button>
+  </div>
+</header>
+
+<div class="nwrap">
+  <nav class="nav">
+    <button class="ntab active" data-p="inq" onclick="go(this,'inq')">📋 Inquiry &amp; Rates<span class="ndot"></span></button>
+    <button class="ntab" data-p="tube" onclick="go(this,'tube')">🔵 Tube<span class="ndot"></span></button>
+    <button class="ntab" data-p="rod" onclick="go(this,'rod')">⚡ Piston Rod<span class="ndot"></span></button>
+    <button class="ntab" data-p="cov" onclick="go(this,'cov')">🔩 CEC/HEC/Gland<span class="ndot"></span></button>
+    <button class="ntab" data-p="misc" onclick="go(this,'misc')">⚙ Misc<span class="ndot"></span></button>
+    <button class="ntab" data-p="bom" onclick="go(this,'bom')">📦 Bill of Materials<span class="ndot"></span></button>
+    <button class="ntab" data-p="asm" onclick="go(this,'asm')">🔧 Assembly &amp; Packing<span class="ndot"></span></button>
+    <button class="ntab" data-p="sum" onclick="go(this,'sum')">💰 Cost Summary<span class="ndot"></span></button>
+    <button class="ntab" data-p="qte" onclick="buildQuote();go(this,'qte')">📄 Quotation<span class="ndot"></span></button>
+  </nav>
+</div>
+
+<!-- INQUIRY + RATES -->
+<div id="p-inq" class="panel active">
+  <div class="g2">
+    <div class="card" style="border-top:3px solid var(--p3)">
+      <div class="card-hd"><span class="ct"><span class="ci ci-b">📋</span>Customer &amp; Order</span></div>
+      <div class="g2">
+        <div class="field"><label>Inquiry No.</label><input id="inq-no" class="fi" value="HISPL-2026-001" oninput="updHdr()"></div>
+        <div class="field"><label>Date</label><input id="inq-date" class="fi" type="date" oninput="updHdr()"></div>
+        <div class="field"><label>Customer Name</label><input id="inq-cust" class="fi" placeholder="Enter customer name" oninput="updHdr();buildQuote()"></div>
+        <div class="field"><label>Quantity <span class="hint">nos</span></label><input id="inq-qty" class="fi" type="number" value="1" min="1" oninput="propagate()"></div>
+        <div class="field"><label>Job Type</label><select id="inq-job" class="fi" onchange="buildQuote()"><option value="mfg">Manufacturing — New</option><option value="recon">Reconditioning</option></select></div>
+        <div class="field"><label>Mounting</label><select id="inq-mnt" class="fi" onchange="buildQuote()"><option>Flange Mount</option><option>Clevis Mount</option><option>Trunnion Mount</option><option>Foot Mount</option><option>Eye Mount</option></select></div>
+      </div>
+      <div class="field mt8"><label>Cylinder Description</label><input id="inq-desc" class="fi" placeholder="e.g. Double Acting Hydraulic Cylinder with Cushion" oninput="buildQuote()"></div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--gr)">
+      <div class="card-hd"><span class="ct"><span class="ci ci-g">📐</span>Cylinder Specifications</span></div>
+      <div class="g2">
+        <div class="field"><label>Bore (ID) <span class="hint">mm</span></label><input id="inq-bore" class="fi" type="number" value="63" oninput="propagate()"></div>
+        <div class="field"><label>Rod Diameter <span class="hint">mm</span></label><input id="inq-rod" class="fi" type="number" value="45" oninput="propagate()"></div>
+        <div class="field"><label>Stroke <span class="hint">mm</span></label><input id="inq-stroke" class="fi" type="number" value="300" oninput="propagate()"></div>
+        <div class="field"><label>Working Pressure <span class="hint">bar</span></label><input id="inq-press" class="fi" type="number" value="160" min="1" oninput="buildQuote()"></div>
+        <div class="field"><label>Stroke Type</label><select id="inq-stype" class="fi" onchange="buildQuote()"><option>Double Acting</option><option>Single Acting</option><option>Telescopic</option></select></div>
+        <div class="field"><label>Fluid Type</label><select id="inq-fluid" class="fi" onchange="buildQuote()"><option>Hydraulic Oil HLP46</option><option>Water Glycol</option><option>Fire Resistant</option><option>Biodegradable</option></select></div>
+      </div>
+      <div class="ib mt8"><span>ℹ</span><b>Green boxes are calculated for you.</b> Enter Bore, Rod Diameter and Stroke here and the rest of the sheet fills in: Bore → Tube ID · Rod Dia → Rod Finished Dia · Tube Length = Stroke + 200 mm · Rod Length = Stroke + 350 mm. A green box you <b>can</b> click may be typed over if your job differs — it turns amber to show it is a manual override. Greyed green boxes are results and cannot be edited.</div>
+    </div>
+  </div>
+  <!-- MASTER RATES INLINE -->
+  <div class="rp">
+    <div class="rpt">⚙ Master Rates — Change once, updates all sheets instantly</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+      <div>
+        <div style="font-size:10px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Material Rates (₹/kg)</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div class="rf"><label>EN8</label><input id="m-en8" type="number" value="80" onchange="calcAll()"></div>
+          <div class="rf"><label>EN19</label><input id="m-en19" type="number" value="90" onchange="calcAll()"></div>
+          <div class="rf"><label>ST52</label><input id="m-st52" type="number" value="160" onchange="calcAll()"></div>
+          <div class="rf"><label>C45</label><input id="m-c45" type="number" value="90" onchange="calcAll()"></div>
+          <div class="rf"><label>SS410</label><input id="m-ss410" type="number" value="250" onchange="calcAll()"></div>
+          <div class="rf"><label>SS316</label><input id="m-ss316" type="number" value="320" onchange="calcAll()"></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Machine Rates (₹/hr)</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div class="rf"><label>Band Saw</label><input id="mr-saw" type="number" value="150" onchange="calcAll()"></div>
+          <div class="rf"><label>CNC Lathe</label><input id="mr-cnc" type="number" value="300" onchange="calcAll()"></div>
+          <div class="rf"><label>Heavy CNC</label><input id="mr-hcnc" type="number" value="350" onchange="calcAll()"></div>
+          <div class="rf"><label>VTL</label><input id="mr-vtl" type="number" value="600" onchange="calcAll()"></div>
+          <div class="rf"><label>Milling</label><input id="mr-mil" type="number" value="250" onchange="calcAll()"></div>
+          <div class="rf"><label>Radial Drill</label><input id="mr-drl" type="number" value="250" onchange="calcAll()"></div>
+          <div class="rf"><label>Honing</label><input id="mr-hon" type="number" value="200" onchange="calcAll()"></div>
+          <div class="rf"><label>Grinder</label><input id="mr-gnd" type="number" value="220" onchange="calcAll()"></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:10px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Process Rates</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div class="rf"><label>Heat Treat ₹/kg</label><input id="pr-ht" type="number" value="12" onchange="calcAll()"></div>
+          <div class="rf"><label>Ind.Hard ₹/cm²</label><input id="pr-ih" type="number" value="0.45" step="0.05" onchange="calcAll()"></div>
+          <div class="rf"><label>Honing ₹/cm²</label><input id="pr-hon" type="number" value="0.30" step="0.05" onchange="calcAll()"></div>
+          <div class="rf"><label>Grinding ₹/cm²</label><input id="pr-gr" type="number" value="0.30" step="0.05" onchange="calcAll()"></div>
+          <div class="rf"><label>Chrome ₹/cm²</label><input id="pr-chrome" type="number" value="0.85" step="0.05" onchange="calcAll()"></div>
+          <div class="rf"><label>Polish ₹/cm²</label><input id="pr-pol" type="number" value="0.20" step="0.05" onchange="calcAll()"></div>
+          <div class="rf"><label>Paint ₹/cm²</label><input id="pr-paint" type="number" value="0.15" step="0.05" onchange="calcAll()"></div>
+          <div class="rf"><label>Weld Labour ₹/hr</label><input id="pr-wl" type="number" value="375" onchange="calcAll()"></div>
+          <div class="rf"><label>Weld Wire ₹/kg</label><input id="pr-ww" type="number" value="360" onchange="calcAll()"></div>
+          <div class="rf"><label>Pack Loose ₹/kg</label><input id="pr-pkl" type="number" value="5" onchange="calcAll()"></div>
+          <div class="rf"><label>Pack Box ₹/kg</label><input id="pr-pkw" type="number" value="15" onchange="calcAll()"></div>
+          <div class="rf"><label>Default Lab ₹/hr</label><input id="pr-lab" type="number" value="100" onchange="calcAll()"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="fe"><button class="btn btn-p" onclick="go(document.querySelector('[data-p=tube]'),'tube')">Proceed to Tube Costing →</button></div>
+</div>
+
+<!-- TUBE -->
+<div id="p-tube" class="panel">
+  <div class="fbox"><strong>Tube Process Sequence</strong>Cutting → Rough Turning → Drilling → Part Welding → Rough Honing → Finish Turning → CEC Welding → Rear Eye Welding</div>
+  <div class="card" style="border-top:3px solid var(--p3)">
+    <div class="card-hd"><span class="ct"><span class="ci ci-b">A</span>Material Inputs</span><span class="badge b-a">Weight auto-calculated</span></div>
+    <div class="g5">
+      <div class="field"><label>Material</label><select id="t-mat" class="fi" onchange="calcTube()"><option value="ST52">ST52</option><option value="EN8">EN8</option><option value="EN19">EN19</option><option value="C45">C45</option><option value="SS410">SS410</option><option value="SS316">SS316</option></select></div>
+      <div class="field"><label>Grain Type</label><select id="t-grain" class="fi"><option>Longitudinal</option><option>Transverse</option><option>Through Thickness</option><option>Radial</option></select></div>
+      <div class="field"><label>Raw OD <span class="hint">mm</span></label><input id="t-rod" class="fi" type="number" value="75" oninput="calcTube()"></div>
+      <div class="field"><label>Finished OD <span class="hint">mm</span></label><input id="t-fod" class="fi" type="number" value="70" oninput="calcTube()"></div>
+      <div class="field"><label>Bore ID <span class="hint">from Bore · editable</span></label><input id="t-id" class="fi fi-a" type="number" value="63" oninput="calcTube()"></div>
+    </div>
+    <div class="g4 mt8">
+      <div class="field"><label>Tube Length <span class="hint">mm · from Stroke · editable</span></label><input id="t-len" class="fi fi-a" type="number" value="500" oninput="calcTube()"></div>
+      <div class="field"><label>Weight/pc <span class="hint">kg · calculated</span></label><input id="t-wt" class="fi fi-a" readonly></div>
+      <div class="field"><label>Mat. Rate <span class="hint">₹/kg · calculated</span></label><input id="t-mr" class="fi fi-a" readonly></div>
+      <div class="field"><label>Material Cost/pc</label><input id="t-mc" class="fi fi-c" readonly></div>
+    </div>
+    <span class="ftag">Weight = (π÷4)×(OD²−ID²)×Length×7.85×10⁻⁶ kg</span>
+  </div>
+  <div class="card" style="border-top:3px solid var(--gr)">
+    <div class="card-hd"><span class="ct"><span class="ci ci-g">B</span>Process Routing</span><span class="badge b-a">Machine hrs from lookup tables · Labour is manual</span></div>
+    <table class="ptbl">
+      <thead><tr><th style="width:12%">Process</th><th style="width:13%">Machine Type</th><th style="width:13%">Weld/Lub Type</th><th style="width:20%">Parameters</th><th style="width:7%">Mach Hrs</th><th style="width:8%">₹/hr</th><th style="width:8%">Lab Hrs</th><th style="width:8%">Lab ₹/hr</th><th style="width:11%">Cost ₹</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>1. Cutting</strong></td>
+          <td><select class="fi" style="font-size:10px"><option>Band Saw</option><option>Plasma</option><option>Laser</option></select></td>
+          <td><select class="fi" style="font-size:10px"><option>Dry</option><option>Flood Coolant</option><option>MQL</option></select></td>
+          <td><span class="va" id="tc-i">OD:—·L:—</span></td>
+          <td class="va" id="tc-h">—</td>
+          <td><input class="fi-sm" id="tc-mr" type="number" value="150" oninput="calcTube()"></td>
+          <td><input class="fi-sm" id="tc-lh" type="number" value="0.5" step="0.25" oninput="calcTube()"></td>
+          <td><input class="fi-sm" id="tc-lr" type="number" value="100" oninput="calcTube()"></td>
+          <td class="vc" id="tc-c">₹0</td>
+        </tr>
+        <tr>
+          <td><strong>2. Rough Turn</strong></td>
+          <td><select class="fi" style="font-size:10px"><option>CNC Lathe</option><option>VTL</option><option>Heavy CNC</option><option>Manual Lathe</option></select></td>
+          <td><select class="fi" style="font-size:10px"><option>Flood Coolant</option><option>MQL</option><option>Dry</option><option>Air Blast</option></select></td>
+          <td>SR:<span class="va" id="trt-sr">—</span>mm ×<span class="va" id="trt-f">—</span></td>
+          <td class="va" id="trt-h">—</td>
+          <td><input class="fi-sm" id="trt-mr" type="number" value="300" oninput="calcTube()"></td>
+          <td><input class="fi-sm" id="trt-lh" type="number" value="1" step="0.25" oninput="calcTube()"></td>
+          <td><input class="fi-sm" id="trt-lr" type="number" value="100" oninput="calcTube()"></td>
+          <td class="vc" id="trt-c">₹0</td>
+        </tr>
+        <tr>
+          <td><strong>3. Drilling</strong></td>
+          <td><select class="fi" style="font-size:10px"><option>Radial Drill</option><option>CNC Drill</option><option>Deep Hole</option></select></td>
+          <td><select class="fi" style="font-size:10px"><option>Flood Coolant</option><option>MQL</option><option>Air Blast</option><option>Dry</option></select></td>
+          <td>Ø<input class="fi-sm" id="td-hd" type="number" placeholder="mm" oninput="calcTube()">×<input class="fi-sm" id="td-hn" type="number" value="4" oninput="calcTube()"> holes</td>
+          <td class="va" id="td-h">—</td>
+          <td><input class="fi-sm" id="td-mr" type="number" value="250" oninput="calcTube()"></td>
+          <td><input class="fi-sm" id="td-lh" type="number" value="0.5" step="0.25" oninput="calcTube()"></td>
+          <td><input class="fi-sm" id="td-lr" type="number" value="100" oninput="calcTube()"></td>
+          <td class="vc" id="td-c">₹0</td>
+        </tr>
+        <tr>
+          <td><strong>4. Part Weld</strong></td>
+          <td class="vn">Welding</td>
+          <td><select class="fi" style="font-size:10px"><option>MIG (GMAW)</option><option>TIG (GTAW)</option><option>SAW</option><option>Stick (SMAW)</option><option>Plasma Arc</option></select></td>
+          <td>Ø<input class="fi-sm" id="tpw-d" type="number" placeholder="mm" oninput="calcTube()">×<input class="fi-sm" id="tpw-n" type="number" value="2" oninput="calcTube()"> beads</td>
+          <td class="va" id="tpw-h">—</td>
+          <td class="vn">Formula</td>
+          <td><input class="fi-sm" id="tpw-lh" type="number" value="0" step="0.25" oninput="calcTube()"></td>
+          <td><input class="fi-sm" id="tpw-lr" type="number" value="100" oninput="calcTube()"></td>
+          <td class="vc" id="tpw-c">₹0</td>
+        </tr>
+        <tr>
+          <td><strong>5. Honing</strong></td>
+          <td><select class="fi" style="font-size:10px"><option>Honing Machine</option><option>Single Pass</option><option>Multi Pass</option></select></td>
+          <td><select class="fi" style="font-size:10px"><option>Honing Oil</option><option>Flood Coolant</option><option>MQL</option></select></td>
+          <td>Int.Area:<span class="va" id="th-a">—</span>cm²</td>
+          <td class="va" id="th-h">—</td>
+          <td class="vn">₹0.30/cm²</td>
+          <td><input class="fi-sm" id="th-lh" type="number" value="0.5" step="0.25" oninput="calcTube()"></td>
+          <td><input class="fi-sm" id="th-lr" type="number" value="100" oninput="calcTube()"></td>
+          <td class="vc" id="th-c">₹0</td>
+        </tr>
+        <tr>
+          <td><strong>6. Finish Turn</strong></td>
+          <td><select class="fi" style="font-size:10px"><option>CNC Lathe</option><option>VTL</option><option>Heavy CNC</option></select></td>
+          <td><select class="fi" style="font-size:10px"><option>Flood Coolant</option><option>MQL</option><option>Air Blast</option></select></td>
+          <td class="vn">=Rough Turn×0.70</td>
+          <td class="va" id="tft-h">—</td>
+          <td class="vn" id="tft-rd">₹300/hr</td>
+          <td><input class="fi-sm" id="tft-lh" type="number" value="0.5" step="0.25" oninput="calcTube()"></td>
+          <td><input class="fi-sm" id="tft-lr" type="number" value="100" oninput="calcTube()"></td>
+          <td class="vc" id="tft-c">₹0</td>
+        </tr>
+        <tr>
+          <td><strong>7. CEC Weld</strong></td>
+          <td class="vn">Welding</td>
+          <td><select class="fi" style="font-size:10px"><option>MIG (GMAW)</option><option>TIG (GTAW)</option><option>SAW</option><option>Stick (SMAW)</option></select></td>
+          <td>Ø<input class="fi-sm" id="tcw-d" type="number" placeholder="mm" oninput="calcTube()">×<input class="fi-sm" id="tcw-n" type="number" value="2" oninput="calcTube()"> beads</td>
+          <td class="va" id="tcw-h">—</td>
+          <td class="vn">Formula</td>
+          <td><input class="fi-sm" id="tcw-lh" type="number" value="0" step="0.25" oninput="calcTube()"></td>
+          <td><input class="fi-sm" id="tcw-lr" type="number" value="100" oninput="calcTube()"></td>
+          <td class="vc" id="tcw-c">₹0</td>
+        </tr>
+        <tr>
+          <td><strong>8. Rear Weld</strong></td>
+          <td class="vn">Welding</td>
+          <td><select class="fi" style="font-size:10px"><option>MIG (GMAW)</option><option>TIG (GTAW)</option><option>SAW</option><option>Stick (SMAW)</option></select></td>
+          <td>Ø<input class="fi-sm" id="trw-d" type="number" placeholder="mm" oninput="calcTube()">×<input class="fi-sm" id="trw-n" type="number" value="2" oninput="calcTube()"> beads</td>
+          <td class="va" id="trw-h">—</td>
+          <td class="vn">Formula</td>
+          <td><input class="fi-sm" id="trw-lh" type="number" value="0" step="0.25" oninput="calcTube()"></td>
+          <td><input class="fi-sm" id="trw-lr" type="number" value="100" oninput="calcTube()"></td>
+          <td class="vc" id="trw-c">₹0</td>
+        </tr>
+        <tr class="rsub"><td colspan="8">Total Process + Labour Cost</td><td id="t-proc">₹0</td></tr>
+        <tr class="rtot"><td colspan="8">🔵 TUBE TOTAL COST (per piece)</td><td id="t-total">₹0</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="fb"><button class="btn btn-s" onclick="go(document.querySelector('[data-p=inq]'),'inq')">← Back</button><button class="btn btn-n" onclick="go(document.querySelector('[data-p=rod]'),'rod')">Piston Rod →</button></div>
+</div>
+
+<!-- PISTON ROD -->
+<div id="p-rod" class="panel">
+  <div class="fbox"><strong>Rod Process Sequence</strong>Cutting → Rough Turning → Heat Treatment → Induction Hardening → Finish Turning → Grinding → Chrome Plating → Polishing</div>
+  <div class="card" style="border-top:3px solid var(--am)">
+    <div class="card-hd"><span class="ct"><span class="ci ci-a">A</span>Material Inputs</span><span class="badge b-a">Solid round bar weight</span></div>
+    <div class="g5">
+      <div class="field"><label>Material</label><select id="r-mat" class="fi" onchange="calcRod()"><option value="EN8">EN8</option><option value="EN19">EN19</option><option value="C45">C45</option><option value="SS410">SS410</option><option value="SS316">SS316</option></select></div>
+      <div class="field"><label>Grain Type</label><select id="r-grain" class="fi"><option>Longitudinal</option><option>Transverse</option><option>Through Thickness</option><option>Radial</option></select></div>
+      <div class="field"><label>Raw Dia <span class="hint">mm</span></label><input id="r-rdia" class="fi" type="number" value="52" oninput="calcRod()"></div>
+      <div class="field"><label>Fin. Dia <span class="hint">mm · from Rod Dia · editable</span></label><input id="r-fdia" class="fi fi-a" type="number" value="45" oninput="calcRod()"></div>
+      <div class="field"><label>Chrome ₹/cm²</label><input id="r-cr" class="fi" type="number" value="0.85" step="0.05" oninput="calcRod()"></div>
+    </div>
+    <div class="g4 mt8">
+      <div class="field"><label>Rod Length <span class="hint">mm · from Stroke · editable</span></label><input id="r-len" class="fi fi-a" type="number" value="650" oninput="calcRod()"></div>
+      <div class="field"><label>Weight/pc <span class="hint">kg · calculated</span></label><input id="r-wt" class="fi fi-a" readonly></div>
+      <div class="field"><label>Mat. Rate <span class="hint">₹/kg · calculated</span></label><input id="r-mr" class="fi fi-a" readonly></div>
+      <div class="field"><label>Material Cost/pc</label><input id="r-mc" class="fi fi-c" readonly></div>
+    </div>
+    <span class="ftag">Weight = (π÷4)×OD²×Length×7.85×10⁻⁶ kg (solid round bar)</span>
+  </div>
+  <div class="card" style="border-top:3px solid var(--gr)">
+    <div class="card-hd"><span class="ct"><span class="ci ci-g">B</span>Process Routing</span></div>
+    <table class="ptbl">
+      <thead><tr><th style="width:12%">Process</th><th style="width:13%">Machine Type</th><th style="width:13%">Lub/Process</th><th style="width:18%">Parameters</th><th style="width:8%">Hrs/Area</th><th style="width:8%">Rate</th><th style="width:8%">Lab Hrs</th><th style="width:8%">Lab ₹/hr</th><th style="width:12%">Cost ₹</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1. Cutting</strong></td><td><select class="fi" style="font-size:10px"><option>Band Saw</option><option>Plasma</option><option>Laser</option></select></td><td><select class="fi" style="font-size:10px"><option>Dry</option><option>Flood Coolant</option><option>MQL</option></select></td><td class="va" id="rc-i">—</td><td class="va" id="rc-h">—</td><td><input class="fi-sm" id="rc-mr" type="number" value="150" oninput="calcRod()"></td><td><input class="fi-sm" id="rc-lh" type="number" value="0.5" step="0.25" oninput="calcRod()"></td><td><input class="fi-sm" id="rc-lr" type="number" value="100" oninput="calcRod()"></td><td class="vc" id="rc-c">₹0</td></tr>
+        <tr><td><strong>2. Rough Turn</strong></td><td><select class="fi" style="font-size:10px"><option>CNC Lathe</option><option>VTL</option><option>Heavy CNC</option></select></td><td><select class="fi" style="font-size:10px"><option>Flood Coolant</option><option>MQL</option><option>Dry</option></select></td><td>SR:<span class="va" id="rrt-sr">—</span>×<span class="va" id="rrt-f">—</span></td><td class="va" id="rrt-h">—</td><td><input class="fi-sm" id="rrt-mr" type="number" value="300" oninput="calcRod()"></td><td><input class="fi-sm" id="rrt-lh" type="number" value="1" step="0.25" oninput="calcRod()"></td><td><input class="fi-sm" id="rrt-lr" type="number" value="100" oninput="calcRod()"></td><td class="vc" id="rrt-c">₹0</td></tr>
+        <tr><td><strong>3. Heat Treat</strong></td><td class="vn">Vendor</td><td class="vn">—</td><td>Wt×₹<span id="rht-rd">12</span>/kg</td><td class="va" id="rht-w">—kg</td><td class="vn">₹/kg</td><td><input class="fi-sm" id="rht-lh" type="number" value="0" step="0.25" oninput="calcRod()"></td><td><input class="fi-sm" id="rht-lr" type="number" value="100" oninput="calcRod()"></td><td class="vc" id="rht-c">₹0</td></tr>
+        <tr><td><strong>4. Ind.Hard</strong></td><td class="vn">Vendor</td><td class="vn">Induction</td><td>Area×₹<span id="rih-rd">0.45</span>/cm²</td><td class="va" id="rih-a">—cm²</td><td class="vn">₹/cm²</td><td><input class="fi-sm" id="rih-lh" type="number" value="0" step="0.25" oninput="calcRod()"></td><td><input class="fi-sm" id="rih-lr" type="number" value="100" oninput="calcRod()"></td><td class="vc" id="rih-c">₹0</td></tr>
+        <tr><td><strong>5. Finish Turn</strong></td><td><select class="fi" style="font-size:10px"><option>CNC Lathe</option><option>VTL</option></select></td><td><select class="fi" style="font-size:10px"><option>Flood Coolant</option><option>MQL</option></select></td><td class="vn">=Rough×0.70</td><td class="va" id="rft-h">—</td><td class="vn">₹300/hr</td><td><input class="fi-sm" id="rft-lh" type="number" value="0.5" step="0.25" oninput="calcRod()"></td><td><input class="fi-sm" id="rft-lr" type="number" value="100" oninput="calcRod()"></td><td class="vc" id="rft-c">₹0</td></tr>
+        <tr><td><strong>6. Grinding</strong></td><td><select class="fi" style="font-size:10px"><option>Cyl.Grinder</option><option>CNC Grinder</option><option>Centreless</option></select></td><td><select class="fi" style="font-size:10px"><option>Grinding Oil</option><option>Flood Coolant</option><option>MQL</option></select></td><td>Area×₹<span id="rgr-rd">0.30</span>/cm²</td><td class="va" id="rgr-a">—cm²</td><td class="vn">₹/cm²</td><td><input class="fi-sm" id="rgr-lh" type="number" value="0.5" step="0.25" oninput="calcRod()"></td><td><input class="fi-sm" id="rgr-lr" type="number" value="100" oninput="calcRod()"></td><td class="vc" id="rgr-c">₹0</td></tr>
+        <tr><td><strong>7. Chrome</strong></td><td class="vn">Vendor</td><td class="vn">Electrolytic</td><td>Area×₹<span id="rch-rd">0.85</span>/cm²</td><td class="va" id="rch-a">—cm²</td><td class="vn">₹/cm²</td><td><input class="fi-sm" id="rch-lh" type="number" value="0" step="0.25" oninput="calcRod()"></td><td><input class="fi-sm" id="rch-lr" type="number" value="100" oninput="calcRod()"></td><td class="vc" id="rch-c">₹0</td></tr>
+        <tr><td><strong>8. Polishing</strong></td><td><select class="fi" style="font-size:10px"><option>Barrel Finish</option><option>Manual Polish</option><option>Belt Polish</option></select></td><td><select class="fi" style="font-size:10px"><option>Polish Compound</option><option>Dry</option></select></td><td>Area×₹<span id="rpol-rd">0.20</span>/cm²</td><td class="va" id="rpol-a">—cm²</td><td class="vn">₹/cm²</td><td><input class="fi-sm" id="rpol-lh" type="number" value="0.5" step="0.25" oninput="calcRod()"></td><td><input class="fi-sm" id="rpol-lr" type="number" value="100" oninput="calcRod()"></td><td class="vc" id="rpol-c">₹0</td></tr>
+        <tr class="rsub"><td colspan="8">Total Process + Labour Cost</td><td id="r-proc">₹0</td></tr>
+        <tr class="rtot"><td colspan="8">⚡ PISTON ROD TOTAL COST (per piece)</td><td id="r-total">₹0</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="fb"><button class="btn btn-s" onclick="go(document.querySelector('[data-p=tube]'),'tube')">← Tube</button><button class="btn btn-n" onclick="go(document.querySelector('[data-p=cov]'),'cov')">CEC/HEC/Gland →</button></div>
+</div>
+
+<!-- COVERS -->
+<div id="p-cov" class="panel">
+  <div class="ib"><span>ℹ</span>CEC, HEC, and Gland — machined from solid billets. Enter material, process and labour costs per piece.</div>
+  <div id="cov-cont"></div>
+  <div class="fb"><button class="btn btn-s" onclick="go(document.querySelector('[data-p=rod]'),'rod')">← Piston Rod</button><button class="btn btn-n" onclick="go(document.querySelector('[data-p=misc]'),'misc')">Misc Components →</button></div>
+</div>
+
+<!-- MISC -->
+<div id="p-misc" class="panel">
+  <div class="ib"><span>ℹ</span>Stop Tube uses solid round raw material. Rear Eye, Rod Eye and Piston start with profile cutting from plate.</div>
+  <div id="misc-cont"></div>
+  <div class="fb"><button class="btn btn-s" onclick="go(document.querySelector('[data-p=cov]'),'cov')">← CEC/HEC</button><button class="btn btn-n" onclick="go(document.querySelector('[data-p=bom]'),'bom')">Bill of Materials →</button></div>
+</div>
+
+<!-- BOM -->
+<div id="p-bom" class="panel">
+  <div class="ib"><span>📦</span><strong>Bill of Materials (BOM)</strong> — All bought-out parts: bearings, seals, fasteners. Upload vendor PDF bills per item.</div>
+
+  <div class="card" style="border-top:3px solid var(--p3)">
+    <div class="card-hd">
+      <span class="ct"><span class="ci ci-b">⚙</span>Bearings</span>
+      <button class="btn btn-sm" onclick="addBearing()" style="background:var(--bl-l);border:1px solid #bfdbfe;color:#1d4ed8;cursor:pointer;border-radius:6px;font-size:11px;padding:4px 10px;font-weight:600">+ Add Bearing</button>
+    </div>
+    <table class="btbl">
+      <thead><tr><th style="width:20%">Bearing Type</th><th style="width:14%">Part No./Size</th><th style="width:12%">Manufacturer</th><th style="width:8%">Qty</th><th style="width:10%">Unit ₹</th><th style="width:10%">Total ₹</th><th style="width:13%">Upload Bill</th><th style="width:10%">File</th><th style="width:5%"></th></tr></thead>
+      <tbody id="bear-rows"></tbody>
+      <tfoot><tr class="btsub"><td colspan="5"><strong>Bearings Sub-total</strong></td><td id="bear-tot">₹0</td><td colspan="3"></td></tr></tfoot>
+    </table>
+  </div>
+
+  <div class="card" style="border-top:3px solid var(--gr)">
+    <div class="card-hd">
+      <span class="ct"><span class="ci ci-g">🔧</span>Seals &amp; Gaskets</span>
+      <button class="btn btn-sm" onclick="addSeal()" style="background:var(--gr-l);border:1px solid #a7f3d0;color:var(--gr-d);cursor:pointer;border-radius:6px;font-size:11px;padding:4px 10px;font-weight:600">+ Add Seal</button>
+    </div>
+    <table class="btbl">
+      <thead><tr><th style="width:20%">Seal Type</th><th style="width:14%">Size/Spec</th><th style="width:12%">Material</th><th style="width:8%">Qty</th><th style="width:10%">Unit ₹</th><th style="width:10%">Total ₹</th><th style="width:13%">Upload Bill</th><th style="width:10%">File</th><th style="width:5%"></th></tr></thead>
+      <tbody id="seal-rows"></tbody>
+      <tfoot><tr class="btsub"><td colspan="5"><strong>Seals Sub-total</strong></td><td id="seal-tot">₹0</td><td colspan="3"></td></tr></tfoot>
+    </table>
+  </div>
+
+  <div class="card" style="border-top:3px solid var(--am)">
+    <div class="card-hd">
+      <span class="ct"><span class="ci ci-a">📦</span>Other Bought Out Items</span>
+      <button class="btn btn-sm" onclick="addBOM()" style="background:var(--am-l);border:1px solid #fde68a;color:var(--am-d);cursor:pointer;border-radius:6px;font-size:11px;padding:4px 10px;font-weight:600">+ Add Item</button>
+    </div>
+    <table class="btbl">
+      <thead><tr><th style="width:22%">Item Description</th><th style="width:14%">Part No./Spec</th><th style="width:12%">Vendor</th><th style="width:8%">Qty</th><th style="width:10%">Unit ₹</th><th style="width:10%">Total ₹</th><th style="width:13%">Upload Bill</th><th style="width:8%">File</th><th style="width:5%"></th></tr></thead>
+      <tbody id="bom-rows"></tbody>
+      <tfoot><tr class="btsub"><td colspan="5"><strong>Other Items Sub-total</strong></td><td id="other-tot">₹0</td><td colspan="3"></td></tr></tfoot>
+    </table>
+  </div>
+
+  <div class="card" style="border-top:3px solid var(--p1)">
+    <div class="card-hd"><span class="ct"><span class="ci ci-b">💰</span>BOM Grand Total</span></div>
+    <div class="g3">
+      <div class="field"><label>Bearings Total</label><input id="bom-bear-d" class="fi fi-a" readonly></div>
+      <div class="field"><label>Seals Total</label><input id="bom-seal-d" class="fi fi-a" readonly></div>
+      <div class="field"><label>Other Items Total</label><input id="bom-other-d" class="fi fi-a" readonly></div>
+    </div>
+    <div class="field mt8"><label>BOM Grand Total</label><input id="bom-grand" class="fi fi-t" readonly></div>
+  </div>
+  <div class="fb"><button class="btn btn-s" onclick="go(document.querySelector('[data-p=misc]'),'misc')">← Misc Components</button><button class="btn btn-n" onclick="go(document.querySelector('[data-p=asm]'),'asm')">Assembly &amp; Packing →</button></div>
+</div>
+
+<!-- ASSEMBLY -->
+<div id="p-asm" class="panel">
+  <div class="g2">
+    <div class="card" style="border-top:3px solid var(--p3)">
+      <div class="card-hd"><span class="ct"><span class="ci ci-b">🔧</span>Assembly &amp; Testing</span><span class="badge b-m">Manual entry</span></div>
+      <div class="g2">
+        <div class="field"><label>Assembly Hours</label><input id="asm-h" class="fi" type="number" value="4" step="0.5" oninput="calcAsm()"></div>
+        <div class="field"><label>Labour Rate ₹/hr</label><input id="asm-lr" class="fi" type="number" value="100" oninput="calcAsm()"></div>
+        <div class="field"><label>Assembly Cost ₹</label><input id="asm-c" class="fi fi-c" readonly></div>
+        <div class="field"><label>Testing Hours</label><input id="test-h" class="fi" type="number" value="1" step="0.5" oninput="calcAsm()"></div>
+        <div class="field"><label>Test Labour ₹/hr</label><input id="test-lr" class="fi" type="number" value="100" oninput="calcAsm()"></div>
+        <div class="field"><label>Testing Cost ₹</label><input id="test-c" class="fi fi-c" readonly></div>
+      </div>
+    </div>
+    <div class="card" style="border-top:3px solid var(--gr)">
+      <div class="card-hd"><span class="ct"><span class="ci ci-g">🎨</span>Painting</span><span class="badge b-a">From surface areas</span></div>
+      <div class="g2">
+        <div class="field"><label>Tube Area <span class="hint">cm² · calculated</span></label><input id="pt-area" class="fi fi-a" readonly></div>
+        <div class="field"><label>Tube Paint ₹/cm²</label><input id="pt-rate" class="fi" type="number" value="0.15" step="0.05" oninput="calcAsm()"></div>
+        <div class="field"><label>Tube Paint Cost</label><input id="pt-c" class="fi fi-c" readonly></div>
+        <div class="field"><label>Rod Area <span class="hint">cm² · calculated</span></label><input id="pr-area" class="fi fi-a" readonly></div>
+        <div class="field"><label>Rod Paint ₹/cm²</label><input id="pr-rate" class="fi" type="number" value="0.20" step="0.05" oninput="calcAsm()"></div>
+        <div class="field"><label>Rod Paint Cost</label><input id="pr-c" class="fi fi-c" readonly></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="border-top:3px solid var(--am)">
+    <div class="card-hd"><span class="ct"><span class="ci ci-a">🚚</span>Transport Costs</span><span class="badge b-m">Manual entry</span></div>
+    <div class="g4">
+      <div class="field"><label>Inward Freight ₹</label><input id="trans-in" class="fi" type="number" value="0" oninput="calcAsm()" placeholder="Raw material inward"></div>
+      <div class="field"><label>Outward Freight ₹</label><input id="trans-out" class="fi" type="number" value="0" oninput="calcAsm()" placeholder="Finished goods delivery"></div>
+      <div class="field"><label>Vendor Transport ₹</label><input id="trans-v" class="fi" type="number" value="0" oninput="calcAsm()" placeholder="Chrome, heat treat etc."></div>
+      <div class="field"><label>Total Transport <span class="hint">auto</span></label><input id="trans-tot" class="fi fi-c" readonly></div>
+    </div>
+  </div>
+
+  <div class="card" style="border-top:3px solid var(--p1)">
+    <div class="card-hd"><span class="ct"><span class="ci ci-b">📦</span>Packing</span></div>
+    <div class="g3">
+      <div class="field"><label>Cylinder Weight <span class="hint">kg · calculated</span></label><input id="pack-wt" class="fi fi-a" readonly></div>
+      <div class="field"><label>Packing Type</label><select id="pack-type" class="fi" onchange="calcAsm()"><option value="loose">Loose (₹5/kg)</option><option value="wooden">Wooden Box (₹15/kg)</option><option value="custom">Custom cost</option></select></div>
+      <div class="field"><label>Packing Cost ₹</label><input id="pack-c" class="fi fi-c" readonly></div>
+    </div>
+    <div class="g2 mt8">
+      <div class="field"><label>Custom Packing Cost ₹ <span class="hint">if custom selected</span></label><input id="pack-cust" class="fi" type="number" value="0" oninput="calcAsm()"></div>
+      <div class="field"><label>Packing Description</label><input id="pack-desc" class="fi" placeholder="e.g. Wooden crate with foam padding"></div>
+    </div>
+  </div>
+  <div class="fb"><button class="btn btn-s" onclick="go(document.querySelector('[data-p=bom]'),'bom')">← Bill of Materials</button><button class="btn btn-n" onclick="go(document.querySelector('[data-p=sum]'),'sum')">Cost Summary →</button></div>
+</div>
+
+<!-- SUMMARY -->
+<div id="p-sum" class="panel">
+  <div class="metrics">
+    <div class="kpi kpi-a"><div class="kl">Manufacturing Cost/pc</div><div class="kv a" id="km-mfg">₹0</div><div class="ks">Before margin</div></div>
+    <div class="kpi kpi-b"><div class="kl">Profit Margin</div><div class="kv b" id="km-mg">₹0</div><div class="ks" id="km-mgp">@ 20%</div></div>
+    <div class="kpi kpi-g"><div class="kl">Selling Price/pc</div><div class="kv g" id="km-sp">₹0</div><div class="ks">Including margin</div></div>
+    <div class="kpi kpi-g"><div class="kl">Total Order Value</div><div class="kv g" id="km-ov">₹0</div><div class="ks" id="km-qty">for 1 piece</div></div>
+  </div>
+  <div class="chgrid">
+    <div class="chcard"><div class="cht">📊 Cost Breakdown</div><div class="chw"><canvas id="chart-pie"></canvas></div></div>
+    <div class="chcard"><div class="cht">📈 Component Comparison</div><div class="chw"><canvas id="chart-bar"></canvas></div></div>
+  </div>
+  <div class="g2" style="align-items:flex-start">
+    <div>
+      <div class="sbl">
+        <div class="sr srh">Component Costs</div>
+        <div class="sr sri"><span>🔵 Tube</span><span class="sv" id="ss-tube">₹0</span></div>
+        <div class="sr sri"><span>⚡ Piston Rod</span><span class="sv" id="ss-rod">₹0</span></div>
+        <div class="sr sri"><span>🔩 Cap End Cover</span><span class="sv" id="ss-cec">₹0</span></div>
+        <div class="sr sri"><span>🔩 Head End Cover</span><span class="sv" id="ss-hec">₹0</span></div>
+        <div class="sr sri"><span>🔩 Gland</span><span class="sv" id="ss-gland">₹0</span></div>
+        <div class="sr sri"><span>⚙ Cushion Bush</span><span class="sv" id="ss-cbush">₹0</span></div>
+        <div class="sr sri"><span>⚙ Stop Tube</span><span class="sv" id="ss-stube">₹0</span></div>
+        <div class="sr sri"><span>⚙ Rear Eye</span><span class="sv" id="ss-reye">₹0</span></div>
+        <div class="sr sri"><span>⚙ Rod Eye</span><span class="sv" id="ss-rodeye">₹0</span></div>
+        <div class="sr sri"><span>⚙ Piston</span><span class="sv" id="ss-piston">₹0</span></div>
+        <div class="sr srsb"><span>Sub-total — Components</span><span class="sv b" id="ss-csub">₹0</span></div>
+      </div>
+      <div class="sbl">
+        <div class="sr srh">BOM &amp; Services</div>
+        <div class="sr sri"><span>⚙ Bearings</span><span class="sv" id="ss-bear">₹0</span></div>
+        <div class="sr sri"><span>🔧 Seals</span><span class="sv" id="ss-seal">₹0</span></div>
+        <div class="sr sri"><span>📦 Other BOM</span><span class="sv" id="ss-bom">₹0</span></div>
+        <div class="sr sri"><span>🔧 Assembly</span><span class="sv" id="ss-asm">₹0</span></div>
+        <div class="sr sri"><span>🔧 Testing</span><span class="sv" id="ss-test">₹0</span></div>
+        <div class="sr sri"><span>🎨 Painting</span><span class="sv" id="ss-paint">₹0</span></div>
+        <div class="sr sri"><span>🚚 Transport</span><span class="sv" id="ss-trans">₹0</span></div>
+        <div class="sr sri"><span>📦 Packing</span><span class="sv" id="ss-pack">₹0</span></div>
+        <div class="sr srt"><span>Total Manufacturing Cost/pc</span><span class="sv b" id="ss-mfg">₹0</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="border-top:3px solid var(--gr)">
+        <div class="card-hd"><span class="ct"><span class="ci ci-g">💰</span>Margin &amp; Selling Price</span></div>
+        <div class="field"><label>Profit Margin %</label><input id="profit-pct" class="fi" type="number" value="20" min="0" oninput="calcSummary()"></div>
+        <div class="field mt8"><label>Margin Amount/pc</label><input id="profit-amt" class="fi fi-a" readonly></div>
+        <div class="field mt8"><label>Selling Price/pc</label><input id="profit-sp" class="fi fi-t" readonly></div>
+        <div class="divider"></div>
+        <div class="field"><label>Quantity <span class="hint">from inquiry</span></label><input id="sum-qty" class="fi fi-a" readonly></div>
+        <div class="field mt8"><label>Total Order Value</label><input id="profit-ov" class="fi fi-t" readonly></div>
+      </div>
+      <div class="fe mt8">
+        <button class="btn btn-p" onclick="buildQuote();go(document.querySelector('[data-p=qte]'),'qte')">Generate Quotation →</button>
+      </div>
+    </div>
+  </div>
+  <div class="fb"><button class="btn btn-s" onclick="go(document.querySelector('[data-p=asm]'),'asm')">← Assembly</button><button class="btn btn-p" onclick="buildQuote();go(document.querySelector('[data-p=qte]'),'qte')">Generate Quotation →</button></div>
+</div>
+
+<!-- QUOTATION -->
+<div id="p-qte" class="panel">
+  <div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:14px">
+    <button class="btn btn-pdf" onclick="generatePDF()">📄 Download PDF</button>
+    <button class="btn btn-n" onclick="printQuote()">🖨 Print Quotation</button>
+  </div>
+  <div class="qwrap">
+    <div class="qdoc" id="quote-doc">
+      <div class="qlh" style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div class="ql-l"><div class="ql-co">Hydraulics India Services Pvt. Ltd.</div><div class="ql-tg">Manufacturer &amp; Reconditioning Specialist — Hydraulic Cylinders</div><div class="ql-ad">Peenya Industrial Area, Bangalore — 560 058, Karnataka, India</div></div>
+        <div class="ql-r"><strong>HISPL</strong>Tel: +91 80 ________<br>Email: sales@hispl.com<br>GST: ______________</div>
+      </div>
+      <div class="qrib"><span>PRODUCT COST SHEET &amp; QUOTATION</span><span id="q-ref">Ref: —</span></div>
+      <div class="qbody">
+        <div class="qmeta">
+          <div class="qmr"><span class="qmk">Customer</span><span class="qmv" id="q-cust">—</span></div>
+          <div class="qmr"><span class="qmk">Inquiry No.</span><span class="qmv" id="q-inq">—</span></div>
+          <div class="qmr"><span class="qmk">Cylinder</span><span class="qmv" id="q-desc">—</span></div>
+          <div class="qmr"><span class="qmk">Date</span><span class="qmv" id="q-date">—</span></div>
+          <div class="qmr"><span class="qmk">Bore×Rod×Stroke</span><span class="qmv" id="q-spec">—</span></div>
+          <div class="qmr"><span class="qmk">Working Pressure</span><span class="qmv" id="q-press">—</span></div>
+          <div class="qmr"><span class="qmk">Mounting</span><span class="qmv" id="q-mnt">—</span></div>
+          <div class="qmr"><span class="qmk">Quantity</span><span class="qmv" id="q-qty">—</span></div>
+        </div>
+        <table class="qtbl"><thead><tr><th>Description</th><th>Material ₹</th><th>Process ₹</th><th>Amount ₹</th></tr></thead><tbody id="q-rows"></tbody></table>
+        <div class="qft">
+          <div class="qtr"><strong>Terms &amp; Conditions</strong>1. Validity: 30 days from date of quotation<br>2. Payment: 50% advance, balance before dispatch<br>3. Delivery: 3–4 weeks from PO + advance receipt<br>4. Taxes: GST @18% extra as applicable<br>5. Warranty: 12 months against manufacturing defects<br>6. Transport: Extra as actuals unless included above<br>7. FOB: HISPL Works, Peenya, Bangalore</div>
+          <div>
+            <div class="qsb">Prepared by: ___________________<br><span style="font-size:10px;color:#64748b">Name &amp; Date</span></div>
+            <div class="qsb" style="margin-top:16px">For Hydraulics India Services Pvt. Ltd.<br>Authorised Signatory: ___________________</div>
+            <div class="qseal">✦ HISPL CERTIFIED QUALITY ✦</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div><!-- end #app -->
+<script>
+'use strict';
+const BEAR_TYPES=['Deep Groove Ball Bearing','Angular Contact Ball Bearing','Self-Aligning Ball Bearing','Cylindrical Roller Bearing','Tapered Roller Bearing','Spherical Roller Bearing','Needle Roller Bearing','Thrust Ball Bearing','Thrust Roller Bearing','Slewing Ring Bearing','Pillow Block Bearing','Flanged Bearing'];
+const SEAL_TYPES=['Piston Seal (Double Acting)','Piston Seal (Single Acting)','Rod Seal','Wiper/Scraper Seal','Guide Ring (Piston)','Guide Ring (Rod)','O-Ring','Backup Ring','U-Cup Seal','Lip Seal','Rotary Seal','Dust Seal'];
+const SEAL_MATS=['NBR (Nitrile)','FKM (Viton)','PTFE','HNBR','Polyurethane','Silicone','EPDM'];
+const COVERS=[{id:'cec',label:'Cap End Cover (CEC)',procs:['Turning','Milling','Drilling']},{id:'hec',label:'Head End Cover (HEC)',procs:['Turning','Milling','Drilling']},{id:'gland',label:'Gland',procs:['Turning','Milling','Drilling','Grinding']}];
+const MISC=[{id:'cbush',label:'Cushion Bush',procs:['Turning','Grinding']},{id:'stube',label:'Stop Tube',procs:['Turning']},{id:'reye',label:'Rear Eye',procs:['Profile Cutting','Milling','Drilling']},{id:'rodeye',label:'Rod Eye',procs:['Profile Cutting','Milling','Drilling']},{id:'piston',label:'Piston',procs:['Profile Cutting','Milling','Drilling']}];
+const TA={r:[80,150,250,9999],c:[500,1000,2000,9999],v:[[.08,.10,.15,.20],[.10,.15,.20,.30],[.15,.20,.30,.40],[.25,.35,.50,.70]]};
+const TB={r:[80,150,250,9999],c:[500,1000,2000,9999],v:[[.30,.60,1.20,1.80],[.50,.90,1.70,2.50],[.80,1.50,2.80,4.00],[1.20,2.20,4.00,6.00]]};
+const TD={r:[80,150,250,9999],c:[500,1000,9999],v:[[.30,.60,1.20],[.50,.90,1.60],[.80,1.40,2.40],[1.20,2.00,3.50]]};
+const TF={r:[80,150,250,9999],c:[500,1000,9999],v:[[.30,.50,.90],[.50,.80,1.40],[.80,1.30,2.20],[1.20,2.00,3.20]]};
+function lkp(T,d,l){let ri=T.r.findIndex(b=>d<=b),ci=T.c.findIndex(b=>l<=b);if(ri<0)ri=T.r.length-1;if(ci<0)ci=T.c.length-1;return T.v[ri][ci];}
+const srF=sr=>sr<=2?1.00:sr<=5?1.15:sr<=10?1.35:1.60;
+const drT=d=>d<=10?.03:d<=20?.05:d<=30?.08:.12;
+const PI=Math.PI;
+const hwt=(od,id,l)=>od>id&&id>0?(PI/4)*(od*od-id*id)*l*7.85e-6:0;
+const swt=(od,l)=>od>0?(PI/4)*od*od*l*7.85e-6:0;
+const eA=(od,l)=>od>0&&l>0?PI*od*l/100:0;
+const iA=(id,l)=>id>0&&l>0?PI*id*l/100:0;
+const r2=n=>Math.round(n*100)/100;const r4=n=>Math.round(n*10000)/10000;
+const MAT={EN8:'m-en8',EN19:'m-en19',ST52:'m-st52',C45:'m-c45',SS410:'m-ss410',SS316:'m-ss316'};
+const mr=g=>gv(MAT[g]||'m-en8');
+const gv=id=>{const e=document.getElementById(id);return e?+e.value||0:0};
+const sv=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v};
+const st=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v};
+const fI=n=>'₹'+Math.round(n).toLocaleString('en-IN');
+function weld(d,b){if(!d||!b)return{t:0,h:0};const len=PI*d*b,h=len/3600,lab=h*gv('pr-wl'),wire=h*.8*gv('pr-ww');return{t:r2(lab+wire),h:r4(h)};}
+let R={tube:{mat:0,proc:0,tot:0,eA:0,wt:0},rod:{mat:0,proc:0,tot:0,eA:0,wt:0},bear:0,seal:0,bom:0,asm:0,test:0,paint:0,trans:0,pack:0};
+let pieChart=null,barChart=null;
+
+function doLogout(){AEW.auth.logout();}
+window.doLogout=doLogout; // explicit window assignment — onclick= attributes require this
+function toggleTheme(){
+  const isDk=document.documentElement.getAttribute('data-theme')==='dark';
+  document.documentElement.setAttribute('data-theme',isDk?'light':'dark');
+  document.getElementById('theme-btn').textContent=isDk?'🌙':'☀️';
+  if(pieChart){pieChart.destroy();pieChart=null;}if(barChart){barChart.destroy();barChart=null;}
+  calcSummary();
+}
+function updHdr(){
+  st('hdr-inq',document.getElementById('inq-no')?.value||'—');
+  const d=document.getElementById('inq-date')?.value;
+  st('hdr-dt',d?new Date(d).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}):'—');
+}
+function propagate(){
+  const bore=gv('inq-bore'),rod=gv('inq-rod'),stroke=gv('inq-stroke');
+  sv('t-id',bore);sv('t-len',stroke+200);sv('r-fdia',rod);sv('r-len',stroke+350);
+  calcTube();calcRod();calcAsm();calcSummary();updHdr();
+}
+function nn(v){return Math.max(0,+v||0);}
+function pc(mh,mr,lh,lr){return Math.max(0,r2(nn(mh)*nn(mr)+nn(lh)*nn(lr)));}
+
+function calcTube(){
+  const rod=gv('t-rod'),fod=gv('t-fod'),id=gv('t-id'),len=gv('t-len');
+  const mat=document.getElementById('t-mat')?.value||'ST52',rate=mr(mat);
+  const wt=r2(hwt(rod,id,len)),mc=r2(wt*rate);
+  sv('t-wt',wt+' kg');sv('t-mr','₹'+rate+'/kg');sv('t-mc',fI(mc));
+  const ch=r4(lkp(TA,rod,len)),cc=pc(ch,gv('tc-mr'),gv('tc-lh'),gv('tc-lr'));
+  st('tc-i','OD:'+rod+'·L:'+len);st('tc-h',ch+' hr');st('tc-c',fI(cc));
+  const sr=rod-fod,sf=srF(Math.max(0,sr)),rth=r4(Math.max(0,lkp(TB,fod,len)*sf)),rtc=pc(rth,gv('trt-mr'),gv('trt-lh'),gv('trt-lr'));
+  st('trt-sr',Math.max(0,r2(sr)));st('trt-f',sf);st('trt-h',rth+' hr');st('trt-c',fI(rtc));
+  const hd=gv('td-hd'),hn=gv('td-hn')||0,dh=hd>0?r4(drT(hd)*hn):0,dc=pc(dh,gv('td-mr'),gv('td-lh'),gv('td-lr'));
+  st('td-h',dh>0?dh+' hr':'—');st('td-c',fI(dc));
+  const pw=weld(gv('tpw-d'),gv('tpw-n')),pwc=Math.max(0,r2(pw.t+nn(gv('tpw-lh'))*nn(gv('tpw-lr'))));
+  st('tpw-h',pw.h>0?pw.h+' hr':'—');st('tpw-c',fI(pwc));
+  const ha=r2(iA(id,len)),hc=Math.max(0,r2(ha*nn(gv('pr-hon'))+nn(gv('th-lh'))*nn(gv('th-lr'))));
+  st('th-a',ha+' cm²');st('th-h',r4(lkp(TD,id,len))+' hr');st('th-c',fI(hc));
+  const fth=r4(rth*.70),ftc=pc(fth,gv('trt-mr'),gv('tft-lh'),gv('tft-lr'));
+  st('tft-rd','₹'+gv('trt-mr')+'/hr');st('tft-h',fth+' hr');st('tft-c',fI(ftc));
+  const cw=weld(gv('tcw-d'),gv('tcw-n')),cwc=Math.max(0,r2(cw.t+nn(gv('tcw-lh'))*nn(gv('tcw-lr'))));
+  st('tcw-h',cw.h>0?cw.h+' hr':'—');st('tcw-c',fI(cwc));
+  const rw=weld(gv('trw-d'),gv('trw-n')),rwc=Math.max(0,r2(rw.t+nn(gv('trw-lh'))*nn(gv('trw-lr'))));
+  st('trw-h',rw.h>0?rw.h+' hr':'—');st('trw-c',fI(rwc));
+  const proc=cc+rtc+dc+pwc+hc+ftc+cwc+rwc,tot=mc+proc;
+  st('t-proc',fI(proc));st('t-total',fI(tot));
+  R.tube={mat:mc,proc,tot,eA:r2(eA(fod,len)),wt};calcSummary();
+}
+
+function calcRod(){
+  const rd=gv('r-rdia'),fd=gv('r-fdia')||gv('inq-rod'),len=gv('r-len')||(gv('inq-stroke')+350);
+  const mat=document.getElementById('r-mat')?.value||'EN8',rate=mr(mat);
+  const wt=r2(swt(rd,len)),mc=r2(wt*rate);
+  sv('r-wt',wt+' kg');sv('r-mr','₹'+rate+'/kg');sv('r-mc',fI(mc));
+  st('rht-rd',gv('pr-ht'));st('rih-rd',gv('pr-ih'));st('rgr-rd',gv('pr-gr'));st('rch-rd',gv('r-cr'));st('rpol-rd',gv('pr-pol'));
+  const ch=r4(lkp(TA,rd,len)),cc=pc(ch,gv('rc-mr'),gv('rc-lh'),gv('rc-lr'));
+  st('rc-i','Ø'+rd+'×'+len);st('rc-h',ch+' hr');st('rc-c',fI(cc));
+  const sr=rd-fd,sf=srF(Math.max(0,sr)),rth=r4(Math.max(0,lkp(TB,fd,len)*sf)),rtc=pc(rth,gv('rrt-mr'),gv('rrt-lh'),gv('rrt-lr'));
+  st('rrt-sr',Math.max(0,r2(sr)));st('rrt-f',sf);st('rrt-h',rth+' hr');st('rrt-c',fI(rtc));
+  const htc=Math.max(0,r2(nn(wt)*nn(gv('pr-ht'))+nn(gv('rht-lh'))*nn(gv('rht-lr'))));
+  st('rht-w',wt+' kg');st('rht-c',fI(htc));
+  const iha=r2(eA(fd,len)),ihc=Math.max(0,r2(iha*nn(gv('pr-ih'))+nn(gv('rih-lh'))*nn(gv('rih-lr'))));
+  st('rih-a',iha+' cm²');st('rih-c',fI(ihc));
+  const fth=r4(rth*.70),ftc=pc(fth,gv('rrt-mr'),gv('rft-lh'),gv('rft-lr'));
+  st('rft-h',fth+' hr');st('rft-c',fI(ftc));
+  const gra=r2(eA(fd,len)),grc=Math.max(0,r2(gra*nn(gv('pr-gr'))+nn(gv('rgr-lh'))*nn(gv('rgr-lr'))));
+  st('rgr-a',gra+' cm²');st('rgr-c',fI(grc));
+  const cha=r2(eA(fd,len)),chc=Math.max(0,r2(cha*nn(gv('r-cr'))+nn(gv('rch-lh'))*nn(gv('rch-lr'))));
+  st('rch-a',cha+' cm²');st('rch-c',fI(chc));
+  const poa=r2(eA(fd,len)),poc=Math.max(0,r2(poa*nn(gv('pr-pol'))+nn(gv('rpol-lh'))*nn(gv('rpol-lr'))));
+  st('rpol-a',poa+' cm²');st('rpol-c',fI(poc));
+  const proc=cc+rtc+htc+ihc+ftc+grc+chc+poc,tot=mc+proc;
+  st('r-proc',fI(proc));st('r-total',fI(tot));
+  R.rod={mat:mc,proc,tot,eA:r2(eA(fd,len)),wt};calcAsm();calcSummary();
+}
+
+function buildBOMRow(typeOpts,matOpts,tbodyId){
+  const tr=document.createElement('tr');
+  const tOpts=typeOpts.map(t=>`<option>${t}</option>`).join('');
+  const mOpts=matOpts.map(m=>`<option>${m}</option>`).join('');
+  const matCol=matOpts.length>0?`<td><select class="fi" style="font-size:10px">${mOpts}</select></td>`:`<td><input placeholder="Vendor/Mfr" oninput="calcBOM()"></td>`;
+  tr.innerHTML=`<td><select class="fi" style="font-size:10px">${tOpts}</select></td><td><input placeholder="Part No./Size" oninput="calcBOM()"></td>${matCol}<td><input class="fi-sm" type="number" value="1" oninput="calcBOM()"></td><td><input class="fi-md" type="number" value="0" oninput="calcBOM()"></td><td class="va line-tot">₹0</td><td><label class="ubtn">📎 Upload<input type="file" accept=".pdf,.jpg,.png" class="fin" onchange="handleFile(this)"></label></td><td class="fnm">—</td><td><button onclick="this.closest('tr').remove();calcBOM()" class="btn btn-x">✕</button></td>`;
+  document.getElementById(tbodyId).appendChild(tr);
+}
+function addBearing(){buildBOMRow(BEAR_TYPES,[],`bear-rows`);calcBOM();}
+function addSeal(){buildBOMRow(SEAL_TYPES,SEAL_MATS,`seal-rows`);calcBOM();}
+function addBOM(){
+  const tb=document.getElementById('bom-rows');
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td><input placeholder="Item description" oninput="calcBOM()"></td><td><input placeholder="Spec/Part No."></td><td><input placeholder="Vendor"></td><td><input class="fi-sm" type="number" value="1" oninput="calcBOM()"></td><td><input class="fi-md" type="number" value="0" oninput="calcBOM()"></td><td class="va line-tot">₹0</td><td><label class="ubtn">📎 Upload<input type="file" accept=".pdf,.jpg,.png" class="fin" onchange="handleFile(this)"></label></td><td class="fnm">—</td><td><button onclick="this.closest('tr').remove();calcBOM()" class="btn btn-x">✕</button></td>`;
+  tb.appendChild(tr);
+}
+function addDefaultBOM(){
+  addBOM();
+  const rows=document.querySelectorAll('#bom-rows tr');
+  if(rows.length>0){const inputs=rows[0].querySelectorAll('input');if(inputs[0])inputs[0].placeholder='e.g. Guide Rings, Grease Nipples, Fasteners';}
+}
+function handleFile(inp){inp.closest('tr').querySelector('.fnm').textContent=inp.files[0]?.name||'—';}
+function calcBOM(){
+  let bt=0,st2=0,ot=0;
+  function sumTable(sel,totClass){let s=0;document.querySelectorAll(sel+' tr').forEach(row=>{const ins=row.querySelectorAll('input[type=number]');if(ins.length>=2){const t=r2((+ins[ins.length-2].value||0)*(+ins[ins.length-1].value||0));s+=t;const td=row.querySelector('.line-tot');if(td)td.textContent=fI(t);}});return s;}
+  bt=sumTable('#bear-rows','bear');st2=sumTable('#seal-rows','seal');ot=sumTable('#bom-rows','other');
+  st('bear-tot',fI(bt));st('seal-tot',fI(st2));st('other-tot',fI(ot));
+  const grand=bt+st2+ot;
+  sv('bom-bear-d',fI(bt));sv('bom-seal-d',fI(st2));sv('bom-other-d',fI(ot));sv('bom-grand',fI(grand));
+  R.bear=bt;R.seal=st2;R.bom=ot;calcSummary();
+}
+function calcAsm(){
+  const ac=r2(gv('asm-h')*gv('asm-lr')),tc=r2(gv('test-h')*gv('test-lr'));
+  sv('asm-c',fI(ac));sv('test-c',fI(tc));
+  const ta=R.tube.eA||0,ra=R.rod.eA||0;
+  sv('pt-area',ta+' cm²');sv('pr-area',ra+' cm²');
+  const ptc=r2(ta*gv('pt-rate')),prc=r2(ra*gv('pr-rate'));
+  sv('pt-c',fI(ptc));sv('pr-c',fI(prc));
+  const trans=r2(gv('trans-in')+gv('trans-out')+gv('trans-v'));
+  sv('trans-tot',fI(trans));
+  const tw=r2((R.tube.wt||0)+(R.rod.wt||0));
+  sv('pack-wt',tw+' kg');
+  const pt=document.getElementById('pack-type')?.value;
+  let pkc=0;
+  if(pt==='loose')pkc=r2(tw*gv('pr-pkl'));
+  else if(pt==='wooden')pkc=r2(tw*gv('pr-pkw'));
+  else pkc=gv('pack-cust');
+  sv('pack-c',fI(pkc));
+  R.asm=ac;R.test=tc;R.paint=ptc+prc;R.trans=trans;R.pack=pkc;calcSummary();
+}
+function calcSummary(){
+  const allC=[...COVERS,...MISC];let csub=R.tube.tot+R.rod.tot;
+  allC.forEach(c=>{const t=gv(c.id+'-mat')+gv(c.id+'-proc')+gv(c.id+'-lab');st('ss-'+c.id,fI(t));csub+=t;});
+  st('ss-tube',fI(R.tube.tot));st('ss-rod',fI(R.rod.tot));st('ss-csub',fI(csub));
+  st('ss-bear',fI(R.bear||0));st('ss-seal',fI(R.seal||0));st('ss-bom',fI(R.bom||0));
+  st('ss-asm',fI(R.asm||0));st('ss-test',fI(R.test||0));
+  st('ss-paint',fI(R.paint||0));st('ss-trans',fI(R.trans||0));st('ss-pack',fI(R.pack||0));
+  const mfg=csub+(R.bear||0)+(R.seal||0)+(R.bom||0)+(R.asm||0)+(R.test||0)+(R.paint||0)+(R.trans||0)+(R.pack||0);
+  st('ss-mfg',fI(mfg));
+  const pp=gv('profit-pct')||20,pa=r2(mfg*pp/100),sp=r2(mfg+pa),qty=gv('inq-qty')||1,ov=r2(sp*qty);
+  sv('profit-amt',fI(pa));sv('profit-sp',fI(sp));sv('sum-qty',qty+' nos');sv('profit-ov',fI(ov));
+  st('km-mfg',fI(mfg));st('km-mg',fI(pa));st('km-sp',fI(sp));st('km-ov',fI(ov));
+  st('km-mgp','@ '+pp+'%');st('km-qty','for '+qty+' piece'+(qty>1?'s':''));
+  renderCharts(csub);
+}
+function renderCharts(csub){
+  if(typeof Chart==='undefined')return;
+  const isDk=document.documentElement.getAttribute('data-theme')==='dark';
+  const tc=isDk?'#9ca3af':'#64748b',gc=isDk?'#374151':'#e2e8f0';
+  const bom=(R.bear||0)+(R.seal||0)+(R.bom||0);
+  const svc=(R.asm||0)+(R.test||0);
+  const pdata=[csub,bom,svc,R.paint||0,R.trans||0,R.pack||0].map(v=>Math.max(v,0));
+  const pcols=['#2563eb','#059669','#d97706','#f472b6','#8b5cf6','#06b6d4'];
+  if(pieChart){pieChart.data.datasets[0].data=pdata;pieChart.update();return;}
+  const pctx=document.getElementById('chart-pie')?.getContext('2d');
+  if(pctx)pieChart=new Chart(pctx,{type:'doughnut',data:{labels:['Components','BOM','Assembly','Painting','Transport','Packing'],datasets:[{data:pdata,backgroundColor:pcols,borderWidth:2,borderColor:isDk?'#1f2937':'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:tc,font:{size:11},padding:8}}}}});
+  const cd=[R.tube.tot,R.rod.tot,...COVERS.map(c=>gv(c.id+'-mat')+gv(c.id+'-proc')+gv(c.id+'-lab')),...MISC.map(c=>gv(c.id+'-mat')+gv(c.id+'-proc')+gv(c.id+'-lab'))];
+  const cl=['Tube','Rod',...COVERS.map(c=>c.id.toUpperCase()),...MISC.map(c=>c.id==='cbush'?'Bush':c.id==='stube'?'StTube':c.id==='rodeye'?'REye':c.id.charAt(0).toUpperCase()+c.id.slice(1))];
+  const bctx=document.getElementById('chart-bar')?.getContext('2d');
+  if(bctx)barChart=new Chart(bctx,{type:'bar',data:{labels:cl,datasets:[{label:'Cost ₹',data:cd.map(v=>Math.max(v,0)),backgroundColor:'#2563ebcc',borderColor:'#2563eb',borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:tc,font:{size:10},callback:v=>'₹'+v.toLocaleString('en-IN')},grid:{color:gc}},x:{ticks:{color:tc,font:{size:10}},grid:{display:false}}}}});
+}
+function buildCompTables(){
+  function mkTbl(cfgs,cid){
+    const el=document.getElementById(cid);if(!el)return;
+    el.innerHTML=cfgs.map(c=>`<div class="card"><div class="card-hd"><span class="ct">${c.label}</span><span class="badge b-m">Manual entry</span></div><div class="g3"><div class="field"><label>Material Cost ₹/pc</label><input id="${c.id}-mat" class="fi" type="number" value="0" oninput="calcSummary()"></div><div class="field"><label>Process Cost ₹/pc</label><input id="${c.id}-proc" class="fi" type="number" value="0" oninput="calcSummary()"></div><div class="field"><label>Labour Cost ₹/pc</label><input id="${c.id}-lab" class="fi" type="number" value="0" oninput="calcSummary()"></div></div><div style="font-size:11px;color:var(--mut);margin-top:8px">Processes: ${c.procs.join(' → ')}</div></div>`).join('');
+  }
+  mkTbl(COVERS,'cov-cont');mkTbl(MISC,'misc-cont');
+}
+function go(btn,id){
+  document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('p-'+id)?.classList.add('active');
+  if(id==='sum')calcSummary();
+  if(id==='qte')buildQuote();
+}
+function buildQuote(){
+  const bore=gv('inq-bore'),rod=gv('inq-rod'),stroke=gv('inq-stroke');
+  const today=new Date(),fd=d=>d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+  const ref='HISPL-'+today.getFullYear()+'-'+String(Math.floor(Math.random()*9000)+1000);
+  st('q-ref','Ref: '+ref);
+  st('q-cust',document.getElementById('inq-cust')?.value||'—');
+  st('q-inq',document.getElementById('inq-no')?.value||'—');
+  st('q-desc',document.getElementById('inq-desc')?.value||'Hydraulic Cylinder');
+  st('q-date',fd(today));
+  st('q-spec','Ø'+bore+'mm bore / Ø'+rod+'mm rod × '+stroke+'mm stroke');
+  st('q-press',gv('inq-press')+' bar');
+  st('q-mnt',document.getElementById('inq-mnt')?.value||'—');
+  st('q-qty',(gv('inq-qty')||1)+' nos');
+  const rows=[];
+  rows.push({l:'Tube ('+document.getElementById('t-mat')?.value+')',m:R.tube.mat,p:R.tube.proc});
+  rows.push({l:'Piston Rod ('+document.getElementById('r-mat')?.value+')',m:R.rod.mat,p:R.rod.proc});
+  [...COVERS,...MISC].forEach(c=>{const m=gv(c.id+'-mat'),p=gv(c.id+'-proc')+gv(c.id+'-lab');if(m+p>0)rows.push({l:c.label,m,p});});
+  const bt=(R.bear||0)+(R.seal||0)+(R.bom||0);
+  if(bt>0)rows.push({l:'Bill of Materials (Bearings, Seals, Bought Out)',m:bt,p:0});
+  const at=(R.asm||0)+(R.test||0);
+  if(at>0)rows.push({l:'Assembly + Testing',m:0,p:at});
+  if(R.paint>0)rows.push({l:'Painting',m:0,p:R.paint});
+  if(R.trans>0)rows.push({l:'Transport (Inward + Outward + Vendor)',m:0,p:R.trans});
+  if(R.pack>0)rows.push({l:'Packing',m:0,p:R.pack});
+  const mfg=rows.reduce((s,r)=>s+r.m+r.p,0);
+  const pp=gv('profit-pct')||20,pa=r2(mfg*pp/100),sp=r2(mfg+pa),qty=gv('inq-qty')||1;
+  document.getElementById('q-rows').innerHTML=
+    rows.map(r=>`<tr><td>${r.l}</td><td>${r.m>0?fI(r.m):'—'}</td><td>${r.p>0?fI(r.p):'—'}</td><td>${fI(r.m+r.p)}</td></tr>`).join('')+
+    `<tr class="qsub"><td colspan="3">Total Manufacturing Cost (per piece)</td><td>${fI(mfg)}</td></tr>
+     <tr class="qmg"><td colspan="3">Profit Margin (${pp}%)</td><td>${fI(pa)}</td></tr>
+     <tr class="qsp"><td colspan="3">Selling Price per Piece</td><td>${fI(sp)}</td></tr>
+     <tr class="qov"><td colspan="3">Total Order Value (${qty} nos)</td><td>${fI(sp*qty)}</td></tr>`;
+}
+function generatePDF(){
+  if(typeof window.jspdf==='undefined'){alert('PDF library loading, please try again in a moment.');return;}
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  const bore=gv('inq-bore'),rod=gv('inq-rod'),stroke=gv('inq-stroke');
+  const cust=document.getElementById('inq-cust')?.value||'—';
+  const inqNo=document.getElementById('inq-no')?.value||'—';
+  const today=new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+  doc.setFillColor(13,27,42);doc.rect(0,0,210,40,'F');
+  doc.setFillColor(5,150,105);doc.rect(0,40,210,8,'F');
+  doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(16);
+  doc.text('Hydraulics India Services Pvt. Ltd.',14,18);
+  doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(180,200,220);
+  doc.text('Manufacturer & Reconditioning Specialist — Hydraulic Cylinders',14,25);
+  doc.text('Peenya Industrial Area, Bangalore — 560 058',14,31);
+  doc.setFont('helvetica','bold');doc.setTextColor(255,255,255);doc.setFontSize(11);
+  doc.text('PRODUCT COST SHEET & QUOTATION',14,46);
+  const ref='HISPL-'+new Date().getFullYear()+'-'+String(Math.floor(Math.random()*9000)+1000);
+  doc.setFontSize(9);doc.text(ref,150,46);
+  doc.setTextColor(15,23,42);doc.setFont('helvetica','normal');doc.setFontSize(9);
+  doc.setFillColor(248,250,252);doc.rect(14,54,182,36,'F');
+  doc.setDrawColor(226,232,240);doc.rect(14,54,182,36,'S');
+  const meta=[['Customer',cust],['Inquiry No.',inqNo],['Date',today],['Bore×Rod×Stroke','Ø'+bore+'/'+rod+'×'+stroke+'mm'],['Pressure',gv('inq-press')+' bar'],['Quantity',(gv('inq-qty')||1)+' nos']];
+  meta.forEach((m,i)=>{const x=i<3?14:105,y=60+(i%3)*10;doc.setFont('helvetica','bold');doc.setTextColor(100,116,139);doc.text(m[0]+':',x,y);doc.setFont('helvetica','normal');doc.setTextColor(15,23,42);doc.text(String(m[1]),x+35,y);});
+  const mfg=R.tube.tot+R.rod.tot+(R.bear||0)+(R.seal||0)+(R.bom||0)+(R.asm||0)+(R.test||0)+(R.paint||0)+(R.trans||0)+(R.pack||0);
+  const pp=gv('profit-pct')||20,pa=r2(mfg*pp/100),sp=r2(mfg+pa),qty=gv('inq-qty')||1;
+  const trows=[[document.getElementById('t-mat')?.value+' Tube',fI(R.tube.mat),fI(R.tube.proc),fI(R.tube.tot)],[document.getElementById('r-mat')?.value+' Piston Rod',fI(R.rod.mat),fI(R.rod.proc),fI(R.rod.tot)],['Bill of Materials (Bearings, Seals, Bought Out)',fI((R.bear||0)+(R.seal||0)+(R.bom||0)),'—',fI((R.bear||0)+(R.seal||0)+(R.bom||0))],['Assembly + Testing','—',fI((R.asm||0)+(R.test||0)),fI((R.asm||0)+(R.test||0))],['Painting + Transport + Packing','—',fI((R.paint||0)+(R.trans||0)+(R.pack||0)),fI((R.paint||0)+(R.trans||0)+(R.pack||0))]];
+  if(typeof doc.autoTable==='function'){
+    doc.autoTable({startY:96,head:[['Description','Material ₹','Process ₹','Total ₹']],body:trows,foot:[['Total Manufacturing Cost','','',fI(mfg)],['Profit Margin ('+pp+'%)','','',fI(pa)],['Selling Price per Piece','','',fI(sp)],['Total Order Value ('+qty+' nos)','','',fI(sp*qty)]],headStyles:{fillColor:[13,27,42],textColor:[255,255,255],fontStyle:'bold',fontSize:9},footStyles:{fillColor:[5,150,105],textColor:[255,255,255],fontStyle:'bold',fontSize:10},bodyStyles:{fontSize:9},alternateRowStyles:{fillColor:[248,250,252]},columnStyles:{0:{cellWidth:90},1:{halign:'right'},2:{halign:'right'},3:{halign:'right',fontStyle:'bold'}},margin:{left:14,right:14}});
+  }
+  const fy=doc.lastAutoTable?.finalY||200;
+  doc.setFontSize(8);doc.setTextColor(100,116,139);
+  doc.text('Terms: 30 days validity · 50% advance · GST @18% extra · 12 months warranty · FOB Peenya, Bangalore',14,fy+10);
+  doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(13,27,42);
+  doc.text('Authorised Signatory: ___________________',14,fy+25);
+  doc.text('For Hydraulics India Services Pvt. Ltd.',14,fy+32);
+  doc.setFont('helvetica','bold');doc.setFontSize(8);doc.setTextColor(5,150,105);
+  doc.text('HISPL CERTIFIED QUALITY',140,fy+28);
+  doc.save('HISPL_Quotation_'+inqNo+'.pdf');
+}
+function calcAll(){calcTube();calcRod();calcBOM();calcAsm();calcSummary();}
+
+function printQuote(){
+  // Grab the quotation document HTML
+  const qdoc = document.getElementById('quote-doc');
+  if(!qdoc){alert('Please go to the Quotation tab first and generate a quotation.');return;}
+
+  // Build a clean print-only page in a new window
+  const printStyles = `
+    <style>
+      *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+      body{font-family:'Inter',system-ui,sans-serif;font-size:12px;color:#0f172a;background:#fff;padding:0}
+      .qdoc{max-width:100%;background:#fff}
+      .qlh{background:linear-gradient(135deg,#0d1b2a 0%,#152237 60%,#1e3a5f 100%)!important;color:#fff;padding:24px 28px;display:flex;justify-content:space-between;align-items:flex-start}
+      .qlh::before{display:none}
+      .ql-l{position:static}.ql-co{font-size:18px;font-weight:800;letter-spacing:-.02em}.ql-tg{font-size:11px;color:rgba(255,255,255,.55);margin-top:3px}.ql-ad{font-size:10px;color:rgba(255,255,255,.35);margin-top:2px}
+      .ql-r{text-align:right;font-size:11px;color:rgba(255,255,255,.6);line-height:1.8}
+      .ql-r strong{color:rgba(255,255,255,.9);font-size:12px;display:block}
+      .qrib{background:#059669!important;color:#fff;padding:8px 28px;display:flex;justify-content:space-between;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase}
+      .qbody{padding:20px 28px}
+      .qmeta{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px;margin-bottom:16px}
+      .qmr{display:flex;gap:8px;font-size:11px;padding:2px 0}
+      .qmk{color:#64748b;width:130px;flex-shrink:0;font-weight:500}.qmv{font-weight:700;color:#0f172a}
+      .qtbl{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:12px;border-radius:8px;overflow:hidden}
+      .qtbl thead th{background:#0d1b2a!important;color:rgba(255,255,255,.9);padding:8px 10px;font-size:10px;font-weight:700;letter-spacing:.05em;text-align:left}
+      .qtbl thead th:last-child{text-align:right}
+      .qtbl tbody td{padding:7px 10px;border-bottom:1px solid #e2e8f0;color:#0f172a}
+      .qtbl tbody td:last-child{text-align:right;font-weight:600}
+      .qtbl tr:nth-child(even) td{background:#f8fafc}
+      .qtbl .qsub td{background:#f1f5f9;font-weight:800;border-top:2px solid #cbd5e1;color:#1e3a5f}
+      .qtbl .qmg td{color:#64748b}
+      .qtbl .qsp td{background:#059669!important;color:#fff;font-weight:800;font-size:13px;padding:10px}
+      .qtbl .qov td{background:#0d1b2a!important;color:#fff;font-weight:800;font-size:14px;padding:11px}
+      .qft{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:16px;padding-top:14px;border-top:1.5px solid #e2e8f0}
+      .qtr{font-size:10px;color:#64748b;line-height:1.9}.qtr strong{color:#0f172a;font-size:11px;display:block;margin-bottom:3px}
+      .qsb{margin-top:24px;padding-top:5px;border-top:1.5px solid #0f172a;font-size:10px;color:#64748b;line-height:1.6}
+      .qseal{margin-top:8px;border:1.5px solid #0d1b2a;border-radius:6px;padding:7px;text-align:center;font-size:9px;font-weight:700;color:#0d1b2a;letter-spacing:.1em;text-transform:uppercase}
+    </style>
+  `;
+
+  const pw = window.open('','_blank','width=900,height=700');
+  pw.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>HISPL Quotation</title>');
+  pw.document.write('<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">');
+  pw.document.write(printStyles);
+  pw.document.write('<\/head><body>');
+  pw.document.write(qdoc.outerHTML);
+  pw.document.write('<\/body><\/html>');
+  pw.document.close();
+
+  // Wait for fonts to load then print
+  pw.onload = function(){ pw.focus(); pw.print(); };
+  setTimeout(()=>{ pw.focus(); pw.print(); }, 800);
+}
+</script>
+
+
+
+<script>
+/* ===================================================================
+   ERP BOOTSTRAP  —  the only non-frozen script on this page.
+   The business logic above is untouched. This file only:
+     1. gates the page behind authentication
+     2. initialises the ERP with fault isolation
+     3. seeds an editable opening rate card
+     4. exposes diagnostics
+   =================================================================== */
+
+/* ═══════════════════════════════════════════════════════════════════
+   OPENING RATE CARD
+
+   The ERP ships every manual-entry cost field at zero, so a fresh
+   session shows a total of ₹0 until someone types in eight components
+   and every BOM line. These are plausible OPENING values for the
+   default 63 mm bore x 45 mm rod x 300 mm stroke cylinder, applied at
+   boot so the tool produces a complete, believable costing on load.
+
+   >>> THESE ARE PLACEHOLDER ESTIMATES, NOT HISPL'S ACTUAL COSTS. <<<
+   Replace them with real figures from HISPL's own costing sheets.
+   Editing this one object changes the opening state for every user.
+
+   Every seeded field remains fully editable in the UI. Seeding only
+   ever writes to a field that is currently empty or zero, so anything
+   a user types is never overwritten.
+   ═══════════════════════════════════════════════════════════════════ */
+var ERP_RATE_CARD = {
+
+  /* Machined components — rupees per piece.
+     ids match the COVERS and MISC catalogues in the ERP. */
+  components: {
+    cec:    { mat: 180, proc: 360, lab: 120 },   /* Cap End Cover   */
+    hec:    { mat: 200, proc: 420, lab: 140 },   /* Head End Cover  */
+    gland:  { mat: 140, proc: 380, lab: 110 },   /* Gland           */
+    cbush:  { mat:  60, proc: 150, lab:  50 },   /* Cushion Bush    */
+    stube:  { mat:  80, proc:  90, lab:  40 },   /* Stop Tube       */
+    reye:   { mat: 150, proc: 280, lab: 100 },   /* Rear Eye        */
+    rodeye: { mat: 150, proc: 280, lab: 100 },   /* Rod Eye         */
+    piston: { mat: 170, proc: 340, lab: 110 }    /* Piston          */
+  },
+
+  /* Bought-out items. One entry per auto-created row, in order. */
+  bearings: [
+    { part: 'Bronze Guide Bush 63 ID', vendor: 'Local',  qty: 1, rate: 280 },
+    { part: 'Wear Ring PTFE 63',       vendor: 'Local',  qty: 2, rate: 110 }
+  ],
+  seals: [
+    { part: 'Piston Seal 63 (Double Acting)', qty: 1, rate: 210 },
+    { part: 'Rod Seal 45',                    qty: 1, rate: 165 }
+  ],
+  other: [
+    { desc: 'Fasteners, ports, grease nipple, nameplate',
+      spec: 'Assorted', vendor: 'Local', qty: 1, rate: 340 }
+  ],
+
+  /* Process parameters the ERP ships blank or at zero.
+     Without a diameter, drilling and welding compute zero hours and the
+     routing rows read "—" with a cost of ₹0. Without labour hours, the
+     welding operations contribute nothing. */
+  process: {
+    'td-hd':  12,    /* Tube  · drilled hole diameter          mm  */
+    'tpw-d':   6,    /* Tube  · part weld bead diameter        mm  */
+    'tcw-d':   8,    /* Tube  · CEC weld diameter              mm  */
+    'trw-d':   8,    /* Tube  · rear eye weld diameter         mm  */
+    'tpw-lh': 0.5,   /* Tube  · part weld labour               hr  */
+    'tcw-lh': 0.5,   /* Tube  · CEC weld labour                hr  */
+    'trw-lh': 0.5,   /* Tube  · rear eye weld labour           hr  */
+    'rht-lh': 0.25,  /* Rod   · heat treatment labour          hr  */
+    'rih-lh': 0.5,   /* Rod   · induction hardening labour     hr  */
+    'rch-lh': 0.25   /* Rod   · chrome plating labour          hr  */
+  },
+
+  /* Freight and packing per cylinder. Set any to 0 for ex-works. */
+  freight: {
+    'trans-in':   120,   /* inward raw-material freight        Rs */
+    'trans-out':  250,   /* outward despatch freight           Rs */
+    'trans-v':     80,   /* vehicle / handling charge          Rs */
+    'pack-cust':  150    /* custom packing over standard       Rs */
+  },
+
+  /* Opening enquiry details, so the Quotation tab renders complete.
+     Overwrite these on screen for each real enquiry. */
+  enquiry: {
+    'inq-cust': 'Sample Customer Pvt. Ltd.',
+    'inq-desc': 'Double Acting Hydraulic Cylinder with Cushioning'
+  }
+};
+
+var AEW_BOOT = { ok: [], failed: [] };
+
+/** Run one initialisation step in isolation. Never throws. */
+function bootStep(label, fn) {
+  try { fn(); AEW_BOOT.ok.push(label); return true; }
+  catch (e) {
+    AEW_BOOT.failed.push(label + ' — ' + e.message);
+    console.error('[ERP boot] "' + label + '" failed (continuing):', e);
+    return false;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  AEW.auth.requireAuth(function (user) { bootERP(user.user_metadata || {}); });
+});
+
+function bootERP(meta) {
+  meta = meta || {};
+  var name   = meta.name   || 'HISPL User';
+  var avatar = meta.avatar || name.charAt(0).toUpperCase();
+  var color  = meta.color  || '#059669';
+
+  /* Reveal the app. The overlay is REMOVED, not hidden: a fixed
+     full-viewport element left in the tree can swallow clicks. */
+  bootStep('reveal app', function () {
+    var ov = document.getElementById('auth-loading');
+    if (ov && ov.parentNode) ov.parentNode.removeChild(ov);
+    var app = document.getElementById('app');
+    if (app) app.style.display = 'block';
+  });
+
+  bootStep('user chip', function () {
+    var un = document.getElementById('uname'), uv = document.getElementById('uav');
+    if (un) un.textContent = name;
+    if (uv) { uv.textContent = avatar; uv.style.background = color; }
+  });
+
+  bootStep('inquiry date', function () {
+    var d = document.getElementById('inq-date');
+    if (d) d.value = new Date().toISOString().split('T')[0];
+  });
+
+  bootStep('nav safety net',  installNavFallback);
+  bootStep('field legend',    installFieldLegend);
+  bootStep('mark suggested',  markSuggestedFields);
+  bootStep('inquiry validation', installInquiryValidation);
+  bootStep('override marking',   installOverrideMarking);
+  bootStep('field legend', classifyFields);
+  bootStep('save & history UI', installPersistenceUI);
+  bootStep('override tracking', trackOverrides);
+  bootStep('calculate bars',    installCalculateBars);
+  bootStep('margin guard', watchMargin);
+  bootStep('master labour rate', wireMasterLabourRate);
+  bootStep('geometry watcher', function () {
+    var app = document.getElementById('app');
+    if (!app) return;
+    /* Delegated, so the ERP's own oninput attributes are untouched.
+       Behaviour depends on WHICH field the user changed:
+
+       • Bore changed (inq-bore / t-id) — the estimator is specifying the
+         cylinder, not the stock. If the current raw OD is now too small
+         the geometry is impossible, so we raise the OD to a workable
+         size, recalculate, and say what we did. Far better than showing
+         a silent zero.
+
+       • Raw or finished OD changed (t-rod / t-fod) — the estimator is
+         deliberately specifying stock. We never overwrite that; we only
+         warn if the result is impossible. */
+    app.addEventListener('input', function (ev) {
+      var id = ev && ev.target ? ev.target.id : '';
+      clearTimeout(window.__aewGeomT);
+      window.__aewGeomT = setTimeout(function () {
+        if (id === 'inq-bore' || id === 't-id') autoFixTubeOD();
+        validateGeometry();
+      }, 150);
+    });
+  });
+  bootStep('updHdr',          function () { updHdr(); });
+  bootStep('buildCompTables', function () { buildCompTables(); });
+
+  /* Deferred so the browser paints before rows are injected. */
+  setTimeout(function () {
+    bootStep('bearing rows', function () { addBearing(); addBearing(); });
+    bootStep('seal rows',    function () { addSeal();    addSeal();    });
+    bootStep('default BOM',  function () { addDefaultBOM(); });
+    bootStep('seed rate card', seedRateCard);
+    bootStep('derived inputs', ensureDerivedInputs);
+
+    /* Full recalculation. Each call is isolated: propagate() failing
+       must not prevent calcAll() from producing figures, since the
+       derived inputs are already populated by that point. */
+    bootStep('calcBOM',     function () { calcBOM(); });
+    bootStep('propagate',   function () { propagate(); });
+    bootStep('calcAll',     function () { calcAll(); });
+    bootStep('calcSummary', function () { calcSummary(); });
+
+    /* Second settling pass. On a slow machine a table row or a chart
+       can still be materialising when the first pass runs. This fills
+       anything still empty and recalculates. It never overwrites a value
+       that is already set, so it is safe to run unconditionally. */
+    setTimeout(function () {
+      try {
+        seedRateCard();
+        ensureDerivedInputs();
+        calcBOM(); propagate(); calcAll(); calcSummary();
+      } catch (e) {
+        console.error('[ERP] settling pass failed:', e);
+      }
+      bootStep('geometry check', validateGeometry);
+      bootStep('refresh calc bars', refreshCalcBars);
+      bootStep('verify', verifyBoot);
+    }, 400);
+
+    if (AEW_BOOT.failed.length) {
+      console.warn('[ERP boot] ' + AEW_BOOT.failed.length +
+                   ' step(s) failed. Run AEW.erp.diagnose() for detail.');
+    } else {
+      console.info('[ERP boot] all ' + AEW_BOOT.ok.length + ' steps OK.');
+    }
+  }, 100);
+}
+
+/* ── Post-boot self-check ──────────────────────────────────────────
+   Reads the manufacturing cost the ERP just produced. If it is zero,
+   or any boot step failed, an on-screen report is shown naming exactly
+   what is wrong. Nothing is displayed when everything is healthy
+   except a small build stamp, so the version in use is always visible
+   without opening developer tools. */
+
+function readMoney(id) {
+  var e = document.getElementById(id);
+  if (!e) return null;
+  var n = Number(String(e.textContent || '').replace(/[^0-9.]/g, ''));
+  return isNaN(n) ? 0 : n;
+}
+
+function verifyBoot() {
+  var mfg = readMoney('ss-mfg');
+
+  var erpAlive = (typeof window.updHdr === 'function');
+
+  if (mfg > 0 && AEW_BOOT.failed.length === 0 && erpAlive) {
+    showStamp('build ' + AEW.config.BUILD, '#059669');
+    return;
+  }
+
+  /* Something is wrong — attempt one forced recovery pass. */
+  console.warn('[ERP] manufacturing cost reads ' + mfg + '. Forcing a reseed.');
+  try {
+    seedRateCard();
+    ensureDerivedInputs();
+    calcBOM(); propagate(); calcAll(); calcSummary();
+  } catch (e) {
+    console.error('[ERP] recovery pass threw:', e);
+  }
+
+  mfg = readMoney('ss-mfg');
+  if (mfg > 0 && AEW_BOOT.failed.length === 0) {
+    console.info('[ERP] recovered after forced reseed.');
+    showStamp('build ' + AEW.config.BUILD, '#059669');
+    return;
+  }
+
+  showTroubleReport(mfg);
+}
+
+/** Small, unobtrusive build stamp so the running version is always visible. */
+function showStamp(text, colour) {
+  var el = document.createElement('div');
+  el.id = 'aew-stamp';
+  el.textContent = text;
+  el.style.cssText =
+    'position:fixed;right:8px;bottom:8px;z-index:99998;' +
+    'background:' + colour + ';color:#fff;opacity:.55;' +
+    'font:11px/1 system-ui,sans-serif;padding:4px 8px;border-radius:5px;' +
+    'pointer-events:none';
+  document.body.appendChild(el);
+}
+
+/** On-screen fault report — shown only when the ERP is not calculating. */
+function showTroubleReport(mfg) {
+  var zeros = [];
+  Object.keys(ERP_RATE_CARD.components).forEach(function (id) {
+    ['-mat', '-proc', '-lab'].forEach(function (sfx) {
+      var el = document.getElementById(id + sfx);
+      if (!el) zeros.push(id + sfx + ' (field missing)');
+      else if (Number(el.value) === 0) zeros.push(id + sfx + ' = 0');
+    });
+  });
+
+  var lines = [];
+  lines.push('Build ' + AEW.config.BUILD);
+
+  /* The browser's own errors — this is the authoritative evidence. */
+  var caught = window.__aewErrors || [];
+  if (caught.length) {
+    lines.push('');
+    lines.push('BROWSER ERRORS (' + caught.length + '):');
+    caught.slice(0, 6).forEach(function (er) {
+      lines.push('  ' + er.message +
+                 (er.file ? '  [' + er.file + ':' + er.line + ':' + er.col + ']' : ''));
+      if (er.stack) lines.push('    ' + er.stack);
+    });
+    lines.push('');
+  } else {
+    lines.push('BROWSER ERRORS: none captured');
+  }
+
+  /* If the ERP functions are missing the block did not execute. Re-parse
+     it here to obtain the precise reason and position. */
+  if (typeof window.updHdr !== 'function') {
+    lines.push('ERP BLOCK DID NOT EXECUTE — re-parsing to find why:');
+    try {
+      /* Locate the ERP block by its content, not by position — this
+         page contains several inline scripts. */
+      var src = document.documentElement.outerHTML;
+      var marker = src.indexOf('BEAR_TYPES');
+      var a = src.lastIndexOf('<script>', marker);
+      var b = src.indexOf('<' + '/script>', a);
+      var code = src.slice(a + 8, b);
+      lines.push('  block length: ' + code.length + ' chars');
+      try {
+        new Function(code);
+        lines.push('  RE-PARSE SUCCEEDED — the block is syntactically valid.');
+        lines.push('  The browser skipped it for another reason.');
+      } catch (pe) {
+        lines.push('  PARSE ERROR: ' + pe.name + ': ' + pe.message);
+        var head = code.slice(0, 60).replace(/\n/g, '\\n');
+        lines.push('  block starts: ' + head);
+      }
+    } catch (ex) {
+      lines.push('  could not re-parse: ' + ex.message);
+    }
+    lines.push('');
+  }
+  lines.push('Manufacturing cost: ' + mfg);
+  lines.push('Boot steps OK: ' + AEW_BOOT.ok.length);
+  if (AEW_BOOT.failed.length) {
+    lines.push('FAILED STEPS: ' + AEW_BOOT.failed.join(' | '));
+  }
+  lines.push('Tube total: ' + (document.getElementById('t-total') || {}).textContent);
+  lines.push('Rod total: '  + (document.getElementById('r-total') || {}).textContent);
+  lines.push('Component fields at zero: ' + (zeros.length ? zeros.length : 'none'));
+  if (zeros.length) lines.push('  ' + zeros.slice(0, 8).join(', '));
+
+  var box = document.createElement('div');
+  box.id = 'aew-trouble';
+  box.style.cssText =
+    'position:fixed;left:0;right:0;bottom:0;z-index:99999;max-height:45vh;' +
+    'overflow:auto;background:#7f1d1d;color:#fff;padding:14px 18px;' +
+    'font:12px/1.6 ui-monospace,Menlo,Consolas,monospace';
+  box.innerHTML =
+    '<div style="font:700 14px/1.4 system-ui,sans-serif;margin-bottom:8px">' +
+    'ERP is not calculating — diagnostic report</div>' +
+    '<pre style="margin:0;white-space:pre-wrap">' +
+    lines.join('\n').replace(/</g, '&lt;') + '</pre>' +
+    '<button id="aew-copy" style="margin-top:10px;padding:6px 14px;border:0;' +
+    'border-radius:6px;background:#fff;color:#7f1d1d;font:700 12px system-ui;' +
+    'cursor:pointer">Copy this report</button>' +
+    '<button id="aew-close" style="margin:10px 0 0 8px;padding:6px 14px;' +
+    'border:1px solid rgba(255,255,255,.5);border-radius:6px;background:transparent;' +
+    'color:#fff;font:600 12px system-ui;cursor:pointer">Dismiss</button>';
+
+  document.body.appendChild(box);
+
+  var copy = document.getElementById('aew-copy');
+  if (copy) copy.addEventListener('click', function () {
+    var t = lines.join('\n');
+    if (navigator.clipboard) navigator.clipboard.writeText(t);
+    copy.textContent = 'Copied';
+  });
+  var close = document.getElementById('aew-close');
+  if (close) close.addEventListener('click', function () { box.remove(); });
+
+  console.error('[ERP] NOT CALCULATING\n' + lines.join('\n'));
+}
+
+/* ── Rate-card seeding ────────────────────────────────────────────── */
+
+/** Write a value to an input only if it is currently empty or zero. */
+function seedField(el, value) {
+  if (!el) return false;
+  var cur = String(el.value || '').trim();
+  if (cur !== '' && Number(cur) !== 0) return false;   /* respect user input */
+  el.value = value;
+  return true;
+}
+
+/**
+ * seedRateCard()
+ * Applies ERP_RATE_CARD to the manual-entry fields the ERP leaves at
+ * zero. Never overwrites a value a user has already entered.
+ */
+function seedRateCard() {
+  var written = 0;
+
+  /* 0 — process parameters. Seeded first: drilling and welding hours
+     depend on these, and every routing row reads "—" without them. */
+  if (ERP_RATE_CARD.process) {
+    Object.keys(ERP_RATE_CARD.process).forEach(function (id) {
+      if (seedField(document.getElementById(id), ERP_RATE_CARD.process[id])) written++;
+    });
+  }
+
+  /* 1 — machined components (cec, hec, gland, cbush, stube, reye, rodeye, piston) */
+  Object.keys(ERP_RATE_CARD.components).forEach(function (id) {
+    var c = ERP_RATE_CARD.components[id];
+    if (seedField(document.getElementById(id + '-mat'),  c.mat))  written++;
+    if (seedField(document.getElementById(id + '-proc'), c.proc)) written++;
+    if (seedField(document.getElementById(id + '-lab'),  c.lab))  written++;
+  });
+
+  /* 2 — bought-out rows.
+     calcBOM() reads the LAST TWO number inputs of each row as
+     quantity and rate, so we target them by position rather than id. */
+  function seedRows(tbodyId, spec) {
+    var rows = document.querySelectorAll('#' + tbodyId + ' tr');
+    for (var i = 0; i < rows.length && i < spec.length; i++) {
+      var s = spec[i];
+
+      var texts = rows[i].querySelectorAll('input[type="text"], input:not([type])');
+      if (texts[0]) seedField(texts[0], s.part || s.desc || '');
+      if (texts[1]) seedField(texts[1], s.spec || s.vendor || '');
+      if (texts[2]) seedField(texts[2], s.vendor || '');
+
+      var nums = rows[i].querySelectorAll('input[type="number"]');
+      if (nums.length >= 2) {
+        var qty  = nums[nums.length - 2];
+        var rate = nums[nums.length - 1];
+        if (qty)  { qty.value = s.qty; written++; }
+        if (seedField(rate, s.rate)) written++;
+      }
+    }
+  }
+  seedRows('bear-rows', ERP_RATE_CARD.bearings);
+  seedRows('seal-rows', ERP_RATE_CARD.seals);
+  seedRows('bom-rows',  ERP_RATE_CARD.other);
+
+  /* 3 — freight and packing */
+  if (ERP_RATE_CARD.freight) {
+    Object.keys(ERP_RATE_CARD.freight).forEach(function (id) {
+      if (seedField(document.getElementById(id), ERP_RATE_CARD.freight[id])) written++;
+    });
+  }
+
+  /* 4 — enquiry text, so the quotation renders with no blanks */
+  if (ERP_RATE_CARD.enquiry) {
+    Object.keys(ERP_RATE_CARD.enquiry).forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el && String(el.value || '').trim() === '') {
+        el.value = ERP_RATE_CARD.enquiry[id];
+        written++;
+      }
+    });
+  }
+
+  console.info('[ERP] rate card seeded — ' + written +
+               ' opening values written. All fields remain editable. ' +
+               'Replace ERP_RATE_CARD with HISPL\'s real costs.');
+}
+
+/* ── Derived-input safety net ─────────────────────────────────────
+   Four fields are auto-derived from the inquiry but remain editable:
+     t-id    Tube Bore ID        = bore
+     t-len   Tube Length         = stroke + 200
+     r-fdia  Rod Finished Dia    = rod
+     r-len   Rod Length          = stroke + 350
+
+   They now carry static defaults in the markup, and propagate() fills
+   them whenever bore, rod or stroke changes. This function is a third
+   guarantee: if any of them is empty or zero at boot — for example
+   because propagate() failed earlier in the chain — it is derived here
+   directly from the inquiry, so machining cost can never read zero for
+   want of a length.
+
+   A value the user has typed is never overwritten. */
+/* ═══════════════════════════════════════════════════════════════════
+   INQUIRY PANEL — validation and override marking
+   Both are delegated listeners on #app, so the ERP's own oninput
+   attributes are never modified.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Fields that must be a positive number for the sheet to make sense. */
+var INQUIRY_RULES = {
+  'inq-bore':   { label: 'Bore',              min: 10,  max: 600 },
+  'inq-rod':    { label: 'Rod diameter',      min: 8,   max: 400 },
+  'inq-stroke': { label: 'Stroke',            min: 25,  max: 6000 },
+  'inq-qty':    { label: 'Quantity',          min: 1,   max: 10000, integer: true },
+  'inq-press':  { label: 'Working pressure',  min: 10,  max: 700 }
+};
+
+/**
+ * validateInquiry()
+ * Checks the enquiry inputs and reports anything that would produce a
+ * meaningless costing. Returns an array of message strings.
+ *
+ * Previously a zero or negative dimension was accepted silently and the
+ * whole sheet quietly costed at zero, with nothing on screen to say why.
+ */
+function validateInquiry() {
+  var issues = [];
+
+  Object.keys(INQUIRY_RULES).forEach(function (id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var rule = INQUIRY_RULES[id];
+    var raw  = String(el.value || '').trim();
+    var v    = Number(raw);
+
+    var bad = null;
+    if (raw === '')                    bad = rule.label + ' is required.';
+    else if (isNaN(v))                 bad = rule.label + ' must be a number.';
+    else if (v <= 0)                   bad = rule.label + ' must be greater than zero.';
+    else if (v < rule.min)             bad = rule.label + ' looks too small (' + raw + '). Minimum ' + rule.min + '.';
+    else if (v > rule.max)             bad = rule.label + ' looks too large (' + raw + '). Maximum ' + rule.max + '.';
+    else if (rule.integer && v % 1)    bad = rule.label + ' must be a whole number.';
+
+    el.classList.toggle('ferr', !!bad);
+    el.setAttribute('aria-invalid', bad ? 'true' : 'false');
+    if (bad) issues.push(bad);
+  });
+
+  /* A rod cannot be as wide as the bore it runs inside. */
+  var bore = Number((document.getElementById('inq-bore') || {}).value) || 0;
+  var rod  = Number((document.getElementById('inq-rod')  || {}).value) || 0;
+  if (bore > 0 && rod > 0 && rod >= bore) {
+    issues.push('Rod diameter (' + rod + ' mm) must be smaller than the bore (' + bore + ' mm).');
+    var re = document.getElementById('inq-rod');
+    if (re) re.classList.add('ferr');
+  }
+
+  showInquiryIssues(issues);
+  return issues;
+}
+
+/** Renders or clears the enquiry validation panel. */
+function showInquiryIssues(issues) {
+  var box = document.getElementById('aew-inq-warn');
+  if (!issues.length) { if (box) box.remove(); return; }
+
+  if (!box) {
+    box = document.createElement('div');
+    box.id = 'aew-inq-warn';
+    box.setAttribute('role', 'alert');
+    box.style.cssText =
+      'margin:12px 0;background:#fef2f2;border:1px solid #fca5a5;' +
+      'border-left:4px solid #dc2626;border-radius:8px;padding:11px 15px;' +
+      'color:#7f1d1d;font:13px/1.6 system-ui,sans-serif';
+    var panel = document.getElementById('p-inq');
+    if (!panel) return;
+    if (panel.firstChild) panel.insertBefore(box, panel.firstChild);
+    else panel.appendChild(box);
+  }
+
+  box.innerHTML =
+    '<strong>Check these enquiry details</strong>' +
+    '<ul style="margin:6px 0 0 18px;padding:0">' +
+    issues.map(function (i) { return '<li>' + i + '</li>'; }).join('') +
+    '</ul>';
+}
+
+/** Debounced validation on any enquiry input. */
+function installInquiryValidation() {
+  var panel = document.getElementById('p-inq');
+  if (!panel) return;
+  panel.addEventListener('input', function () {
+    clearTimeout(window.__aewInqT);
+    window.__aewInqT = setTimeout(validateInquiry, 200);
+  });
+  validateInquiry();
+}
+
+/**
+ * installOverrideMarking()
+ * The four editable green fields (t-id, t-len, r-fdia, r-len) are
+ * normally derived from the enquiry. If the estimator types over one,
+ * it turns amber so it is obvious the value is no longer automatic.
+ * Clearing the field restores the derived value on the next propagate.
+ */
+function installOverrideMarking() {
+  var ids = ['t-id', 't-len', 'r-fdia', 'r-len'];
+  ids.forEach(function (id) {
+    var el = document.getElementById(id);
+    if (!el || el.hasAttribute('readonly')) return;
+
+    el.title = 'Calculated from the enquiry. Type here to override for this job.';
+
+    el.addEventListener('input', function () {
+      el.dataset.manual = '1';
+      el.classList.add('overridden');
+      el.title = 'Manual override \u2014 clear this field to return to the calculated value.';
+      if (String(el.value || '').trim() === '') {
+        delete el.dataset.manual;
+        el.classList.remove('overridden');
+        try { propagate(); } catch (e) { /* ERP not ready */ }
+      }
+    });
+  });
+}
+
+/**
+ * deriveTubeOD(bore)
+ * A workable raw outside diameter for a given bore. Wall thickness
+ * follows common hydraulic tube practice. This is a starting point the
+ * estimator adjusts to the stock actually held; its purpose is to keep
+ * the geometry valid so the weight formula never collapses to zero.
+ */
+function deriveTubeOD(bore) {
+  var wall = bore <= 50  ?  8
+           : bore <= 80  ? 10
+           : bore <= 125 ? 12.5
+           : bore <= 200 ? 15
+           :               20;
+  return Math.ceil(bore + 2 * wall);
+}
+
+/**
+ * validateGeometry()
+ * A tube whose bore is wider than its outside diameter is impossible.
+ * The weight formula (pi/4)(OD^2 - ID^2) x length x density goes
+ * negative and is clamped to zero, so every downstream cost silently
+ * reads zero. This surfaces the problem instead of hiding it.
+ */
+/**
+ * autoFixTubeOD()
+ * Raises the raw and finished OD when the entered bore has made the
+ * tube geometry impossible. Returns true if it changed anything.
+ */
+function autoFixTubeOD() {
+  var boreEl = document.getElementById('t-id');
+  var rawEl  = document.getElementById('t-rod');
+  var finEl  = document.getElementById('t-fod');
+  if (!boreEl || !rawEl) return false;
+
+  var bore = Number(boreEl.value) || 0;
+  var raw  = Number(rawEl.value)  || 0;
+  if (!bore || bore < raw) return false;          /* geometry is fine */
+
+  var od = deriveTubeOD(bore);
+  rawEl.value = od;
+  if (finEl) finEl.value = od - 5;
+
+  try { calcTube(); calcAll(); calcSummary(); }
+  catch (e) { console.error('[ERP] recalc after OD fix failed:', e); }
+
+  showGeometryNotice('Raw OD raised to ' + od + ' mm and finished OD to ' +
+                     (od - 5) + ' mm to suit a ' + bore + ' mm bore. ' +
+                     'Change them if your stock size differs.');
+  return true;
+}
+
+/** Brief, self-clearing informational notice. */
+function showGeometryNotice(msg) {
+  var el = document.getElementById('aew-geom-note');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'aew-geom-note';
+    el.style.cssText =
+      'position:fixed;left:50%;transform:translateX(-50%);bottom:16px;' +
+      'z-index:99997;background:#065f46;color:#fff;padding:9px 16px;' +
+      'border-radius:7px;font:12.5px/1.4 system-ui,sans-serif;' +
+      'box-shadow:0 4px 14px rgba(0,0,0,.25);max-width:560px';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.style.opacity = '1';
+  clearTimeout(window.__aewNoteT);
+  window.__aewNoteT = setTimeout(function () {
+    if (el) el.style.opacity = '0';
+  }, 6000);
+  el.style.transition = 'opacity .4s';
+}
+
+function validateGeometry() {
+  var n = function (id) {
+    var e = document.getElementById(id);
+    return e ? (Number(e.value) || 0) : 0;
+  };
+  var issues = [];
+  var rawOD = n('t-rod'), finOD = n('t-fod'), boreID = n('t-id');
+
+  if (boreID > 0 && rawOD > 0 && boreID >= rawOD) {
+    issues.push('Tube bore (' + boreID + ' mm) must be smaller than the raw OD (' +
+                rawOD + ' mm). Suggested raw OD: ' + deriveTubeOD(boreID) + ' mm.');
+  }
+  if (finOD > 0 && rawOD > 0 && finOD > rawOD) {
+    issues.push('Finished OD (' + finOD + ' mm) cannot exceed the raw OD (' + rawOD + ' mm).');
+  }
+  if (boreID > 0 && finOD > 0 && boreID >= finOD) {
+    issues.push('Tube bore (' + boreID + ' mm) must be smaller than the finished OD (' +
+                finOD + ' mm).');
+  }
+  showGeometryWarning(issues);
+  return issues;
+}
+
+/** Renders or clears an inline geometry warning at the top of the ERP. */
+function showGeometryWarning(issues) {
+  var box = document.getElementById('aew-geom-warn');
+  if (!issues.length) { if (box) box.remove(); return; }
+
+  if (!box) {
+    box = document.createElement('div');
+    box.id = 'aew-geom-warn';
+    box.setAttribute('role', 'alert');
+    box.style.cssText =
+      'position:sticky;top:0;z-index:9000;background:#fef3c7;' +
+      'border-bottom:2px solid #d97706;color:#78350f;padding:10px 16px;' +
+      'font:13px/1.5 system-ui,sans-serif';
+    var app = document.getElementById('app');
+    if (!app) return;
+    if (app.firstChild) app.insertBefore(box, app.firstChild);
+    else app.appendChild(box);
+  }
+
+  box.innerHTML =
+    '<strong>Check the dimensions &mdash; costs read zero until this is corrected.</strong>' +
+    '<ul style="margin:6px 0 8px 18px;padding:0">' +
+    issues.map(function (i) { return '<li>' + i + '</li>'; }).join('') +
+    '</ul>' +
+    '<button id="aew-geom-fix" style="padding:5px 14px;border:0;border-radius:5px;' +
+    'background:#d97706;color:#fff;font:700 12px system-ui;cursor:pointer">' +
+    'Set a workable OD for me</button>';
+
+  var fix = document.getElementById('aew-geom-fix');
+  if (fix) fix.addEventListener('click', function () {
+    var boreEl = document.getElementById('t-id');
+    var bore = boreEl ? (Number(boreEl.value) || 0) : 0;
+    if (!bore) return;
+    var od = deriveTubeOD(bore);
+    var rawEl = document.getElementById('t-rod');
+    var finEl = document.getElementById('t-fod');
+    if (rawEl) rawEl.value = od;
+    if (finEl) finEl.value = od - 5;
+    calcTube(); calcAll(); calcSummary();
+    validateGeometry();
+  });
+}
+
+function ensureDerivedInputs() {
+  var g = function (id) {
+    var e = document.getElementById(id);
+    return e ? (Number(e.value) || 0) : 0;
+  };
+  var bore   = g('inq-bore');
+  var rod    = g('inq-rod');
+  var stroke = g('inq-stroke');
+  if (!bore && !rod && !stroke) return;   /* nothing to derive from */
+
+  var derived = {
+    't-id':   bore,
+    't-len':  stroke ? stroke + 200 : 0,
+    'r-fdia': rod,
+    'r-len':  stroke ? stroke + 350 : 0
+  };
+
+  var filled = [];
+  Object.keys(derived).forEach(function (id) {
+    var el = document.getElementById(id);
+    if (!el || !derived[id]) return;
+    if (Number(el.value) > 0) return;      /* already set — leave alone */
+    el.value = derived[id];
+    filled.push(id + '=' + derived[id]);
+  });
+
+  /* Keep the tube geometry physically possible. Stock raw OD ships at
+     75 mm, which is smaller than every standard bore above 63 mm, so an
+     unadjusted bore silently zeroes the tube weight and every cost. */
+  var boreEl = document.getElementById('t-id');
+  var rawEl  = document.getElementById('t-rod');
+  var finEl  = document.getElementById('t-fod');
+  if (boreEl && rawEl) {
+    var b = Number(boreEl.value) || 0;
+    var o = Number(rawEl.value)  || 0;
+    if (b > 0 && b >= o) {
+      var newOD = deriveTubeOD(b);
+      rawEl.value = newOD;
+      if (finEl) finEl.value = newOD - 5;
+      filled.push('t-rod=' + newOD + ' (raised above bore ' + b + ')');
+    }
+  }
+
+  if (filled.length) {
+    console.info('[ERP] derived inputs filled: ' + filled.join(', '));
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   FIELD CLARITY
+   Three kinds of field exist on these sheets, and they used to look
+   identical, which made the sheet hard to read:
+
+     CALCULATED  grey, locked   the ERP works it out; you cannot type
+     SUGGESTED   amber          an opening figure you SHOULD replace
+     YOURS       white          straightforward manual entry
+
+   A legend at the top of every panel states this, and the seeded
+   opening values are tinted amber so it is obvious which numbers are
+   placeholders rather than HISPL's real costs.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/** Inserts the colour legend at the top of every panel. */
+function installFieldLegend() {
+  var LEGEND =
+    '<div class="lgd">' +
+      '<span><b>Field guide:</b></span>' +
+      '<span><i class="i-calc"></i>Calculated \u2014 worked out for you, locked</span>' +
+      '<span><i class="i-sugg"></i>Suggested \u2014 opening figure, please replace</span>' +
+      '<span><i class="i-you"></i>Yours \u2014 type your own value</span>' +
+    '</div>';
+
+  var panels = document.querySelectorAll('.panel');
+  for (var i = 0; i < panels.length; i++) {
+    if (panels[i].querySelector('.lgd')) continue;      /* already added */
+    var d = document.createElement('div');
+    d.innerHTML = LEGEND;
+    panels[i].insertBefore(d.firstChild, panels[i].firstChild);
+  }
+}
+
+/**
+ * Tints every field the rate card seeded, so a user can see at a glance
+ * which numbers are placeholder estimates. The tint clears the moment
+ * they type their own value.
+ */
+function markSuggestedFields() {
+  var ids = [];
+
+  if (ERP_RATE_CARD.components) {
+    Object.keys(ERP_RATE_CARD.components).forEach(function (c) {
+      ids.push(c + '-mat', c + '-proc', c + '-lab');
+    });
+  }
+  if (ERP_RATE_CARD.process) ids = ids.concat(Object.keys(ERP_RATE_CARD.process));
+  if (ERP_RATE_CARD.freight) ids = ids.concat(Object.keys(ERP_RATE_CARD.freight));
+
+  ids.forEach(function (id) {
+    var el = document.getElementById(id);
+    if (!el || el.readOnly) return;
+    el.classList.add('fi-s');
+    el.title = 'Suggested opening value \u2014 replace with your own figure.';
+    el.addEventListener('input', function once() {
+      el.classList.remove('fi-s');
+      el.title = '';
+      el.removeEventListener('input', once);
+    });
+  });
+
+  /* Bought-out rate cells in the BOM tables */
+  ['bear-rows', 'seal-rows', 'bom-rows'].forEach(function (tb) {
+    var rows = document.querySelectorAll('#' + tb + ' tr');
+    for (var i = 0; i < rows.length; i++) {
+      var nums = rows[i].querySelectorAll('input[type="number"]');
+      if (!nums.length) continue;
+      var rate = nums[nums.length - 1];
+      if (Number(rate.value) > 0) {
+        rate.classList.add('fi-s');
+        rate.title = 'Suggested rate \u2014 replace with your supplier price.';
+        (function (el) {
+          el.addEventListener('input', function once() {
+            el.classList.remove('fi-s');
+            el.title = '';
+            el.removeEventListener('input', once);
+          });
+        }(rate));
+      }
+    }
+  });
+
+  /* Every locked field gets an explanatory tooltip */
+  document.querySelectorAll('input[readonly]').forEach(function (el) {
+    if (!el.title) el.title = 'Calculated automatically \u2014 change the inputs above to affect this.';
+  });
+}
+
+/* ── Calculate bar ─────────────────────────────────────────────────
+   A calculate bar is added to the bottom of every panel.
+
+   The ERP already recalculates as you type — each input carries its own
+   oninput handler. So why add a button?
+
+   Three reasons, all from watching how the sheet is actually used:
+
+   1. Confirmation. After editing eight component rates you want one
+      deliberate action that says "apply all of that", and a number that
+      visibly updates in response. Continuous recalculation is correct
+      but gives no moment of confirmation.
+
+   2. Recovery. If a single field's handler ever fails, that panel stops
+      updating silently. The button re-runs the entire chain — tube, rod,
+      BOM, assembly, summary — so one broken handler cannot leave the
+      sheet stale.
+
+   3. Visibility. Standing on the Tube panel you cannot see the effect on
+      the order value, because that figure lives on Cost Summary. The bar
+      shows this panel's subtotal and the whole-job totals side by side.
+
+   Everything here is additive. No ERP calculation is modified — the bar
+   calls the ERP's own functions and reads the ERP's own output fields. */
+
+/** Which figure matters most on each panel. */
+var PANEL_TOTALS = {
+  'p-inq':  { label: 'Manufacturing cost', field: 'ss-mfg'    },
+  'p-tube': { label: 'Tube total',         field: 't-total'   },
+  'p-rod':  { label: 'Piston rod total',   field: 'r-total'   },
+  'p-cov':  { label: 'Components subtotal',field: 'ss-csub'   },
+  'p-misc': { label: 'Components subtotal',field: 'ss-csub'   },
+  'p-bom':  { label: 'Bill of materials',  field: 'bom-grand' },
+  'p-asm':  { label: 'Assembly & packing', field: 'ss-asm'    },
+  'p-sum':  { label: 'Manufacturing cost', field: 'ss-mfg'    },
+  'p-qte':  { label: 'Order value',        field: 'profit-ov' }
+};
+
+/** Read a displayed figure, whether it sits in an input or a span. */
+function readFigure(id) {
+  var el = document.getElementById(id);
+  if (!el) return '\u2014';
+  var text = (el.value !== undefined && el.value !== '') ? el.value : el.textContent;
+  return String(text || '').trim() || '\u2014';
+}
+
+/**
+ * recalculateAll()
+ * Runs the ERP's full calculation chain in dependency order. Each step
+ * is isolated, so a failure in one is reported without stopping the
+ * rest — a broken BOM must not prevent the tube from costing.
+ * Returns the list of steps that failed.
+ */
+/* The four fields propagate() derives from bore, rod and stroke. Each
+   is pre-filled but editable — an estimator may set a different tube
+   length because that is the stock they actually hold. */
+var DERIVED_FIELDS = ['t-id', 't-len', 'r-fdia', 'r-len'];
+
+/* Which enquiry dimension drives which derived field. */
+var DERIVED_SOURCE = {
+  't-id':   'inq-bore',
+  't-len':  'inq-stroke',
+  'r-fdia': 'inq-rod',
+  'r-len':  'inq-stroke'
+};
+
+/* Fields the estimator has typed into directly. */
+var _overridden = Object.create(null);
+
+/**
+ * trackOverrides()
+ * Records deliberate edits to the derived fields.
+ *
+ * An earlier version inferred an override by comparing the field to
+ * what propagate() would produce. That was wrong: changing the stroke
+ * makes tube length look "overridden" when it is merely stale, so the
+ * old value was restored and the new stroke never took effect.
+ *
+ * Watching the events removes the ambiguity entirely:
+ *   • typing in a derived field marks it as yours, and Calculate will
+ *     not overwrite it
+ *   • changing the dimension that drives it releases the override,
+ *     because a new bore or stroke means a different cylinder
+ */
+function trackOverrides() {
+  DERIVED_FIELDS.forEach(function (id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('input', function () { _overridden[id] = el.value; });
+  });
+
+  ['inq-bore', 'inq-rod', 'inq-stroke'].forEach(function (sourceId) {
+    var el = document.getElementById(sourceId);
+    if (!el) return;
+    el.addEventListener('input', function () {
+      var released = [];
+      DERIVED_FIELDS.forEach(function (id) {
+        if (DERIVED_SOURCE[id] === sourceId && id in _overridden) {
+          delete _overridden[id];
+          released.push(id);
+        }
+      });
+      if (released.length) {
+        console.info('[ERP] released manual values for: ' + released.join(', ') +
+                     ' (the driving dimension changed)');
+      }
+    });
+  });
+}
+
+/** Restore the estimator's own values after propagate() has run. */
+function restoreOverrides() {
+  var restored = [];
+  Object.keys(_overridden).forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el && el.value !== _overridden[id]) {
+      el.value = _overridden[id];
+      restored.push(id);
+    }
+  });
+  return restored;
+}
+
+function recalculateAll() {
+  var failures = [];
+  var hasOverrides = Object.keys(_overridden).length > 0;
+
+  var steps = [
+    ['dimensions',  function () {
+      propagate();
+      var restored = restoreOverrides();
+      if (restored.length) {
+        console.info('[ERP] kept your manual values for: ' + restored.join(', '));
+      }
+    }],
+    ['bill of materials', function () { calcBOM(); }],
+    ['tube',        function () { calcTube(); }],
+    ['piston rod',  function () { calcRod(); }],
+    ['assembly',    function () { calcAsm(); }],
+    ['summary',     function () { calcSummary(); }],
+    ['header',      function () { updHdr(); }]
+  ];
+
+  /* An override changes the geometry, so tube and rod are recomputed
+     after the restore rather than before it. */
+  if (hasOverrides) {
+    steps.splice(1, 0, ['re-apply overrides', function () {
+      calcTube(); calcRod();
+    }]);
+  }
+
+  steps.forEach(function (step) {
+    try { step[1](); }
+    catch (e) {
+      failures.push(step[0]);
+      console.error('[ERP] recalculation step "' + step[0] + '" failed:', e);
+    }
+  });
+
+  /* The quotation is rebuilt only when it is on screen — it is
+     expensive and pointless to regenerate otherwise. */
+  var quotePanel = document.getElementById('p-qte');
+  if (quotePanel && quotePanel.classList.contains('active')) {
+    try { buildQuote(); }
+    catch (e) { failures.push('quotation'); console.error('[ERP] buildQuote failed:', e); }
+  }
+
+  /* Keep the zero-margin correction applied. */
+  try { enforceZeroMargin(); } catch (e) { /* guard is optional */ }
+
+  return failures;
+}
+
+/**
+ * runCalculate(panelId)
+ * Handler for the button. Recalculates everything, refreshes every
+ * calculate bar on the page, and reports the outcome.
+ */
+function runCalculate(panelId) {
+  var button = document.querySelector('#' + panelId + ' .aew-calc-btn');
+  if (button) { button.disabled = true; button.textContent = 'Calculating\u2026'; }
+
+  var failures = recalculateAll();
+  refreshCalcBars();
+
+  if (button) {
+    button.disabled = false;
+    button.textContent = 'Calculate';
+  }
+
+  var flash = document.querySelector('#' + panelId + ' .aew-calc-figures');
+  if (flash) {
+    flash.style.transition = 'none';
+    flash.style.opacity = '0.35';
+    setTimeout(function () {
+      flash.style.transition = 'opacity .45s';
+      flash.style.opacity = '1';
+    }, 40);
+  }
+
+  if (failures.length) {
+    toast('Recalculated, but these did not complete: ' + failures.join(', ') + '.', 'warn');
+  } else {
+    var spec = PANEL_TOTALS[panelId];
+    toast(spec
+      ? 'Recalculated. ' + spec.label + ': ' + readFigure(spec.field) + '.'
+      : 'Recalculated.', 'ok');
+  }
+}
+
+/** Update the figures shown in every calculate bar. */
+function refreshCalcBars() {
+  Object.keys(PANEL_TOTALS).forEach(function (panelId) {
+    var spec = PANEL_TOTALS[panelId];
+
+    var own = document.querySelector('#' + panelId + ' .aew-calc-own');
+    if (own) own.textContent = readFigure(spec.field);
+
+    var mfg = document.querySelector('#' + panelId + ' .aew-calc-mfg');
+    if (mfg) mfg.textContent = readFigure('ss-mfg');
+
+    var order = document.querySelector('#' + panelId + ' .aew-calc-order');
+    if (order) order.textContent = readFigure('profit-ov');
+
+    var qty = document.querySelector('#' + panelId + ' .aew-calc-qty');
+    if (qty) {
+      var n = document.getElementById('inq-qty');
+      qty.textContent = (n && n.value ? n.value : '1') + ' nos';
+    }
+  });
+}
+
+/**
+ * installCalculateBars()
+ * Appends a bar to the bottom of each panel. Uses createElement rather
+ * than innerHTML so nothing already in the panel is re-parsed — the
+ * ERP's existing event handlers stay attached.
+ */
+function installCalculateBars() {
+  Object.keys(PANEL_TOTALS).forEach(function (panelId) {
+    var panel = document.getElementById(panelId);
+    if (!panel || panel.querySelector('.aew-calc-bar')) return;
+
+    var spec = PANEL_TOTALS[panelId];
+
+    var bar = document.createElement('div');
+    bar.className = 'aew-calc-bar';
+    bar.style.cssText =
+      'margin:22px 0 8px;padding:14px 18px;border-radius:12px;' +
+      'border:1px solid rgba(5,150,105,.28);background:rgba(5,150,105,.07);' +
+      'display:flex;flex-wrap:wrap;align-items:center;gap:18px;' +
+      'justify-content:space-between;font:13px/1.4 system-ui,sans-serif';
+
+    var button = document.createElement('button');
+    button.className = 'aew-calc-btn';
+    button.type = 'button';
+    button.textContent = 'Calculate';
+    button.title = 'Recalculate every panel from the current values';
+    button.style.cssText =
+      'padding:11px 26px;border:0;border-radius:9px;cursor:pointer;' +
+      'background:linear-gradient(135deg,#059669,#047857);color:#fff;' +
+      'font:600 14px/1 system-ui,sans-serif;white-space:nowrap';
+    button.addEventListener('click', function () { runCalculate(panelId); });
+
+    var figures = document.createElement('div');
+    figures.className = 'aew-calc-figures';
+    figures.style.cssText =
+      'display:flex;flex-wrap:wrap;gap:22px;align-items:center;margin-left:auto';
+
+    function cell(caption, valueClass, emphasise) {
+      var wrap = document.createElement('div');
+      wrap.style.cssText = 'text-align:right;min-width:104px';
+
+      var head = document.createElement('div');
+      head.textContent = caption;
+      head.style.cssText =
+        'font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;' +
+        'opacity:.62;margin-bottom:3px';
+
+      var value = document.createElement('div');
+      value.className = valueClass;
+      value.textContent = '\u2014';
+      value.style.cssText = emphasise
+        ? 'font:700 18px/1 system-ui,sans-serif;color:#047857'
+        : 'font:600 15px/1 system-ui,sans-serif';
+
+      wrap.appendChild(head);
+      wrap.appendChild(value);
+      return wrap;
+    }
+
+    figures.appendChild(cell(spec.label, 'aew-calc-own', false));
+    figures.appendChild(cell('Mfg cost / pc', 'aew-calc-mfg', false));
+    figures.appendChild(cell('Quantity', 'aew-calc-qty', false));
+    figures.appendChild(cell('Order value', 'aew-calc-order', true));
+
+    bar.appendChild(button);
+    bar.appendChild(figures);
+    panel.appendChild(bar);
+  });
+
+  refreshCalcBars();
+
+  /* Keep the bars honest as the user types, so the figures shown are
+     never stale relative to the sheet. */
+  var app = document.getElementById('app');
+  if (app) {
+    app.addEventListener('input', function () {
+      clearTimeout(window.__aewBarT);
+      window.__aewBarT = setTimeout(refreshCalcBars, 250);
+    });
+  }
+
+  /* Refresh when a tab is opened, since panels are hidden not unmounted. */
+  var nav = document.querySelector('.nav');
+  if (nav) nav.addEventListener('click', function () {
+    setTimeout(refreshCalcBars, 60);
+  });
+}
+
+/* ── Persistence ───────────────────────────────────────────────────
+   Saving a costing to the AEW API, and reopening one from history.
+
+   Everything here is additive. If no backend is configured, or the
+   server is unreachable, the buttons explain that and the ERP carries
+   on working exactly as before. A costing must never be lost because a
+   server is down — least of all during a customer demonstration.  */
+
+var AEW_SAVED_ID = null;    /* set once a costing has been saved */
+
+/** Read a numeric field, tolerating currency formatting. */
+function money(id) {
+  var el = document.getElementById(id);
+  if (!el) return 0;
+  var raw = String(el.value !== undefined && el.value !== '' ? el.value : el.textContent);
+  var n = Number(raw.replace(/[^0-9.\-]/g, ''));
+  return isFinite(n) ? n : 0;
+}
+
+function fieldValue(id) {
+  var el = document.getElementById(id);
+  return el ? String(el.value || '').trim() : '';
+}
+
+/**
+ * collectCosting()
+ * Assemble the request body from what is on screen. The snapshot in
+ * `payload` holds every input, so reopening a costing restores it
+ * exactly rather than approximately.
+ */
+function collectCosting() {
+  var snapshot = {};
+  document.querySelectorAll('#app input[id], #app select[id]').forEach(function (el) {
+    if (el.type === 'button' || el.type === 'submit') return;
+    snapshot[el.id] = el.value;
+  });
+
+  /* Bought-out rows are created dynamically, so they are captured as
+     their own structure rather than by element id. */
+  snapshot._rows = {};
+  ['bear-rows', 'seal-rows', 'bom-rows'].forEach(function (tbody) {
+    var host = document.getElementById(tbody);
+    if (!host) return;
+    snapshot._rows[tbody] = Array.prototype.map.call(
+      host.querySelectorAll('tr'),
+      function (tr) {
+        return Array.prototype.map.call(
+          tr.querySelectorAll('input, select'),
+          function (i) { return i.value; }
+        );
+      }
+    );
+  });
+
+  var body = {
+    inquiry_no:    fieldValue('inq-no')   || 'UNTITLED',
+    customer:      fieldValue('inq-cust') || 'Unnamed customer',
+    bore:          money('inq-bore'),
+    rod:           money('inq-rod'),
+    stroke:        money('inq-stroke'),
+    total_cost:    money('ss-mfg'),
+    selling_price: money('profit-sp'),
+    profit_pct:    money('profit-pct'),
+    qty:           Math.max(1, Math.round(money('inq-qty')) || 1),
+    order_value:   money('profit-ov'),
+    payload:       snapshot
+  };
+
+  var description = fieldValue('inq-desc');
+  if (description) body.description = description.slice(0, 500);
+
+  var pressure = money('inq-press');
+  if (pressure > 0) body.pressure = pressure;
+
+  return body;
+}
+
+/** Validate before sending, so the user gets a useful message locally. */
+function costingProblems(body) {
+  var problems = [];
+  if (!(body.bore > 0))                problems.push('Bore must be greater than zero.');
+  if (!(body.rod > 0))                 problems.push('Rod diameter must be greater than zero.');
+  if (!(body.stroke > 0))              problems.push('Stroke must be greater than zero.');
+  if (body.rod >= body.bore)           problems.push('Rod diameter must be smaller than the bore.');
+  if (!(body.total_cost > 0))          problems.push('The costing has not calculated yet.');
+  return problems;
+}
+
+/* ── Save ──────────────────────────────────────────────────────────── */
+
+function saveCosting() {
+  var button = document.getElementById('aew-save-btn');
+  var body = collectCosting();
+
+  var problems = costingProblems(body);
+  if (problems.length) {
+    toast(problems[0], 'warn');
+    return;
+  }
+
+  if (button) { button.disabled = true; button.textContent = 'Saving…'; }
+
+  /* An already-saved costing is revised rather than duplicated, so
+     repeated saves do not litter the history with near-identical rows. */
+  var operation = AEW_SAVED_ID
+    ? AEW.api.updateQuotation(AEW_SAVED_ID, body)
+    : AEW.api.saveQuotation(body);
+
+  operation.then(function (result) {
+    if (button) { button.disabled = false; button.textContent = 'Save costing'; }
+
+    if (result.ok) {
+      AEW_SAVED_ID = (result.data && result.data.id) || AEW_SAVED_ID;
+      toast('Saved as ' + body.inquiry_no + '.', 'ok');
+      markSaved();
+      return;
+    }
+
+    if (result.offline) {
+      toast(result.error, 'warn');
+      return;
+    }
+    if (result.status === 401) {
+      toast('Your session has expired. Sign in again to save.', 'warn');
+      return;
+    }
+    if (result.status === 403) {
+      toast('Your account has read-only access to costings.', 'warn');
+      return;
+    }
+    toast(result.error || 'Could not save.', 'err');
+  });
+}
+
+function markSaved() {
+  var chip = document.getElementById('aew-save-state');
+  if (chip) {
+    chip.textContent = 'Saved';
+    chip.style.background = '#065f46';
+  }
+}
+
+/* ── History ───────────────────────────────────────────────────────── */
+
+function openHistory() {
+  var panel = document.getElementById('aew-history');
+  if (panel) { panel.remove(); return; }        /* toggle */
+
+  panel = document.createElement('div');
+  panel.id = 'aew-history';
+  panel.style.cssText =
+    'position:fixed;top:0;right:0;bottom:0;width:min(460px,92vw);z-index:99990;' +
+    'background:var(--bg,#fff);border-left:1px solid rgba(0,0,0,.12);' +
+    'box-shadow:-8px 0 26px rgba(0,0,0,.16);overflow:auto;' +
+    'font:13px/1.5 system-ui,sans-serif';
+  panel.innerHTML =
+    '<div style="padding:14px 18px;border-bottom:1px solid rgba(0,0,0,.08);' +
+    'display:flex;justify-content:space-between;align-items:center">' +
+    '<strong style="font-size:15px">Saved costings</strong>' +
+    '<button id="aew-hist-close" style="border:0;background:transparent;' +
+    'font-size:20px;cursor:pointer;line-height:1;color:inherit">&times;</button></div>' +
+    '<div id="aew-hist-body" style="padding:16px 18px;opacity:.6">Loading…</div>';
+  document.body.appendChild(panel);
+
+  document.getElementById('aew-hist-close')
+    .addEventListener('click', function () { panel.remove(); });
+
+  AEW.api.listQuotations({ limit: 30 }).then(function (result) {
+    var host = document.getElementById('aew-hist-body');
+    if (!host) return;
+
+    if (!result.ok) {
+      host.style.opacity = '1';
+      host.innerHTML = '<p style="color:#b45309">' + escapeHtml(result.error) + '</p>';
+      return;
+    }
+
+    var items = (result.data && result.data.items) || [];
+    if (!items.length) {
+      host.style.opacity = '1';
+      host.innerHTML =
+        '<p style="opacity:.65">No costings saved yet.<br>' +
+        'Complete a costing and press <strong>Save costing</strong>.</p>';
+      return;
+    }
+
+    host.style.opacity = '1';
+    host.innerHTML = items.map(function (q) {
+      return '<div class="aew-hist-row" data-id="' + escapeHtml(q.id) + '" ' +
+        'style="padding:11px 12px;margin-bottom:8px;border:1px solid rgba(0,0,0,.1);' +
+        'border-radius:8px;cursor:pointer">' +
+        '<div style="display:flex;justify-content:space-between;gap:10px">' +
+        '<strong>' + escapeHtml(q.inquiry_no) + '</strong>' +
+        '<span style="opacity:.6;font-size:11px">' +
+        new Date(q.created_at).toLocaleDateString('en-IN',
+          { day: '2-digit', month: 'short', year: '2-digit' }) + '</span></div>' +
+        '<div style="opacity:.75;margin:3px 0">' + escapeHtml(q.customer) + '</div>' +
+        '<div style="opacity:.6;font-size:12px">' +
+        q.bore + ' \u00D7 ' + q.rod + ' \u00D7 ' + q.stroke + ' mm' +
+        ' \u00B7 ' + q.qty + ' nos \u00B7 <strong>\u20B9' +
+        Math.round(q.order_value).toLocaleString('en-IN') + '</strong></div></div>';
+    }).join('');
+
+    host.querySelectorAll('.aew-hist-row').forEach(function (row) {
+      row.addEventListener('click', function () {
+        reopenCosting(row.getAttribute('data-id'));
+      });
+    });
+  });
+}
+
+/** Restore a saved costing into the sheet. */
+function reopenCosting(id) {
+  toast('Opening…', 'ok');
+
+  AEW.api.getQuotation(id).then(function (result) {
+    if (!result.ok) { toast(result.error || 'Could not open that costing.', 'err'); return; }
+
+    var snapshot = result.data && result.data.payload;
+    if (!snapshot) { toast('That costing has no saved detail.', 'warn'); return; }
+
+    Object.keys(snapshot).forEach(function (key) {
+      if (key === '_rows') return;
+      var el = document.getElementById(key);
+      if (el) el.value = snapshot[key];
+    });
+
+    /* Dynamic rows are rebuilt, then refilled in order. */
+    var rows = snapshot._rows || {};
+    Object.keys(rows).forEach(function (tbody) {
+      var host = document.getElementById(tbody);
+      if (!host) return;
+      var saved = rows[tbody];
+      var existing = host.querySelectorAll('tr').length;
+      var adder = tbody === 'bear-rows' ? window.addBearing
+                : tbody === 'seal-rows' ? window.addSeal
+                : window.addBOM;
+      for (var i = existing; i < saved.length && typeof adder === 'function'; i++) adder();
+
+      host.querySelectorAll('tr').forEach(function (tr, rowIndex) {
+        if (!saved[rowIndex]) return;
+        tr.querySelectorAll('input, select').forEach(function (input, cellIndex) {
+          if (saved[rowIndex][cellIndex] !== undefined) {
+            input.value = saved[rowIndex][cellIndex];
+          }
+        });
+      });
+    });
+
+    AEW_SAVED_ID = id;
+
+    try { calcBOM(); propagate(); calcAll(); calcSummary(); }
+    catch (e) { console.error('[ERP] recalculation after reopening failed:', e); }
+
+    var panel = document.getElementById('aew-history');
+    if (panel) panel.remove();
+    markSaved();
+    toast('Opened ' + (result.data.inquiry_no || 'costing') + '.', 'ok');
+  });
+}
+
+/* ── Small helpers ─────────────────────────────────────────────────── */
+
+function escapeHtml(value) {
+  return String(value === undefined || value === null ? '' : value)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function toast(message, kind) {
+  var colours = { ok: '#065f46', warn: '#92400e', err: '#7f1d1d' };
+  var el = document.getElementById('aew-toast');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'aew-toast';
+    el.style.cssText =
+      'position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:99996;' +
+      'color:#fff;padding:10px 18px;border-radius:8px;max-width:min(560px,92vw);' +
+      'font:13px/1.45 system-ui,sans-serif;box-shadow:0 5px 18px rgba(0,0,0,.28);' +
+      'transition:opacity .35s';
+    document.body.appendChild(el);
+  }
+  el.style.background = colours[kind] || colours.ok;
+  el.textContent = message;
+  el.style.opacity = '1';
+  clearTimeout(window.__aewToastT);
+  window.__aewToastT = setTimeout(function () { el.style.opacity = '0'; }, 5000);
+}
+
+/**
+ * installPersistenceUI()
+ * Adds Save and History to the header. Nothing in the frozen ERP is
+ * modified — the controls are inserted next to the existing buttons.
+ */
+function installPersistenceUI() {
+  if (document.getElementById('aew-save-btn')) return;
+
+  var logout = document.querySelector('.hdr .hb:last-of-type');
+  var host = logout ? logout.parentNode : document.querySelector('.hdr');
+  if (!host) return;
+
+  var configured = AEW.api.isConfigured();
+
+  var save = document.createElement('button');
+  save.id = 'aew-save-btn';
+  save.className = 'hb';
+  save.textContent = 'Save costing';
+  save.title = configured
+    ? 'Save this costing so you can reopen it later'
+    : 'Saving is not configured. Costings work normally but are not stored.';
+  save.addEventListener('click', saveCosting);
+
+  var history = document.createElement('button');
+  history.id = 'aew-hist-btn';
+  history.className = 'hb';
+  history.textContent = 'History';
+  history.title = 'Reopen a saved costing';
+  history.addEventListener('click', openHistory);
+
+  var state = document.createElement('span');
+  state.id = 'aew-save-state';
+  state.textContent = configured ? 'Not saved' : 'Local only';
+  state.style.cssText =
+    'font:10px/1 system-ui,sans-serif;padding:4px 8px;border-radius:20px;' +
+    'background:' + (configured ? '#78350f' : '#374151') + ';color:#fff;opacity:.85';
+
+  host.insertBefore(state, logout);
+  host.insertBefore(save, logout);
+  host.insertBefore(history, logout);
+
+  /* Any edit invalidates "Saved". */
+  var app = document.getElementById('app');
+  if (app) {
+    app.addEventListener('input', function () {
+      var chip = document.getElementById('aew-save-state');
+      if (chip && chip.textContent === 'Saved') {
+        chip.textContent = 'Unsaved changes';
+        chip.style.background = '#78350f';
+      }
+    });
+  }
+}
+
+/* ── Zero-margin guard ─────────────────────────────────────────────
+   calcSummary computes the margin as:
+
+       const pp = gv('profit-pct') || 20;
+
+   In JavaScript `0 || 20` evaluates to 20, so entering a 0% margin
+   silently applies 20% instead. The estimator sees a price above cost
+   with no indication why. That matters commercially: quoting a job at
+   cost is a legitimate decision (a strategic order, an internal
+   transfer, a rework) and the tool must honour it.
+
+   This runs after calcSummary and corrects the figures when the margin
+   is exactly zero. The frozen calculation is not modified. */
+
+function enforceZeroMargin() {
+  var pct = document.getElementById('profit-pct');
+  if (!pct) return;
+  if (String(pct.value).trim() === '' || Number(pct.value) !== 0) return;
+
+  var mfgEl = document.getElementById('ss-mfg');
+  if (!mfgEl) return;
+  var mfg = Number(String(mfgEl.textContent).replace(/[^0-9.]/g, '')) || 0;
+  var qty = Number((document.getElementById('inq-qty') || {}).value) || 1;
+
+  var money = function (n) {
+    return '\u20B9' + Math.round(n).toLocaleString('en-IN');
+  };
+
+  var setVal = function (id, v) {
+    var e = document.getElementById(id); if (e) e.value = v;
+  };
+  var setTxt = function (id, v) {
+    var e = document.getElementById(id); if (e) e.textContent = v;
+  };
+
+  setVal('profit-amt', money(0));
+  setVal('profit-sp',  money(mfg));
+  setVal('profit-ov',  money(mfg * qty));
+  setTxt('km-mg', money(0));
+  setTxt('km-sp', money(mfg));
+  setTxt('km-ov', money(mfg * qty));
+}
+
+/**
+ * watchMargin()
+ * Re-applies the zero-margin correction whenever anything changes,
+ * since calcSummary runs on almost every edit.
+ */
+function watchMargin() {
+  var app = document.getElementById('app');
+  if (!app) return;
+  app.addEventListener('input', function () {
+    clearTimeout(window.__aewMarginT);
+    window.__aewMarginT = setTimeout(enforceZeroMargin, 60);
+  });
+  app.addEventListener('change', function () {
+    clearTimeout(window.__aewMarginT);
+    window.__aewMarginT = setTimeout(enforceZeroMargin, 60);
+  });
+}
+
+/* ── Field legend ──────────────────────────────────────────────────
+   Green fields currently look identical whether they are calculated
+   and locked, or merely pre-filled and fully editable. That is
+   genuinely confusing: an estimator cannot tell which boxes accept a
+   number and which ignore typing.
+
+   This distinguishes them without altering any ERP markup or logic:
+
+     LOCKED   readonly, computed by the ERP. Dotted border, lock icon,
+              "not-allowed" cursor. Typing does nothing, by design.
+     AUTO     pre-filled from your entries, but fully editable. Solid
+              border, pencil icon. Overwrite it whenever you need to.
+
+   A one-line legend is added above the tab bar. */
+
+function classifyFields() {
+  if (document.getElementById('aew-field-css')) return;
+
+  var css = document.createElement('style');
+  css.id = 'aew-field-css';
+  css.textContent = [
+    /* Locked: computed output, cannot be typed into */
+    '.aew-locked{border-style:dashed !important;cursor:not-allowed !important;opacity:.92}',
+    '.aew-locked:hover{box-shadow:none !important}',
+    /* Editable-auto: pre-filled but yours to change */
+    '.aew-auto{border-style:solid !important}',
+    '.aew-auto:focus{outline:2px solid #059669;outline-offset:1px}',
+    /* Legend */
+    '#aew-legend{display:flex;gap:18px;align-items:center;flex-wrap:wrap;',
+    'padding:7px 16px;font:12px/1.4 system-ui,sans-serif;',
+    'background:var(--bg2,#f8fafc);border-bottom:1px solid rgba(0,0,0,.07)}',
+    '#aew-legend .k{display:inline-flex;align-items:center;gap:6px;color:#475569}',
+    '#aew-legend .sw{width:15px;height:15px;border-radius:3px;display:inline-block}',
+    '#aew-legend .sw-l{background:#d1fae5;border:1.5px dashed #6ee7b7}',
+    '#aew-legend .sw-a{background:#d1fae5;border:1.5px solid #6ee7b7}',
+    '#aew-legend .sw-m{background:#fff;border:1.5px solid #cbd5e1}'
+  ].join('');
+  document.head.appendChild(css);
+
+  var n = { locked: 0, auto: 0 };
+  Array.prototype.slice.call(document.querySelectorAll('input.fi-a')).forEach(function (el) {
+    if (el.readOnly) {
+      el.classList.add('aew-locked');
+      el.title = 'Calculated by the ERP from your entries. This field cannot be edited.';
+      n.locked++;
+    } else {
+      el.classList.add('aew-auto');
+      el.title = 'Filled in automatically as a starting point. You can type over it.';
+      n.auto++;
+    }
+  });
+
+  /* Legend strip, inserted above the tab bar */
+  if (!document.getElementById('aew-legend')) {
+    var bar = document.createElement('div');
+    bar.id = 'aew-legend';
+    bar.innerHTML =
+      '<span class="k"><i class="sw sw-l"></i>' +
+      '<strong>Calculated</strong> &mdash; worked out for you, cannot be edited</span>' +
+      '<span class="k"><i class="sw sw-a"></i>' +
+      '<strong>Auto-filled</strong> &mdash; a starting point, type over it freely</span>' +
+      '<span class="k"><i class="sw sw-m"></i>' +
+      '<strong>Your entry</strong> &mdash; fill in from your own figures</span>';
+    var nav = document.querySelector('.nav');
+    if (nav && nav.parentNode) nav.parentNode.insertBefore(bar, nav);
+  }
+
+  console.info('[ERP] field legend applied: ' + n.locked +
+               ' calculated, ' + n.auto + ' auto-filled.');
+}
+
+/* ── Master labour rate ────────────────────────────────────────────
+   The Inquiry panel has a "Default Lab Rs/hr" field (pr-lab) under the
+   heading "MASTER RATES — CHANGE ONCE, UPDATES ALL SHEETS INSTANTLY".
+   It was never wired to anything: the ERP reads 18 separate per-
+   operation labour-rate inputs, each hardcoded to 100, and pr-lab
+   appeared nowhere in any calculation.
+
+   This connects it. Changing the master rate updates every operation
+   row that is still on the previous master value. A row the estimator
+   has deliberately set to something else is left alone, so a genuine
+   exception (a specialist operation on a higher rate) survives a
+   master-rate change. */
+
+/** Every per-operation labour-rate input in the ERP. */
+function labourRateFields() {
+  return Array.prototype.slice.call(
+    document.querySelectorAll('input[id$="-lr"]')
+  );
+}
+
+var _lastMasterLabour = null;   /* previous master value, for matching */
+
+/**
+ * applyMasterLabourRate(force)
+ * Pushes pr-lab out to every operation row.
+ *   force = false : only rows still on the previous master value
+ *   force = true  : every row, overriding local edits
+ */
+function applyMasterLabourRate(force) {
+  var master = document.getElementById('pr-lab');
+  if (!master) return 0;
+  var rate = Number(master.value);
+  if (!rate || rate <= 0) return 0;
+
+  var prev = (_lastMasterLabour === null) ? 100 : _lastMasterLabour;
+  var changed = 0;
+
+  labourRateFields().forEach(function (el) {
+    if (force || Number(el.value) === prev) {
+      if (Number(el.value) !== rate) { el.value = rate; changed++; }
+    }
+  });
+
+  _lastMasterLabour = rate;
+
+  if (changed) {
+    try { calcAll(); calcSummary(); }
+    catch (e) { console.error('[ERP] recalc after labour rate change failed:', e); }
+  }
+  return changed;
+}
+
+/** Wires pr-lab so edits propagate. Runs once at boot. */
+function wireMasterLabourRate() {
+  var master = document.getElementById('pr-lab');
+  if (!master) return;
+
+  _lastMasterLabour = Number(master.value) || 100;
+
+  var push = function () {
+    var n = applyMasterLabourRate(false);
+    if (n) {
+      showGeometryNotice('Labour rate applied to ' + n +
+        ' operation' + (n === 1 ? '' : 's') + '. ' +
+        'Rows you set individually were left unchanged.');
+    }
+  };
+
+  master.addEventListener('input',  function () {
+    clearTimeout(window.__aewLabT);
+    window.__aewLabT = setTimeout(push, 400);
+  });
+  master.addEventListener('change', push);
+}
+
+/* ── Tab navigation safety net ────────────────────────────────────
+   Nav buttons carry onclick="go(this,'id')". That primary path is left
+   alone. This delegated listener installs ONLY if go() is unreachable,
+   so tabs can never be dead and are never handled twice. */
+function installNavFallback() {
+  if (typeof window.go === 'function') return;
+  console.warn('[ERP] go() unreachable — installing delegated nav fallback.');
+  var nav = document.querySelector('.nav');
+  if (!nav) return;
+  nav.addEventListener('click', function (ev) {
+    var btn = ev.target.closest ? ev.target.closest('.ntab') : null;
+    if (!btn) return;
+    var id = btn.getAttribute('data-p');
+    if (!id) return;
+    var tabs = document.querySelectorAll('.ntab');
+    for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
+    btn.classList.add('active');
+    var panels = document.querySelectorAll('.panel');
+    for (var j = 0; j < panels.length; j++) panels[j].classList.remove('active');
+    var t = document.getElementById('p-' + id);
+    if (t) t.classList.add('active');
+    if (id === 'sum' && typeof calcSummary === 'function') calcSummary();
+    if (id === 'qte' && typeof buildQuote  === 'function') buildQuote();
+  });
+}
+
+/* ── Diagnostics and rate-card control ───────────────────────────── */
+AEW.erp = {
+
+  /** The live rate card. Inspect or change it from the console. */
+  rateCard: ERP_RATE_CARD,
+
+  /** Re-apply the rate card to any field still at zero, then recalc. */
+  reseed: function () {
+    seedRateCard();
+    calcBOM(); propagate(); calcAll(); calcSummary();
+    return 'Rate card re-applied.';
+  },
+
+  /** Zero every seeded cost field, for quoting entirely from scratch. */
+  clearRates: function () {
+    Object.keys(ERP_RATE_CARD.components).forEach(function (id) {
+      ['-mat', '-proc', '-lab'].forEach(function (sfx) {
+        var el = document.getElementById(id + sfx);
+        if (el) el.value = 0;
+      });
+    });
+    ['bear-rows', 'seal-rows', 'bom-rows'].forEach(function (tb) {
+      document.querySelectorAll('#' + tb + ' tr').forEach(function (r) {
+        var n = r.querySelectorAll('input[type="number"]');
+        if (n.length) n[n.length - 1].value = 0;
+      });
+    });
+    if (ERP_RATE_CARD.process) {
+      Object.keys(ERP_RATE_CARD.process).forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.value = 0;
+      });
+    }
+    if (ERP_RATE_CARD.freight) {
+      Object.keys(ERP_RATE_CARD.freight).forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.value = 0;
+      });
+    }
+    calcBOM(); propagate(); calcAll(); calcSummary();
+    return 'All seeded rates cleared to zero.';
+  },
+
+  diagnose: function () {
+    var FNS = ['go','calcTube','calcRod','calcBOM','calcAsm','calcSummary',
+               'buildQuote','generatePDF','printQuote','propagate','updHdr',
+               'buildCompTables','addBearing','addSeal','addBOM',
+               'addDefaultBOM','toggleTheme','doLogout','handleFile','calcAll'];
+    var missing = FNS.filter(function (f) { return typeof window[f] !== 'function'; });
+    var tabs = document.querySelectorAll('.ntab');
+    var unwired = [];
+    for (var i = 0; i < tabs.length; i++) {
+      var id = tabs[i].getAttribute('data-p');
+      if (!document.getElementById('p-' + id)) unwired.push(id);
+    }
+    var zeros = [];
+    Object.keys(ERP_RATE_CARD.components).forEach(function (id) {
+      ['-mat','-proc','-lab'].forEach(function (s) {
+        var el = document.getElementById(id + s);
+        if (el && Number(el.value) === 0) zeros.push(id + s);
+      });
+    });
+    var txt = function (id) {
+      var e = document.getElementById(id);
+      return e ? e.textContent.trim() : 'n/a';
+    };
+    console.log(
+      '\n─── ERP diagnostics ──────────────────────────────────\n' +
+      ' build          : ' + AEW.config.BUILD + '\n' +
+      ' functions      : ' + (FNS.length - missing.length) + '/' + FNS.length +
+                             (missing.length ? '  MISSING: ' + missing.join(', ') : '  all present') + '\n' +
+      ' nav buttons    : ' + tabs.length + '   unwired: ' + (unwired.length ? unwired.join(', ') : 'none') + '\n' +
+      ' auth overlay   : ' + (document.getElementById('auth-loading') ? 'STILL IN DOM (blocks clicks)' : 'removed') + '\n' +
+      ' Chart.js       : ' + (typeof window.Chart !== 'undefined' ? 'loaded' : 'NOT LOADED') + '\n' +
+      ' jsPDF          : ' + (window.jspdf ? 'loaded' : 'NOT LOADED') + '\n' +
+      '\n VALUES\n' +
+      '  Tube total    : ' + txt('t-total') + '\n' +
+      '  Rod total     : ' + txt('r-total') + '\n' +
+      '  Bearings      : ' + txt('bear-tot') + '\n' +
+      '  Seals         : ' + txt('seal-tot') + '\n' +
+      '  Other BOM     : ' + txt('other-tot') + '\n' +
+      '  CEC / HEC     : ' + txt('ss-cec') + ' / ' + txt('ss-hec') + '\n' +
+      '  Gland         : ' + txt('ss-gland') + '\n' +
+      '\n fields still 0 : ' + (zeros.length ? zeros.join(', ') : 'none') + '\n' +
+      ' boot OK        : ' + AEW_BOOT.ok.length + '\n' +
+      ' boot FAILED    : ' + (AEW_BOOT.failed.length ? '\n   - ' + AEW_BOOT.failed.join('\n   - ') : 'none') + '\n' +
+      '──────────────────────────────────────────────────────'
+    );
+    return { missing: missing, failed: AEW_BOOT.failed, unwired: unwired, zeroFields: zeros };
+  }
+};
+</script>
+</body>
+</html>
