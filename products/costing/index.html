@@ -25,14 +25,14 @@ window.addEventListener('error', function (e) {
 }, true);
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="../../assets/js/config.js?v=2026.08.02-1"></script>
-<script src="../../assets/js/supabase.js?v=2026.08.02-1"></script>
-<script src="../../assets/js/session.js?v=2026.08.02-1"></script>
-<script src="../../assets/js/router.js?v=2026.08.02-1"></script>
-<script src="../../assets/js/auth.js?v=2026.08.02-1"></script>
-<script src="../../assets/js/ui.js?v=2026.08.02-1"></script>
-<script src="../../assets/js/api.js?v=2026.08.02-1"></script>
-<script src="../../assets/js/common.js?v=2026.08.02-1"></script>
+<script src="../../assets/js/config.js?v=2026.08.14-1"></script>
+<script src="../../assets/js/supabase.js?v=2026.08.14-1"></script>
+<script src="../../assets/js/session.js?v=2026.08.14-1"></script>
+<script src="../../assets/js/router.js?v=2026.08.14-1"></script>
+<script src="../../assets/js/auth.js?v=2026.08.14-1"></script>
+<script src="../../assets/js/ui.js?v=2026.08.14-1"></script>
+<script src="../../assets/js/api.js?v=2026.08.14-1"></script>
+<script src="../../assets/js/common.js?v=2026.08.14-1"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
@@ -759,6 +759,9 @@ const swt=(od,l)=>od>0?(PI/4)*od*od*l*7.85e-6:0;
 const eA=(od,l)=>od>0&&l>0?PI*od*l/100:0;
 const iA=(id,l)=>id>0&&l>0?PI*id*l/100:0;
 const r2=n=>Math.round(n*100)/100;const r4=n=>Math.round(n*10000)/10000;
+/* Whole rupees. Totals sum ROUNDED lines so the printed column always
+   reconciles with the printed total. */
+const rup=n=>Math.round(+n||0);
 const MAT={EN8:'m-en8',EN19:'m-en19',ST52:'m-st52',C45:'m-c45',SS410:'m-ss410',SS316:'m-ss316'};
 const mr=g=>gv(MAT[g]||'m-en8');
 const gv=id=>{const e=document.getElementById(id);return e?+e.value||0:0};
@@ -812,9 +815,9 @@ function calcTube(){
   st('tcw-h',cw.h>0?cw.h+' hr':'—');st('tcw-c',fI(cwc));
   const rw=weld(gv('trw-d'),gv('trw-n')),rwc=Math.max(0,r2(rw.t+nn(gv('trw-lh'))*nn(gv('trw-lr'))));
   st('trw-h',rw.h>0?rw.h+' hr':'—');st('trw-c',fI(rwc));
-  const proc=cc+rtc+dc+pwc+hc+ftc+cwc+rwc,tot=mc+proc;
+  const proc=rup(cc)+rup(rtc)+rup(dc)+rup(pwc)+rup(hc)+rup(ftc)+rup(cwc)+rup(rwc),tot=rup(mc)+proc;
   st('t-proc',fI(proc));st('t-total',fI(tot));
-  R.tube={mat:mc,proc,tot,eA:r2(eA(fod,len)),wt};calcSummary();
+  R.tube={mat:rup(mc),proc,tot,eA:r2(eA(fod,len)),wt};calcSummary();
 }
 
 function calcRod(){
@@ -839,9 +842,9 @@ function calcRod(){
   st('rch-a',cha+' cm²');st('rch-c',fI(chc));
   const poa=r2(eA(fd,len)),poc=Math.max(0,r2(poa*nn(gv('pr-pol'))+nn(gv('rpol-lh'))*nn(gv('rpol-lr'))));
   st('rpol-a',poa+' cm²');st('rpol-c',fI(poc));
-  const proc=cc+rtc+htc+ihc+ftc+grc+chc+poc,tot=mc+proc;
+  const proc=rup(cc)+rup(rtc)+rup(htc)+rup(ihc)+rup(ftc)+rup(grc)+rup(chc)+rup(poc),tot=rup(mc)+proc;
   st('r-proc',fI(proc));st('r-total',fI(tot));
-  R.rod={mat:mc,proc,tot,eA:r2(eA(fd,len)),wt};calcAsm();calcSummary();
+  R.rod={mat:rup(mc),proc,tot,eA:r2(eA(fd,len)),wt};calcAsm();calcSummary();
 }
 
 function buildBOMRow(typeOpts,matOpts,tbodyId){
@@ -873,7 +876,7 @@ function calcBOM(){
   st('bear-tot',fI(bt));st('seal-tot',fI(st2));st('other-tot',fI(ot));
   const grand=bt+st2+ot;
   sv('bom-bear-d',fI(bt));sv('bom-seal-d',fI(st2));sv('bom-other-d',fI(ot));sv('bom-grand',fI(grand));
-  R.bear=bt;R.seal=st2;R.bom=ot;calcSummary();
+  R.bear=rup(bt);R.seal=rup(st2);R.bom=rup(ot);calcSummary();
 }
 function calcAsm(){
   const ac=r2(gv('asm-h')*gv('asm-lr')),tc=r2(gv('test-h')*gv('test-lr'));
@@ -892,21 +895,50 @@ function calcAsm(){
   else if(pt==='wooden')pkc=r2(tw*gv('pr-pkw'));
   else pkc=gv('pack-cust');
   sv('pack-c',fI(pkc));
-  R.asm=ac;R.test=tc;R.paint=ptc+prc;R.trans=trans;R.pack=pkc;calcSummary();
+  R.asm=rup(ac);R.test=rup(tc);R.paint=rup(ptc)+rup(prc);R.trans=rup(trans);R.pack=rup(pkc);calcSummary();
+}
+/* ── Single source of truth for the money ──────────────────────────
+   Summary, Quotation and PDF must never compute this independently.
+   Three separate roll-ups is what let the PDF drift Rs4,200 below the
+   screen with nothing failing. Every figure here is a whole rupee, so
+   the printed lines always sum to the printed total. */
+function coverTot(id){return rup(gv(id+'-mat'))+rup(gv(id+'-proc'))+rup(gv(id+'-lab'));}
+function componentSub(){
+  let csub=R.tube.tot+R.rod.tot;
+  [...COVERS,...MISC].forEach(c=>{csub+=coverTot(c.id);});
+  return csub;
+}
+function mfgTotal(){
+  return componentSub()+rup(R.bear)+rup(R.seal)+rup(R.bom)
+        +rup(R.asm)+rup(R.test)+rup(R.paint)+rup(R.trans)+rup(R.pack);
+}
+/* 0 is a legitimate margin - a strategic order, an internal transfer, a
+   rework. gv(...)||20 silently turned it into 20. Blank still defaults. */
+function marginPct(){
+  const e=document.getElementById('profit-pct');
+  if(!e)return 20;
+  const raw=String(e.value).trim();
+  if(raw==='')return 20;
+  const v=Number(raw);
+  return isFinite(v)&&v>=0?v:20;
+}
+function commercials(){
+  const mfg=mfgTotal(),pp=marginPct();
+  const pa=rup(mfg*pp/100),sp=mfg+pa,qty=gv('inq-qty')||1;
+  return {mfg,pp,pa,sp,qty,ov:sp*qty};
 }
 function calcSummary(){
-  const allC=[...COVERS,...MISC];let csub=R.tube.tot+R.rod.tot;
-  allC.forEach(c=>{const t=gv(c.id+'-mat')+gv(c.id+'-proc')+gv(c.id+'-lab');st('ss-'+c.id,fI(t));csub+=t;});
+  [...COVERS,...MISC].forEach(c=>{st('ss-'+c.id,fI(coverTot(c.id)));});
+  const csub=componentSub();
   st('ss-tube',fI(R.tube.tot));st('ss-rod',fI(R.rod.tot));st('ss-csub',fI(csub));
-  st('ss-bear',fI(R.bear||0));st('ss-seal',fI(R.seal||0));st('ss-bom',fI(R.bom||0));
-  st('ss-asm',fI(R.asm||0));st('ss-test',fI(R.test||0));
-  st('ss-paint',fI(R.paint||0));st('ss-trans',fI(R.trans||0));st('ss-pack',fI(R.pack||0));
-  const mfg=csub+(R.bear||0)+(R.seal||0)+(R.bom||0)+(R.asm||0)+(R.test||0)+(R.paint||0)+(R.trans||0)+(R.pack||0);
-  st('ss-mfg',fI(mfg));
-  const pp=gv('profit-pct')||20,pa=r2(mfg*pp/100),sp=r2(mfg+pa),qty=gv('inq-qty')||1,ov=r2(sp*qty);
-  sv('profit-amt',fI(pa));sv('profit-sp',fI(sp));sv('sum-qty',qty+' nos');sv('profit-ov',fI(ov));
-  st('km-mfg',fI(mfg));st('km-mg',fI(pa));st('km-sp',fI(sp));st('km-ov',fI(ov));
-  st('km-mgp','@ '+pp+'%');st('km-qty','for '+qty+' piece'+(qty>1?'s':''));
+  st('ss-bear',fI(rup(R.bear)));st('ss-seal',fI(rup(R.seal)));st('ss-bom',fI(rup(R.bom)));
+  st('ss-asm',fI(rup(R.asm)));st('ss-test',fI(rup(R.test)));
+  st('ss-paint',fI(rup(R.paint)));st('ss-trans',fI(rup(R.trans)));st('ss-pack',fI(rup(R.pack)));
+  const C=commercials();
+  st('ss-mfg',fI(C.mfg));
+  sv('profit-amt',fI(C.pa));sv('profit-sp',fI(C.sp));sv('sum-qty',C.qty+' nos');sv('profit-ov',fI(C.ov));
+  st('km-mfg',fI(C.mfg));st('km-mg',fI(C.pa));st('km-sp',fI(C.sp));st('km-ov',fI(C.ov));
+  st('km-mgp','@ '+C.pp+'%');st('km-qty','for '+C.qty+' piece'+(C.qty>1?'s':''));
   renderCharts(csub);
 }
 function renderCharts(csub){
@@ -956,7 +988,7 @@ function buildQuote(){
   const rows=[];
   rows.push({l:'Tube ('+document.getElementById('t-mat')?.value+')',m:R.tube.mat,p:R.tube.proc});
   rows.push({l:'Piston Rod ('+document.getElementById('r-mat')?.value+')',m:R.rod.mat,p:R.rod.proc});
-  [...COVERS,...MISC].forEach(c=>{const m=gv(c.id+'-mat'),p=gv(c.id+'-proc')+gv(c.id+'-lab');if(m+p>0)rows.push({l:c.label,m,p});});
+  [...COVERS,...MISC].forEach(c=>{const m=rup(gv(c.id+'-mat')),p=rup(gv(c.id+'-proc'))+rup(gv(c.id+'-lab'));if(m+p>0)rows.push({l:c.label,m,p});});
   const bt=(R.bear||0)+(R.seal||0)+(R.bom||0);
   if(bt>0)rows.push({l:'Bill of Materials (Bearings, Seals, Bought Out)',m:bt,p:0});
   const at=(R.asm||0)+(R.test||0);
@@ -964,14 +996,13 @@ function buildQuote(){
   if(R.paint>0)rows.push({l:'Painting',m:0,p:R.paint});
   if(R.trans>0)rows.push({l:'Transport (Inward + Outward + Vendor)',m:0,p:R.trans});
   if(R.pack>0)rows.push({l:'Packing',m:0,p:R.pack});
-  const mfg=rows.reduce((s,r)=>s+r.m+r.p,0);
-  const pp=gv('profit-pct')||20,pa=r2(mfg*pp/100),sp=r2(mfg+pa),qty=gv('inq-qty')||1;
+  const C=commercials();
   document.getElementById('q-rows').innerHTML=
-    rows.map(r=>`<tr><td>${r.l}</td><td>${r.m>0?fI(r.m):'—'}</td><td>${r.p>0?fI(r.p):'—'}</td><td>${fI(r.m+r.p)}</td></tr>`).join('')+
-    `<tr class="qsub"><td colspan="3">Total Manufacturing Cost (per piece)</td><td>${fI(mfg)}</td></tr>
-     <tr class="qmg"><td colspan="3">Profit Margin (${pp}%)</td><td>${fI(pa)}</td></tr>
-     <tr class="qsp"><td colspan="3">Selling Price per Piece</td><td>${fI(sp)}</td></tr>
-     <tr class="qov"><td colspan="3">Total Order Value (${qty} nos)</td><td>${fI(sp*qty)}</td></tr>`;
+    rows.map(r=>`<tr><td>${r.l}</td><td>${r.m>0?fI(rup(r.m)):'—'}</td><td>${r.p>0?fI(rup(r.p)):'—'}</td><td>${fI(rup(r.m)+rup(r.p))}</td></tr>`).join('')+
+    `<tr class="qsub"><td colspan="3">Total Manufacturing Cost (per piece)</td><td>${fI(C.mfg)}</td></tr>
+     <tr class="qmg"><td colspan="3">Profit Margin (${C.pp}%)</td><td>${fI(C.pa)}</td></tr>
+     <tr class="qsp"><td colspan="3">Selling Price per Piece</td><td>${fI(C.sp)}</td></tr>
+     <tr class="qov"><td colspan="3">Total Order Value (${C.qty} nos)</td><td>${fI(C.ov)}</td></tr>`;
 }
 function generatePDF(){
   if(typeof window.jspdf==='undefined'){alert('PDF library loading, please try again in a moment.');return;}
@@ -997,11 +1028,19 @@ function generatePDF(){
   doc.setDrawColor(226,232,240);doc.rect(14,54,182,36,'S');
   const meta=[['Customer',cust],['Inquiry No.',inqNo],['Date',today],['Bore×Rod×Stroke','Ø'+bore+'/'+rod+'×'+stroke+'mm'],['Pressure',gv('inq-press')+' bar'],['Quantity',(gv('inq-qty')||1)+' nos']];
   meta.forEach((m,i)=>{const x=i<3?14:105,y=60+(i%3)*10;doc.setFont('helvetica','bold');doc.setTextColor(100,116,139);doc.text(m[0]+':',x,y);doc.setFont('helvetica','normal');doc.setTextColor(15,23,42);doc.text(String(m[1]),x+35,y);});
-  const mfg=R.tube.tot+R.rod.tot+(R.bear||0)+(R.seal||0)+(R.bom||0)+(R.asm||0)+(R.test||0)+(R.paint||0)+(R.trans||0)+(R.pack||0);
-  const pp=gv('profit-pct')||20,pa=r2(mfg*pp/100),sp=r2(mfg+pa),qty=gv('inq-qty')||1;
-  const trows=[[document.getElementById('t-mat')?.value+' Tube',fI(R.tube.mat),fI(R.tube.proc),fI(R.tube.tot)],[document.getElementById('r-mat')?.value+' Piston Rod',fI(R.rod.mat),fI(R.rod.proc),fI(R.rod.tot)],['Bill of Materials (Bearings, Seals, Bought Out)',fI((R.bear||0)+(R.seal||0)+(R.bom||0)),'—',fI((R.bear||0)+(R.seal||0)+(R.bom||0))],['Assembly + Testing','—',fI((R.asm||0)+(R.test||0)),fI((R.asm||0)+(R.test||0))],['Painting + Transport + Packing','—',fI((R.paint||0)+(R.trans||0)+(R.pack||0)),fI((R.paint||0)+(R.trans||0)+(R.pack||0))]];
+  const C=commercials();
+  const coversTot=componentSub()-R.tube.tot-R.rod.tot;
+  const bomTot=rup(R.bear)+rup(R.seal)+rup(R.bom);
+  const atTot=rup(R.asm)+rup(R.test);
+  const ptpTot=rup(R.paint)+rup(R.trans)+rup(R.pack);
+  const trows=[[document.getElementById('t-mat')?.value+' Tube',fI(R.tube.mat),fI(R.tube.proc),fI(R.tube.tot)],[document.getElementById('r-mat')?.value+' Piston Rod',fI(R.rod.mat),fI(R.rod.proc),fI(R.rod.tot)]];
+  /* Without this row the printed table would not sum to its own footer. */
+  if(coversTot>0)trows.push(['Machined Components (covers, gland, eyes, piston)','—',fI(coversTot),fI(coversTot)]);
+  trows.push(['Bill of Materials (Bearings, Seals, Bought Out)',fI(bomTot),'—',fI(bomTot)]);
+  trows.push(['Assembly + Testing','—',fI(atTot),fI(atTot)]);
+  trows.push(['Painting + Transport + Packing','—',fI(ptpTot),fI(ptpTot)]);
   if(typeof doc.autoTable==='function'){
-    doc.autoTable({startY:96,head:[['Description','Material ₹','Process ₹','Total ₹']],body:trows,foot:[['Total Manufacturing Cost','','',fI(mfg)],['Profit Margin ('+pp+'%)','','',fI(pa)],['Selling Price per Piece','','',fI(sp)],['Total Order Value ('+qty+' nos)','','',fI(sp*qty)]],headStyles:{fillColor:[13,27,42],textColor:[255,255,255],fontStyle:'bold',fontSize:9},footStyles:{fillColor:[5,150,105],textColor:[255,255,255],fontStyle:'bold',fontSize:10},bodyStyles:{fontSize:9},alternateRowStyles:{fillColor:[248,250,252]},columnStyles:{0:{cellWidth:90},1:{halign:'right'},2:{halign:'right'},3:{halign:'right',fontStyle:'bold'}},margin:{left:14,right:14}});
+    doc.autoTable({startY:96,head:[['Description','Material ₹','Process ₹','Total ₹']],body:trows,foot:[['Total Manufacturing Cost','','',fI(C.mfg)],['Profit Margin ('+C.pp+'%)','','',fI(C.pa)],['Selling Price per Piece','','',fI(C.sp)],['Total Order Value ('+C.qty+' nos)','','',fI(C.ov)]],headStyles:{fillColor:[13,27,42],textColor:[255,255,255],fontStyle:'bold',fontSize:9},footStyles:{fillColor:[5,150,105],textColor:[255,255,255],fontStyle:'bold',fontSize:10},bodyStyles:{fontSize:9},alternateRowStyles:{fillColor:[248,250,252]},columnStyles:{0:{cellWidth:90},1:{halign:'right'},2:{halign:'right'},3:{halign:'right',fontStyle:'bold'}},margin:{left:14,right:14}});
   }
   const fy=doc.lastAutoTable?.finalY||200;
   doc.setFontSize(8);doc.setTextColor(100,116,139);
@@ -1210,7 +1249,6 @@ function bootERP(meta) {
   bootStep('save & history UI', installPersistenceUI);
   bootStep('override tracking', trackOverrides);
   bootStep('calculate bars',    installCalculateBars);
-  bootStep('margin guard', watchMargin);
   bootStep('master labour rate', wireMasterLabourRate);
   bootStep('geometry watcher', function () {
     var app = document.getElementById('app');
@@ -1232,6 +1270,11 @@ function bootERP(meta) {
       clearTimeout(window.__aewGeomT);
       window.__aewGeomT = setTimeout(function () {
         if (id === 'inq-bore' || id === 't-id') autoFixTubeOD();
+        /* Unconditional, unlike the tube guard: propagate() rewrites
+           r-fdia programmatically, so there is no input event carrying
+           its id. autoFixRodDia() self-checks and is a no-op when the
+           geometry is already valid. */
+        autoFixRodDia();
         validateGeometry();
       }, 150);
     });
@@ -1245,6 +1288,7 @@ function bootERP(meta) {
     bootStep('seal rows',    function () { addSeal();    addSeal();    });
     bootStep('default BOM',  function () { addDefaultBOM(); });
     bootStep('seed rate card', seedRateCard);
+    bootStep('rod dia guard',  autoFixRodDia);
     bootStep('derived inputs', ensureDerivedInputs);
 
     /* Full recalculation. Each call is isolated: propagate() failing
@@ -1710,6 +1754,44 @@ function autoFixTubeOD() {
   return true;
 }
 
+/**
+ * deriveRodRawDia(fin)
+ * Bar stock must exceed the finished rod. +4 mm gives a workable turning
+ * and grinding allowance; commercial bright bar comes in 5 mm steps, so
+ * round up to the next one. ASSUMPTION - not confirmed with HISPL.
+ */
+function deriveRodRawDia(fin) {
+  return Math.ceil((fin + 4) / 5) * 5;
+}
+
+/**
+ * autoFixRodDia()
+ * propagate() sets the finished rod diameter from the enquiry but never
+ * touches the raw bar size, which ships at 52 mm. Any rod above that is
+ * machined from stock smaller than the finished part. Unlike the tube
+ * bug nothing collapses to zero here - the cost stays plausible while
+ * being computed from stock that cannot exist, which is worse.
+ */
+function autoFixRodDia() {
+  var finEl = document.getElementById('r-fdia');
+  var rawEl = document.getElementById('r-rdia');
+  if (!finEl || !rawEl) return false;
+
+  var fin = Number(finEl.value) || 0;
+  var raw = Number(rawEl.value) || 0;
+  if (!fin || raw > fin) return false;          /* geometry is fine */
+
+  var nd = deriveRodRawDia(fin);
+  rawEl.value = nd;
+
+  try { calcRod(); calcAll(); }
+  catch (e) { console.error('[ERP] recalc after rod dia fix failed:', e); }
+
+  showGeometryNotice('Raw rod diameter raised to ' + nd + ' mm to suit a ' +
+                     fin + ' mm finished rod. Change it if your bar stock differs.');
+  return true;
+}
+
 /** Brief, self-clearing informational notice. */
 function showGeometryNotice(msg) {
   var el = document.getElementById('aew-geom-note');
@@ -2103,7 +2185,6 @@ function recalculateAll() {
   }
 
   /* Keep the zero-margin correction applied. */
-  try { enforceZeroMargin(); } catch (e) { /* guard is optional */ }
 
   return failures;
 }

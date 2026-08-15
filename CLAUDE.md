@@ -3,7 +3,7 @@
 Context for any AI assistant working on this repository. Read this before
 changing anything.
 
-**Build** 2026.08.02-1 · **Status** Working prototype, pre-customer-demo
+**Build** 2026.08.14-1 · **Status** Working prototype, pre-customer-demo
 **Owner** Technical founder · **First customer** HISPL, Peenya Industrial Area, Bangalore
 
 ---
@@ -47,7 +47,45 @@ Verify after any change:
 node tests/integrity.js     # must print: ERP INTACT
 ```
 
-Current business-logic hash: `304a7d3070ebe34f72706af4d60c23a1`
+Current business-logic hash: `afb92d49a6c7315589835c2402781b9a`
+
+#### Freeze exception — 2026-08-14
+
+The block **was** modified, once, deliberately. The freeze exists to
+stop a wrong number reaching a customer; this was that case.
+
+Three surfaces — Summary, Quotation and PDF — each computed the
+manufacturing total independently. The PDF's version omitted every
+machined component, so it printed **₹13,389 where the screen said
+₹17,589**, understating by 23.9 %. Each surface also re-read the margin
+as `gv('profit-pct') || 20`, so a 0 % margin silently became 20 % on
+two of the three. Together, a 0 %-margin PDF quoted **₹1,522 below
+manufacturing cost** on a document that looked entirely correct.
+
+Patching each surface separately would have guaranteed they diverged
+again, so the fix was structural:
+
+| Added to the frozen block | Purpose |
+|---|---|
+| `coverTot(id)` | one machined component, whole rupees |
+| `componentSub()` | tube + rod + all covers |
+| `mfgTotal()` | the manufacturing cost — **the only one** |
+| `marginPct()` | honours an explicit 0 %; blank still defaults to 20 % |
+| `commercials()` | `{mfg, pp, pa, sp, qty, ov}` for every surface |
+
+`calcSummary`, `buildQuote` and `generatePDF` now all call
+`commercials()` and compute nothing themselves. `calcTube`, `calcRod`,
+`calcBOM` and `calcAsm` round each line to whole rupees so a printed
+column always sums to its printed total.
+
+The bootstrap's `enforceZeroMargin()` and `watchMargin()` were
+**deleted**: they were a second authority on the same number, and they
+recomputed from the rounded `ss-mfg` text, which would have re-broken
+the agreement by a rupee.
+
+Guarded by `tests/formulas.js`, which fails if the three surfaces
+disagree by even ₹1. See `docs/WORKED_EXAMPLE.md` for the evidence and
+`docs/PATCHES-PROPOSED.md` for the patch as reviewed.
 
 ### 2. Never write `</body>` inside a JavaScript string
 
@@ -191,6 +229,10 @@ the ERP keeps you signed in.
 | Calculate wiped manual overrides | `propagate()` rewrites tube length from stroke. Now tracked by watching input events — typing in a derived field marks it yours; changing the driving dimension releases it. |
 | Every manual-entry field shipped at 0 | Totals read ₹0 until eight components were typed in. `ERP_RATE_CARD` seeds opening values without ever overwriting user input. |
 | `bootERP` aborted on first error | Eight unguarded calls; one throw stopped the rest. Now each step runs isolated via `bootStep()`. |
+| PDF quoted ₹4,200 below the screen | `generatePDF` built its own manufacturing total and left out every machined component. Three surfaces each rolled up independently. One `commercials()` now serves all three. |
+| 0 % margin became 20 % on the quotation and PDF | The bootstrap guard patched only the Summary panel; the other two re-read `gv('profit-pct') \|\| 20`. `marginPct()` now honours an explicit zero at source. |
+| A 56 mm rod machined from 52 mm bar | `propagate()` set the finished rod diameter but never the raw bar, which shipped at 52 mm. Nothing zeroed — the cost stayed plausible while being computed from stock that cannot exist. `autoFixRodDia()` now raises it, as `autoFixTubeOD()` does for the tube. |
+| Printed columns did not sum to printed totals | Lines displayed to whole rupees, totals summed at 2 dp. Every line is now rounded before summing. |
 
 ---
 
@@ -234,6 +276,26 @@ speculative.
 - **Never use `innerHTML` on a container the ERP owns** — it destroys
   the existing event handlers. Use `createElement`.
 - **Comments explain *why*, never *what*.**
+
+### The landing page figure is derived from the ERP
+
+`index.html` shows a hydraulic cylinder costing **₹18,092** broken into
+twelve components. Those are not illustrative numbers — every one is a
+real line from an ERP costing run of **Ø100 bore × Ø56 rod × 500
+stroke, qty 10** at the shipped rate card. They sum to the ERP's
+manufacturing cost exactly, with no balancing entry.
+
+**Regenerate them whenever costing logic changes.** They drifted once
+already: the page advertised ₹17,589 while the tool had moved to
+₹18,092, and the honest answer to "which is right?" would have been
+"not the marketing one".
+
+To regenerate: run that enquiry in the ERP, read the Summary panel, and
+update `PARTS` in `index.html`. The eight meshed entries take their own
+ERP line; the four `noMesh` entries aggregate the ten smaller lines the
+way the ERP's PDF groups them. `GRAND_TOTAL` is computed from the
+array, so the total follows automatically — but the array must still
+sum to what the ERP reports.
 
 ---
 

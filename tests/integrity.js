@@ -6,7 +6,7 @@
  */
 const fs = require('fs'), path = require('path'), crypto = require('crypto');
 const FILE = path.join(__dirname, '..', 'products', 'costing', 'index.html');
-const BASELINE = '304a7d3070ebe34f72706af4d60c23a1';
+const BASELINE = 'afb92d49a6c7315589835c2402781b9a';
 
 const html = fs.readFileSync(FILE, 'utf8');
 let erp = null;
@@ -20,10 +20,15 @@ const logicLines = erp.split('\n').filter(l => !l.includes('AEW.'));
 const logic = logicLines.join('\n');
 const hash  = crypto.createHash('md5').update(logic).digest('hex').slice(0, 32);
 
+/* commercials/mfgTotal/componentSub/marginPct/coverTot are the single
+   source of truth for the money. If any of them goes missing, three
+   surfaces start computing their own totals again — the exact defect
+   the 2026.08.14 exception was granted to remove. */
 const FNS = ['calcTube','calcRod','calcBOM','calcAsm','calcSummary','buildQuote',
              'generatePDF','printQuote','propagate','updHdr','buildCompTables',
              'addBearing','addSeal','addBOM','addDefaultBOM','toggleTheme','go',
-             'doLogout','handleFile','renderCharts','calcAll','buildBOMRow'];
+             'doLogout','handleFile','renderCharts','calcAll','buildBOMRow',
+             'componentSub','mfgTotal','marginPct','commercials','coverTot'];
 const missing = FNS.filter(f => !new RegExp('^function\\s+' + f + '\\b', 'm').test(erp));
 const integration = erp.split('\n').filter(l => l.includes('AEW.')).length;
 

@@ -38,7 +38,7 @@
      which forces the browser to fetch fresh files instead of serving a
      cached copy from a previous build. If the console banner below does
      not show the expected build, the browser is running stale code. */
-  var BUILD = '2026.08.02-1';
+  var BUILD = '2026.08.14-1';
 
   /* ── Supabase project credentials ─────────────────────────────── */
   var SUPABASE_URL      = 'https://qqtctmrdawjcwnqszplx.supabase.co';
