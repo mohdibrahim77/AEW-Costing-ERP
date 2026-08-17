@@ -1079,6 +1079,7 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
   function resize(){
     var r = figure.getBoundingClientRect();
     if(r.width < 2 || r.height < 2) return;
+    figW = r.width; figH = r.height;          /* the frame loop reads these, never the DOM */
     renderer.setSize(r.width, r.height, false);
     camera.aspect = r.width / r.height;
     camera.updateProjectionMatrix();
@@ -1105,9 +1106,33 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
   var running = true;
   var perfFrames = [];
 
+  /* Cached so the frame loop never reads layout. Reading clientWidth /
+     clientHeight between style writes forces a synchronous reflow; doing
+     it once per part per frame was the single biggest cost here. */
+  var figW = 0, figH = 0;
+  var scrollY = window.scrollY;
+  var lastGridY = -1, lastFade = -1, lastRunVal = -1, lastExploding = null;
+
+  /* classList writes touch the DOM even when the class is already set, so
+     each label tracks its own state and only writes on an actual change. */
+  function setLabelState(p, wantDrawn, wantShown){
+    if(wantDrawn !== p._drawn){
+      p._drawn = wantDrawn;
+      if(wantDrawn) p.el.classList.add('drawn');
+      else p.el.classList.remove('drawn');
+    }
+    if(!wantDrawn) wantShown = false;
+    if(wantShown !== p._shown){
+      p._shown = wantShown;
+      if(wantShown) p.el.classList.add('shown');
+      else p.el.classList.remove('shown');
+    }
+  }
+
   window.addEventListener('scroll', function(){
     var y = window.scrollY, dy = y - lastScroll;
     lastScroll = y;
+    scrollY = y;                              /* cached; tick() must not read layout */
     spinVel += dy * 0.00022;                       // it has mass
     if(spinVel >  0.09) spinVel =  0.09;
     if(spinVel < -0.09) spinVel = -0.09;
@@ -1152,10 +1177,12 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
         var lp = clamp01((scrollP - (0.72 + noMeshSeen*0.06)) / 0.08);
         if(lp > 0) runningTotal += p.cost * easeOut(lp);
         if(p.el){
-          var stackY = figure.clientHeight - 26 - (3 - noMeshSeen)*17;
-          p.el.style.transform = 'translate3d(18px,' + stackY.toFixed(1) + 'px,0)';
-          if(lp > 0.02) p.el.classList.add('drawn'); else { p.el.classList.remove('drawn'); p.el.classList.remove('shown'); }
-          if(lp > 0.30) p.el.classList.add('shown'); else p.el.classList.remove('shown');
+          var wantDrawn = lp > 0.02, wantShown = lp > 0.30;
+          if(wantDrawn && !p._drawn){
+            /* position it once, when it first appears — it never moves after */
+            p.el.style.transform = 'translate3d(18px,' + ((figH - 26 - (3 - noMeshSeen)*17)|0) + 'px,0)';
+          }
+          setLabelState(p, wantDrawn, wantShown);
         }
         noMeshSeen++;
         continue;
@@ -1168,20 +1195,21 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
       if(raw > 0) runningTotal += p.cost * easeOut(raw);
 
       if(p.el){
-        p.mesh.getWorldPosition(vec);
-        vec.project(camera);
-        var w = figure.clientWidth, h2 = figure.clientHeight;
-        var x = (vec.x*0.5+0.5)*w, y = (-vec.y*0.5+0.5)*h2;
-        if(x > w-190) x = w-190;
-        if(x < 6) x = 6;
-        if(y < 6) y = 6;
-        if(y > h2-16) y = h2-16;
-        p.el.style.transform = 'translate3d('+x.toFixed(1)+'px,'+y.toFixed(1)+'px,0)';
+        var wantDrawn2 = raw > 0.15;
+        /* Only project and reposition a label that is actually on screen.
+           At rest that skips all eight every frame. */
+        if(wantDrawn2){
+          p.mesh.getWorldPosition(vec);
+          vec.project(camera);
+          var x = (vec.x*0.5+0.5)*figW, y = (-vec.y*0.5+0.5)*figH;
+          if(x > figW-190) x = figW-190;
+          if(x < 6) x = 6;
+          if(y < 6) y = 6;
+          if(y > figH-16) y = figH-16;
+          p.el.style.transform = 'translate3d('+(x|0)+'px,'+(y|0)+'px,0)';
+        }
         // 6. leader line draws first, label only after it has landed
-        if(raw > 0.15) p.el.classList.add('drawn');
-        else { p.el.classList.remove('drawn'); p.el.classList.remove('shown'); }
-        if(raw > 0.40) p.el.classList.add('shown');
-        else p.el.classList.remove('shown');
+        setLabelState(p, wantDrawn2, raw > 0.40);
       }
     }
 
@@ -1190,21 +1218,33 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
        own readout and climbs until the two reconcile. */
     if(counterLive && entranceP >= 1){
       var exploding = scrollP > 0.001;
-      runEl.classList.toggle('on', exploding);
+      if(exploding !== lastExploding){ runEl.classList.toggle('on', exploding); lastExploding = exploding; }
       if(exploding){
-        runValEl.textContent = fmt(runningTotal);
-        runEl.classList.toggle('reconciled', Math.round(runningTotal) >= GRAND_TOTAL);
+        /* toLocaleString is Intl and genuinely costly. The displayed value
+           only changes a few times a second, so format on change only. */
+        var rounded = Math.round(runningTotal);
+        if(rounded !== lastRunVal){
+          lastRunVal = rounded;
+          runValEl.textContent = fmt(rounded);
+          runEl.classList.toggle('reconciled', rounded >= GRAND_TOTAL);
+        }
       }
     }
 
     // 13. grid parallax at 0.3x + 16. fade over the last 15% of the track
     if(gridDrawn){
-      var gy = (window.scrollY * 0.3) % 44;
-      gridV.style.transform = 'scaleX(1) translate3d(0,'+gy.toFixed(1)+'px,0)';
-      gridH.style.transform = 'scaleY(1) translate3d(0,'+gy.toFixed(1)+'px,0)';
+      var gy = ((scrollY * 0.3) % 44)|0;
+      if(gy !== lastGridY){
+        lastGridY = gy;
+        gridV.style.transform = 'scaleX(1) translate3d(0,'+gy+'px,0)';
+        gridH.style.transform = 'scaleY(1) translate3d(0,'+gy+'px,0)';
+      }
     }
-    var fade = scrollP > 0.85 ? 1 - (scrollP-0.85)/0.15 : 1;
-    gridV.style.opacity = gridH.style.opacity = fade.toFixed(3);
+    var fade = scrollP > 0.85 ? Math.round((1 - (scrollP-0.85)/0.15)*100)/100 : 1;
+    if(fade !== lastFade){
+      lastFade = fade;
+      gridV.style.opacity = gridH.style.opacity = fade;
+    }
 
     if(lightDirty){
       light.style.transform = 'translate3d('+lightX+'px,'+lightY+'px,0)';
