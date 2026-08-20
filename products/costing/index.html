@@ -1283,7 +1283,13 @@ function bootERP(meta) {
            vanished: bore 100 quoted 13,736 instead of 18,092.
            propagate() also rewrites t-id programmatically, with no input
            event carrying its id. */
-        if (id !== 't-rod' && id !== 't-fod') autoFixTubeOD();
+        if (id !== 't-rod' && id !== 't-fod') {
+          /* Follows the bore up and down; no-op once they agree. */
+          syncTubeODToBore();
+          /* Safety net: still raises the OD if the geometry is somehow
+             impossible after the sync (e.g. an overridden stock size). */
+          autoFixTubeOD();
+        }
         autoFixRodDia();
         validateGeometry();
       }, 150);
@@ -1765,6 +1771,52 @@ function autoFixTubeOD() {
 }
 
 /**
+ * syncTubeODToBore()
+ * Keeps the stock size following the bore in BOTH directions.
+ *
+ * autoFixTubeOD() only ever raises the OD, and only when the geometry
+ * has become impossible. That left the opposite case wrong: quote a
+ * 160 mm bore, then drop to 63, and the tube was still costed from
+ * 190 mm stock — Rs20,809 of material instead of Rs2,229. Valid
+ * geometry, so nothing complained, but nobody machines a 63 mm bore
+ * out of a 190 mm billet.
+ *
+ * Respects the estimator's own stock size: if t-rod has been typed
+ * into, it is in _overridden and stays untouched until the bore
+ * changes, which releases it — the same rule the derived dimensions
+ * already follow.
+ *
+ * Idempotent: when the OD already matches the bore this does nothing,
+ * so it is safe to call on every input event.
+ */
+function syncTubeODToBore() {
+  if ('t-rod' in _overridden) return false;      /* the estimator owns it */
+
+  var boreEl = document.getElementById('t-id');
+  var rawEl  = document.getElementById('t-rod');
+  var finEl  = document.getElementById('t-fod');
+  if (!boreEl || !rawEl) return false;
+
+  var bore = Number(boreEl.value) || 0;
+  if (!bore) return false;
+
+  var od = deriveTubeOD(bore);
+  if ((Number(rawEl.value) || 0) === od) return false;   /* already correct */
+
+  var was = Number(rawEl.value) || 0;
+  rawEl.value = od;
+  if (finEl && !('t-fod' in _overridden)) finEl.value = od - 5;
+
+  try { calcTube(); calcAll(); calcSummary(); }
+  catch (e) { console.error('[ERP] recalc after OD sync failed:', e); }
+
+  showGeometryNotice('Raw OD set to ' + od + ' mm for a ' + bore +
+                     ' mm bore (was ' + was + ' mm). Type your own stock ' +
+                     'size to override it.');
+  return true;
+}
+
+/**
  * deriveRodRawDia(fin)
  * Bar stock must exceed the finished rod. +4 mm gives a workable turning
  * and grinding allowance; commercial bright bar comes in 5 mm steps, so
@@ -2083,14 +2135,19 @@ function readFigure(id) {
 /* The four fields propagate() derives from bore, rod and stroke. Each
    is pre-filled but editable — an estimator may set a different tube
    length because that is the stock they actually hold. */
-var DERIVED_FIELDS = ['t-id', 't-len', 'r-fdia', 'r-len'];
+/* t-rod and t-fod are stock sizes, not dimensions of the cylinder, but
+   they follow the same rule: the estimator's own value stands until the
+   bore changes, because a new bore means different stock. */
+var DERIVED_FIELDS = ['t-id', 't-len', 'r-fdia', 'r-len', 't-rod', 't-fod'];
 
 /* Which enquiry dimension drives which derived field. */
 var DERIVED_SOURCE = {
   't-id':   'inq-bore',
   't-len':  'inq-stroke',
   'r-fdia': 'inq-rod',
-  'r-len':  'inq-stroke'
+  'r-len':  'inq-stroke',
+  't-rod':  'inq-bore',
+  't-fod':  'inq-bore'
 };
 
 /* Fields the estimator has typed into directly. */

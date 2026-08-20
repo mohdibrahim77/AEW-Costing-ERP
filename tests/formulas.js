@@ -369,7 +369,32 @@ if (!JSDOM) {
 
   const third = await enquiry(160, 90, 1200);    /* larger again */
   okEq('re-quoted bore 160: raw OD raised above bore', third.rawOD > third.bore, true);
+  okEq('re-quoted bore 160: raw OD is 190', third.rawOD, 190);
   ok('re-quoted bore 160: tube has mass', third.tubeWt > 0 ? 1 : 0, 1);
+
+  /* The OD has to follow the bore DOWN as well. It only ever rose
+     before, so dropping from a 160 bore to a 63 left the tube costed
+     from 190 mm stock — valid geometry, so nothing complained, but
+     Rs20,809 of material instead of Rs2,229. */
+  const down = await enquiry(63, 36, 400);
+  okEq('bore lowered 160 -> 63: raw OD drops to 83', down.rawOD, 83);
+  okEq('bore lowered: OD no longer oversized', down.rawOD < third.rawOD, true);
+  ok('bore lowered: tube mass falls accordingly', down.tubeWt, 10.80, 0.005);
+
+  /* Idempotent — the same bore must always give the same stock size,
+     whichever direction it was reached from. */
+  const back = await enquiry(40, 22, 200);
+  okEq('returning to bore 40 reproduces the first result', back.rawOD, first.rawOD);
+  ok('returning to bore 40 reproduces the first mass', back.tubeWt, first.tubeWt, 0.005);
+
+  /* The estimator's own stock size still wins until the bore changes. */
+  setv('inq-bore', 100); await wait(650);
+  setv('t-rod', 140);    await wait(650);
+  okEq('estimator stock size 140 is kept', Number(d.getElementById('t-rod').value), 140);
+  setv('inq-stroke', 600); await wait(650);
+  okEq('stock size survives a stroke change', Number(d.getElementById('t-rod').value), 140);
+  setv('inq-bore', 63);  await wait(650);
+  okEq('changing the bore releases the override', Number(d.getElementById('t-rod').value), 83);
 
   finish();
 })();
