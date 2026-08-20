@@ -1269,11 +1269,21 @@ function bootERP(meta) {
       var id = ev && ev.target ? ev.target.id : '';
       clearTimeout(window.__aewGeomT);
       window.__aewGeomT = setTimeout(function () {
-        if (id === 'inq-bore' || id === 't-id') autoFixTubeOD();
-        /* Unconditional, unlike the tube guard: propagate() rewrites
-           r-fdia programmatically, so there is no input event carrying
-           its id. autoFixRodDia() self-checks and is a no-op when the
-           geometry is already valid. */
+        /* Run the tube guard for every field EXCEPT the two the estimator
+           uses to specify stock. Those stay sacred: typing an impossible
+           OD by hand must warn, never silently overwrite.
+
+           The old gate — only on 'inq-bore' / 't-id' — was too narrow.
+           This listener is debounced, so only the LAST touched field's id
+           survives; typing bore -> rod -> stroke left it as 'inq-stroke'
+           and the guard never ran. A fresh page seeds the OD correctly,
+           which hid it completely. But re-quoting a larger bore in the
+           same session left the raw OD at the previous value, so ID > OD,
+           the tube mass clamped to zero and the entire tube material cost
+           vanished: bore 100 quoted 13,736 instead of 18,092.
+           propagate() also rewrites t-id programmatically, with no input
+           event carrying its id. */
+        if (id !== 't-rod' && id !== 't-fod') autoFixTubeOD();
         autoFixRodDia();
         validateGeometry();
       }, 150);

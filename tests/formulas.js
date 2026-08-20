@@ -321,5 +321,55 @@ if (!JSDOM) {
     ok('headline figure matches the ERP', money(shown), erpMfg, 0.005);
   }
 
+  /* ═══ 10. RE-QUOTING IN THE SAME SESSION ══════════════════════════
+     An estimator quotes one cylinder, then quotes another without
+     reloading. That path had a hole: autoFixTubeOD() was gated on the
+     input event's id, but the geometry listener is debounced, so only
+     the LAST touched field's id survived. Typing bore -> rod -> stroke
+     left it as 'inq-stroke' and the tube guard never ran. A fresh page
+     seeds the OD correctly, which hid it completely.
+
+     Result: the raw OD stayed at the previous enquiry's value, ID > OD,
+     the tube mass clamped to zero, and the entire tube material cost
+     disappeared. Bore 100 quoted Rs13,736 instead of Rs18,092 — 24 %
+     light, on a quotation that looked completely normal.
+
+     These assertions drive the real input sequence, not the internals. */
+  console.log('\n━━━ Re-quoting without a page reload ━━━\n');
+
+  async function enquiry(bore, rod, stroke){
+    setv('inq-bore', bore);   await wait(60);
+    setv('inq-rod', rod);     await wait(60);
+    setv('inq-stroke', stroke);
+    await wait(600);                       /* past the 150 ms geometry debounce */
+    return {
+      bore:  Number(d.getElementById('t-id').value)   || 0,
+      rawOD: Number(d.getElementById('t-rod').value)  || 0,
+      tubeWt: parseFloat(d.getElementById('t-wt').value) || 0,
+      mfg:   money(txt('ss-mfg'))
+    };
+  }
+
+  const first  = await enquiry(40, 22, 200);     /* small bore, OD default 75 is fine */
+  okEq('1st enquiry (bore 40) has valid geometry', first.rawOD > first.bore, true);
+  ok('1st enquiry tube has mass', first.tubeWt > 0 ? 1 : 0, 1);
+
+  /* Earlier sections may have left the raw OD already raised, which would
+     let the next enquiry pass for the wrong reason. Put the estimator's
+     own stock size back in through the real field, so the guard has to do
+     actual work. This is ordinary user behaviour — t-rod is editable. */
+  setv('t-rod', 75); await wait(60);
+  setv('t-fod', 70); await wait(600);
+
+  const second = await enquiry(100, 56, 500);    /* the enquiry that used to break */
+  okEq('re-quoted bore 100: raw OD raised above bore', second.rawOD > second.bore, true);
+  okEq('re-quoted bore 100: raw OD is 125', second.rawOD, 125);
+  ok('re-quoted bore 100: tube mass is 24.28 kg, not zero', second.tubeWt, 24.28, 0.005);
+  okEq('re-quoted bore 100 costs the same as a fresh page', second.mfg, 18092);
+
+  const third = await enquiry(160, 90, 1200);    /* larger again */
+  okEq('re-quoted bore 160: raw OD raised above bore', third.rawOD > third.bore, true);
+  ok('re-quoted bore 160: tube has mass', third.tubeWt > 0 ? 1 : 0, 1);
+
   finish();
 })();
