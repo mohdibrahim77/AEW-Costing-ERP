@@ -25,14 +25,14 @@ window.addEventListener('error', function (e) {
 }, true);
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="../../assets/js/config.js?v=2026.08.14-1"></script>
-<script src="../../assets/js/supabase.js?v=2026.08.14-1"></script>
-<script src="../../assets/js/session.js?v=2026.08.14-1"></script>
-<script src="../../assets/js/router.js?v=2026.08.14-1"></script>
-<script src="../../assets/js/auth.js?v=2026.08.14-1"></script>
-<script src="../../assets/js/ui.js?v=2026.08.14-1"></script>
-<script src="../../assets/js/api.js?v=2026.08.14-1"></script>
-<script src="../../assets/js/common.js?v=2026.08.14-1"></script>
+<script src="../../assets/js/config.js?v=2026.08.26-1"></script>
+<script src="../../assets/js/supabase.js?v=2026.08.26-1"></script>
+<script src="../../assets/js/session.js?v=2026.08.26-1"></script>
+<script src="../../assets/js/router.js?v=2026.08.26-1"></script>
+<script src="../../assets/js/auth.js?v=2026.08.26-1"></script>
+<script src="../../assets/js/ui.js?v=2026.08.26-1"></script>
+<script src="../../assets/js/api.js?v=2026.08.26-1"></script>
+<script src="../../assets/js/common.js?v=2026.08.26-1"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
@@ -1290,6 +1290,10 @@ function bootERP(meta) {
              impossible after the sync (e.g. an overridden stock size). */
           autoFixTubeOD();
         }
+        if (id !== 'r-rdia') {
+          /* Follows the finished rod up and down, as the tube does. */
+          syncRodRawToFinished();
+        }
         autoFixRodDia();
         validateGeometry();
       }, 150);
@@ -1304,6 +1308,7 @@ function bootERP(meta) {
     bootStep('seal rows',    function () { addSeal();    addSeal();    });
     bootStep('default BOM',  function () { addDefaultBOM(); });
     bootStep('seed rate card', seedRateCard);
+    bootStep('rod stock sync', syncRodRawToFinished);
     bootStep('rod dia guard',  autoFixRodDia);
     bootStep('derived inputs', ensureDerivedInputs);
 
@@ -1827,12 +1832,61 @@ function deriveRodRawDia(fin) {
 }
 
 /**
+ * syncRodRawToFinished()
+ * Keeps the bar stock following the finished rod in BOTH directions.
+ *
+ * The exact counterpart of syncTubeODToBore(), and it exists for the
+ * same reason. autoFixRodDia() only ever raises the bar, and only when
+ * the geometry is impossible (`raw > fin` reads "fine" and returns).
+ * Quote a 160 mm rod, then drop to 28, and the rod was still costed
+ * from 165 mm bar: 100.71 kg instead of 10 kg, Rs19,806 instead of
+ * Rs10,991 - an 80% over-quote on valid-looking geometry, so nothing
+ * complained. Nobody turns a 28 mm rod from a 165 mm billet.
+ *
+ * The tube received this fix; the rod did not, because the guard was
+ * written to mirror autoFixTubeOD() at a time when that only raised
+ * too. Both halves of the pattern are now present on both parts.
+ *
+ * Respects the estimator's own bar size via _overridden, released when
+ * the finished rod changes - a new rod means different stock.
+ *
+ * Idempotent: a no-op once the bar already suits the rod.
+ */
+function syncRodRawToFinished() {
+  if ('r-rdia' in _overridden) return false;     /* the estimator owns it */
+
+  var finEl = document.getElementById('r-fdia');
+  var rawEl = document.getElementById('r-rdia');
+  if (!finEl || !rawEl) return false;
+
+  var fin = Number(finEl.value) || 0;
+  if (!fin) return false;
+
+  var nd = deriveRodRawDia(fin);
+  if ((Number(rawEl.value) || 0) === nd) return false;  /* already correct */
+
+  var was = Number(rawEl.value) || 0;
+  rawEl.value = nd;
+
+  try { calcRod(); calcAll(); calcSummary(); }
+  catch (e) { console.error('[ERP] recalc after rod sync failed:', e); }
+
+  showGeometryNotice('Raw bar set to ' + nd + ' mm for a ' + fin +
+                     ' mm finished rod (was ' + was + ' mm). Type your own ' +
+                     'bar size to override it.');
+  return true;
+}
+
+/**
  * autoFixRodDia()
  * propagate() sets the finished rod diameter from the enquiry but never
  * touches the raw bar size, which ships at 52 mm. Any rod above that is
  * machined from stock smaller than the finished part. Unlike the tube
  * bug nothing collapses to zero here - the cost stays plausible while
  * being computed from stock that cannot exist, which is worse.
+ *
+ * Safety net only, now that syncRodRawToFinished() handles the normal
+ * case. This still fires when an overridden bar size is too small.
  */
 function autoFixRodDia() {
   var finEl = document.getElementById('r-fdia');
@@ -2135,10 +2189,11 @@ function readFigure(id) {
 /* The four fields propagate() derives from bore, rod and stroke. Each
    is pre-filled but editable — an estimator may set a different tube
    length because that is the stock they actually hold. */
-/* t-rod and t-fod are stock sizes, not dimensions of the cylinder, but
-   they follow the same rule: the estimator's own value stands until the
-   bore changes, because a new bore means different stock. */
-var DERIVED_FIELDS = ['t-id', 't-len', 'r-fdia', 'r-len', 't-rod', 't-fod'];
+/* t-rod, t-fod and r-rdia are stock sizes, not dimensions of the
+   cylinder, but they follow the same rule: the estimator's own value
+   stands until the driving dimension changes, because a new bore or rod
+   means different stock. */
+var DERIVED_FIELDS = ['t-id', 't-len', 'r-fdia', 'r-len', 't-rod', 't-fod', 'r-rdia'];
 
 /* Which enquiry dimension drives which derived field. */
 var DERIVED_SOURCE = {
@@ -2147,7 +2202,8 @@ var DERIVED_SOURCE = {
   'r-fdia': 'inq-rod',
   'r-len':  'inq-stroke',
   't-rod':  'inq-bore',
-  't-fod':  'inq-bore'
+  't-fod':  'inq-bore',
+  'r-rdia': 'inq-rod'
 };
 
 /* Fields the estimator has typed into directly. */
