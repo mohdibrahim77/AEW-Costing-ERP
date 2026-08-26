@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Costing v2 — Engine Preview</title>
+<style>
+  :root{
+    --bg:#f6f7f8; --panel:#fff; --ink:#101418; --muted:#5b6672;
+    --line:#e3e7ea; --accent:#059669; --accent-weak:#e7f5f0;
+    --warn:#b45309; --warn-weak:#fdf4e7; --stop:#b42318; --stop-weak:#fdf0ef;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.55 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
+  .wrap{max-width:1240px;margin:0 auto;padding:28px 22px 80px}
+
+  .banner{background:var(--warn-weak);border:1px solid #f0d9b5;
+    border-left:3px solid var(--warn);border-radius:6px;padding:12px 16px;
+    margin-bottom:26px;font-size:13.5px;color:#7c4a06}
+  .banner b{color:var(--warn)}
+
+  h1{font-size:26px;letter-spacing:-.02em;margin:0 0 6px}
+  .sub{color:var(--muted);font-size:14px;margin:0 0 26px;max-width:78ch}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:8px;
+    padding:20px 22px;margin-bottom:20px}
+  .card h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;
+    color:var(--muted);margin:0 0 16px;font-weight:600}
+
+  .inputs{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end}
+  .f{display:flex;flex-direction:column;gap:5px}
+  .f label{font-size:12px;color:var(--muted)}
+  .f input{width:112px;padding:8px 10px;border:1px solid var(--line);
+    border-radius:5px;font:inherit;font-family:var(--mono);font-size:14px}
+  .f input:focus-visible{outline:2px solid var(--accent);outline-offset:1px;
+    border-color:var(--accent)}
+  button{padding:9px 16px;border:1px solid var(--accent);background:var(--accent);
+    color:#fff;border-radius:5px;font:inherit;font-size:14px;cursor:pointer}
+  button:hover{filter:brightness(1.06)}
+  button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+  button.ghost{background:#fff;color:var(--accent)}
+
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  @media(max-width:900px){.cols{grid-template-columns:1fr}}
+
+  .big{font-family:var(--mono);font-size:30px;letter-spacing:-.02em;margin:2px 0 4px}
+  .big.eir{font-size:15px;color:var(--stop);letter-spacing:0;line-height:1.4}
+  .note{font-size:12.5px;color:var(--muted)}
+
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);
+    vertical-align:top}
+  th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--muted);font-weight:600}
+  td.n{text-align:right;font-family:var(--mono);white-space:nowrap}
+  .scroll{overflow-x:auto}
+
+  .pill{display:inline-block;padding:1px 7px;border-radius:20px;font-size:11px;
+    font-family:var(--mono)}
+  .pill.ok{background:var(--accent-weak);color:#065f46}
+  .pill.no{background:var(--stop-weak);color:var(--stop)}
+  .pill.off{background:#eef1f3;color:var(--muted)}
+
+  .eirbox{background:var(--stop-weak);border:1px solid #f4d5d2;border-radius:6px;
+    padding:14px 16px}
+  .eirbox h3{margin:0 0 4px;font-size:14px;color:var(--stop)}
+  .grp{margin-top:12px}
+  .grp b{font-size:12.5px}
+  .dims{font-family:var(--mono);font-size:12px;color:#7a2c25;margin-top:3px;
+    line-height:1.7}
+  .dims span{background:#fff;border:1px solid #f0cfcb;border-radius:3px;
+    padding:1px 6px;margin-right:4px;display:inline-block}
+
+  code{font-family:var(--mono);font-size:12.5px;background:#eef1f3;
+    padding:1px 5px;border-radius:3px}
+  .src{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+  iframe{position:absolute;width:1200px;height:900px;left:-99999px;top:0;
+    border:0}
+  .foot{color:var(--muted);font-size:12.5px;margin-top:30px;
+    border-top:1px solid var(--line);padding-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="banner">
+    <b>Internal preview — not linked from the dashboard.</b>
+    This page runs the Stage 3 costing engine built from
+    <code>Trunion_Included.xlsx</code>. It changes nothing in the live
+    tool and is not part of any customer workflow.
+  </div>
+
+  <h1>Costing v2 — engine preview</h1>
+  <p class="sub">
+    Side by side: what the tool computes today, what the new engine can
+    compute from HISPL's workbook alone, and the dimensions it needs but
+    cannot derive — because no formula anywhere in the workbook derives
+    them.
+  </p>
+
+  <div class="card">
+    <h2>Enquiry</h2>
+    <div class="inputs">
+      <div class="f"><label for="p-bore">Bore (mm)</label>
+        <input id="p-bore" type="number" value="100"></div>
+      <div class="f"><label for="p-rod">Rod dia (mm)</label>
+        <input id="p-rod" type="number" value="56"></div>
+      <div class="f"><label for="p-stroke">Stroke (mm)</label>
+        <input id="p-stroke" type="number" value="800"></div>
+      <div class="f"><label for="p-qty">Qty</label>
+        <input id="p-qty" type="number" value="1"></div>
+      <button id="p-run">Recalculate</button>
+      <button id="p-v1" class="ghost">Load v1 comparison</button>
+      <button id="p-fill" class="ghost">Fill tube from workbook sample</button>
+    </div>
+    <p class="note" style="margin-top:12px">
+      The workbook sample is its own Tube sheet — EN8, raw OD&nbsp;110,
+      finished OD&nbsp;108, finished ID&nbsp;100.4, length&nbsp;900,
+      4&nbsp;holes at 12&nbsp;mm. Filling it shows what the engine produces
+      once one component's dimensions are known.
+    </p>
+  </div>
+
+  <div class="cols">
+    <div class="card">
+      <h2>v1 — the tool today</h2>
+      <div id="v1-cost" class="big">—</div>
+      <div class="note" id="v1-note">
+        Not loaded. The comparison runs the live ERP in a hidden frame, so
+        the figure is the real tool's, not a copy of its logic.
+      </div>
+      <table style="margin-top:14px"><tbody id="v1-rows"></tbody></table>
+    </div>
+
+    <div class="card">
+      <h2>v2 — from the workbook</h2>
+      <div id="v2-cost" class="big">—</div>
+      <div class="note" id="v2-note"></div>
+      <table style="margin-top:14px"><tbody id="v2-rows"></tbody></table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Components</h2>
+    <div class="scroll">
+      <table>
+        <thead><tr>
+          <th>Component</th><th>Sheet</th><th>Grade</th>
+          <th class="n">Weight</th><th class="n">Material</th>
+          <th class="n">Process</th><th class="n">Total</th><th>Status</th>
+        </tr></thead>
+        <tbody id="comp-rows"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Engineering input required</h2>
+    <div id="eir-wrap"></div>
+  </div>
+
+  <div class="card">
+    <h2>Traceability — where each resolved value came from</h2>
+    <div class="scroll">
+      <table>
+        <thead><tr>
+          <th>Component</th><th>Cell</th><th>Value</th>
+          <th class="n">Result</th><th>Source</th>
+        </tr></thead>
+        <tbody id="trace-rows"></tbody>
+      </table>
+    </div>
+    <p class="note" id="trace-note" style="margin-top:12px"></p>
+  </div>
+
+  <p class="foot">
+    Engine: <code>assets/js/costing/{masters,components,engine}.js</code> ·
+    Extracted from <code>Trunion_Included.xlsx</code> ·
+    Formulas in <code>hispl-v2/source/EXTRACTED_FORMULAS.md</code> ·
+    Open questions in <code>hispl-v2/QUERY-TO-ANIKTHA.md</code>
+  </p>
+</div>
+
+<script src="../../assets/js/costing/masters.js?v=2026.08.26-1"></script>
+<script src="../../assets/js/costing/components.js?v=2026.08.26-1"></script>
+<script src="../../assets/js/costing/engine.js?v=2026.08.26-1"></script>
+<script>
+(function () {
+  'use strict';
+  var M = window.AEW.masters, C = window.AEW.components, E = window.AEW.engine;
+  var EIR = M.EIR;
+
+  function $(id) { return document.getElementById(id); }
+  function num(id) { return Number($(id).value) || 0; }
+  function isNum(v) { return typeof v === 'number' && isFinite(v); }
+  function rs(n) { return '₹' + Math.round(n).toLocaleString('en-IN'); }
+  function cell(txt, cls) {
+    var td = document.createElement('td');
+    if (cls) td.className = cls;
+    td.textContent = txt;
+    return td;
+  }
+  function clear(el) { while (el.firstChild) el.removeChild(el.firstChild); }
+
+  /* Dimensions the operator has supplied by hand, per component. */
+  var supplied = {};
+
+  /* ── v2 ─────────────────────────────────────────────────────── */
+  function runV2() {
+    var inq = { bore: num('p-bore'), rodDia: num('p-rod'),
+                stroke: num('p-stroke'), qty: num('p-qty') };
+    var res = E.cost(inq, supplied);
+
+    var costEl = $('v2-cost'), noteEl = $('v2-note');
+    if (isNum(res.totalManufacturingCost)) {
+      costEl.className = 'big';
+      costEl.textContent = rs(res.totalManufacturingCost);
+      noteEl.textContent = 'All twelve components costed.';
+    } else {
+      costEl.className = 'big eir';
+      costEl.textContent = 'ENGINEERING INPUT REQUIRED';
+      noteEl.textContent = res.blockedComponents.length +
+        ' of 12 components cannot be costed without dimensions the ' +
+        'workbook does not derive.';
+    }
+
+    var rows = $('v2-rows'); clear(rows);
+    function add(label, value, extra) {
+      var tr = document.createElement('tr');
+      tr.appendChild(cell(label));
+      tr.appendChild(cell(value, 'n'));
+      if (extra) tr.appendChild(cell(extra, 'n'));
+      rows.appendChild(tr);
+    }
+    add('Cylinder weight', isNum(res.cylinderWeight)
+      ? res.cylinderWeight.toFixed(2) + ' kg'
+      : 'blocked (' + res.weightMissing.length + ' components)');
+    add('Bought-out', rs(res.other.boughtOut));
+    add('Other costs', rs(res.other.subtotal));
+    add('Welding', res.welding.resolved ? 'included'
+        : 'withheld — method unresolved');
+
+    renderComponents(res);
+    renderEIR(res);
+    renderTrace(res);
+    return res;
+  }
+
+  function renderComponents(res) {
+    var tb = $('comp-rows'); clear(tb);
+    res.components.forEach(function (c) {
+      var tr = document.createElement('tr');
+      tr.appendChild(cell(c.name));
+      tr.appendChild(cell(c.sheet));
+      tr.appendChild(cell(c.grade));
+      tr.appendChild(cell(isNum(c.weight) ? c.weight.toFixed(2) + ' kg' : '—', 'n'));
+      tr.appendChild(cell(isNum(c.materialCost) ? rs(c.materialCost) : '—', 'n'));
+      tr.appendChild(cell(isNum(c.processCost) ? rs(c.processCost) : '—', 'n'));
+      tr.appendChild(cell(isNum(c.total) ? rs(c.total) : '—', 'n'));
+
+      var td = document.createElement('td');
+      var span = document.createElement('span');
+      if (isNum(c.total)) {
+        span.className = 'pill ok'; span.textContent = 'costed';
+      } else if (c.missingDims.length) {
+        span.className = 'pill no';
+        span.textContent = c.missingDims.length + ' dims needed';
+      } else {
+        span.className = 'pill off'; span.textContent = 'blocked';
+      }
+      td.appendChild(span);
+      tr.appendChild(td);
+      tb.appendChild(tr);
+    });
+  }
+
+  function renderEIR(res) {
+    var wrap = $('eir-wrap'); clear(wrap);
+    if (!res.engineeringInputRequired.length) {
+      var p = document.createElement('p');
+      p.className = 'note';
+      p.textContent = 'Nothing outstanding — every dimension has been supplied.';
+      wrap.appendChild(p);
+      return;
+    }
+
+    var box = document.createElement('div');
+    box.className = 'eirbox';
+    var h = document.createElement('h3');
+    h.textContent = res.engineeringInputRequired.length +
+      ' dimensions cannot be derived';
+    box.appendChild(h);
+
+    var p = document.createElement('p');
+    p.className = 'note';
+    p.style.color = '#7a2c25';
+    p.textContent = 'Every component dimension in Trunion_Included.xlsx is ' +
+      'typed by the estimator. No formula in any of its 24 sheets computes ' +
+      'one from bore, rod or stroke, so the engine asks rather than guesses.';
+    box.appendChild(p);
+
+    var byComp = {};
+    res.engineeringInputRequired.forEach(function (r) {
+      (byComp[r.componentName] = byComp[r.componentName] || []).push(r);
+    });
+    Object.keys(byComp).forEach(function (name) {
+      var g = document.createElement('div');
+      g.className = 'grp';
+      var b = document.createElement('b');
+      b.textContent = name;
+      g.appendChild(b);
+      var d = document.createElement('div');
+      d.className = 'dims';
+      byComp[name].forEach(function (r) {
+        var s = document.createElement('span');
+        s.textContent = r.label + (r.cell ? ' (' + r.cell + ')' : '');
+        d.appendChild(s);
+      });
+      g.appendChild(d);
+      box.appendChild(g);
+    });
+    wrap.appendChild(box);
+  }
+
+  function renderTrace(res) {
+    var tb = $('trace-rows'); clear(tb);
+    var rows = E.traceability(res);
+    var resolved = rows.filter(function (r) { return r.value !== EIR; });
+    resolved.slice(0, 60).forEach(function (r) {
+      var tr = document.createElement('tr');
+      tr.appendChild(cell(r.component));
+      tr.appendChild(cell(r.cell || '—'));
+      tr.appendChild(cell(r.what));
+      tr.appendChild(cell(
+        typeof r.value === 'number'
+          ? (Math.abs(r.value) >= 1000 || r.value % 1 === 0
+              ? String(Math.round(r.value)) : r.value.toFixed(4))
+          : String(r.value), 'n'));
+      var td = cell(r.source); td.className = 'src';
+      tr.appendChild(td);
+      tb.appendChild(tr);
+    });
+    $('trace-note').textContent = resolved.length
+      ? resolved.length + ' values resolved, each traced to the master it ' +
+        'came from' + (resolved.length > 60 ? ' (first 60 shown)' : '') + '.'
+      : 'No values resolve yet — supply a component’s dimensions to ' +
+        'see the chain.';
+  }
+
+  /* ── v1, via the live ERP in a hidden frame ─────────────────── */
+  var frame = null;
+  function loadV1() {
+    $('v1-note').textContent = 'Loading the live ERP…';
+    if (frame) { frame.parentNode.removeChild(frame); frame = null; }
+    frame = document.createElement('iframe');
+    frame.setAttribute('title', 'v1 ERP, driven for comparison');
+    frame.src = 'index.html';
+    frame.addEventListener('load', function () { setTimeout(driveV1, 1200); });
+    document.body.appendChild(frame);
+  }
+
+  function driveV1() {
+    var w, d;
+    try { w = frame.contentWindow; d = w.document; }
+    catch (e) { $('v1-note').textContent = 'Could not reach the ERP frame.'; return; }
+
+    if (typeof w.bootERP !== 'function') {
+      $('v1-note').textContent =
+        'The ERP did not start in the frame — it may have redirected to ' +
+        'sign in. Open the ERP in a tab first, then reload this page.';
+      return;
+    }
+    try { w.bootERP({ name: 'P', avatar: 'P', color: '#059669' }); } catch (e) {}
+
+    setTimeout(function () {
+      function set(id, v) {
+        var e = d.getElementById(id);
+        if (e) { e.value = v; e.dispatchEvent(new w.Event('input', { bubbles: true })); }
+      }
+      set('inq-qty', num('p-qty'));
+      set('inq-bore', num('p-bore'));
+      setTimeout(function () { set('inq-rod', num('p-rod')); }, 40);
+      setTimeout(function () { set('inq-stroke', num('p-stroke')); }, 80);
+      setTimeout(readV1, 700);
+    }, 400);
+  }
+
+  function readV1() {
+    var d = frame.contentWindow.document;
+    function txt(id) {
+      var e = d.getElementById(id);
+      return e ? (e.textContent || e.value || '') : '';
+    }
+    function val(id) {
+      var e = d.getElementById(id);
+      return e ? (parseFloat(e.value) || 0) : 0;
+    }
+    var mfg = Number(String(txt('ss-mfg')).replace(/[^0-9.]/g, '')) || 0;
+    $('v1-cost').className = 'big';
+    $('v1-cost').textContent = mfg ? rs(mfg) : '—';
+    $('v1-note').textContent =
+      'From the live ERP. Models the tube and rod only — the covers, ' +
+      'gland, piston, eyes, bushes and trunnion are not computed from ' +
+      'geometry.';
+
+    var rows = $('v1-rows'); clear(rows);
+    [['Tube weight', val('t-wt') + ' kg'],
+     ['Rod weight', val('r-wt') + ' kg'],
+     ['Tube stock OD', val('t-rod') + ' mm'],
+     ['Rod raw bar', val('r-rdia') + ' mm']].forEach(function (p) {
+      var tr = document.createElement('tr');
+      tr.appendChild(cell(p[0]));
+      tr.appendChild(cell(String(p[1]), 'n'));
+      rows.appendChild(tr);
+    });
+  }
+
+  /* ── the workbook's own tube, so the engine has something real ── */
+  function fillTube() {
+    supplied.tube = {
+      grade: 'EN8',
+      dims: { rawOD: 110, finishedOD: 108, finishedID: 100.4, length: 900,
+              holeDia: 12, holeCount: 4 },
+      qty: 1
+    };
+    supplied.cushionBush = {
+      grade: 'BR-SAE660',
+      dims: { od: 130, id: 57, length: 70 }, qty: 1
+    };
+    runV2();
+  }
+
+  $('p-run').addEventListener('click', function () {
+    runV2();
+    if (frame) driveV1();
+  });
+  $('p-v1').addEventListener('click', loadV1);
+  $('p-fill').addEventListener('click', fillTube);
+
+  runV2();
+})();
+</script>
+</body>
+</html>

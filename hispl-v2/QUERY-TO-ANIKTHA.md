@@ -5,7 +5,9 @@ Aniktha,
 We've extracted every formula from `Trunion Included.xlsx` and checked it
 against the reference document and the cost sheet. The workbook is a good
 spec — the process routing, rate cards and welding logic are all clear
-enough to build from.
+enough to build from, and the engine already reproduces your own cached
+figures where we have the dimensions (your Cushion Bush sheet comes out
+at Rs 3,798 against your Rs 3,798.47).
 
 Six things need your answer first. The first three block us; the rest are
 data issues you'll want to know about regardless.
@@ -16,14 +18,31 @@ Each is answerable in a sentence.
 
 ## 1. Do written geometry standards exist? — **blocks everything**
 
-This is the big one, and I want to describe what we found rather than
-assume.
+This is the big one. We've now measured it rather than guessed at it.
+
+We ran all 295 cylinders from your cost sheet through the engine and
+compared against what you actually charged. The tool comes in about
+**3x under** your real prices. Splitting that gap:
+
+| | |
+|---|---|
+| Missing component mass | **99.3%** |
+| Rates being too low | **2.3%** |
+
+**Your rates are essentially right.** The engine prices a kilogram at
+397 Rs/kg where you charged 435. That is not the problem.
+
+The problem is mass. The engine predicts a median **48 kg** where the
+cylinder actually weighed **127 kg**, because it only models the tube and
+the rod. It cannot compute the covers, gland, piston, eyes, bushes or
+trunnion — and it cannot compute them because there is nothing to
+compute them *from*.
 
 In the workbook, **every component dimension is typed in by hand.** Tube
 Raw OD 110, Finished OD 108, Finished ID 100.4, Length 900 — all typed.
-We checked all 24 sheets: the inquiry inputs (Bore, Rod, Stroke) are used
-only for labels and the database record. Nothing computes a dimension
-from them.
+We checked all 24 sheets: Bore, Rod and Stroke are referenced 16 times,
+every one of them for a label or a database record. Not one formula
+derives a dimension from them.
 
 So the question is not "please send us the standards." It is:
 
@@ -32,14 +51,20 @@ So the question is not "please send us the standards." It is:
 > judgement?**
 
 Either answer is fine and we'll build accordingly. What we can't do is
-guess. If there's no written standard, the tool will ask the estimator
-for those dimensions rather than invent them — which is the honest
-behaviour, but it changes the design significantly, so we need to know
-now.
+guess: correcting the rates alone would move a median quote from
+Rs 19,197 to Rs 19,672, against a real figure of Rs 55,350. It barely
+moves. The mass is the whole gap, and no rate change reaches it.
 
 If standards *do* exist, even partially — tube OD by bore, boring
 allowance, tube length vs stroke, rod raw bar sizing — anything you have
-is useful.
+is useful. If they don't, the tool will ask the estimator for those
+dimensions rather than invent them. That is the honest behaviour, but it
+changes the design significantly, so we need to know now.
+
+There is a working preview that makes this concrete: it lists all 52
+dimensions it needs, by component and by your own cell reference, and
+shows what it can already compute without them. Happy to walk you
+through it.
 
 ---
 
@@ -206,6 +231,32 @@ expensive jobs.
 
 > **Can you extend the tables above 3000 mm, or should the tool stop and
 > ask for machining hours on those?**
+
+---
+
+---
+
+## One from our side — a live bug we found and fixed
+
+Not a question, but you should know, because it would have reached an
+estimator eventually.
+
+The current tool raised the raw bar diameter when the finished rod grew,
+but never lowered it again when the rod shrank. So quoting a 160 mm rod
+cylinder and then a 28 mm one **in the same session** costed the small
+rod as if it were machined from 165 mm bar — 100.71 kg of steel instead
+of 10 kg.
+
+The quote came out at **Rs 19,806 instead of Rs 10,991 — 81% high** — and
+nothing warned, because 165 mm bar for a 28 mm rod is perfectly valid
+geometry. Just not that cylinder's.
+
+Fixed and deployed. We've also added a test that quotes a large cylinder,
+then a small one, and checks all 147 fields against a fresh session, so
+the same class of bug can't return anywhere else in the tool.
+
+Mentioning it because it is exactly the kind of fault that produces a
+quote nobody can explain six months later.
 
 ---
 

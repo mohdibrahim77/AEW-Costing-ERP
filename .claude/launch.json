@@ -2,9 +2,9 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "static-preview",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["-y", "http-server", "-p", "5500", "-c-1"],
+      "name": "aew-static",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["tools-static-server.js"],
       "port": 5500
     }
   ]
