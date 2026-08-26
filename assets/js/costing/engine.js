@@ -136,6 +136,17 @@
       out.cost = rup(basisValue);
       out.source = basisLabel;
       return out;
+    } else if (p.basis === 'manual') {
+      /* The workbook's "Manual Entry" rows: D="Manual", E="Manual",
+         F=0. No table stands behind them — the estimator prices them.
+         Zero is the workbook's own default here, and it is a real
+         value rather than a missing one, so it does not block. */
+      var man = (ctx.manual && isNum(ctx.manual[p.process]))
+        ? ctx.manual[p.process] : 0;
+      out.hours = null; out.qty = null; out.rate = null;
+      out.cost = rup(man);
+      out.source = 'Manual Entry (workbook: D="Manual", E="Manual")';
+      return out;
     }
 
     out.qty = basisValue;
@@ -293,7 +304,8 @@
         ? !!applyMap[p.process] : p.applyDefault;
       var r = runProcess(p, {
         dims: out.dims, applied: applied,
-        weight: out.weight, stroke: opts.stroke
+        weight: out.weight, stroke: opts.stroke,
+        manual: (supplied && supplied.manual) || null
       });
       out.processes.push(r);
       if (isEIR(r.cost)) { procBlocked = true; }

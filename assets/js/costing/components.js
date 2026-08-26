@@ -222,8 +222,10 @@
         dim('height',     'Height',      'B10'),
         dim('thickness',  'Thickness',   'B11'),
         dim('finishedOD', 'Finished OD', 'B12'),
-        dim('holeDia',    'Hole Diameter [drilling]', null),
-        dim('holeCount',  'No. of Holes',             null)
+        dim('millWidth',  'Machined Width [milling]',  'B23'),
+        dim('millLength', 'Machined Length [milling]', 'B24'),
+        dim('holeDia',    'Hole Diameter [drilling]',  'B25'),
+        dim('holeCount',  'No. of Holes',              'B26')
       ],
       /* B18 = IF(shape="Round", (PI/4)Dia^2 x Thk, W x H x Thk) x rho/1e6
          The only geometry conditional in the workbook. Note the raw
@@ -263,8 +265,10 @@
         dim('height',     'Height',      'B10'),
         dim('thickness',  'Thickness',   'B11'),
         dim('finishedOD', 'Finished OD', 'B12'),
-        dim('holeDia',    'Hole Diameter [drilling]', null),
-        dim('holeCount',  'No. of Holes',             null)
+        dim('millWidth',  'Machined Width [milling]',  'B23'),
+        dim('millLength', 'Machined Length [milling]', 'B24'),
+        dim('holeDia',    'Hole Diameter [drilling]',  'B25'),
+        dim('holeCount',  'No. of Holes',              'B26')
       ],
       weightCell: 'B18',
       shaped: true,
@@ -297,8 +301,10 @@
         dim('od',     'OD',     'B7'),
         dim('id',     'ID',     'B8'),
         dim('length', 'Length', 'B9'),
-        dim('holeDia',   'Hole Diameter [drilling]', null),
-        dim('holeCount', 'No. of Holes',             null)
+        dim('millWidth',  'Machined Width [milling]',  'B20'),
+        dim('millLength', 'Machined Length [milling]', 'B21'),
+        dim('holeDia',    'Hole Diameter [drilling]',  'B22'),
+        dim('holeCount',  'No. of Holes',              'B23')
       ],
       /* B15 = (PI/4)(OD^2 - ID^2) x L x rho / 1e6 */
       weightCell: 'B15',
@@ -380,7 +386,12 @@
         dim('thickness',  'Raw Plate Thickness', 'B7'),
         dim('width',      'Width',               'B8'),
         dim('height',     'Height',              'B9'),
-        dim('pinHoleDia', 'Pin Hole Diameter',   'B10')
+        dim('pinHoleDia', 'Pin Hole Diameter',   'B10'),
+        dim('holeCount',  'No. of Pin Holes',    'B21'),
+        /* D26 = VLOOKUP((B8)*(B9), MillingTable,…) — the milling area is
+           the blank's Width x Height, not separate machined cells. */
+        dim('millWidth',  'Milling area width [= Width]',  'B8'),
+        dim('millLength', 'Milling area length [= Height]', 'B9')
       ],
       /* B16 = W x H x Thk x rho / 1e6 — rectangular plate blank */
       weightCell: 'B16',
@@ -396,7 +407,7 @@
         proc({ process: 'Milling', basis: 'time1d', table: 'milling',
                rate: 'machine', machine: 'Milling Machine' }),
         proc({ process: 'Drilling', basis: 'time1d', table: 'drilling',
-               rowFrom: 'pinHoleDia', holesFrom: null,
+               rowFrom: 'pinHoleDia', holesFrom: 'holeCount',
                rate: 'machine', machine: 'Drilling Machine' })
       ],
       welds: []
@@ -413,7 +424,11 @@
         dim('width',      'Width',             'B9'),
         dim('height',     'Height',            'B10'),
         dim('thickness',  'Thickness',         'B11'),
-        dim('pinHoleDia', 'Pin Hole Diameter', 'B12')
+        dim('pinHoleDia', 'Pin Hole Diameter', 'B12'),
+        dim('holeCount',  'No. of Pin Holes',  'B23'),
+        /* D28 = VLOOKUP((B9)*(B10), MillingTable,…) */
+        dim('millWidth',  'Milling area width [= Width]',   'B9'),
+        dim('millLength', 'Milling area length [= Height]', 'B10')
       ],
       weightCell: 'B18',
       shaped: true,
@@ -430,7 +445,7 @@
         proc({ process: 'Milling', basis: 'time1d', table: 'milling',
                rate: 'machine', machine: 'Milling Machine' }),
         proc({ process: 'Drilling', basis: 'time1d', table: 'drilling',
-               rowFrom: 'pinHoleDia', holesFrom: null,
+               rowFrom: 'pinHoleDia', holesFrom: 'holeCount',
                rate: 'machine', machine: 'Drilling Machine' })
       ],
       welds: []
@@ -444,8 +459,10 @@
       dims: [
         dim('od',     'OD',     'B7'),
         dim('length', 'Length', 'B8'),
-        dim('holeDia',   'Hole Diameter [drilling]', null),
-        dim('holeCount', 'No. of Holes',             null)
+        dim('millWidth',  'Machined Width [groove milling]',  'B19'),
+        dim('millLength', 'Machined Length [groove milling]', 'B20'),
+        dim('holeDia',    'Hole Diameter [drilling]',         'B21'),
+        dim('holeCount',  'No. of Holes',                     'B22')
       ],
       /* B14 = (PI/4)(OD^2) x L x rho / 1e6 — solid disc */
       weightCell: 'B14',
@@ -475,8 +492,10 @@
       dims: [
         dim('od',     'OD',     'B7'),
         dim('length', 'Length', 'B8'),
-        dim('holeDia',   'Hole Diameter [drilling]', null),
-        dim('holeCount', 'No. of Holes',             null)
+        dim('millWidth',  'Machined Width [milling]',  'B19'),
+        dim('millLength', 'Machined Length [milling]', 'B20'),
+        dim('holeDia',    'Hole Diameter [drilling]',  'B21'),
+        dim('holeCount',  'No. of Holes',              'B22')
       ],
       weightCell: 'B14',
       weight: function (d, density) {
@@ -518,14 +537,16 @@
       },
       weightNeeds: ['length', 'width', 'height'],
       processes: [
-        proc({ process: 'Rough Turning', basis: 'time2d', table: 'roughTurning',
-               rowFrom: 'width', colFrom: 'length',
-               rate: 'turningCard', turningKind: 'rough' }),
-        proc({ process: 'Finished Turning', basis: 'time2d', table: 'roughTurning',
-               rowFrom: 'width', colFrom: 'length', finishFactor: true,
-               rate: 'turningCard', turningKind: 'finish' }),
-        proc({ process: 'Pin Grinding', basis: 'area', areaOf: 'od',
-               rate: 'process', processName: 'Grinding' }),
+        /* Rows 27-29 are "Manual Entry" on the sheet: D="Manual",
+           E="Manual", F=0. The estimator prices these himself; there is
+           no table behind them. Modelled as manual, defaulting to 0, as
+           the workbook does. */
+        proc({ process: 'Rough Turning', basis: 'manual', rate: 'manual',
+               note: 'Manual Entry on the sheet — no table lookup.' }),
+        proc({ process: 'Finished Turning', basis: 'manual', rate: 'manual',
+               note: 'Manual Entry on the sheet — no table lookup.' }),
+        proc({ process: 'Pin Grinding', basis: 'manual', rate: 'manual',
+               note: 'Manual Entry on the sheet — no table lookup.' }),
         proc({ process: 'Milling', basis: 'time1d', table: 'milling',
                rate: 'machine', machine: 'Milling Machine' }),
         proc({ process: 'Drilling', basis: 'time1d', table: 'drilling',
