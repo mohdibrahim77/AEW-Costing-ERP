@@ -1,0 +1,198 @@
+{
+  "_source": "Trunion_Included.xlsx + HISPL_Costing_Master_Tables_Developer_Reference.docx",
+  "_note": "HISPL-supplied master data. Replaces every invented rate in ERP_RATE_CARD.",
+  "_extracted": "2026-08-15",
+
+  "materialMaster": {
+    "EN8":          { "name": "EN8 Carbon Steel",          "density": 7.85, "rate": 68,  "use": "Tubes, general turning parts" },
+    "EN19":         { "name": "EN19 Alloy Steel",          "density": 7.85, "rate": 92,  "use": "Piston rod, heat treatable" },
+    "EN24":         { "name": "EN24 Alloy Steel",          "density": 7.85, "rate": 118, "use": "High strength rods / eyes" },
+    "C45":          { "name": "C45 Carbon Steel",          "density": 7.85, "rate": 66,  "use": "Cap/Head End Covers, Gland, Flange" },
+    "ST52":         { "name": "ST52 Seamless Tube",        "density": 7.85, "rate": 78,  "use": "Cylinder tube raw material" },
+    "SS-410":       { "name": "SS 410 Stainless",          "density": 7.7,  "rate": 210, "use": "Corrosion resistant rods" },
+    "BR-SAE660":    { "name": "Bronze SAE 660",            "density": 8.9,  "rate": 520, "use": "Cushion bush / bearing bush" },
+    "EN353":        { "name": "EN353 Case Hardening Steel","density": 7.85, "rate": 96,  "use": "Pins / bushes" },
+    "PLATE-IS2062": { "name": "IS2062 Plate",              "density": 7.85, "rate": 62,  "use": "Rear eye / rod eye / piston blanks" }
+  },
+
+  "machineRateMaster": {
+    "CNC Lathe":         { "rate": 550, "note": "Finish turning rate overridden by Turning Rate Card" },
+    "Center Lathe":      { "rate": 500, "note": "Boring; rough turning rate overridden by Turning Rate Card" },
+    "Milling Machine":   { "rate": 350 },
+    "Drilling Machine":  { "rate": 250 },
+    "Honing Machine":    { "rate": 450, "note": "Utilisation reference only; cost via Honing Rate Card" },
+    "Grinding Machine":  { "rate": 400, "note": "Utilisation reference only; cost via Rs/cm2" },
+    "Cutting Machine":   { "rate": 350, "note": "Universal flat charge" }
+  },
+
+  "machineTimeMaster": {
+    "_lookup": "Find first row bucket where value <= bound, then first column bucket. Returns hours.",
+
+    "cutting": {
+      "inputs": ["OD", "Length"],
+      "rowBins": [80, 150, 250, null],
+      "colBins": [500, 1000, 2000, 3000],
+      "hours": [
+        [0.08, 0.10, 0.15, 0.20],
+        [0.10, 0.15, 0.20, 0.30],
+        [0.15, 0.20, 0.30, 0.40],
+        [0.25, 0.35, 0.50, 0.70]
+      ]
+    },
+
+    "roughTurning": {
+      "inputs": ["Finished OD", "Length"],
+      "rowBins": [80, 150, 250, null],
+      "colBins": [500, 1000, 2000, 3000],
+      "hours": [
+        [0.3, 0.6, 1.2, 1.8],
+        [0.5, 0.9, 1.7, 2.5],
+        [0.8, 1.5, 2.8, 4.0],
+        [1.2, 2.2, 4.0, 6.0]
+      ]
+    },
+
+    "stockRemovalFactor": {
+      "_applies": "Multiplies rough turning time. Stock removal = Raw OD - Finished OD.",
+      "bins":    [2, 5, 10, null],
+      "factors": [1.0, 1.15, 1.35, 1.6]
+    },
+
+    "finishTurning": {
+      "_rule": "Finish Turning Time = Rough Turning Time (same lookup) x 0.70"
+    },
+
+    "boring": {
+      "inputs": ["Finished ID", "Bore Length"],
+      "rowBins": [80, 150, 250, null],
+      "colBins": [250, 500, 1000, 2000],
+      "hours": [
+        [0.25, 0.4, 0.7, 1.2],
+        [0.40, 0.7, 1.2, 2.0],
+        [0.70, 1.2, 2.2, 3.5],
+        [1.20, 2.0, 3.5, 5.5]
+      ]
+    },
+
+    "honing": {
+      "_note": "Utilisation reference ONLY. Cost is via Honing Rate Card, NOT these hours.",
+      "inputs": ["ID", "Length"],
+      "rowBins": [80, 150, 250, null],
+      "colBins": [500, 1000, 2000],
+      "hours": [
+        [0.3, 0.6, 1.2],
+        [0.5, 0.9, 1.6],
+        [0.8, 1.4, 2.4],
+        [1.2, 2.0, 3.5]
+      ]
+    },
+
+    "grinding": {
+      "_note": "Utilisation reference ONLY. Cost is via Rs/cm2 in Process Rate Master.",
+      "inputs": ["OD", "Length"],
+      "rowBins": [80, 150, 250, null],
+      "colBins": [500, 1000, 2000],
+      "hours": [
+        [0.3, 0.5, 0.9],
+        [0.5, 0.8, 1.4],
+        [0.8, 1.3, 2.2],
+        [1.2, 2.0, 3.2]
+      ]
+    },
+
+    "milling": {
+      "inputs": ["Machined Area mm2 = Width x Length"],
+      "bins":  [10000, 25000, 50000, null],
+      "hours": [0.3, 0.6, 1.0, 1.8]
+    },
+
+    "drilling": {
+      "inputs": ["Hole Diameter"],
+      "_rule": "Total = time per hole x number of holes",
+      "bins":  [10, 20, 30, null],
+      "hoursPerHole": [0.03, 0.05, 0.08, 0.12]
+    },
+
+    "profileCutting": {
+      "_note": "Utilisation reference ONLY. Cost is via Rs/kg in Process Rate Master.",
+      "inputs": ["Component Weight kg"],
+      "bins":  [10, 25, 50, null],
+      "hours": [0.1, 0.2, 0.35, 0.6]
+    }
+  },
+
+  "processRateMaster": {
+    "Heat Treatment":      { "rate": 12,   "unit": "Rs/kg" },
+    "Induction Hardening": { "rate": 0.45, "unit": "Rs/cm2" },
+    "Grinding":            { "rate": 0.4,  "unit": "Rs/cm2" },
+    "Polishing":           { "rate": 0.2,  "unit": "Rs/cm2" },
+    "Painting":            { "rate": 0.2,  "unit": "Rs/cm2" },
+    "Chrome Plating":      { "rate": 0.6,  "unit": "Rs/cm2" },
+    "Dechrome Plating":    { "rate": 0.35, "unit": "Rs/cm2" },
+    "Profile Cutting":     { "rate": 1.25, "unit": "Rs/kg" },
+    "Packing - Loose":     { "rate": 5,    "unit": "Rs/kg" },
+    "Packing - Wooden Box":{ "rate": 15,   "unit": "Rs/kg" }
+  },
+
+  "turningRateCard": {
+    "_note": "OVERRIDES the flat machine rate for rough and finish turning, by FINISHED DIAMETER.",
+    "bins": [100, 250, null],
+    "rough":  [300, 550, 700],
+    "finish": [400, 550, 700]
+  },
+
+  "honingRateCard": {
+    "_note": "Cost = Internal Surface Area (cm2) x rate. Higher rate applies if EITHER threshold is exceeded.",
+    "strokeThreshold": 4000,
+    "idThreshold": 100,
+    "rateWithin": 0.30,
+    "rateBeyond": 0.40
+  },
+
+  "weldingConstants": {
+    "_workbookFormula": {
+      "labourRate": 375,
+      "wireCost": 360,
+      "depositionRate": 0.8,
+      "weldingSpeed": 3600,
+      "diaThresholdForBeads": 250,
+      "beadsIfDiaLessOrEqual": 5,
+      "beadsIfDiaGreater": 8
+    },
+    "_OPEN_QUESTION": "The reference document notes a later APPROVED HISPL instruction to use Rs 14 per inch per bead. The workbook still contains the formula above. MUST CONFIRM WITH ANIKTHA which applies."
+  },
+
+  "boughtOutMaster": [
+    { "item": "Bearing",      "rate": 180,  "qty": 2, "defaultInclude": true  },
+    { "item": "Check Valve",  "rate": 650,  "qty": 1, "defaultInclude": false },
+    { "item": "Transducer",   "rate": 4500, "qty": 1, "defaultInclude": false, "note": "Position sensor / LVDT" },
+    { "item": "Bellows",      "rate": 850,  "qty": 1, "defaultInclude": false, "note": "Rod protection bellow" },
+    { "item": "Other 1",      "rate": 0,    "qty": 1, "defaultInclude": false, "note": "Manual entry, renameable" },
+    { "item": "Other 2",      "rate": 0,    "qty": 1, "defaultInclude": false },
+    { "item": "Other 3",      "rate": 0,    "qty": 1, "defaultInclude": false },
+    { "item": "Other 4",      "rate": 0,    "qty": 1, "defaultInclude": false },
+    { "item": "Other 5",      "rate": 0,    "qty": 1, "defaultInclude": false }
+  ],
+  "_sealMaster": "EXCLUDED as requested by HISPL.",
+
+  "geometryRules": {
+    "finishedTubeID":   "Bore",
+    "finishedTubeOD":   "Tube OD input",
+    "rawTubeID":        "Bore + Tube Boring Allowance",
+    "rawTubeOD":        "Tube OD + Tube OD Turning Allowance",
+    "tubeVolume":       "PI/4 x (OD^2 - ID^2) x Length",
+    "solidRodVolume":   "PI/4 x OD^2 x Length",
+    "ringBushVolume":   "PI/4 x (OD^2 - ID^2) x Length",
+    "steelWeight":      "Volume(mm3) x 7.85e-6 kg   [use grade density, not fixed 7.85]",
+    "cylindricalArea":  "PI x Diameter x Length",
+    "areaConversion":   "mm2 / 100 = cm2",
+    "trunnionThickness":"(Trunnion OD - Pin Diameter) / 2",
+    "finalDimension":   "Manual override if entered, otherwise standard geometry value"
+  },
+
+  "inquiryInputs": [
+    "Inquiry No.", "Inquiry Date", "Customer Name", "Customer Location",
+    "Cylinder Name / Application Department", "Bore (mm)", "Rod Diameter (mm)",
+    "Stroke (mm)", "Mounting Type", "Working Pressure (bar)", "Job Type"
+  ]
+}

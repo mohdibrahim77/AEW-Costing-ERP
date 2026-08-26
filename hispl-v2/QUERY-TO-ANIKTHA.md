@@ -1,0 +1,230 @@
+# Costing v2 — questions before we build
+
+Aniktha,
+
+We've extracted every formula from `Trunion Included.xlsx` and checked it
+against the reference document and the cost sheet. The workbook is a good
+spec — the process routing, rate cards and welding logic are all clear
+enough to build from.
+
+Six things need your answer first. The first three block us; the rest are
+data issues you'll want to know about regardless.
+
+Each is answerable in a sentence.
+
+---
+
+## 1. Do written geometry standards exist? — **blocks everything**
+
+This is the big one, and I want to describe what we found rather than
+assume.
+
+In the workbook, **every component dimension is typed in by hand.** Tube
+Raw OD 110, Finished OD 108, Finished ID 100.4, Length 900 — all typed.
+We checked all 24 sheets: the inquiry inputs (Bore, Rod, Stroke) are used
+only for labels and the database record. Nothing computes a dimension
+from them.
+
+So the question is not "please send us the standards." It is:
+
+> **Do documented standards exist for deriving component dimensions from
+> bore, rod and stroke — or does the estimator work from experience and
+> judgement?**
+
+Either answer is fine and we'll build accordingly. What we can't do is
+guess. If there's no written standard, the tool will ask the estimator
+for those dimensions rather than invent them — which is the honest
+behaviour, but it changes the design significantly, so we need to know
+now.
+
+If standards *do* exist, even partially — tube OD by bore, boring
+allowance, tube length vs stroke, rod raw bar sizing — anything you have
+is useful.
+
+---
+
+## 2. Welding — which method is current? — **blocks welding cost**
+
+The workbook implements welding fully:
+
+```
+beads       = 5 if weld dia <= 250, else 8
+weld length = pi x weld dia x beads
+time        = weld length / 3600 mm/hr
+labour      = time x Rs 375/hr
+wire        = time x 0.8 kg/hr x Rs 360/kg
+cost        = labour + wire
+```
+
+Your reference document also notes a later approved HISPL instruction of
+**Rs 14 per inch per bead**, to be applied as a controlled update if not
+already in the workbook.
+
+They give very different numbers. On the workbook's own sample —
+108 mm weld diameter, 5 beads:
+
+| Method | Per weld |
+|---|---|
+| Workbook formula | **Rs 312** |
+| Rs 14 / inch / bead | **Rs 935** |
+
+That's about **3x**. The Tube has three welds and the Piston Rod one, so
+on a single cylinder it's roughly **Rs 1,868** difference.
+
+> **Which is current — the workbook formula, or Rs 14 per inch per bead?**
+
+Until you confirm, the tool will not produce a welding cost at all rather
+than quietly pick one.
+
+---
+
+## 3. Three defects in the workbook — **it currently has no total**
+
+We haven't changed anything; these are yours to correct.
+
+### 3a. Eight of twelve components are broken
+
+Eight sheets name a material grade that isn't in the Material Master:
+
+| Sheet | Grade named | Master has |
+|---|---|---|
+| Cap End Cover, Head End Cover, Gland, Flange | `MS-C45` | `C45` |
+| Stop Tube, Piston | `MS-EN8` | `EN8` |
+| Rear Eye, Rod Eye | `MS-PLATE-IS2062` | `PLATE-IS2062` |
+
+It looks like a rename to an `MS-` prefix was started and not finished —
+the Material Master has a bare `MS` row (A13) with no name, density or
+rate, and the prefixed codes were never created.
+
+Consequence: those eight lookups return `#N/A`, which propagates to
+
+```
+Cost Summary!B19  SUBTOTAL                 = #N/A
+Cost Summary!B38  TOTAL MANUFACTURING COST = #N/A
+```
+
+**The workbook does not currently produce a total.** Only Tube, Piston
+Rod, Cushion Bush and Trunnion resolve.
+
+> **Should the eight sheets point back to the existing codes (`C45`,
+> `EN8`, `PLATE-IS2062`), or is `MS` a new grade you intend to add with
+> its own density and rate?**
+
+### 3b. Boring rate is `#N/A` on every sheet that uses it
+
+```excel
+Tube!E28 = INDEX(MachineRateMaster_Range, MATCH("Conventional Lathe", ...), 2)
+```
+
+The Machine Rate Master calls that machine **`Center Lathe`**. The lookup
+string never matches. It's currently hidden because the Tube's Boring row
+is set to `Apply? = No` — the moment anyone sets it to `Yes`, the boring
+cost and the whole component subtotal become `#N/A`.
+
+> **Confirm "Conventional Lathe" and "Center Lathe" are the same machine
+> — then one of the two spellings needs changing.**
+
+### 3c. Cylinder weight silently ignores missing components
+
+```excel
+Cost Summary!B22 = IFERROR(Tube_Weight,0) + IFERROR(PistonRod_Weight,0) + ...
+                 = 76.54 kg
+```
+
+Because eight components are `#N/A`, the `IFERROR` counts each as **zero
+kilograms**. The sheet reports a confident **76.54 kg** for a cylinder
+missing two-thirds of its parts. The cost correctly shows `#N/A`; the
+weight doesn't.
+
+Worth fixing even after 3a, so a future error shows up instead of
+quietly reducing the weight.
+
+---
+
+## 4. Tube weight uses Raw OD with Finished ID
+
+```excel
+Tube!B16 = (PI()/4) * (RawOD^2 - FinishedID^2) * Length * Density / 1000000
+              ^^^^^                ^^^^^^^^
+```
+
+It mixes the **raw** outside diameter with the **finished** inside
+diameter, and there is no Raw ID field anywhere on the sheet. If the tube
+is bored during manufacture, the raw ID is smaller than the finished ID,
+so the true purchased weight is higher than this.
+
+Your reference notes list `raw tube ID = bore + boring allowance`, which
+implies a raw ID the sheet doesn't have.
+
+> **Do you buy tube already at (or near) finished bore, so raw ID equals
+> finished ID — or should the raw weight use a separate raw ID?**
+
+---
+
+## 5. Five rows in the cost sheet are physically impossible
+
+From `COST SHEET.xlsx`, these have a rod diameter **equal to or larger
+than the bore**, which can't be a cylinder:
+
+| Row | Bore | Rod | Stroke | Weight | Total |
+|---|---|---|---|---|---|
+| 13 | 31 | 110 | 125 | 421 kg | Rs 1,31,850 |
+| 117 | 127 | 143 | 1221 | 43 kg | Rs 15,350 |
+| 167 | 36 | 36 | 280 | 78 kg | Rs 34,000 |
+| 232 | 480 | 480 | 1000 | 5974 kg | Rs 14,96,641 |
+| 280 | 70 | 320 | 850 | 4785 kg | Rs 9,30,844 |
+
+(A sixth, row 28, has stroke 0 and we've already excluded it.)
+
+Row 13 is a 31 mm bore weighing 421 kg, which is impossible on its face.
+Most likely the BORE and ROD columns hold something else on these rows.
+
+> **Should we drop these five, or can you tell us what they should read?**
+
+They matter more than tidiness: the Rs/kg benchmarks we're validating
+against (1003 / 522 / 352 / 318 by bore band) only reproduce exactly when
+these rows are *included*, so they're currently influencing the targets.
+
+---
+
+## 6. Six cylinders are longer than the machine time tables allow
+
+The Cutting and Rough Turning tables' longest column is **"2001-3000"**.
+There's no column beyond 3000 mm. Six cylinders in the cost sheet exceed
+it:
+
+| Row | Stroke |
+|---|---|
+| 115, 220, 225 | 3962 mm |
+| 233 | 3250 mm |
+| 136 | 4700 mm |
+| 158 | 4950 mm |
+
+Excel's lookup will quietly put a 4950 mm part in the "2001-3000" bucket
+and cost it as if it were 3000 — under-charging the longest, most
+expensive jobs.
+
+> **Can you extend the tables above 3000 mm, or should the tool stop and
+> ask for machining hours on those?**
+
+---
+
+## What we're doing meanwhile
+
+- Everything is built from the workbook, not from the reference document.
+  Where the two disagree, the workbook wins.
+- Nothing is guessed. Any dimension we can't derive from an approved rule
+  will be shown as **ENGINEERING INPUT REQUIRED** rather than filled with
+  a plausible-looking number.
+- No welding cost is produced until question 2 is answered.
+
+One note on the reference document, in case it's shared with anyone else:
+its tables came out **shifted one heading down** in the Word export, so
+each heading shows the previous section's table. Under *"5.2 Honing Rate
+Card"* it prints 300 / 400 / 550 / 700 — those are the **Turning** rates.
+The real honing rates (0.30 and 0.40 Rs/cm2) don't appear anywhere in the
+document. We've taken them from the workbook, which is correct, but
+anyone building from the document alone would price honing about a
+thousand times too high.
+
+Thanks — questions 1 and 2 are the ones holding us up.

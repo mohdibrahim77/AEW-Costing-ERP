@@ -1,0 +1,40 @@
+{
+  "generated": "2026-08-25T23:15:22.560Z",
+  "rows": 295,
+  "zeroed": 0,
+  "medianGap": 2.956823544783205,
+  "medianMassFactor": 2.9335608481759086,
+  "medianRateFactor": 1.0247221871801377,
+  "medianAbsErr": 36099,
+  "medianRelErr": 0.6641040643352327,
+  "byBand": [
+    {
+      "band": "<60",
+      "n": 19,
+      "medianGap": 2.401547917140906,
+      "actualPerKg": 1009.375,
+      "targetPerKg": 1003
+    },
+    {
+      "band": "60-110",
+      "n": 120,
+      "medianGap": 2.745230956990922,
+      "actualPerKg": 527.323754789272,
+      "targetPerKg": 522
+    },
+    {
+      "band": "110-180",
+      "n": 95,
+      "medianGap": 2.9842209072978303,
+      "actualPerKg": 352.05479452054794,
+      "targetPerKg": 352
+    },
+    {
+      "band": ">=180",
+      "n": 56,
+      "medianGap": 5.592704230504806,
+      "actualPerKg": 321.60716756607167,
+      "targetPerKg": 318
+    }
+  ]
+}
