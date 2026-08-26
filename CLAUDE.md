@@ -19,7 +19,7 @@ but not yet deployed.
 
 ---
 
-## The five rules
+## The six rules
 
 Break any of these and something will fail silently. Every one of them
 exists because it already went wrong.
@@ -137,7 +137,61 @@ dead button stayed invisible.
 node tests/handlers.js      # must print: 25 bound, 0 dead
 ```
 
-### 5. Do not touch authentication without a very good reason
+### 5. Three sources, three distinct roles — never blur them
+
+The HISPL costing work has three source files in `hispl-v2/source/`.
+They are not interchangeable, and each has already misled us once.
+
+| Source | Supplies | Never supplies |
+|---|---|---|
+| `HISPL_..._Developer_Reference.docx` | **Structure and intent** — what the tool should do, which inputs are permitted, how components are organised, the rules of the process | **Any numeric value** |
+| `Trunion_Included.xlsx` | **Every value and every calculation** — rates, tables, rate cards, constants, weight formulas, process routing, roll-up logic | — |
+| `COST_SHEET.xlsx` | **Reference and validation only** — what a realistic job looks like, which mounting codes occur, what size range matters | **Any value used by the application** |
+
+**Structure from the document, values and calculations from the
+workbook, sanity-checking from the cost sheet.**
+
+If a number appears in the application, it came from the workbook. No
+exceptions.
+
+#### Why the document supplies no numbers
+
+Its tables came out of the Word export **shifted one heading down**, so
+every heading displays the *previous* section's table. Under
+*"5.2 Honing Rate Card"* it prints `300 / 400 / 550 / 700` — those are
+the **turning** rates. The real honing rates, `0.30` and `0.40` Rs/cm²,
+appear nowhere in that document at all.
+
+Building honing from that document would price it roughly **a thousand
+times too high**, and the code would look perfectly reasonable. Every
+number in that file is suspect.
+
+#### Why the cost sheet supplies no values
+
+It is last financial year's quotations. Legitimate evidence about what a
+real job looks like; illegitimate as a source of rates, because pricing
+from last year's figures — mixed with whatever margin applied at the
+time — is not costing.
+
+The four ₹/kg band targets (1003 / 522 / 352 / 318) *are* cost-sheet
+derived. They live in `masters.js` under `BORE_BANDS` and are
+**validation reporting only**. No costing path reads them, and
+`source-purity.js` fails if one does.
+
+#### When the document and the workbook disagree on structure
+
+**Report it. Do not silently pick.**
+
+The document is level 2 in the hierarchy and the workbook level 3, so
+the document wins on *intent*. But it has already proved unreliable on
+*detail*, so a disagreement is a finding to raise, not something to
+resolve alone.
+
+```bash
+node tests/source-purity.js    # must print: ✓ SOURCE-PURITY
+```
+
+### 6. Do not touch authentication without a very good reason
 
 It took many iterations to stabilise. The current design works. See the
 architecture section below before changing anything in

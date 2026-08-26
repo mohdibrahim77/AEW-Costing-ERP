@@ -545,3 +545,102 @@ Documented for HISPL, not fixed here. See `RECONCILIATION.md` §4.
 Defect 3 is the pattern this project must not inherit: the engine
 reports a blocked weight as `EIR` and names the omissions, rather than
 summing what happens to resolve.
+
+---
+
+# SOURCE RULE — three sources, three distinct roles
+
+Governs every value in the v2 application. Enforced by
+`tests/source-purity.js`, not by convention.
+
+| Source | Role | Supplies | Never supplies |
+|---|---|---|---|
+| `HISPL_..._Developer_Reference.docx` | **Structure and intent** | What the tool should do, which inputs are permitted, how components are organised, the rules of the process | **Any numeric value** |
+| `Trunion_Included.xlsx` | **Values and calculations** | All rates, tables, rate cards, constants, weight formulas, process routing, roll-up logic | — |
+| `COST_SHEET.xlsx` | **Reference and validation** | What a realistic job looks like, which mounting codes occur, what size range matters; may be compared against | **Any value used by the application** |
+
+**Structure from the document, values and calculations from the
+workbook, sanity-checking from the cost sheet.**
+
+If a number appears in the application, it came from the workbook. No
+exceptions.
+
+## Why the document is barred from supplying numbers
+
+Its tables came out of the Word export **shifted one heading down**:
+every heading displays the *previous* section's table. The giveaway is
+visible in the extraction — the table printed under *"5.2 Honing Rate
+Card"* ends with the rows `HONING RATE CARD (Rough Honing & Finished
+Honing)` and `Cost = Internal Surface Area (cm2) x Rate…`, which are the
+real heading rows pushed to the bottom of the table above.
+
+So under the honing heading it prints:
+
+```
+0.0    | Up to 100 mm  | 300.0 | 400.0
+101.0  | 101-250 mm    | 550.0 | 550.0
+251.0  | Above 250 mm  | 700.0 | 700.0
+```
+
+Those are the **Turning Rate Card**. The true honing rates — `0.30` and
+`0.40` Rs/cm² — appear nowhere in the document.
+
+Honing costed from that table would be roughly **1,000x** too high, on
+code that reads as correct. This is why the bar is absolute rather than
+"check the document carefully": a rule that depends on vigilance fails
+exactly when vigilance lapses.
+
+The document remains authoritative on **structure**: the 11 permitted
+inputs it lists were verified correct against the workbook's Inquiry
+Input sheet.
+
+## Why the cost sheet is barred from supplying values
+
+It is last financial year's quotations. It tells us truthfully what a
+real job looks like, and it is the basis for validation — but a rate
+taken from it would be last year's price with last year's margin already
+inside it, which is not a cost.
+
+One exception, tightly bounded: the four ₹/kg band targets
+(1003 / 522 / 352 / 318) are cost-sheet derived and live in `masters.js`
+under `BORE_BANDS`. They are **validation reporting only**. No costing
+path reads them, `engine.js` and `components.js` never reference
+`boreBand` or `targetTotalPerKg`, and `source-purity.js` fails the build
+if that changes.
+
+## When the document and the workbook disagree on structure
+
+**Report it. Do not silently resolve it.**
+
+The document is level 2 in the source hierarchy and the workbook level
+3, so the document wins on *intent*. But it has already proved unreliable
+on *detail*, so a disagreement is a finding to raise, not a decision to
+take alone.
+
+Disagreements found so far, all reported rather than resolved:
+
+| Point | Document | Workbook | Handling |
+|---|---|---|---|
+| Honing rates | 300 / 400 / 550 / 700 | 0.30 / 0.40 Rs/cm² | Workbook used; document's table is the mangled turning card |
+| Welding method | "later approved instruction: Rs 14 per inch per bead" | full formula, Rs 312 per 108 mm weld | **Unresolved** — held behind `weldingStatus()`, question 2 to HISPL |
+| Geometry cascade | §7: changing bore "must cascade" to dependent dimensions | no derivation exists; every dimension typed | **Unresolved** — question 1 to HISPL; all dimensions surface `ENGINEERING INPUT REQUIRED` |
+
+## What the test enforces
+
+```bash
+node tests/source-purity.js
+```
+
+- No `COST_SHEET` or historical-data reference anywhere in
+  `assets/js/costing/`
+- No `300 / 400 / 550 / 700` run in any costing module — the signature
+  of a transcribed mangled honing table
+- Honing rates are `0.30` / `0.40`, and the honing card carries no
+  hour-scale rate
+- Band targets appear only inside `BORE_BANDS`, and no other module
+  reads them
+- No rate literal restated outside `masters.js`
+- Welding stays behind `weldingStatus().resolved`; `14` is recorded but
+  never used as a rate
+- Every costing module names the workbook as its provenance
+- `CLAUDE.md` and this document actually state the rule
