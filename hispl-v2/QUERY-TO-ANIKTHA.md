@@ -13,15 +13,41 @@ Aniktha,
 We've extracted every formula from `Trunion Included.xlsx` and checked it
 against the reference document and the cost sheet. The workbook is a good
 spec — the process routing, rate cards and welding logic are all clear
-enough to build from, and the engine already reproduces your own cached
-figures where we have the dimensions (your Cushion Bush sheet comes out
-at Rs 3,798 against your Rs 3,798.47).
+enough to build from.
 
 Six things below. The first two block us. The third is a set of defects
 in the workbook that you'll want to fix regardless — it does not
 currently produce a total. The last three are data questions.
 
 Each is answerable in a sentence.
+
+---
+
+## First, a check: we costed your own cylinder
+
+We took the sample cylinder in your workbook — bore 100, rod 56, stroke
+800 — read its typed dimensions straight out of the sheets, and ran them
+through our engine. Against the four components your workbook still
+resolves:
+
+| | Your workbook | Our engine | |
+|---|---|---|---|
+| Tube | Rs 4,914 | Rs 4,914 | match |
+| Piston Rod | Rs 7,314 | Rs 7,314 | match |
+| Cushion Bush | Rs 3,798 | Rs 3,798 | match |
+| Trunnion | Rs 1,198 | Rs 1,198 | match |
+
+Complete cylinder: **Rs 25,167** — using the workbook's welding formula,
+and mapping the eight `MS-` grades to the real ones (see question 3a;
+without that mapping the workbook produces no total at all).
+
+The engine is reading your logic correctly. Everything below is about
+what the workbook doesn't contain, not about whether we've understood
+what it does.
+
+One number from that run matters for question 1: **all twelve components
+weigh 127.59 kg, where the tube and rod alone weigh 38.46 kg.** The
+median cylinder in your cost sheet weighs 127 kg.
 
 ---
 
