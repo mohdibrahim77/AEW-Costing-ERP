@@ -1,9 +1,10 @@
 # Costing v2 — questions before we build
 
-> **Two things are blocking us.** (1) Do written standards exist for
-> deriving component dimensions from bore, rod and stroke, or does the
-> estimator work from experience? (2) Is welding costed by the workbook
-> formula or the later Rs 14 per inch per bead instruction?
+> **Two things are blocking us.** (1) Section 8 of your document lists
+> eighteen geometry masters still to be created — which should we start
+> with, and who populates them? Without them the ten inputs reach 1.4%
+> of a cylinder's cost. (2) Is welding costed by the workbook formula or
+> the later Rs 14 per inch per bead instruction?
 >
 > Everything else below is a data issue you'll want to know about, but
 > it isn't holding up work.
@@ -15,9 +16,9 @@ against the reference document and the cost sheet. The workbook is a good
 spec — the process routing, rate cards and welding logic are all clear
 enough to build from.
 
-Six things below. The first two block us. The third is a set of defects
-in the workbook that you'll want to fix regardless — it does not
-currently produce a total. The last three are data questions.
+Seven things below. The first two block us. The third is a set of
+defects in the workbook that you'll want to fix regardless — it does not
+currently produce a total. The last four are short data questions.
 
 Each is answerable in a sentence.
 
@@ -51,95 +52,88 @@ median cylinder in your cost sheet weighs 127 kg.
 
 ---
 
-## 1. Do written geometry standards exist? — **blocks everything**
+## 1. Geometry masters — which first, and who populates them? — **blocks everything**
 
-Your reference document and your workbook disagree on this, and it is
-the central question for the whole build.
+Your ten inputs currently reach **1.4%** of a cylinder's cost.
 
-**Your reference document says:**
+On your own sample cylinder, costed at Rs 25,167, bore + rod + stroke
+get us to **Rs 360** — and that Rs 360 is the bought-out bearing, which
+needs no geometry at all. **Zero of the twelve components can be
+costed.** Seventy-six dimensions are outstanding.
 
-> "Changing Bore, Tube OD, Stroke or Rod Diameter must cascade to
-> dependent geometry and costing."
+That is not a limitation of our build. It is what section 8 of your own
+document already says:
 
-**Your workbook derives no dimension from any of them.** We checked all
-24 sheets. Bore, Rod and Stroke are referenced 16 times, every one of
-them for a label or a database record. Tube Raw OD 110, Finished OD 108,
-Finished ID 100.4, Length 900 — all typed in by hand.
+> "The supplied workbook does not currently contain dedicated geometry
+> masters for the following. These should be created as controlled
+> engineering reference tables and populated from HISPL historical
+> drawings/data or approved engineering standards."
 
-So:
+So we are not asking whether standards exist — you have already answered
+that, and you have specified the required fields for all eighteen
+masters. Three practical questions follow from it.
 
-> **Which is the intent — is the cascade something that already exists
-> and we haven't found it, something you want built, or something the
-> estimator does in his head?**
+### 1a. Which masters matter most first?
 
-Three lines above the cascade requirement, the same document says:
+We ranked the components by value on your sample cylinder:
 
-> "Do not invent missing geometry values. Missing engineering dimensions
-> must be marked ENGINEERING INPUT REQUIRED."
+| | Component | Cost | Cumulative |
+|---|---|---|---|
+| 1 | Piston Rod | Rs 7,314 | 29% |
+| 2 | Tube | Rs 4,914 | 49% |
+| 3 | Cushion Bush | Rs 3,798 | 64% |
+| 4 | Trunnion (x2) | Rs 2,396 | 73% |
+| 5 | Flange | Rs 1,777 | 80% |
 
-That is exactly what we have built, so we are not proposing a change of
-direction. And two lines below it:
+The Cap End Cover, Head End Cover and Gland are further down than we
+expected — Rs 789, Rs 839 and Rs 834, about 3% each.
 
-> "Maintain source/basis and confidence for **future** geometry
-> standards."
+> **Would the Piston Rod and Tube Geometry Masters be the two to start
+> with?** Those alone would take us from 1.4% to roughly half the
+> cylinder. This is one cylinder, so if the ranking looks wrong for your
+> typical job, tell us and we will follow yours.
 
-which reads as though the standards are still to be established. If that
-is right, we would rather hear it plainly than keep looking for a
-document that was never written.
+### 1b. Who populates them?
 
-### Why it matters this much
+Section 8 says "from HISPL historical drawings/data or approved
+engineering standards".
 
-We have now measured it rather than guessed at it.
+> **Which is it in practice — is there a drawing set someone can work
+> from, or does this come out of the estimator's working knowledge?**
 
-We ran all 295 cylinders from your cost sheet through the engine and
-compared against what you actually charged. The tool comes in about
-**3x under** your real prices. Splitting that gap:
+That decides whether this is a data-entry exercise or a series of
+conversations, and the two have very different timelines.
 
-| | |
-|---|---|
-| Missing component mass | **99.3%** |
-| Rates being too low | **2.3%** |
+### 1c. Section 9's rules — where do the missing values live?
 
-**Your rates are essentially right.** The engine prices a kilogram at
-397 Rs/kg where you charged 435. That is not the problem.
+Section 9 gives eight calculation rules. Sorting them by what they need:
 
-That comparison is against your FY-25 prices — if your rates have moved
-since, send the current ones and we'll re-run it. The mass finding
-doesn't depend on prices either way.
+- **One runs today**: Finished Tube ID = Bore.
+- **Three are already built**: the volume, weight and surface-area
+  formulas.
+- **Four are stated but cannot run** — they need Tube OD, Tube Boring
+  Allowance, OD Turning Allowance, Trunnion OD and Pin Diameter.
 
-The problem is mass. The engine predicts a median **48 kg** where the
-cylinder actually weighed **127 kg**, because it only models the tube and
-the rod. It cannot compute the covers, gland, piston, eyes, bushes or
-trunnion — and it cannot compute them because there is nothing to
-compute them *from*.
+> **Are those five values inside section 8's masters, or are they
+> separate constants?** Tube OD in particular reads as an input in
+> section 9 but is not one of the ten, so we assume it comes from the
+> Tube Geometry Master — worth confirming.
 
-To show how little the rates matter here: correcting them alone would
-move a median quote from Rs 19,197 to Rs 19,672, against a real figure
-of Rs 55,350. It barely moves. The mass is the whole gap, and no rate
-change reaches it.
+### Worth twenty minutes on a call
 
-Any answer is workable and we'll build accordingly. If standards *do*
-exist, even partially — tube OD by bore, boring allowance, tube length
-vs stroke, rod raw bar sizing — anything you have is useful. If they
-don't, the tool asks the estimator for those dimensions rather than
-inventing them, which is what your own document instructs. What we
-cannot do is guess.
+A written answer to 1a and 1b will be short; watching whoever estimates
+pick a cap end cover OD for a given bore would tell us more than either.
+Whether he reaches for a chart, a past job, or judgement decides what we
+build.
 
-There is a working preview that makes this concrete — it lists all 52
-dimensions it needs, by component and by your own cell reference, and
-shows what it can already compute without them:
+There is a preview that makes this concrete — it lists all the
+dimensions we need, by component and by your own cell reference, and
+shows what we can already compute without them:
 
 **https://aew-costing-erp.pages.dev/products/costing/preview**
 
-It isn't linked from anywhere and isn't indexed, so it won't be seen by
-anyone you don't send it to. Worth a look before we speak.
-
-**This might be faster on a call — twenty minutes with whoever does the
-estimating would probably settle it.** A written answer to "do standards
-exist" will be one word either way. What would actually help is watching
-him pick a cap end cover OD for a given bore: whether he reaches for a
-chart, a past job, or judgement tells us what to build. We can share the
-preview on screen and go through the 52 dimensions with him directly.
+It is unlinked and not indexed, so it will not be seen by anyone you do
+not send it to. Worth a look before we speak.
 
 ---
 
@@ -318,6 +312,20 @@ expensive jobs.
 > ask for machining hours on those?**
 
 ---
+
+---
+
+## 7. Job Type — input or not?
+
+Your workbook's Inquiry Input sheet has an eleventh row, `B13 Job Type`,
+set to "Manufacturing". Section 7 of your document lists ten inputs and
+does not mention Job Type anywhere.
+
+> **Is Job Type a real input we should carry, or was it dropped
+> deliberately?**
+
+We have built to the document's ten. Adding an eleventh is easy if it
+belongs.
 
 ---
 
