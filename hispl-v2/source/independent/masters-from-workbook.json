@@ -1,0 +1,88 @@
+{
+  "_source": "Trunion_Included.xlsx",
+  "_method": "mechanical extraction",
+  "materialMaster": {
+    "EN8": {
+      "name": "EN8 Carbon Steel",
+      "density": 7.85,
+      "rate": 68.0
+    },
+    "EN19": {
+      "name": "EN19 Alloy Steel",
+      "density": 7.85,
+      "rate": 92.0
+    },
+    "EN24": {
+      "name": "EN24 Alloy Steel",
+      "density": 7.85,
+      "rate": 118.0
+    },
+    "C45": {
+      "name": "C45 Carbon Steel",
+      "density": 7.85,
+      "rate": 66.0
+    },
+    "ST52": {
+      "name": "ST52 Seamless Tube",
+      "density": 7.85,
+      "rate": 78.0
+    },
+    "SS-410": {
+      "name": "SS 410 Stainless",
+      "density": 7.7,
+      "rate": 210.0
+    },
+    "BR-SAE660": {
+      "name": "Bronze SAE 660",
+      "density": 8.9,
+      "rate": 520.0
+    },
+    "EN353": {
+      "name": "EN353 Case Hardening Steel",
+      "density": 7.85,
+      "rate": 96.0
+    },
+    "PLATE-IS2062": {
+      "name": "IS2062 Plate",
+      "density": 7.85,
+      "rate": 62.0
+    },
+    "MS": {
+      "name": null,
+      "density": null,
+      "rate": null
+    }
+  },
+  "machineRateMaster": {
+    "CNC Lathe": 550.0,
+    "Center Lathe": 500.0,
+    "Milling Machine": 350.0,
+    "Drilling Machine": 250.0,
+    "Honing Machine": 450.0,
+    "Grinding Machine": 400.0,
+    "Cutting Machine": 350.0
+  },
+  "processRateMaster": {
+    "Heat Treatment": 12.0,
+    "Induction Hardening": 0.45,
+    "Grinding": 0.4,
+    "Polishing": 0.2,
+    "Painting": 0.2,
+    "Chrome Plating": 0.6,
+    "Dechrome Plating": 0.35,
+    "Profile Cutting": 1.25,
+    "Packing - Loose": 5.0,
+    "Packing - Wooden Box": 15.0,
+    "Rate up to 4000mm Stroke & 100mm ID (Rs./cm2)": 0.3,
+    "Rate beyond 4000mm Stroke or 100mm ID (Rs./cm2)": 0.4,
+    "Length / Stroke Threshold (mm)": 4000.0,
+    "ID Threshold (mm)": 100.0,
+    "Labour Rate (Rs./Hr)": 375.0,
+    "Wire Cost (Rs./kg)": 360.0,
+    "Deposition Rate (kg/Hr)": 0.8,
+    "Welding Speed (mm/Hr)": 3600.0,
+    "Dia Threshold for Bead Count (mm)": 250.0,
+    "Beads if Dia <= Threshold": 5.0,
+    "Beads if Dia > Threshold": 8.0
+  }
+}

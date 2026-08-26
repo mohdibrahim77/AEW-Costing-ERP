@@ -1,0 +1,8182 @@
+{
+ "Inquiry Input": {
+  "A1": {
+   "formula": null,
+   "value": "INQUIRY INPUT"
+  },
+  "A3": {
+   "formula": null,
+   "value": "Inquiry No."
+  },
+  "B3": {
+   "formula": null,
+   "value": "INQ-0001"
+  },
+  "A4": {
+   "formula": null,
+   "value": "Inquiry Date"
+  },
+  "B4": {
+   "formula": "=TODAY()",
+   "value": "2026-08-14 00:00:00"
+  },
+  "A5": {
+   "formula": null,
+   "value": "Customer Name"
+  },
+  "B5": {
+   "formula": null,
+   "value": "Sample Customer Pvt Ltd"
+  },
+  "A6": {
+   "formula": null,
+   "value": "Customer Location"
+  },
+  "B6": {
+   "formula": null,
+   "value": "Bengaluru"
+  },
+  "A7": {
+   "formula": null,
+   "value": "Cylinder Name / Application Department"
+  },
+  "B7": {
+   "formula": null,
+   "value": "Excavator Boom Cylinder"
+  },
+  "A8": {
+   "formula": null,
+   "value": "Bore (mm)"
+  },
+  "B8": {
+   "formula": null,
+   "value": 100.0
+  },
+  "A9": {
+   "formula": null,
+   "value": "Rod Diameter (mm)"
+  },
+  "B9": {
+   "formula": null,
+   "value": 56.0
+  },
+  "A10": {
+   "formula": null,
+   "value": "Stroke (mm)"
+  },
+  "B10": {
+   "formula": null,
+   "value": 800.0
+  },
+  "A11": {
+   "formula": null,
+   "value": "Mounting Type"
+  },
+  "B11": {
+   "formula": null,
+   "value": "Clevis"
+  },
+  "A12": {
+   "formula": null,
+   "value": "Working Pressure (bar)"
+  },
+  "B12": {
+   "formula": null,
+   "value": 250.0
+  },
+  "A13": {
+   "formula": null,
+   "value": "Job Type"
+  },
+  "B13": {
+   "formula": null,
+   "value": "Manufacturing"
+  },
+  "A15": {
+   "formula": null,
+   "value": "This sheet feeds Cylinder ID, Customer & Cylinder details automatically into Cost Summary and Cylinder Database."
+  },
+  "A16": {
+   "formula": null,
+   "value": "Job Type here describes the overall job. In addition, every component sheet has its own 'New Material?' Yes/No selector - choose 'No' on a component to set that component's material cost to zero (existing part reused)."
+  },
+  "A17": {
+   "formula": null,
+   "value": "For every new cylinder job, make a copy of this workbook (Inquiry Input + Master + Component + Cost Summary sheets) and feed fresh details here."
+  }
+ },
+ "Material Master": {
+  "A1": {
+   "formula": null,
+   "value": "MATERIAL RATE MASTER"
+  },
+  "A2": {
+   "formula": null,
+   "value": "Add / edit materials here. Rates (blue) are inputs. Every component sheet looks up Density & Rate from this table only."
+  },
+  "A3": {
+   "formula": null,
+   "value": "Material Code"
+  },
+  "B3": {
+   "formula": null,
+   "value": "Material Name / Grade"
+  },
+  "C3": {
+   "formula": null,
+   "value": "Density (g/cm3)"
+  },
+  "D3": {
+   "formula": null,
+   "value": "Rate (Rs./kg)"
+  },
+  "E3": {
+   "formula": null,
+   "value": "Remarks"
+  },
+  "A4": {
+   "formula": null,
+   "value": "EN8"
+  },
+  "B4": {
+   "formula": null,
+   "value": "EN8 Carbon Steel"
+  },
+  "C4": {
+   "formula": null,
+   "value": 7.85
+  },
+  "D4": {
+   "formula": null,
+   "value": 68.0
+  },
+  "E4": {
+   "formula": null,
+   "value": "Tubes, general turning parts"
+  },
+  "A5": {
+   "formula": null,
+   "value": "EN19"
+  },
+  "B5": {
+   "formula": null,
+   "value": "EN19 Alloy Steel"
+  },
+  "C5": {
+   "formula": null,
+   "value": 7.85
+  },
+  "D5": {
+   "formula": null,
+   "value": 92.0
+  },
+  "E5": {
+   "formula": null,
+   "value": "Piston Rod - heat treatable"
+  },
+  "A6": {
+   "formula": null,
+   "value": "EN24"
+  },
+  "B6": {
+   "formula": null,
+   "value": "EN24 Alloy Steel"
+  },
+  "C6": {
+   "formula": null,
+   "value": 7.85
+  },
+  "D6": {
+   "formula": null,
+   "value": 118.0
+  },
+  "E6": {
+   "formula": null,
+   "value": "High strength rods / eyes"
+  },
+  "A7": {
+   "formula": null,
+   "value": "C45"
+  },
+  "B7": {
+   "formula": null,
+   "value": "C45 Carbon Steel"
+  },
+  "C7": {
+   "formula": null,
+   "value": 7.85
+  },
+  "D7": {
+   "formula": null,
+   "value": 66.0
+  },
+  "E7": {
+   "formula": null,
+   "value": "Cap/Head End Covers, Gland, Flange"
+  },
+  "A8": {
+   "formula": null,
+   "value": "ST52"
+  },
+  "B8": {
+   "formula": null,
+   "value": "ST52 Seamless Tube"
+  },
+  "C8": {
+   "formula": null,
+   "value": 7.85
+  },
+  "D8": {
+   "formula": null,
+   "value": 78.0
+  },
+  "E8": {
+   "formula": null,
+   "value": "Cylinder Tube raw material"
+  },
+  "A9": {
+   "formula": null,
+   "value": "SS-410"
+  },
+  "B9": {
+   "formula": null,
+   "value": "SS 410 Stainless"
+  },
+  "C9": {
+   "formula": null,
+   "value": 7.7
+  },
+  "D9": {
+   "formula": null,
+   "value": 210.0
+  },
+  "E9": {
+   "formula": null,
+   "value": "Corrosion resistant rods"
+  },
+  "A10": {
+   "formula": null,
+   "value": "BR-SAE660"
+  },
+  "B10": {
+   "formula": null,
+   "value": "Bronze SAE 660"
+  },
+  "C10": {
+   "formula": null,
+   "value": 8.9
+  },
+  "D10": {
+   "formula": null,
+   "value": 520.0
+  },
+  "E10": {
+   "formula": null,
+   "value": "Cushion Bush / Bearing Bush"
+  },
+  "A11": {
+   "formula": null,
+   "value": "EN353"
+  },
+  "B11": {
+   "formula": null,
+   "value": "EN353 Case Hardening Steel"
+  },
+  "C11": {
+   "formula": null,
+   "value": 7.85
+  },
+  "D11": {
+   "formula": null,
+   "value": 96.0
+  },
+  "E11": {
+   "formula": null,
+   "value": "Pins / Bushes"
+  },
+  "A12": {
+   "formula": null,
+   "value": "PLATE-IS2062"
+  },
+  "B12": {
+   "formula": null,
+   "value": "IS2062 Plate"
+  },
+  "C12": {
+   "formula": null,
+   "value": 7.85
+  },
+  "D12": {
+   "formula": null,
+   "value": 62.0
+  },
+  "E12": {
+   "formula": null,
+   "value": "Rear Eye / Rod Eye / Piston blanks"
+  },
+  "A13": {
+   "formula": null,
+   "value": "MS"
+  }
+ },
+ "Machine Rate Master": {
+  "A1": {
+   "formula": null,
+   "value": "MACHINE HOUR RATE MASTER"
+  },
+  "A2": {
+   "formula": null,
+   "value": "Hourly rates (Rs./Hr) used by every component sheet to cost machine hours. Machine names below are the ONLY names used across the whole workbook - keep them exactly as spelled here."
+  },
+  "A3": {
+   "formula": null,
+   "value": "Machine"
+  },
+  "B3": {
+   "formula": null,
+   "value": "Hourly Rate (Rs./Hr)"
+  },
+  "C3": {
+   "formula": null,
+   "value": "Process(es) Carried Out On This Machine"
+  },
+  "A4": {
+   "formula": null,
+   "value": "CNC Lathe"
+  },
+  "B4": {
+   "formula": null,
+   "value": 550.0
+  },
+  "C4": {
+   "formula": null,
+   "value": "Finish Turning (rate overridden by Turning Rate Card below); generic Turning on CEC/HEC/Flange/Piston"
+  },
+  "A5": {
+   "formula": null,
+   "value": "Center Lathe"
+  },
+  "B5": {
+   "formula": null,
+   "value": 500.0
+  },
+  "C5": {
+   "formula": null,
+   "value": "Boring; Rough Turning (rate overridden by Turning Rate Card below)"
+  },
+  "A6": {
+   "formula": null,
+   "value": "Milling Machine"
+  },
+  "B6": {
+   "formula": null,
+   "value": 350.0
+  },
+  "C6": {
+   "formula": null,
+   "value": "Milling"
+  },
+  "A7": {
+   "formula": null,
+   "value": "Drilling Machine"
+  },
+  "B7": {
+   "formula": null,
+   "value": 250.0
+  },
+  "C7": {
+   "formula": null,
+   "value": "Drilling"
+  },
+  "A8": {
+   "formula": null,
+   "value": "Honing Machine"
+  },
+  "B8": {
+   "formula": null,
+   "value": 450.0
+  },
+  "C8": {
+   "formula": null,
+   "value": "Rough Honing and Finished Honing (utilisation reference; cost via Honing Rate Card)"
+  },
+  "A9": {
+   "formula": null,
+   "value": "Grinding Machine"
+  },
+  "B9": {
+   "formula": null,
+   "value": 400.0
+  },
+  "C9": {
+   "formula": null,
+   "value": "Grinding (utilisation reference; cost via Process Rate Master Rs./cm2)"
+  },
+  "A10": {
+   "formula": null,
+   "value": "Cutting Machine"
+  },
+  "B10": {
+   "formula": null,
+   "value": 350.0
+  },
+  "C10": {
+   "formula": null,
+   "value": "Cutting - universal flat charge"
+  }
+ },
+ "Machine Time Master": {
+  "A1": {
+   "formula": null,
+   "value": "MACHINE TIME MASTER"
+  },
+  "A2": {
+   "formula": null,
+   "value": "Single source of machine time standards. Every component sheet looks up hours from these tables via INDEX/MATCH or VLOOKUP - never enter machine hours manually."
+  },
+  "A4": {
+   "formula": null,
+   "value": "SECTION 2 - CUTTING TIME (Hrs)  |  Inputs: OD, Length"
+  },
+  "A5": {
+   "formula": null,
+   "value": "Bin Start"
+  },
+  "B5": {
+   "formula": null,
+   "value": "OD (mm)"
+  },
+  "C5": {
+   "formula": null,
+   "value": "Up to 500"
+  },
+  "D5": {
+   "formula": null,
+   "value": "501-1000"
+  },
+  "E5": {
+   "formula": null,
+   "value": "1001-2000"
+  },
+  "F5": {
+   "formula": null,
+   "value": "2001-3000"
+  },
+  "B6": {
+   "formula": null,
+   "value": "Length/Area Bin Start (helper)"
+  },
+  "C6": {
+   "formula": null,
+   "value": 0.0
+  },
+  "D6": {
+   "formula": null,
+   "value": 501.0
+  },
+  "E6": {
+   "formula": null,
+   "value": 1001.0
+  },
+  "F6": {
+   "formula": null,
+   "value": 2001.0
+  },
+  "A7": {
+   "formula": null,
+   "value": 0.0
+  },
+  "B7": {
+   "formula": null,
+   "value": "Up to 80"
+  },
+  "C7": {
+   "formula": null,
+   "value": 0.08
+  },
+  "D7": {
+   "formula": null,
+   "value": 0.1
+  },
+  "E7": {
+   "formula": null,
+   "value": 0.15
+  },
+  "F7": {
+   "formula": null,
+   "value": 0.2
+  },
+  "A8": {
+   "formula": null,
+   "value": 81.0
+  },
+  "B8": {
+   "formula": null,
+   "value": "81-150"
+  },
+  "C8": {
+   "formula": null,
+   "value": 0.1
+  },
+  "D8": {
+   "formula": null,
+   "value": 0.15
+  },
+  "E8": {
+   "formula": null,
+   "value": 0.2
+  },
+  "F8": {
+   "formula": null,
+   "value": 0.3
+  },
+  "A9": {
+   "formula": null,
+   "value": 151.0
+  },
+  "B9": {
+   "formula": null,
+   "value": "151-250"
+  },
+  "C9": {
+   "formula": null,
+   "value": 0.15
+  },
+  "D9": {
+   "formula": null,
+   "value": 0.2
+  },
+  "E9": {
+   "formula": null,
+   "value": 0.3
+  },
+  "F9": {
+   "formula": null,
+   "value": 0.4
+  },
+  "A10": {
+   "formula": null,
+   "value": 251.0
+  },
+  "B10": {
+   "formula": null,
+   "value": "Above 250"
+  },
+  "C10": {
+   "formula": null,
+   "value": 0.25
+  },
+  "D10": {
+   "formula": null,
+   "value": 0.35
+  },
+  "E10": {
+   "formula": null,
+   "value": 0.5
+  },
+  "F10": {
+   "formula": null,
+   "value": 0.7
+  },
+  "A12": {
+   "formula": null,
+   "value": "SECTION 3 - ROUGH TURNING TIME (Hrs)  |  Inputs: Finished OD, Length. Stock Removal = Raw OD - Finished OD"
+  },
+  "A13": {
+   "formula": null,
+   "value": "Bin Start"
+  },
+  "B13": {
+   "formula": null,
+   "value": "Finished OD (mm)"
+  },
+  "C13": {
+   "formula": null,
+   "value": "Up to 500"
+  },
+  "D13": {
+   "formula": null,
+   "value": "501-1000"
+  },
+  "E13": {
+   "formula": null,
+   "value": "1001-2000"
+  },
+  "F13": {
+   "formula": null,
+   "value": "2001-3000"
+  },
+  "B14": {
+   "formula": null,
+   "value": "Length/Area Bin Start (helper)"
+  },
+  "C14": {
+   "formula": null,
+   "value": 0.0
+  },
+  "D14": {
+   "formula": null,
+   "value": 501.0
+  },
+  "E14": {
+   "formula": null,
+   "value": 1001.0
+  },
+  "F14": {
+   "formula": null,
+   "value": 2001.0
+  },
+  "A15": {
+   "formula": null,
+   "value": 0.0
+  },
+  "B15": {
+   "formula": null,
+   "value": "Up to 80"
+  },
+  "C15": {
+   "formula": null,
+   "value": 0.3
+  },
+  "D15": {
+   "formula": null,
+   "value": 0.6
+  },
+  "E15": {
+   "formula": null,
+   "value": 1.2
+  },
+  "F15": {
+   "formula": null,
+   "value": 1.8
+  },
+  "A16": {
+   "formula": null,
+   "value": 81.0
+  },
+  "B16": {
+   "formula": null,
+   "value": "81-150"
+  },
+  "C16": {
+   "formula": null,
+   "value": 0.5
+  },
+  "D16": {
+   "formula": null,
+   "value": 0.9
+  },
+  "E16": {
+   "formula": null,
+   "value": 1.7
+  },
+  "F16": {
+   "formula": null,
+   "value": 2.5
+  },
+  "A17": {
+   "formula": null,
+   "value": 151.0
+  },
+  "B17": {
+   "formula": null,
+   "value": "151-250"
+  },
+  "C17": {
+   "formula": null,
+   "value": 0.8
+  },
+  "D17": {
+   "formula": null,
+   "value": 1.5
+  },
+  "E17": {
+   "formula": null,
+   "value": 2.8
+  },
+  "F17": {
+   "formula": null,
+   "value": 4.0
+  },
+  "A18": {
+   "formula": null,
+   "value": 251.0
+  },
+  "B18": {
+   "formula": null,
+   "value": "Above 250"
+  },
+  "C18": {
+   "formula": null,
+   "value": 1.2
+  },
+  "D18": {
+   "formula": null,
+   "value": 2.2
+  },
+  "E18": {
+   "formula": null,
+   "value": 4.0
+  },
+  "F18": {
+   "formula": null,
+   "value": 6.0
+  },
+  "A20": {
+   "formula": null,
+   "value": "STOCK REMOVAL CORRECTION FACTOR (applied to Rough Turning Time)"
+  },
+  "A21": {
+   "formula": null,
+   "value": "Bin Start (helper)"
+  },
+  "B21": {
+   "formula": null,
+   "value": "Stock Removal (mm)"
+  },
+  "C21": {
+   "formula": null,
+   "value": "Factor"
+  },
+  "A22": {
+   "formula": null,
+   "value": 0.0
+  },
+  "B22": {
+   "formula": null,
+   "value": "<= 2 mm"
+  },
+  "C22": {
+   "formula": null,
+   "value": 1.0
+  },
+  "A23": {
+   "formula": null,
+   "value": 2.0001
+  },
+  "B23": {
+   "formula": null,
+   "value": "> 2 - 5 mm"
+  },
+  "C23": {
+   "formula": null,
+   "value": 1.15
+  },
+  "A24": {
+   "formula": null,
+   "value": 5.0001
+  },
+  "B24": {
+   "formula": null,
+   "value": "> 5 - 10 mm"
+  },
+  "C24": {
+   "formula": null,
+   "value": 1.35
+  },
+  "A25": {
+   "formula": null,
+   "value": 10.0001
+  },
+  "B25": {
+   "formula": null,
+   "value": "> 10 mm"
+  },
+  "C25": {
+   "formula": null,
+   "value": 1.6
+  },
+  "A27": {
+   "formula": null,
+   "value": "SECTION 4 - Finish Turning Time = Rough Turning Time (looked up the same way) x 0.70  (applied directly in component sheets)"
+  },
+  "A29": {
+   "formula": null,
+   "value": "SECTION 5 - BORING TIME (Hrs)  |  Inputs: Finished ID, Bore Length"
+  },
+  "A30": {
+   "formula": null,
+   "value": "Bin Start"
+  },
+  "B30": {
+   "formula": null,
+   "value": "ID (mm)"
+  },
+  "C30": {
+   "formula": null,
+   "value": "Up to 250"
+  },
+  "D30": {
+   "formula": null,
+   "value": "251-500"
+  },
+  "E30": {
+   "formula": null,
+   "value": "501-1000"
+  },
+  "F30": {
+   "formula": null,
+   "value": "1001-2000"
+  },
+  "B31": {
+   "formula": null,
+   "value": "Length/Area Bin Start (helper)"
+  },
+  "C31": {
+   "formula": null,
+   "value": 0.0
+  },
+  "D31": {
+   "formula": null,
+   "value": 251.0
+  },
+  "E31": {
+   "formula": null,
+   "value": 501.0
+  },
+  "F31": {
+   "formula": null,
+   "value": 1001.0
+  },
+  "A32": {
+   "formula": null,
+   "value": 0.0
+  },
+  "B32": {
+   "formula": null,
+   "value": "Up to 80"
+  },
+  "C32": {
+   "formula": null,
+   "value": 0.25
+  },
+  "D32": {
+   "formula": null,
+   "value": 0.4
+  },
+  "E32": {
+   "formula": null,
+   "value": 0.7
+  },
+  "F32": {
+   "formula": null,
+   "value": 1.2
+  },
+  "A33": {
+   "formula": null,
+   "value": 81.0
+  },
+  "B33": {
+   "formula": null,
+   "value": "81-150"
+  },
+  "C33": {
+   "formula": null,
+   "value": 0.4
+  },
+  "D33": {
+   "formula": null,
+   "value": 0.7
+  },
+  "E33": {
+   "formula": null,
+   "value": 1.2
+  },
+  "F33": {
+   "formula": null,
+   "value": 2.0
+  },
+  "A34": {
+   "formula": null,
+   "value": 151.0
+  },
+  "B34": {
+   "formula": null,
+   "value": "151-250"
+  },
+  "C34": {
+   "formula": null,
+   "value": 0.7
+  },
+  "D34": {
+   "formula": null,
+   "value": 1.2
+  },
+  "E34": {
+   "formula": null,
+   "value": 2.2
+  },
+  "F34": {
+   "formula": null,
+   "value": 3.5
+  },
+  "A35": {
+   "formula": null,
+   "value": 251.0
+  },
+  "B35": {
+   "formula": null,
+   "value": "Above 250"
+  },
+  "C35": {
+   "formula": null,
+   "value": 1.2
+  },
+  "D35": {
+   "formula": null,
+   "value": 2.0
+  },
+  "E35": {
+   "formula": null,
+   "value": 3.5
+  },
+  "F35": {
+   "formula": null,
+   "value": 5.5
+  },
+  "A37": {
+   "formula": null,
+   "value": "SECTION 6 - HONING TIME (Hrs, utilisation reference)  |  Cost is via Honing Rate Card (Process Rate Master), NOT this table"
+  },
+  "A38": {
+   "formula": null,
+   "value": "Bin Start"
+  },
+  "B38": {
+   "formula": null,
+   "value": "ID (mm)"
+  },
+  "C38": {
+   "formula": null,
+   "value": "Up to 500"
+  },
+  "D38": {
+   "formula": null,
+   "value": "501-1000"
+  },
+  "E38": {
+   "formula": null,
+   "value": "1001-2000"
+  },
+  "B39": {
+   "formula": null,
+   "value": "Length/Area Bin Start (helper)"
+  },
+  "C39": {
+   "formula": null,
+   "value": 0.0
+  },
+  "D39": {
+   "formula": null,
+   "value": 501.0
+  },
+  "E39": {
+   "formula": null,
+   "value": 1001.0
+  },
+  "A40": {
+   "formula": null,
+   "value": 0.0
+  },
+  "B40": {
+   "formula": null,
+   "value": "Up to 80"
+  },
+  "C40": {
+   "formula": null,
+   "value": 0.3
+  },
+  "D40": {
+   "formula": null,
+   "value": 0.6
+  },
+  "E40": {
+   "formula": null,
+   "value": 1.2
+  },
+  "A41": {
+   "formula": null,
+   "value": 81.0
+  },
+  "B41": {
+   "formula": null,
+   "value": "81-150"
+  },
+  "C41": {
+   "formula": null,
+   "value": 0.5
+  },
+  "D41": {
+   "formula": null,
+   "value": 0.9
+  },
+  "E41": {
+   "formula": null,
+   "value": 1.6
+  },
+  "A42": {
+   "formula": null,
+   "value": 151.0
+  },
+  "B42": {
+   "formula": null,
+   "value": "151-250"
+  },
+  "C42": {
+   "formula": null,
+   "value": 0.8
+  },
+  "D42": {
+   "formula": null,
+   "value": 1.4
+  },
+  "E42": {
+   "formula": null,
+   "value": 2.4
+  },
+  "A43": {
+   "formula": null,
+   "value": 251.0
+  },
+  "B43": {
+   "formula": null,
+   "value": "Above 250"
+  },
+  "C43": {
+   "formula": null,
+   "value": 1.2
+  },
+  "D43": {
+   "formula": null,
+   "value": 2.0
+  },
+  "E43": {
+   "formula": null,
+   "value": 3.5
+  },
+  "A45": {
+   "formula": null,
+   "value": "SECTION 7 - GRINDING TIME (Hrs, machine utilisation reference)  |  Surface Area(cm2) = PI() x OD x Length / 100"
+  },
+  "A46": {
+   "formula": null,
+   "value": "Grinding COST is charged via Process Rate Master (Rs./cm2). This table is for machine hour / utilisation tracking on the Dashboard."
+  },
+  "A47": {
+   "formula": null,
+   "value": "Bin Start"
+  },
+  "B47": {
+   "formula": null,
+   "value": "OD (mm)"
+  },
+  "C47": {
+   "formula": null,
+   "value": "Up to 500"
+  },
+  "D47": {
+   "formula": null,
+   "value": "501-1000"
+  },
+  "E47": {
+   "formula": null,
+   "value": "1001-2000"
+  },
+  "B48": {
+   "formula": null,
+   "value": "Length/Area Bin Start (helper)"
+  },
+  "C48": {
+   "formula": null,
+   "value": 0.0
+  },
+  "D48": {
+   "formula": null,
+   "value": 501.0
+  },
+  "E48": {
+   "formula": null,
+   "value": 1001.0
+  },
+  "A49": {
+   "formula": null,
+   "value": 0.0
+  },
+  "B49": {
+   "formula": null,
+   "value": "Up to 80"
+  },
+  "C49": {
+   "formula": null,
+   "value": 0.3
+  },
+  "D49": {
+   "formula": null,
+   "value": 0.5
+  },
+  "E49": {
+   "formula": null,
+   "value": 0.9
+  },
+  "A50": {
+   "formula": null,
+   "value": 81.0
+  },
+  "B50": {
+   "formula": null,
+   "value": "81-150"
+  },
+  "C50": {
+   "formula": null,
+   "value": 0.5
+  },
+  "D50": {
+   "formula": null,
+   "value": 0.8
+  },
+  "E50": {
+   "formula": null,
+   "value": 1.4
+  },
+  "A51": {
+   "formula": null,
+   "value": 151.0
+  },
+  "B51": {
+   "formula": null,
+   "value": "151-250"
+  },
+  "C51": {
+   "formula": null,
+   "value": 0.8
+  },
+  "D51": {
+   "formula": null,
+   "value": 1.3
+  },
+  "E51": {
+   "formula": null,
+   "value": 2.2
+  },
+  "A52": {
+   "formula": null,
+   "value": 251.0
+  },
+  "B52": {
+   "formula": null,
+   "value": "Above 250"
+  },
+  "C52": {
+   "formula": null,
+   "value": 1.2
+  },
+  "D52": {
+   "formula": null,
+   "value": 2.0
+  },
+  "E52": {
+   "formula": null,
+   "value": 3.2
+  },
+  "A54": {
+   "formula": null,
+   "value": "SECTION 8 - MILLING TIME (Hrs)  |  Input: Machined Area (mm2) = Width x Length"
+  },
+  "A55": {
+   "formula": null,
+   "value": "Bin Start (helper)"
+  },
+  "B55": {
+   "formula": null,
+   "value": "Machined Area (mm2)"
+  },
+  "C55": {
+   "formula": null,
+   "value": "Time (Hr)"
+  },
+  "A56": {
+   "formula": null,
+   "value": 0.0
+  },
+  "B56": {
+   "formula": null,
+   "value": "Up to 10,000"
+  },
+  "C56": {
+   "formula": null,
+   "value": 0.3
+  },
+  "A57": {
+   "formula": null,
+   "value": 10001.0
+  },
+  "B57": {
+   "formula": null,
+   "value": "10,001-25,000"
+  },
+  "C57": {
+   "formula": null,
+   "value": 0.6
+  },
+  "A58": {
+   "formula": null,
+   "value": 25001.0
+  },
+  "B58": {
+   "formula": null,
+   "value": "25,001-50,000"
+  },
+  "C58": {
+   "formula": null,
+   "value": 1.0
+  },
+  "A59": {
+   "formula": null,
+   "value": 50001.0
+  },
+  "B59": {
+   "formula": null,
+   "value": "Above 50,000"
+  },
+  "C59": {
+   "formula": null,
+   "value": 1.8
+  },
+  "A61": {
+   "formula": null,
+   "value": "SECTION 9 - DRILLING TIME (Hrs per hole)  |  Total Time = Time/Hole x No. of Holes"
+  },
+  "A62": {
+   "formula": null,
+   "value": "Bin Start (helper)"
+  },
+  "B62": {
+   "formula": null,
+   "value": "Hole Dia (mm)"
+  },
+  "C62": {
+   "formula": null,
+   "value": "Time/Hole (Hr)"
+  },
+  "A63": {
+   "formula": null,
+   "value": 0.0
+  },
+  "B63": {
+   "formula": null,
+   "value": "Up to 10"
+  },
+  "C63": {
+   "formula": null,
+   "value": 0.03
+  },
+  "A64": {
+   "formula": null,
+   "value": 11.0
+  },
+  "B64": {
+   "formula": null,
+   "value": "11-20"
+  },
+  "C64": {
+   "formula": null,
+   "value": 0.05
+  },
+  "A65": {
+   "formula": null,
+   "value": 21.0
+  },
+  "B65": {
+   "formula": null,
+   "value": "21-30"
+  },
+  "C65": {
+   "formula": null,
+   "value": 0.08
+  },
+  "A66": {
+   "formula": null,
+   "value": 31.0
+  },
+  "B66": {
+   "formula": null,
+   "value": "Above 30"
+  },
+  "C66": {
+   "formula": null,
+   "value": 0.12
+  },
+  "A68": {
+   "formula": null,
+   "value": "SECTION 10 - PROFILE CUTTING TIME (Hrs, utilisation reference)  |  Input: Weight (kg)"
+  },
+  "A69": {
+   "formula": null,
+   "value": "Profile Cutting COST is charged via Process Rate Master (Rs./kg). This table is for utilisation tracking."
+  },
+  "A70": {
+   "formula": null,
+   "value": "Bin Start (helper)"
+  },
+  "B70": {
+   "formula": null,
+   "value": "Weight (kg)"
+  },
+  "C70": {
+   "formula": null,
+   "value": "Time (Hr)"
+  },
+  "A71": {
+   "formula": null,
+   "value": 0.0
+  },
+  "B71": {
+   "formula": null,
+   "value": "Up to 10"
+  },
+  "C71": {
+   "formula": null,
+   "value": 0.1
+  },
+  "A72": {
+   "formula": null,
+   "value": 11.0
+  },
+  "B72": {
+   "formula": null,
+   "value": "11-25"
+  },
+  "C72": {
+   "formula": null,
+   "value": 0.2
+  },
+  "A73": {
+   "formula": null,
+   "value": 26.0
+  },
+  "B73": {
+   "formula": null,
+   "value": "26-50"
+  },
+  "C73": {
+   "formula": null,
+   "value": 0.35
+  },
+  "A74": {
+   "formula": null,
+   "value": 51.0
+  },
+  "B74": {
+   "formula": null,
+   "value": "Above 50"
+  },
+  "C74": {
+   "formula": null,
+   "value": 0.6
+  },
+  "A76": {
+   "formula": null,
+   "value": "SECTION 11 - SURFACE AREA MASTER (cm2) - referenced formulas, applied locally in each component sheet"
+  },
+  "A77": {
+   "formula": null,
+   "value": "Process"
+  },
+  "B77": {
+   "formula": null,
+   "value": "Formula"
+  },
+  "A78": {
+   "formula": null,
+   "value": "Grinding / Chrome Plating / Dechrome Plating / Polishing / Painting / Induction Hardening (on OD)"
+  },
+  "B78": {
+   "formula": null,
+   "value": "PI() x OD(mm) x Length(mm) / 100"
+  },
+  "A79": {
+   "formula": null,
+   "value": "Honing (on ID)"
+  },
+  "B79": {
+   "formula": null,
+   "value": "PI() x ID(mm) x Length(mm) / 100"
+  }
+ },
+ "Process Rate Master": {
+  "A1": {
+   "formula": null,
+   "value": "PROCESS & VENDOR RATE MASTER"
+  },
+  "A2": {
+   "formula": null,
+   "value": "Rates for area/weight based finishing & vendor processes and welding constants. Referenced by every component sheet - edit only here."
+  },
+  "A3": {
+   "formula": null,
+   "value": "Process"
+  },
+  "B3": {
+   "formula": null,
+   "value": "Rate"
+  },
+  "C3": {
+   "formula": null,
+   "value": "Unit"
+  },
+  "D3": {
+   "formula": null,
+   "value": "Remarks"
+  },
+  "A4": {
+   "formula": null,
+   "value": "Heat Treatment"
+  },
+  "B4": {
+   "formula": null,
+   "value": 12.0
+  },
+  "C4": {
+   "formula": null,
+   "value": "Rs./kg"
+  },
+  "A5": {
+   "formula": null,
+   "value": "Induction Hardening"
+  },
+  "B5": {
+   "formula": null,
+   "value": 0.45
+  },
+  "C5": {
+   "formula": null,
+   "value": "Rs./cm2"
+  },
+  "A6": {
+   "formula": null,
+   "value": "Grinding"
+  },
+  "B6": {
+   "formula": null,
+   "value": 0.4
+  },
+  "C6": {
+   "formula": null,
+   "value": "Rs./cm2"
+  },
+  "A7": {
+   "formula": null,
+   "value": "Polishing"
+  },
+  "B7": {
+   "formula": null,
+   "value": 0.2
+  },
+  "C7": {
+   "formula": null,
+   "value": "Rs./cm2"
+  },
+  "A8": {
+   "formula": null,
+   "value": "Painting"
+  },
+  "B8": {
+   "formula": null,
+   "value": 0.2
+  },
+  "C8": {
+   "formula": null,
+   "value": "Rs./cm2"
+  },
+  "A9": {
+   "formula": null,
+   "value": "Chrome Plating"
+  },
+  "B9": {
+   "formula": null,
+   "value": 0.6
+  },
+  "C9": {
+   "formula": null,
+   "value": "Rs./cm2"
+  },
+  "A10": {
+   "formula": null,
+   "value": "Dechrome Plating"
+  },
+  "B10": {
+   "formula": null,
+   "value": 0.35
+  },
+  "C10": {
+   "formula": null,
+   "value": "Rs./cm2"
+  },
+  "A11": {
+   "formula": null,
+   "value": "Profile Cutting"
+  },
+  "B11": {
+   "formula": null,
+   "value": 1.25
+  },
+  "C11": {
+   "formula": null,
+   "value": "Rs./kg"
+  },
+  "A12": {
+   "formula": null,
+   "value": "Packing - Loose"
+  },
+  "B12": {
+   "formula": null,
+   "value": 5.0
+  },
+  "C12": {
+   "formula": null,
+   "value": "Rs./kg"
+  },
+  "A13": {
+   "formula": null,
+   "value": "Packing - Wooden Box"
+  },
+  "B13": {
+   "formula": null,
+   "value": 15.0
+  },
+  "C13": {
+   "formula": null,
+   "value": "Rs./kg"
+  },
+  "A16": {
+   "formula": null,
+   "value": "TURNING RATE CARD (Conventional / CNC Lathe - by Finished Diameter)"
+  },
+  "A17": {
+   "formula": null,
+   "value": "Overrides the flat machine rate for Rough Turning and Finish Turning specifically, in Tube and Piston Rod sheets."
+  },
+  "A18": {
+   "formula": null,
+   "value": "Bin Start (helper)"
+  },
+  "B18": {
+   "formula": null,
+   "value": "Diameter Range"
+  },
+  "C18": {
+   "formula": null,
+   "value": "Rough Turning Rate (Rs./Hr)"
+  },
+  "D18": {
+   "formula": null,
+   "value": "Finish Turning Rate (Rs./Hr)"
+  },
+  "A19": {
+   "formula": null,
+   "value": 0.0
+  },
+  "B19": {
+   "formula": null,
+   "value": "Up to 100 mm"
+  },
+  "C19": {
+   "formula": null,
+   "value": 300.0
+  },
+  "D19": {
+   "formula": null,
+   "value": 400.0
+  },
+  "A20": {
+   "formula": null,
+   "value": 101.0
+  },
+  "B20": {
+   "formula": null,
+   "value": "101-250 mm"
+  },
+  "C20": {
+   "formula": null,
+   "value": 550.0
+  },
+  "D20": {
+   "formula": null,
+   "value": 550.0
+  },
+  "A21": {
+   "formula": null,
+   "value": 251.0
+  },
+  "B21": {
+   "formula": null,
+   "value": "Above 250 mm"
+  },
+  "C21": {
+   "formula": null,
+   "value": 700.0
+  },
+  "D21": {
+   "formula": null,
+   "value": 700.0
+  },
+  "A23": {
+   "formula": null,
+   "value": "HONING RATE CARD (Rough Honing & Finished Honing)"
+  },
+  "A24": {
+   "formula": null,
+   "value": "Cost = Internal Surface Area (cm2) x Rate. Threshold applies to BOTH Length (Stroke) AND ID together."
+  },
+  "A25": {
+   "formula": null,
+   "value": "Rate up to 4000mm Stroke & 100mm ID (Rs./cm2)"
+  },
+  "B25": {
+   "formula": null,
+   "value": 0.3
+  },
+  "A26": {
+   "formula": null,
+   "value": "Rate beyond 4000mm Stroke or 100mm ID (Rs./cm2)"
+  },
+  "B26": {
+   "formula": null,
+   "value": 0.4
+  },
+  "A27": {
+   "formula": null,
+   "value": "Length / Stroke Threshold (mm)"
+  },
+  "B27": {
+   "formula": null,
+   "value": 4000.0
+  },
+  "A28": {
+   "formula": null,
+   "value": "ID Threshold (mm)"
+  },
+  "B28": {
+   "formula": null,
+   "value": 100.0
+  },
+  "A30": {
+   "formula": null,
+   "value": "WELDING CONSTANTS (HISPL FORMULA)"
+  },
+  "A31": {
+   "formula": null,
+   "value": "Labour Rate (Rs./Hr)"
+  },
+  "B31": {
+   "formula": null,
+   "value": 375.0
+  },
+  "A32": {
+   "formula": null,
+   "value": "Wire Cost (Rs./kg)"
+  },
+  "B32": {
+   "formula": null,
+   "value": 360.0
+  },
+  "A33": {
+   "formula": null,
+   "value": "Deposition Rate (kg/Hr)"
+  },
+  "B33": {
+   "formula": null,
+   "value": 0.8
+  },
+  "A34": {
+   "formula": null,
+   "value": "Welding Speed (mm/Hr)"
+  },
+  "B34": {
+   "formula": null,
+   "value": 3600.0
+  },
+  "A35": {
+   "formula": null,
+   "value": "Dia Threshold for Bead Count (mm)"
+  },
+  "B35": {
+   "formula": null,
+   "value": 250.0
+  },
+  "A36": {
+   "formula": null,
+   "value": "Beads if Dia <= Threshold"
+  },
+  "B36": {
+   "formula": null,
+   "value": 5.0
+  },
+  "A37": {
+   "formula": null,
+   "value": "Beads if Dia > Threshold"
+  },
+  "B37": {
+   "formula": null,
+   "value": 8.0
+  }
+ },
+ "Tube": {
+  "A1": {
+   "formula": null,
+   "value": "TUBE - COSTING SHEET"
+  },
+  "A3": {
+   "formula": null,
+   "value": "SECTION A - MATERIAL INPUTS"
+  },
+  "A4": {
+   "formula": null,
+   "value": "New Material? (Yes/No)"
+  },
+  "B4": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "C4": {
+   "formula": null,
+   "value": "Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero."
+  },
+  "A5": {
+   "formula": null,
+   "value": "Parameter"
+  },
+  "B5": {
+   "formula": null,
+   "value": "Value"
+  },
+  "C5": {
+   "formula": null,
+   "value": "Unit"
+  },
+  "A6": {
+   "formula": null,
+   "value": "Material Grade"
+  },
+  "B6": {
+   "formula": null,
+   "value": "EN8"
+  },
+  "A7": {
+   "formula": null,
+   "value": "Raw OD"
+  },
+  "B7": {
+   "formula": null,
+   "value": 110.0
+  },
+  "C7": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A8": {
+   "formula": null,
+   "value": "Finished OD"
+  },
+  "B8": {
+   "formula": null,
+   "value": 108.0
+  },
+  "C8": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A9": {
+   "formula": null,
+   "value": "Finished ID"
+  },
+  "B9": {
+   "formula": null,
+   "value": 100.4
+  },
+  "C9": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A10": {
+   "formula": null,
+   "value": "Length"
+  },
+  "B10": {
+   "formula": null,
+   "value": 900.0
+  },
+  "C10": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A11": {
+   "formula": null,
+   "value": "Quantity (Nos)"
+  },
+  "B11": {
+   "formula": null,
+   "value": 1.0
+  },
+  "A13": {
+   "formula": null,
+   "value": "AUTO CALCULATE - MATERIAL"
+  },
+  "A14": {
+   "formula": null,
+   "value": "Density (g/cm3)"
+  },
+  "B14": {
+   "formula": "=INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),3)",
+   "value": 7.85
+  },
+  "A15": {
+   "formula": null,
+   "value": "Material Rate (Rs./kg)"
+  },
+  "B15": {
+   "formula": "=INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),4)",
+   "value": 68
+  },
+  "A16": {
+   "formula": null,
+   "value": "Unit Weight (kg / pc)"
+  },
+  "B16": {
+   "formula": "=(PI()/4)*((B7)^2-(B9)^2)*B10*B14/1000000",
+   "value": 11.207765
+  },
+  "A17": {
+   "formula": null,
+   "value": "Total Weight for Qty (kg)"
+  },
+  "B17": {
+   "formula": "=B16*B11",
+   "value": 11.207765
+  },
+  "A18": {
+   "formula": null,
+   "value": "Material Cost / pc (Rs.)"
+  },
+  "B18": {
+   "formula": "=IF(B4=\"No\",0,B16*B15)",
+   "value": 762.1280197
+  },
+  "A19": {
+   "formula": null,
+   "value": "Total Material Cost for Qty (Rs.)"
+  },
+  "B19": {
+   "formula": "=B18*B11",
+   "value": 762.1280197
+  },
+  "A21": {
+   "formula": null,
+   "value": "Hole Diameter (mm) [for Drilling]"
+  },
+  "B21": {
+   "formula": null,
+   "value": 12.0
+  },
+  "A22": {
+   "formula": null,
+   "value": "No. of Holes"
+  },
+  "B22": {
+   "formula": null,
+   "value": 4.0
+  },
+  "A24": {
+   "formula": null,
+   "value": "SECTION B - PROCESS ROUTING (auto machine hours from Machine Time Master)"
+  },
+  "A25": {
+   "formula": null,
+   "value": "Apply?"
+  },
+  "B25": {
+   "formula": null,
+   "value": "Process"
+  },
+  "C25": {
+   "formula": null,
+   "value": "Machine / Basis"
+  },
+  "D25": {
+   "formula": null,
+   "value": "Hours / Qty Basis"
+  },
+  "E25": {
+   "formula": null,
+   "value": "Rate (Rs.)"
+  },
+  "F25": {
+   "formula": null,
+   "value": "Cost (Rs.)"
+  },
+  "A26": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B26": {
+   "formula": null,
+   "value": "Cutting"
+  },
+  "C26": {
+   "formula": null,
+   "value": "Cutting Machine"
+  },
+  "D26": {
+   "formula": "=INDEX(CuttingTable,MATCH(B7,CuttingODBins,1),MATCH(B10,CuttingLenBins,1))",
+   "value": 0.15
+  },
+  "E26": {
+   "formula": "=INDEX(MachineRateMaster_Range,MATCH(\"Cutting Machine\",INDEX(MachineRateMaster_Range,0,1),0),2)",
+   "value": 350
+  },
+  "F26": {
+   "formula": "=IF(A26=\"Yes\",D26*E26,0)",
+   "value": 52.5
+  },
+  "A27": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B27": {
+   "formula": null,
+   "value": "Rough Turning"
+  },
+  "C27": {
+   "formula": null,
+   "value": "Conventional Lathe"
+  },
+  "D27": {
+   "formula": "=INDEX(RoughTurningTable,MATCH(B8,TurningODBins,1),MATCH(B10,TurningLenBins,1))*VLOOKUP((B7-B8),StockRemovalTable,3,TRUE())",
+   "value": 0.9
+  },
+  "E27": {
+   "formula": "=VLOOKUP(B8,TurningRateTable,3,TRUE())",
+   "value": 550
+  },
+  "F27": {
+   "formula": "=IF(A27=\"Yes\",D27*E27,0)",
+   "value": 495
+  },
+  "A28": {
+   "formula": null,
+   "value": "No"
+  },
+  "B28": {
+   "formula": null,
+   "value": "Boring"
+  },
+  "C28": {
+   "formula": null,
+   "value": "Conventional Lathe"
+  },
+  "D28": {
+   "formula": "=INDEX(BoringTable,MATCH(B9,BoringIDBins,1),MATCH(B10,BoringLenBins,1))",
+   "value": 1.2
+  },
+  "E28": {
+   "formula": "=INDEX(MachineRateMaster_Range,MATCH(\"Conventional Lathe\",INDEX(MachineRateMaster_Range,0,1),0),2)",
+   "value": "#N/A"
+  },
+  "F28": {
+   "formula": "=IF(A28=\"Yes\",D28*E28,0)",
+   "value": 0
+  },
+  "A29": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B29": {
+   "formula": null,
+   "value": "Drilling"
+  },
+  "C29": {
+   "formula": null,
+   "value": "Drilling Machine"
+  },
+  "D29": {
+   "formula": "=VLOOKUP(B21,DrillingTable,3,TRUE())*B22",
+   "value": 0.2
+  },
+  "E29": {
+   "formula": "=INDEX(MachineRateMaster_Range,MATCH(\"Drilling Machine\",INDEX(MachineRateMaster_Range,0,1),0),2)",
+   "value": 250
+  },
+  "F29": {
+   "formula": "=IF(A29=\"Yes\",D29*E29,0)",
+   "value": 50
+  },
+  "A30": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B30": {
+   "formula": null,
+   "value": "Rough Honing"
+  },
+  "C30": {
+   "formula": null,
+   "value": "Honing Machine"
+  },
+  "D30": {
+   "formula": "=PI()*B9*B10/100",
+   "value": 2838.743122
+  },
+  "E30": {
+   "formula": "=IF(AND(B10<=HoningLengthThreshold,B9<=HoningIDThreshold),HoningRateLow,HoningRateHigh)",
+   "value": 0.4
+  },
+  "F30": {
+   "formula": "=IF(A30=\"Yes\",D30*E30,0)",
+   "value": 1135.497249
+  },
+  "A31": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B31": {
+   "formula": null,
+   "value": "Finish Turning"
+  },
+  "C31": {
+   "formula": null,
+   "value": "CNC Lathe"
+  },
+  "D31": {
+   "formula": "=INDEX(RoughTurningTable,MATCH(B8,TurningODBins,1),MATCH(B10,TurningLenBins,1))*0.7",
+   "value": 0.63
+  },
+  "E31": {
+   "formula": "=VLOOKUP(B8,TurningRateTable,4,TRUE())",
+   "value": 550
+  },
+  "F31": {
+   "formula": "=IF(A31=\"Yes\",D31*E31,0)",
+   "value": 346.5
+  },
+  "A32": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B32": {
+   "formula": null,
+   "value": "Finished Honing"
+  },
+  "C32": {
+   "formula": null,
+   "value": "Honing Machine"
+  },
+  "D32": {
+   "formula": "=PI()*B9*B10/100",
+   "value": 2838.743122
+  },
+  "E32": {
+   "formula": "=IF(AND(B10<=HoningLengthThreshold,B9<=HoningIDThreshold),HoningRateLow,HoningRateHigh)",
+   "value": 0.4
+  },
+  "F32": {
+   "formula": "=IF(A32=\"Yes\",D32*E32,0)",
+   "value": 1135.497249
+  },
+  "A34": {
+   "formula": null,
+   "value": "SECTION C - WELDING (HISPL Auto Formula)"
+  },
+  "A35": {
+   "formula": null,
+   "value": "WELDING - Part Welding (Tube parts joint)"
+  },
+  "A36": {
+   "formula": null,
+   "value": "Weld Diameter (mm)"
+  },
+  "B36": {
+   "formula": null,
+   "value": 108.0
+  },
+  "A37": {
+   "formula": null,
+   "value": "No. of Beads (auto)"
+  },
+  "B37": {
+   "formula": "=IF(B36<=WeldDiaThreshold,WeldBeadsLow,WeldBeadsHigh)",
+   "value": 5
+  },
+  "A38": {
+   "formula": null,
+   "value": "Total Weld Length (mm)"
+  },
+  "B38": {
+   "formula": "=PI()*B36*B37",
+   "value": 1696.460033
+  },
+  "A39": {
+   "formula": null,
+   "value": "Welding Time (Hr)"
+  },
+  "B39": {
+   "formula": "=B38/WeldSpeed",
+   "value": 0.471238898
+  },
+  "A40": {
+   "formula": null,
+   "value": "Labour Cost (Rs.)"
+  },
+  "B40": {
+   "formula": "=B39*WeldLabourRate",
+   "value": 176.7145868
+  },
+  "A41": {
+   "formula": null,
+   "value": "Wire Cost (Rs.)"
+  },
+  "B41": {
+   "formula": "=B39*WeldDepositionRate*WeldWireRate",
+   "value": 135.7168026
+  },
+  "A42": {
+   "formula": null,
+   "value": "Total Welding Cost (Rs.)"
+  },
+  "B42": {
+   "formula": "=B40+B41",
+   "value": 312.4313894
+  },
+  "A44": {
+   "formula": null,
+   "value": "WELDING - CEC Welding"
+  },
+  "A45": {
+   "formula": null,
+   "value": "Weld Diameter (mm)"
+  },
+  "B45": {
+   "formula": null,
+   "value": 108.0
+  },
+  "A46": {
+   "formula": null,
+   "value": "No. of Beads (auto)"
+  },
+  "B46": {
+   "formula": "=IF(B45<=WeldDiaThreshold,WeldBeadsLow,WeldBeadsHigh)",
+   "value": 5
+  },
+  "A47": {
+   "formula": null,
+   "value": "Total Weld Length (mm)"
+  },
+  "B47": {
+   "formula": "=PI()*B45*B46",
+   "value": 1696.460033
+  },
+  "A48": {
+   "formula": null,
+   "value": "Welding Time (Hr)"
+  },
+  "B48": {
+   "formula": "=B47/WeldSpeed",
+   "value": 0.471238898
+  },
+  "A49": {
+   "formula": null,
+   "value": "Labour Cost (Rs.)"
+  },
+  "B49": {
+   "formula": "=B48*WeldLabourRate",
+   "value": 176.7145868
+  },
+  "A50": {
+   "formula": null,
+   "value": "Wire Cost (Rs.)"
+  },
+  "B50": {
+   "formula": "=B48*WeldDepositionRate*WeldWireRate",
+   "value": 135.7168026
+  },
+  "A51": {
+   "formula": null,
+   "value": "Total Welding Cost (Rs.)"
+  },
+  "B51": {
+   "formula": "=B49+B50",
+   "value": 312.4313894
+  },
+  "A53": {
+   "formula": null,
+   "value": "WELDING - Rear Eye Welding"
+  },
+  "A54": {
+   "formula": null,
+   "value": "Weld Diameter (mm)"
+  },
+  "B54": {
+   "formula": null,
+   "value": 108.0
+  },
+  "A55": {
+   "formula": null,
+   "value": "No. of Beads (auto)"
+  },
+  "B55": {
+   "formula": "=IF(B54<=WeldDiaThreshold,WeldBeadsLow,WeldBeadsHigh)",
+   "value": 5
+  },
+  "A56": {
+   "formula": null,
+   "value": "Total Weld Length (mm)"
+  },
+  "B56": {
+   "formula": "=PI()*B54*B55",
+   "value": 1696.460033
+  },
+  "A57": {
+   "formula": null,
+   "value": "Welding Time (Hr)"
+  },
+  "B57": {
+   "formula": "=B56/WeldSpeed",
+   "value": 0.471238898
+  },
+  "A58": {
+   "formula": null,
+   "value": "Labour Cost (Rs.)"
+  },
+  "B58": {
+   "formula": "=B57*WeldLabourRate",
+   "value": 176.7145868
+  },
+  "A59": {
+   "formula": null,
+   "value": "Wire Cost (Rs.)"
+  },
+  "B59": {
+   "formula": "=B57*WeldDepositionRate*WeldWireRate",
+   "value": 135.7168026
+  },
+  "A60": {
+   "formula": null,
+   "value": "Total Welding Cost (Rs.)"
+  },
+  "B60": {
+   "formula": "=B58+B59",
+   "value": 312.4313894
+  },
+  "A62": {
+   "formula": null,
+   "value": "SUBTOTAL - PROCESS & VENDOR COST"
+  },
+  "A63": {
+   "formula": null,
+   "value": "Total Process & Vendor Cost / pc (Rs.)"
+  },
+  "B63": {
+   "formula": "=F26+F27+F28+F29+F30+F31+F32+B42+B51+B60",
+   "value": 4152.288666
+  },
+  "A65": {
+   "formula": null,
+   "value": "SECTION D - ADDITIONAL COST (Manual Entry)"
+  },
+  "A66": {
+   "formula": null,
+   "value": "Additional Cost / pc (Rs.)"
+  },
+  "B66": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A67": {
+   "formula": null,
+   "value": "Remarks"
+  },
+  "A69": {
+   "formula": null,
+   "value": "SECTION E - COMPONENT COST SUMMARY"
+  },
+  "A70": {
+   "formula": null,
+   "value": "Cost Head"
+  },
+  "B70": {
+   "formula": null,
+   "value": "Rs. / pc"
+  },
+  "A71": {
+   "formula": null,
+   "value": "Material Cost"
+  },
+  "B71": {
+   "formula": "=B18",
+   "value": 762.1280197
+  },
+  "A72": {
+   "formula": null,
+   "value": "Process Cost"
+  },
+  "B72": {
+   "formula": "=B63",
+   "value": 4152.288666
+  },
+  "A73": {
+   "formula": null,
+   "value": "Additional Cost"
+  },
+  "B73": {
+   "formula": "=B66",
+   "value": 0
+  },
+  "A74": {
+   "formula": null,
+   "value": "TOTAL TUBE COST / pc"
+  },
+  "B74": {
+   "formula": "=B18+B63+B66",
+   "value": 4914.416685
+  },
+  "A75": {
+   "formula": null,
+   "value": "TOTAL TUBE COST for Qty"
+  },
+  "B75": {
+   "formula": "=B74*B11",
+   "value": 4914.416685
+  }
+ },
+ "Piston Rod": {
+  "A1": {
+   "formula": null,
+   "value": "PISTON ROD - COSTING SHEET"
+  },
+  "A3": {
+   "formula": null,
+   "value": "SECTION A - MATERIAL INPUTS"
+  },
+  "A4": {
+   "formula": null,
+   "value": "New Material? (Yes/No)"
+  },
+  "B4": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "C4": {
+   "formula": null,
+   "value": "Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero."
+  },
+  "A5": {
+   "formula": null,
+   "value": "Parameter"
+  },
+  "B5": {
+   "formula": null,
+   "value": "Value"
+  },
+  "C5": {
+   "formula": null,
+   "value": "Unit"
+  },
+  "A6": {
+   "formula": null,
+   "value": "Material Grade"
+  },
+  "B6": {
+   "formula": null,
+   "value": "EN19"
+  },
+  "A7": {
+   "formula": null,
+   "value": "Raw Diameter"
+  },
+  "B7": {
+   "formula": null,
+   "value": 62.0
+  },
+  "C7": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A8": {
+   "formula": null,
+   "value": "Finished Diameter"
+  },
+  "B8": {
+   "formula": null,
+   "value": 56.0
+  },
+  "C8": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A9": {
+   "formula": null,
+   "value": "Length"
+  },
+  "B9": {
+   "formula": null,
+   "value": 1150.0
+  },
+  "C9": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A10": {
+   "formula": null,
+   "value": "Quantity (Nos)"
+  },
+  "B10": {
+   "formula": null,
+   "value": 1.0
+  },
+  "A12": {
+   "formula": null,
+   "value": "AUTO CALCULATE - MATERIAL"
+  },
+  "A13": {
+   "formula": null,
+   "value": "Density (g/cm3)"
+  },
+  "B13": {
+   "formula": "=INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),3)",
+   "value": 7.85
+  },
+  "A14": {
+   "formula": null,
+   "value": "Material Rate (Rs./kg)"
+  },
+  "B14": {
+   "formula": "=INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),4)",
+   "value": 92
+  },
+  "A15": {
+   "formula": null,
+   "value": "Unit Weight (kg / pc)"
+  },
+  "B15": {
+   "formula": "=(PI()/4)*((B7)^2)*B9*B13/1000000",
+   "value": 27.2546593
+  },
+  "A16": {
+   "formula": null,
+   "value": "Total Weight for Qty (kg)"
+  },
+  "B16": {
+   "formula": "=B15*B10",
+   "value": 27.2546593
+  },
+  "A17": {
+   "formula": null,
+   "value": "Material Cost / pc (Rs.)"
+  },
+  "B17": {
+   "formula": "=IF(B4=\"No\",0,B15*B14)",
+   "value": 2507.428656
+  },
+  "A18": {
+   "formula": null,
+   "value": "Total Material Cost for Qty (Rs.)"
+  },
+  "B18": {
+   "formula": "=B17*B10",
+   "value": 2507.428656
+  },
+  "A20": {
+   "formula": null,
+   "value": "Machined Width (mm) [for Milling]"
+  },
+  "B20": {
+   "formula": null,
+   "value": 20.0
+  },
+  "A21": {
+   "formula": null,
+   "value": "Machined Length (mm) [for Milling]"
+  },
+  "B21": {
+   "formula": null,
+   "value": 40.0
+  },
+  "A22": {
+   "formula": null,
+   "value": "Deep Hole Drilling Vendor Cost (Rs.) [manual]"
+  },
+  "B22": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A24": {
+   "formula": null,
+   "value": "SECTION B - PROCESS ROUTING & SECTION C - VENDOR / AREA BASED COST"
+  },
+  "A25": {
+   "formula": null,
+   "value": "Apply?"
+  },
+  "B25": {
+   "formula": null,
+   "value": "Process"
+  },
+  "C25": {
+   "formula": null,
+   "value": "Machine / Basis"
+  },
+  "D25": {
+   "formula": null,
+   "value": "Hours / Qty Basis"
+  },
+  "E25": {
+   "formula": null,
+   "value": "Rate (Rs.)"
+  },
+  "F25": {
+   "formula": null,
+   "value": "Cost (Rs.)"
+  },
+  "A26": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B26": {
+   "formula": null,
+   "value": "Cutting"
+  },
+  "C26": {
+   "formula": null,
+   "value": "Cutting Machine"
+  },
+  "D26": {
+   "formula": "=INDEX(CuttingTable,MATCH(B7,CuttingODBins,1),MATCH(B9,CuttingLenBins,1))",
+   "value": 0.15
+  },
+  "E26": {
+   "formula": "=INDEX(MachineRateMaster_Range,MATCH(\"Cutting Machine\",INDEX(MachineRateMaster_Range,0,1),0),2)",
+   "value": 350
+  },
+  "F26": {
+   "formula": "=IF(A26=\"Yes\",D26*E26,0)",
+   "value": 52.5
+  },
+  "A27": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B27": {
+   "formula": null,
+   "value": "Rough Turning"
+  },
+  "C27": {
+   "formula": null,
+   "value": "CNC Lathe"
+  },
+  "D27": {
+   "formula": "=INDEX(RoughTurningTable,MATCH(B8,TurningODBins,1),MATCH(B9,TurningLenBins,1))*VLOOKUP((B7-B8),StockRemovalTable,3,TRUE())",
+   "value": 1.62
+  },
+  "E27": {
+   "formula": "=VLOOKUP(B8,TurningRateTable,3,TRUE())",
+   "value": 300
+  },
+  "F27": {
+   "formula": "=IF(A27=\"Yes\",D27*E27,0)",
+   "value": 486
+  },
+  "A28": {
+   "formula": null,
+   "value": "-- vendor / area-based processes use Weight or Surface Area as basis (still auto-computed) --"
+  },
+  "A29": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B29": {
+   "formula": null,
+   "value": "Heat Treatment"
+  },
+  "C29": {
+   "formula": null,
+   "value": "Vendor (Rs./kg)"
+  },
+  "D29": {
+   "formula": "=B15",
+   "value": 27.2546593
+  },
+  "E29": {
+   "formula": "=HeatTreatmentRate",
+   "value": 12
+  },
+  "F29": {
+   "formula": "=IF(A29=\"Yes\",D29*E29,0)",
+   "value": 327.0559116
+  },
+  "A30": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B30": {
+   "formula": null,
+   "value": "Induction Hardening"
+  },
+  "C30": {
+   "formula": null,
+   "value": "Vendor (Rs./cm2)"
+  },
+  "D30": {
+   "formula": "=PI()*B8*B9/100",
+   "value": 2023.185669
+  },
+  "E30": {
+   "formula": "=InductionHardeningRate",
+   "value": 0.45
+  },
+  "F30": {
+   "formula": "=IF(A30=\"Yes\",D30*E30,0)",
+   "value": 910.433551
+  },
+  "A31": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B31": {
+   "formula": null,
+   "value": "Finish Turning"
+  },
+  "C31": {
+   "formula": null,
+   "value": "CNC Lathe"
+  },
+  "D31": {
+   "formula": "=INDEX(RoughTurningTable,MATCH(B8,TurningODBins,1),MATCH(B9,TurningLenBins,1))*0.7",
+   "value": 0.84
+  },
+  "E31": {
+   "formula": "=VLOOKUP(B8,TurningRateTable,4,TRUE())",
+   "value": 400
+  },
+  "F31": {
+   "formula": "=IF(A31=\"Yes\",D31*E31,0)",
+   "value": 336
+  },
+  "A32": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B32": {
+   "formula": null,
+   "value": "Grinding"
+  },
+  "C32": {
+   "formula": null,
+   "value": "In-house (Rs./cm2)"
+  },
+  "D32": {
+   "formula": "=PI()*B8*B9/100",
+   "value": 2023.185669
+  },
+  "E32": {
+   "formula": "=GrindingRate",
+   "value": 0.4
+  },
+  "F32": {
+   "formula": "=IF(A32=\"Yes\",D32*E32,0)",
+   "value": 809.2742676
+  },
+  "A33": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B33": {
+   "formula": null,
+   "value": "Chrome Plating"
+  },
+  "C33": {
+   "formula": null,
+   "value": "Vendor (Rs./cm2)"
+  },
+  "D33": {
+   "formula": "=PI()*B8*B9/100",
+   "value": 2023.185669
+  },
+  "E33": {
+   "formula": "=ChromePlatingRate",
+   "value": 0.6
+  },
+  "F33": {
+   "formula": "=IF(A33=\"Yes\",D33*E33,0)",
+   "value": 1213.911401
+  },
+  "A34": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B34": {
+   "formula": null,
+   "value": "Polishing"
+  },
+  "C34": {
+   "formula": null,
+   "value": "In-house (Rs./cm2)"
+  },
+  "D34": {
+   "formula": "=PI()*B8*B9/100",
+   "value": 2023.185669
+  },
+  "E34": {
+   "formula": "=PolishingRate",
+   "value": 0.2
+  },
+  "F34": {
+   "formula": "=IF(A34=\"Yes\",D34*E34,0)",
+   "value": 404.6371338
+  },
+  "A35": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B35": {
+   "formula": null,
+   "value": "Milling"
+  },
+  "C35": {
+   "formula": null,
+   "value": "Milling Machine"
+  },
+  "D35": {
+   "formula": "=VLOOKUP((B20)*(B21),MillingTable,3,TRUE())",
+   "value": 0.3
+  },
+  "E35": {
+   "formula": "=INDEX(MachineRateMaster_Range,MATCH(\"Milling Machine\",INDEX(MachineRateMaster_Range,0,1),0),2)",
+   "value": 350
+  },
+  "F35": {
+   "formula": "=IF(A35=\"Yes\",D35*E35,0)",
+   "value": 105
+  },
+  "A36": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B36": {
+   "formula": null,
+   "value": "Deep Hole Drilling"
+  },
+  "C36": {
+   "formula": null,
+   "value": "Vendor Cost (manual)"
+  },
+  "D36": {
+   "formula": null,
+   "value": "Manual"
+  },
+  "E36": {
+   "formula": null,
+   "value": "Manual"
+  },
+  "F36": {
+   "formula": "=B22",
+   "value": 0
+  },
+  "A38": {
+   "formula": null,
+   "value": "SECTION C2 - WELDING (HISPL Auto Formula)"
+  },
+  "A39": {
+   "formula": null,
+   "value": "WELDING - Rod Eye Welding"
+  },
+  "A40": {
+   "formula": null,
+   "value": "Weld Diameter (mm)"
+  },
+  "B40": {
+   "formula": null,
+   "value": 56.0
+  },
+  "A41": {
+   "formula": null,
+   "value": "No. of Beads (auto)"
+  },
+  "B41": {
+   "formula": "=IF(B40<=WeldDiaThreshold,WeldBeadsLow,WeldBeadsHigh)",
+   "value": 5
+  },
+  "A42": {
+   "formula": null,
+   "value": "Total Weld Length (mm)"
+  },
+  "B42": {
+   "formula": "=PI()*B40*B41",
+   "value": 879.645943
+  },
+  "A43": {
+   "formula": null,
+   "value": "Welding Time (Hr)"
+  },
+  "B43": {
+   "formula": "=B42/WeldSpeed",
+   "value": 0.2443460953
+  },
+  "A44": {
+   "formula": null,
+   "value": "Labour Cost (Rs.)"
+  },
+  "B44": {
+   "formula": "=B43*WeldLabourRate",
+   "value": 91.62978573
+  },
+  "A45": {
+   "formula": null,
+   "value": "Wire Cost (Rs.)"
+  },
+  "B45": {
+   "formula": "=B43*WeldDepositionRate*WeldWireRate",
+   "value": 70.37167544
+  },
+  "A46": {
+   "formula": null,
+   "value": "Total Welding Cost (Rs.)"
+  },
+  "B46": {
+   "formula": "=B44+B45",
+   "value": 162.0014612
+  },
+  "A48": {
+   "formula": null,
+   "value": "SUBTOTAL - PROCESS & VENDOR COST"
+  },
+  "A49": {
+   "formula": null,
+   "value": "Total Process & Vendor Cost / pc (Rs.)"
+  },
+  "B49": {
+   "formula": "=F26+F27+F29+F30+F31+F32+F33+F34+F35+F36+B46",
+   "value": 4806.813726
+  },
+  "A51": {
+   "formula": null,
+   "value": "SECTION D - ADDITIONAL COST (Manual Entry)"
+  },
+  "A52": {
+   "formula": null,
+   "value": "Additional Cost / pc (Rs.)"
+  },
+  "B52": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A53": {
+   "formula": null,
+   "value": "Remarks"
+  },
+  "A55": {
+   "formula": null,
+   "value": "SECTION E - COMPONENT COST SUMMARY"
+  },
+  "A56": {
+   "formula": null,
+   "value": "Cost Head"
+  },
+  "B56": {
+   "formula": null,
+   "value": "Rs. / pc"
+  },
+  "A57": {
+   "formula": null,
+   "value": "Material Cost"
+  },
+  "B57": {
+   "formula": "=B17",
+   "value": 2507.428656
+  },
+  "A58": {
+   "formula": null,
+   "value": "Process Cost"
+  },
+  "B58": {
+   "formula": "=B49",
+   "value": 4806.813726
+  },
+  "A59": {
+   "formula": null,
+   "value": "Additional Cost"
+  },
+  "B59": {
+   "formula": "=B52",
+   "value": 0
+  },
+  "A60": {
+   "formula": null,
+   "value": "TOTAL PISTON ROD COST / pc"
+  },
+  "B60": {
+   "formula": "=B17+B49+B52",
+   "value": 7314.242382
+  },
+  "A61": {
+   "formula": null,
+   "value": "TOTAL PISTON ROD COST for Qty"
+  },
+  "B61": {
+   "formula": "=B60*B10",
+   "value": 7314.242382
+  }
+ },
+ "Cap End Cover": {
+  "A1": {
+   "formula": null,
+   "value": "CAP END COVER - COSTING SHEET"
+  },
+  "A3": {
+   "formula": null,
+   "value": "SECTION A - MATERIAL INPUTS"
+  },
+  "A4": {
+   "formula": null,
+   "value": "New Material? (Yes/No)"
+  },
+  "B4": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "C4": {
+   "formula": null,
+   "value": "Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero."
+  },
+  "A5": {
+   "formula": null,
+   "value": "Raw Material Shape"
+  },
+  "B5": {
+   "formula": null,
+   "value": "Round"
+  },
+  "C5": {
+   "formula": null,
+   "value": "Round = solid round bar (uses Diameter). Profile / Cuboid Block = flat/rectangular stock (uses Width & Height). Fill only the dimensions that apply."
+  },
+  "A6": {
+   "formula": null,
+   "value": "Parameter"
+  },
+  "B6": {
+   "formula": null,
+   "value": "Value"
+  },
+  "C6": {
+   "formula": null,
+   "value": "Unit"
+  },
+  "A7": {
+   "formula": null,
+   "value": "Material Grade"
+  },
+  "B7": {
+   "formula": null,
+   "value": "MS-C45"
+  },
+  "A8": {
+   "formula": null,
+   "value": "Diameter"
+  },
+  "B8": {
+   "formula": null,
+   "value": 100.0
+  },
+  "C8": {
+   "formula": null,
+   "value": "mm - fill if Shape = Round"
+  },
+  "A9": {
+   "formula": null,
+   "value": "Width"
+  },
+  "B9": {
+   "formula": null,
+   "value": 160.0
+  },
+  "C9": {
+   "formula": null,
+   "value": "mm - fill if Shape = Profile / Cuboid Block"
+  },
+  "A10": {
+   "formula": null,
+   "value": "Height"
+  },
+  "B10": {
+   "formula": null,
+   "value": 100.0
+  },
+  "C10": {
+   "formula": null,
+   "value": "mm - fill if Shape = Profile / Cuboid Block"
+  },
+  "A11": {
+   "formula": null,
+   "value": "Thickness"
+  },
+  "B11": {
+   "formula": null,
+   "value": 60.0
+  },
+  "C11": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A12": {
+   "formula": null,
+   "value": "Finished OD"
+  },
+  "B12": {
+   "formula": null,
+   "value": 220.0
+  },
+  "C12": {
+   "formula": null,
+   "value": "mm - used for Turning / Milling / Drilling below, regardless of raw shape chosen"
+  },
+  "A13": {
+   "formula": null,
+   "value": "Quantity (Nos)"
+  },
+  "B13": {
+   "formula": null,
+   "value": 1.0
+  },
+  "A15": {
+   "formula": null,
+   "value": "AUTO CALCULATE - MATERIAL"
+  },
+  "A16": {
+   "formula": null,
+   "value": "Density (g/cm3)"
+  },
+  "B16": {
+   "formula": "=INDEX(MaterialMaster_Range,MATCH(B7,INDEX(MaterialMaster_Range,0,1),0),3)",
+   "value": "#N/A"
+  },
+  "A17": {
+   "formula": null,
+   "value": "Material Rate (Rs./kg)"
+  },
+  "B17": {
+   "formula": "=INDEX(MaterialMaster_Range,MATCH(B7,INDEX(MaterialMaster_Range,0,1),0),4)",
+   "value": "#N/A"
+  },
+  "A18": {
+   "formula": null,
+   "value": "Unit Weight (kg / pc)"
+  },
+  "B18": {
+   "formula": "=IF(B5=\"Round\",(PI()/4)*(B8)^2*B11*B16/1000000,(B9)*(B10)*B11*B16/1000000)",
+   "value": "#N/A"
+  },
+  "A19": {
+   "formula": null,
+   "value": "Total Weight for Qty (kg)"
+  },
+  "B19": {
+   "formula": "=B18*B13",
+   "value": "#N/A"
+  },
+  "A20": {
+   "formula": null,
+   "value": "Material Cost / pc (Rs.)"
+  },
+  "B20": {
+   "formula": "=IF(B4=\"No\",0,B18*B17)",
+   "value": "#N/A"
+  },
+  "A21": {
+   "formula": null,
+   "value": "Total Material Cost for Qty (Rs.)"
+  },
+  "B21": {
+   "formula": "=B20*B13",
+   "value": "#N/A"
+  },
+  "A23": {
+   "formula": null,
+   "value": "Machined Width (mm) [for Milling]"
+  },
+  "B23": {
+   "formula": null,
+   "value": 40.0
+  },
+  "A24": {
+   "formula": null,
+   "value": "Machined Length (mm) [for Milling]"
+  },
+  "B24": {
+   "formula": null,
+   "value": 40.0
+  },
+  "A25": {
+   "formula": null,
+   "value": "Hole Diameter (mm) [for Drilling]"
+  },
+  "B25": {
+   "formula": null,
+   "value": 14.0
+  },
+  "A26": {
+   "formula": null,
+   "value": "No. of Holes"
+  },
+  "B26": {
+   "formula": null,
+   "value": 4.0
+  },
+  "A28": {
+   "formula": null,
+   "value": "SECTION B - PROCESS ROUTING"
+  },
+  "A29": {
+   "formula": null,
+   "value": "Apply?"
+  },
+  "B29": {
+   "formula": null,
+   "value": "Process"
+  },
+  "C29": {
+   "formula": null,
+   "value": "Machine / Basis"
+  },
+  "D29": {
+   "formula": null,
+   "value": "Hours / Qty Basis"
+  },
+  "E29": {
+   "formula": null,
+   "value": "Rate (Rs.)"
+  },
+  "F29": {
+   "formula": null,
+   "value": "Cost (Rs.)"
+  },
+  "A30": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B30": {
+   "formula": null,
+   "value": "Turning"
+  },
+  "C30": {
+   "formula": null,
+   "value": "CNC Lathe"
+  },
+  "D30": {
+   "formula": "=INDEX(RoughTurningTable,MATCH(B12,TurningODBins,1),MATCH(B11,TurningLenBins,1))",
+   "value": 0.8
+  },
+  "E30": {
+   "formula": "=INDEX(MachineRateMaster_Range,MATCH(\"CNC Lathe\",INDEX(MachineRateMaster_Range,0,1),0),2)",
+   "value": 550
+  },
+  "F30": {
+   "formula": "=IF(A30=\"Yes\",D30*E30,0)",
+   "value": 440
+  },
+  "A31": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B31": {
+   "formula": null,
+   "value": "Milling"
+  },
+  "C31": {
+   "formula": null,
+   "value": "Milling Machine"
+  },
+  "D31": {
+   "formula": "=VLOOKUP((B23)*(B24),MillingTable,3,TRUE())",
+   "value": 0.3
+  },
+  "E31": {
+   "formula": "=INDEX(MachineRateMaster_Range,MATCH(\"Milling Machine\",INDEX(MachineRateMaster_Range,0,1),0),2)",
+   "value": 350
+  },
+  "F31": {
+   "formula": "=IF(A31=\"Yes\",D31*E31,0)",
+   "value": 105
+  },
+  "A32": {
+   "formula": null,
+   "value": "No"
+  },
+  "B32": {
+   "formula": null,
+   "value": "Drilling"
+  },
+  "C32": {
+   "formula": null,
+   "value": "Drilling Machine"
+  },
+  "D32": {
+   "formula": "=VLOOKUP(B25,DrillingTable,3,TRUE())*B26",
+   "value": 0.2
+  },
+  "E32": {
+   "formula": "=INDEX(MachineRateMaster_Range,MATCH(\"Drilling Machine\",INDEX(MachineRateMaster_Range,0,1),0),2)",
+   "value": 250
+  },
+  "F32": {
+   "formula": "=IF(A32=\"Yes\",D32*E32,0)",
+   "value": 0
+  },
+  "A34": {
+   "formula": null,
+   "value": "SUBTOTAL - PROCESS & VENDOR COST"
+  },
+  "A35": {
+   "formula": null,
+   "value": "Total Process & Vendor Cost / pc (Rs.)"
+  },
+  "B35": {
+   "formula": "=F30+F31+F32",
+   "value": 545
+  },
+  "A37": {
+   "formula": null,
+   "value": "SECTION D - ADDITIONAL COST (Manual Entry)"
+  },
+  "A38": {
+   "formula": null,
+   "value": "Additional Cost / pc (Rs.)"
+  },
+  "B38": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A39": {
+   "formula": null,
+   "value": "Remarks"
+  },
+  "A41": {
+   "formula": null,
+   "value": "SECTION E - COMPONENT COST SUMMARY"
+  },
+  "A42": {
+   "formula": null,
+   "value": "Cost Head"
+  },
+  "B42": {
+   "formula": null,
+   "value": "Rs. / pc"
+  },
+  "A43": {
+   "formula": null,
+   "value": "Material Cost"
+  },
+  "B43": {
+   "formula": "=B20",
+   "value": "#N/A"
+  },
+  "A44": {
+   "formula": null,
+   "value": "Process Cost"
+  },
+  "B44": {
+   "formula": "=B35",
+   "value": 545
+  },
+  "A45": {
+   "formula": null,
+   "value": "Additional Cost"
+  },
+  "B45": {
+   "formula": "=B38",
+   "value": 0
+  },
+  "A46": {
+   "formula": null,
+   "value": "TOTAL CAP END COVER COST / pc"
+  },
+  "B46": {
+   "formula": "=B20+B35+B38",
+   "value": "#N/A"
+  },
+  "A47": {
+   "formula": null,
+   "value": "TOTAL CAP END COVER COST for Qty"
+  },
+  "B47": {
+   "formula": "=B46*B13",
+   "value": "#N/A"
+  }
+ },
+ "Head End Cover": {
+  "A1": {
+   "formula": null,
+   "value": "HEAD END COVER - COSTING SHEET"
+  },
+  "A3": {
+   "formula": null,
+   "value": "SECTION A - MATERIAL INPUTS"
+  },
+  "A4": {
+   "formula": null,
+   "value": "New Material? (Yes/No)"
+  },
+  "B4": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "C4": {
+   "formula": null,
+   "value": "Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero."
+  },
+  "A5": {
+   "formula": null,
+   "value": "Raw Material Shape"
+  },
+  "B5": {
+   "formula": null,
+   "value": "Round"
+  },
+  "C5": {
+   "formula": null,
+   "value": "Round = solid round bar (uses Diameter). Profile / Cuboid Block = flat/rectangular stock (uses Width & Height). Fill only the dimensions that apply."
+  },
+  "A6": {
+   "formula": null,
+   "value": "Parameter"
+  },
+  "B6": {
+   "formula": null,
+   "value": "Value"
+  },
+  "C6": {
+   "formula": null,
+   "value": "Unit"
+  },
+  "A7": {
+   "formula": null,
+   "value": "Material Grade"
+  },
+  "B7": {
+   "formula": null,
+   "value": "MS-C45"
+  },
+  "A8": {
+   "formula": null,
+   "value": "Diameter"
+  },
+  "B8": {
+   "formula": null,
+   "value": 100.0
+  },
+  "C8": {
+   "formula": null,
+   "value": "mm - fill if Shape = Round"
+  },
+  "A9": {
+   "formula": null,
+   "value": "Width"
+  },
+  "B9": {
+   "formula": null,
+   "value": 160.0
+  },
+  "C9": {
+   "formula": null,
+   "value": "mm - fill if Shape = Profile / Cuboid Block"
+  },
+  "A10": {
+   "formula": null,
+   "value": "Height"
+  },
+  "B10": {
+   "formula": null,
+   "value": 100.0
+  },
+  "C10": {
+   "formula": null,
+   "value": "mm - fill if Shape = Profile / Cuboid Block"
+  },
+  "A11": {
+   "formula": null,
+   "value": "Thickness"
+  },
+  "B11": {
+   "formula": null,
+   "value": 60.0
+  },
+  "C11": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A12": {
+   "formula": null,
+   "value": "Finished OD"
+  },
+  "B12": {
+   "formula": null,
+   "value": 220.0
+  },
+  "C12": {
+   "formula": null,
+   "value": "mm - used for Turning / Milling / Drilling below, regardless of raw shape chosen"
+  },
+  "A13": {
+   "formula": null,
+   "value": "Quantity (Nos)"
+  },
+  "B13": {
+   "formula": null,
+   "value": 1.0
+  },
+  "A15": {
+   "formula": null,
+   "value": "AUTO CALCULATE - MATERIAL"
+  },
+  "A16": {
+   "formula": null,
+   "value": "Density (g/cm3)"
+  },
+  "B16": {
+   "formula": "=INDEX(MaterialMaster_Range,MATCH(B7,INDEX(MaterialMaster_Range,0,1),0),3)",
+   "value": "#N/A"
+  },
+  "A17": {
+   "formula": null,
+   "value": "Material Rate (Rs./kg)"
+  },
+  "B17": {
+   "formula": "=INDEX(MaterialMaster_Range,MATCH(B7,INDEX(MaterialMaster_Range,0,1),0),4)",
+   "value": "#N/A"
+  },
+  "A18": {
+   "formula": null,
+   "value": "Unit Weight (kg / pc)"
+  },
+  "B18": {
+   "formula": "=IF(B5=\"Round\",(PI()/4)*(B8)^2*B11*B16/1000000,(B9)*(B10)*B11*B16/1000000)",
+   "value": "#N/A"
+  },
+  "A19": {
+   "formula": null,
+   "value": "Total Weight for Qty (kg)"
+  },
+  "B19": {
+   "formula": "=B18*B13",
+   "value": "#N/A"
+  },
+  "A20": {
+   "formula": null,
+   "value": "Material Cost / pc (Rs.)"
+  },
+  "B20": {
+   "formula": "=IF(B4=\"No\",0,B18*B17)",
+   "value": "#N/A"
+  },
+  "A21": {
+   "formula": null,
+   "value": "Total Material Cost for Qty (Rs.)"
+  },
+  "B21": {
+   "formula": "=B20*B13",
+   "value": "#N/A"
+  },
+  "A23": {
+   "formula": null,
+   "value": "Machined Width (mm) [for Milling]"
+  },
+  "B23": {
+   "formula": null,
+   "value": 40.0
+  },
+  "A24": {
+   "formula": null,
+   "value": "Machined Length (mm) [for Milling]"
+  },
+  "B24": {
+   "formula": null,
+   "value": 40.0
+  },
+  "A25": {
+   "formula": null,
+   "value": "Hole Diameter (mm) [for Drilling]"
+  },
+  "B25": {
+   "formula": null,
+   "value": 14.0
+  },
+  "A26": {
+   "formula": null,
+   "value": "No. of Holes"
+  },
+  "B26": {
+   "formula": null,
+   "value": 4.0
+  },
+  "A28": {
+   "formula": null,
+   "value": "SECTION B - PROCESS ROUTING"
+  },
+  "A29": {
+   "formula": null,
+   "value": "Apply?"
+  },
+  "B29": {
+   "formula": null,
+   "value": "Process"
+  },
+  "C29": {
+   "formula": null,
+   "value": "Machine / Basis"
+  },
+  "D29": {
+   "formula": null,
+   "value": "Hours / Qty Basis"
+  },
+  "E29": {
+   "formula": null,
+   "value": "Rate (Rs.)"
+  },
+  "F29": {
+   "formula": null,
+   "value": "Cost (Rs.)"
+  },
+  "A30": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B30": {
+   "formula": null,
+   "value": "Turning"
+  },
+  "C30": {
+   "formula": null,
+   "value": "CNC Lathe"
+  },
+  "D30": {
+   "formula": "=INDEX(RoughTurningTable,MATCH(B12,TurningODBins,1),MATCH(B11,TurningLenBins,1))",
+   "value": 0.8
+  },
+  "E30": {
+   "formula": "=INDEX(MachineRateMaster_Range,MATCH(\"CNC Lathe\",INDEX(MachineRateMaster_Range,0,1),0),2)",
+   "value": 550
+  },
+  "F30": {
+   "formula": "=IF(A30=\"Yes\",D30*E30,0)",
+   "value": 440
+  },
+  "A31": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B31": {
+   "formula": null,
+   "value": "Milling"
+  },
+  "C31": {
+   "formula": null,
+   "value": "Milling Machine"
+  },
+  "D31": {
+   "formula": "=VLOOKUP((B23)*(B24),MillingTable,3,TRUE())",
+   "value": 0.3
+  },
+  "E31": {
+   "formula": "=INDEX(MachineRateMaster_Range,MATCH(\"Milling Machine\",INDEX(MachineRateMaster_Range,0,1),0),2)",
+   "value": 350
+  },
+  "F31": {
+   "formula": "=IF(A31=\"Yes\",D31*E31,0)",
+   "value": 105
+  },
+  "A32": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B32": {
+   "formula": null,
+   "value": "Drilling"
+  },
+  "C32": {
+   "formula": null,
+   "value": "Drilling Machine"
+  },
+  "D32": {
+   "formula": "=VLOOKUP(B25,DrillingTable,3,TRUE())*B26",
+   "value": 0.2
+  },
+  "E32": {
+   "formula": "=INDEX(MachineRateMaster_Range,MATCH(\"Drilling Machine\",INDEX(MachineRateMaster_Range,0,1),0),2)",
+   "value": 250
+  },
+  "F32": {
+   "formula": "=IF(A32=\"Yes\",D32*E32,0)",
+   "value": 50
+  },
+  "A34": {
+   "formula": null,
+   "value": "SUBTOTAL - PROCESS & VENDOR COST"
+  },
+  "A35": {
+   "formula": null,
+   "value": "Total Process & Vendor Cost / pc (Rs.)"
+  },
+  "B35": {
+   "formula": "=F30+F31+F32",
+   "value": 595
+  },
+  "A37": {
+   "formula": null,
+   "value": "SECTION D - ADDITIONAL COST (Manual Entry)"
+  },
+  "A38": {
+   "formula": null,
+   "value": "Additional Cost / pc (Rs.)"
+  },
+  "B38": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A39": {
+   "formula": null,
+   "value": "Remarks"
+  },
+  "A41": {
+   "formula": null,
+   "value": "SECTION E - COMPONENT COST SUMMARY"
+  },
+  "A42": {
+   "formula": null,
+   "value": "Cost Head"
+  },
+  "B42": {
+   "formula": null,
+   "value": "Rs. / pc"
+  },
+  "A43": {
+   "formula": null,
+   "value": "Material Cost"
+  },
+  "B43": {
+   "formula": "=B20",
+   "value": "#N/A"
+  },
+  "A44": {
+   "formula": null,
+   "value": "Process Cost"
+  },
+  "B44": {
+   "formula": "=B35",
+   "value": 595
+  },
+  "A45": {
+   "formula": null,
+   "value": "Additional Cost"
+  },
+  "B45": {
+   "formula": "=B38",
+   "value": 0
+  },
+  "A46": {
+   "formula": null,
+   "value": "TOTAL HEAD END COVER COST / pc"
+  },
+  "B46": {
+   "formula": "=B20+B35+B38",
+   "value": "#N/A"
+  },
+  "A47": {
+   "formula": null,
+   "value": "TOTAL HEAD END COVER COST for Qty"
+  },
+  "B47": {
+   "formula": "=B46*B13",
+   "value": "#N/A"
+  }
+ },
+ "Gland": {
+  "A1": {
+   "formula": null,
+   "value": "GLAND - COSTING SHEET"
+  },
+  "A3": {
+   "formula": null,
+   "value": "SECTION A - MATERIAL INPUTS"
+  },
+  "A4": {
+   "formula": null,
+   "value": "New Material? (Yes/No)"
+  },
+  "B4": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "C4": {
+   "formula": null,
+   "value": "Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero."
+  },
+  "A5": {
+   "formula": null,
+   "value": "Parameter"
+  },
+  "B5": {
+   "formula": null,
+   "value": "Value"
+  },
+  "C5": {
+   "formula": null,
+   "value": "Unit"
+  },
+  "A6": {
+   "formula": null,
+   "value": "Material Grade"
+  },
+  "B6": {
+   "formula": null,
+   "value": "MS-C45"
+  },
+  "A7": {
+   "formula": null,
+   "value": "OD"
+  },
+  "B7": {
+   "formula": null,
+   "value": 130.0
+  },
+  "C7": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A8": {
+   "formula": null,
+   "value": "ID"
+  },
+  "B8": {
+   "formula": null,
+   "value": 57.0
+  },
+  "C8": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A9": {
+   "formula": null,
+   "value": "Length"
+  },
+  "B9": {
+   "formula": null,
+   "value": 70.0
+  },
+  "C9": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A10": {
+   "formula": null,
+   "value": "Quantity (Nos)"
+  },
+  "B10": {
+   "formula": null,
+   "value": 1.0
+  },
+  "A12": {
+   "formula": null,
+   "value": "AUTO CALCULATE - MATERIAL"
+  },
+  "A13": {
+   "formula": null,
+   "value": "Density (g/cm3)"
+  },
+  "B13": {
+   "formula": "=INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),3)",
+   "value": "#N/A"
+  },
+  "A14": {
+   "formula": null,
+   "value": "Material Rate (Rs./kg)"
+  },
+  "B14": {
+   "formula": "=INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),4)",
+   "value": "#N/A"
+  },
+  "A15": {
+   "formula": null,
+   "value": "Unit Weight (kg / pc)"
+  },
+  "B15": {
+   "formula": "=(PI()/4)*((B7)^2-(B8)^2)*B9*B13/1000000",
+   "value": "#N/A"
+  },
+  "A16": {
+   "formula": null,
+   "value": "Total Weight for Qty (kg)"
+  },
+  "B16": {
+   "formula": "=B15*B10",
+   "value": "#N/A"
+  },
+  "A17": {
+   "formula": null,
+   "value": "Material Cost / pc (Rs.)"
+  },
+  "B17": {
+   "formula": "=IF(B4=\"No\",0,B15*B14)",
+   "value": "#N/A"
+  },
+  "A18": {
+   "formula": null,
+   "value": "Total Material Cost for Qty (Rs.)"
+  },
+  "B18": {
+   "formula": "=B17*B10",
+   "value": "#N/A"
+  },
+  "A20": {
+   "formula": null,
+   "value": "Machined Width (mm)"
+  },
+  "B20": {
+   "formula": null,
+   "value": 30.0
+  },
+  "A21": {
+   "formula": null,
+   "value": "Machined Length (mm)"
+  },
+  "B21": {
+   "formula": null,
+   "value": 30.0
+  },
+  "A22": {
+   "formula": null,
+   "value": "Hole Diameter (mm)"
+  },
+  "B22": {
+   "formula": null,
+   "value": 10.0
+  },
+  "A23": {
+   "formula": null,
+   "value": "No. of Holes"
+  },
+  "B23": {
+   "formula": null,
+   "value": 2.0
+  },
+  "A25": {
+   "formula": null,
+   "value": "SECTION B - PROCESS ROUTING"
+  },
+  "A26": {
+   "formula": null,
+   "value": "Apply?"
+  },
+  "B26": {
+   "formula": null,
+   "value": "Process"
+  },
+  "C26": {
+   "formula": null,
+   "value": "Machine / Basis"
+  },
+  "D26": {
+   "formula": null,
+   "value": "Hours / Qty Basis"
+  },
+  "E26": {
+   "formula": null,
+   "value": "Rate (Rs.)"
+  },
+  "F26": {
+   "formula": null,
+   "value": "Cost (Rs.)"
+  },
+  "A27": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B27": {
+   "formula": null,
+   "value": "Turning"
+  },
+  "C27": {
+   "formula": null,
+   "value": "CNC Lathe"
+  },
+  "D27": {
+   "formula": "=INDEX(RoughTurningTable,MATCH(B7,TurningODBins,1),MATCH(B9,TurningLenBins,1))",
+   "value": 0.5
+  },
+  "E27": {
+   "formula": "=INDEX(MachineRateMaster_Range,MATCH(\"CNC Lathe\",INDEX(MachineRateMaster_Range,0,1),0),2)",
+   "value": 550
+  },
+  "F27": {
+   "formula": "=IF(A27=\"Yes\",D27*E27,0)",
+   "value": 275
+  },
+  "A28": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B28": {
+   "formula": null,
+   "value": "Milling"
+  },
+  "C28": {
+   "formula": null,
+   "value": "Milling Machine"
+  },
+  "D28": {
+   "formula": "=VLOOKUP((B20)*(B21),MillingTable,3,TRUE())",
+   "value": 0.3
+  },
+  "E28": {
+   "formula": "=INDEX(MachineRateMaster_Range,MATCH(\"Milling Machine\",INDEX(MachineRateMaster_Range,0,1),0),2)",
+   "value": 350
+  },
+  "F28": {
+   "formula": "=IF(A28=\"Yes\",D28*E28,0)",
+   "value": 105
+  },
+  "A29": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B29": {
+   "formula": null,
+   "value": "Drilling"
+  },
+  "C29": {
+   "formula": null,
+   "value": "Drilling Machine"
+  },
+  "D29": {
+   "formula": "=VLOOKUP(B22,DrillingTable,3,TRUE())*B23",
+   "value": 0.06
+  },
+  "E29": {
+   "formula": "=INDEX(MachineRateMaster_Range,MATCH(\"Drilling Machine\",INDEX(MachineRateMaster_Range,0,1),0),2)",
+   "value": 250
+  },
+  "F29": {
+   "formula": "=IF(A29=\"Yes\",D29*E29,0)",
+   "value": 15
+  },
+  "A30": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B30": {
+   "formula": null,
+   "value": "Grinding (ID bore)"
+  },
+  "C30": {
+   "formula": null,
+   "value": "In-house (Rs./cm2)"
+  },
+  "D30": {
+   "formula": "=PI()*B8*B9/100",
+   "value": 125.3495469
+  },
+  "E30": {
+   "formula": "=GrindingRate",
+   "value": 0.4
+  },
+  "F30": {
+   "formula": "=IF(A30=\"Yes\",D30*E30,0)",
+   "value": 50.13981875
+  },
+  "A32": {
+   "formula": null,
+   "value": "SUBTOTAL - PROCESS & VENDOR COST"
+  },
+  "A33": {
+   "formula": null,
+   "value": "Total Process & Vendor Cost / pc (Rs.)"
+  },
+  "B33": {
+   "formula": "=F27+F28+F29+F30",
+   "value": 445.1398188
+  },
+  "A35": {
+   "formula": null,
+   "value": "SECTION D - ADDITIONAL COST (Manual Entry)"
+  },
+  "A36": {
+   "formula": null,
+   "value": "Additional Cost / pc (Rs.)"
+  },
+  "B36": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A37": {
+   "formula": null,
+   "value": "Remarks"
+  },
+  "A39": {
+   "formula": null,
+   "value": "SECTION E - COMPONENT COST SUMMARY"
+  },
+  "A40": {
+   "formula": null,
+   "value": "Cost Head"
+  },
+  "B40": {
+   "formula": null,
+   "value": "Rs. / pc"
+  },
+  "A41": {
+   "formula": null,
+   "value": "Material Cost"
+  },
+  "B41": {
+   "formula": "=B17",
+   "value": "#N/A"
+  },
+  "A42": {
+   "formula": null,
+   "value": "Process Cost"
+  },
+  "B42": {
+   "formula": "=B33",
+   "value": 445.1398188
+  },
+  "A43": {
+   "formula": null,
+   "value": "Additional Cost"
+  },
+  "B43": {
+   "formula": "=B36",
+   "value": 0
+  },
+  "A44": {
+   "formula": null,
+   "value": "TOTAL GLAND COST / pc"
+  },
+  "B44": {
+   "formula": "=B17+B33+B36",
+   "value": "#N/A"
+  },
+  "A45": {
+   "formula": null,
+   "value": "TOTAL GLAND COST for Qty"
+  },
+  "B45": {
+   "formula": "=B44*B10",
+   "value": "#N/A"
+  }
+ },
+ "Cushion Bush": {
+  "A1": {
+   "formula": null,
+   "value": "CUSHION BUSH - COSTING SHEET"
+  },
+  "A3": {
+   "formula": null,
+   "value": "SECTION A - MATERIAL INPUTS"
+  },
+  "A4": {
+   "formula": null,
+   "value": "New Material? (Yes/No)"
+  },
+  "B4": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "C4": {
+   "formula": null,
+   "value": "Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero."
+  },
+  "A5": {
+   "formula": null,
+   "value": "Parameter"
+  },
+  "B5": {
+   "formula": null,
+   "value": "Value"
+  },
+  "C5": {
+   "formula": null,
+   "value": "Unit"
+  },
+  "A6": {
+   "formula": null,
+   "value": "Material Grade"
+  },
+  "B6": {
+   "formula": null,
+   "value": "BR-SAE660"
+  },
+  "A7": {
+   "formula": null,
+   "value": "OD"
+  },
+  "B7": {
+   "formula": null,
+   "value": 130.0
+  },
+  "C7": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A8": {
+   "formula": null,
+   "value": "ID"
+  },
+  "B8": {
+   "formula": null,
+   "value": 57.0
+  },
+  "C8": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A9": {
+   "formula": null,
+   "value": "Length"
+  },
+  "B9": {
+   "formula": null,
+   "value": 70.0
+  },
+  "C9": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A10": {
+   "formula": null,
+   "value": "Quantity (Nos)"
+  },
+  "B10": {
+   "formula": null,
+   "value": 1.0
+  },
+  "A12": {
+   "formula": null,
+   "value": "AUTO CALCULATE - MATERIAL"
+  },
+  "A13": {
+   "formula": null,
+   "value": "Density (g/cm3)"
+  },
+  "B13": {
+   "formula": "=INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),3)",
+   "value": 8.9
+  },
+  "A14": {
+   "formula": null,
+   "value": "Material Rate (Rs./kg)"
+  },
+  "B14": {
+   "formula": "=INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),4)",
+   "value": 520
+  },
+  "A15": {
+   "formula": null,
+   "value": "Unit Weight (kg / pc)"
+  },
+  "B15": {
+   "formula": "=(PI()/4)*((B7)^2-(B8)^2)*B9*B13/1000000",
+   "value": 6.679476015
+  },
+  "A16": {
+   "formula": null,
+   "value": "Total Weight for Qty (kg)"
+  },
+  "B16": {
+   "formula": "=B15*B10",
+   "value": 6.679476015
+  },
+  "A17": {
+   "formula": null,
+   "value": "Material Cost / pc (Rs.)"
+  },
+  "B17": {
+   "formula": "=IF(B4=\"No\",0,B15*B14)",
+   "value": 3473.327528
+  },
+  "A18": {
+   "formula": null,
+   "value": "Total Material Cost for Qty (Rs.)"
+  },
+  "B18": {
+   "formula": "=B17*B10",
+   "value": 3473.327528
+  },
+  "A21": {
+   "formula": null,
+   "value": "SECTION B - PROCESS ROUTING"
+  },
+  "A22": {
+   "formula": null,
+   "value": "Apply?"
+  },
+  "B22": {
+   "formula": null,
+   "value": "Process"
+  },
+  "C22": {
+   "formula": null,
+   "value": "Machine / Basis"
+  },
+  "D22": {
+   "formula": null,
+   "value": "Hours / Qty Basis"
+  },
+  "E22": {
+   "formula": null,
+   "value": "Rate (Rs.)"
+  },
+  "F22": {
+   "formula": null,
+   "value": "Cost (Rs.)"
+  },
+  "A23": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B23": {
+   "formula": null,
+   "value": "Turning"
+  },
+  "C23": {
+   "formula": null,
+   "value": "CNC Lathe"
+  },
+  "D23": {
+   "formula": "=INDEX(RoughTurningTable,MATCH(B7,TurningODBins,1),MATCH(B9,TurningLenBins,1))",
+   "value": 0.5
+  },
+  "E23": {
+   "formula": "=INDEX(MachineRateMaster_Range,MATCH(\"CNC Lathe\",INDEX(MachineRateMaster_Range,0,1),0),2)",
+   "value": 550
+  },
+  "F23": {
+   "formula": "=IF(A23=\"Yes\",D23*E23,0)",
+   "value": 275
+  },
+  "A24": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B24": {
+   "formula": null,
+   "value": "Grinding (ID bore)"
+  },
+  "C24": {
+   "formula": null,
+   "value": "In-house (Rs./cm2)"
+  },
+  "D24": {
+   "formula": "=PI()*B8*B9/100",
+   "value": 125.3495469
+  },
+  "E24": {
+   "formula": "=GrindingRate",
+   "value": 0.4
+  },
+  "F24": {
+   "formula": "=IF(A24=\"Yes\",D24*E24,0)",
+   "value": 50.13981875
+  },
+  "A26": {
+   "formula": null,
+   "value": "SUBTOTAL - PROCESS & VENDOR COST"
+  },
+  "A27": {
+   "formula": null,
+   "value": "Total Process & Vendor Cost / pc (Rs.)"
+  },
+  "B27": {
+   "formula": "=F23+F24",
+   "value": 325.1398188
+  },
+  "A29": {
+   "formula": null,
+   "value": "SECTION D - ADDITIONAL COST (Manual Entry)"
+  },
+  "A30": {
+   "formula": null,
+   "value": "Additional Cost / pc (Rs.)"
+  },
+  "B30": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A31": {
+   "formula": null,
+   "value": "Remarks"
+  },
+  "A33": {
+   "formula": null,
+   "value": "SECTION E - COMPONENT COST SUMMARY"
+  },
+  "A34": {
+   "formula": null,
+   "value": "Cost Head"
+  },
+  "B34": {
+   "formula": null,
+   "value": "Rs. / pc"
+  },
+  "A35": {
+   "formula": null,
+   "value": "Material Cost"
+  },
+  "B35": {
+   "formula": "=B17",
+   "value": 3473.327528
+  },
+  "A36": {
+   "formula": null,
+   "value": "Process Cost"
+  },
+  "B36": {
+   "formula": "=B27",
+   "value": 325.1398188
+  },
+  "A37": {
+   "formula": null,
+   "value": "Additional Cost"
+  },
+  "B37": {
+   "formula": "=B30",
+   "value": 0
+  },
+  "A38": {
+   "formula": null,
+   "value": "TOTAL CUSHION BUSH COST / pc"
+  },
+  "B38": {
+   "formula": "=B17+B27+B30",
+   "value": 3798.467346
+  },
+  "A39": {
+   "formula": null,
+   "value": "TOTAL CUSHION BUSH COST for Qty"
+  },
+  "B39": {
+   "formula": "=B38*B10",
+   "value": 3798.467346
+  }
+ },
+ "Stop Tube": {
+  "A1": {
+   "formula": null,
+   "value": "STOP TUBE - COSTING SHEET"
+  },
+  "A2": {
+   "formula": null,
+   "value": "IMPORTANT: Costed using SOLID ROUND raw material as per HISPL standard."
+  },
+  "A3": {
+   "formula": null,
+   "value": "SECTION A - MATERIAL INPUTS"
+  },
+  "A4": {
+   "formula": null,
+   "value": "New Material? (Yes/No)"
+  },
+  "B4": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "C4": {
+   "formula": null,
+   "value": "Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero."
+  },
+  "A5": {
+   "formula": null,
+   "value": "Parameter"
+  },
+  "B5": {
+   "formula": null,
+   "value": "Value"
+  },
+  "C5": {
+   "formula": null,
+   "value": "Unit"
+  },
+  "A6": {
+   "formula": null,
+   "value": "Material Grade"
+  },
+  "B6": {
+   "formula": null,
+   "value": "MS-EN8"
+  },
+  "A7": {
+   "formula": null,
+   "value": "Raw Diameter"
+  },
+  "B7": {
+   "formula": null,
+   "value": 60.0
+  },
+  "C7": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A8": {
+   "formula": null,
+   "value": "Finished Diameter"
+  },
+  "B8": {
+   "formula": null,
+   "value": 56.0
+  },
+  "C8": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A9": {
+   "formula": null,
+   "value": "Length"
+  },
+  "B9": {
+   "formula": null,
+   "value": 150.0
+  },
+  "C9": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A10": {
+   "formula": null,
+   "value": "Quantity (Nos)"
+  },
+  "B10": {
+   "formula": null,
+   "value": 1.0
+  },
+  "A12": {
+   "formula": null,
+   "value": "AUTO CALCULATE - MATERIAL"
+  },
+  "A13": {
+   "formula": null,
+   "value": "Density (g/cm3)"
+  },
+  "B13": {
+   "formula": "=INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),3)",
+   "value": "#N/A"
+  },
+  "A14": {
+   "formula": null,
+   "value": "Material Rate (Rs./kg)"
+  },
+  "B14": {
+   "formula": "=INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),4)",
+   "value": "#N/A"
+  },
+  "A15": {
+   "formula": null,
+   "value": "Unit Weight (kg / pc)"
+  },
+  "B15": {
+   "formula": "=(PI()/4)*((B7)^2)*B9*B13/1000000",
+   "value": "#N/A"
+  },
+  "A16": {
+   "formula": null,
+   "value": "Total Weight for Qty (kg)"
+  },
+  "B16": {
+   "formula": "=B15*B10",
+   "value": "#N/A"
+  },
+  "A17": {
+   "formula": null,
+   "value": "Material Cost / pc (Rs.)"
+  },
+  "B17": {
+   "formula": "=IF(B4=\"No\",0,B15*B14)",
+   "value": "#N/A"
+  },
+  "A18": {
+   "formula": null,
+   "value": "Total Material Cost for Qty (Rs.)"
+  },
+  "B18": {
+   "formula": "=B17*B10",
+   "value": "#N/A"
+  },
+  "A20": {
+   "formula": null,
+   "value": "SECTION B - PROCESS ROUTING"
+  },
+  "A21": {
+   "formula": null,
+   "value": "Apply?"
+  },
+  "B21": {
+   "formula": null,
+   "value": "Process"
+  },
+  "C21": {
+   "formula": null,
+   "value": "Machine / Basis"
+  },
+  "D21": {
+   "formula": null,
+   "value": "Hours / Qty Basis"
+  },
+  "E21": {
+   "formula": null,
+   "value": "Rate (Rs.)"
+  },
+  "F21": {
+   "formula": null,
+   "value": "Cost (Rs.)"
+  },
+  "A22": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B22": {
+   "formula": null,
+   "value": "Turning"
+  },
+  "C22": {
+   "formula": null,
+   "value": "CNC Lathe"
+  },
+  "D22": {
+   "formula": "=INDEX(RoughTurningTable,MATCH(B8,TurningODBins,1),MATCH(B9,TurningLenBins,1))*VLOOKUP((B7-B8),StockRemovalTable,3,TRUE())",
+   "value": 0.345
+  },
+  "E22": {
+   "formula": "=INDEX(MachineRateMaster_Range,MATCH(\"CNC Lathe\",INDEX(MachineRateMaster_Range,0,1),0),2)",
+   "value": 550
+  },
+  "F22": {
+   "formula": "=IF(A22=\"Yes\",D22*E22,0)",
+   "value": 189.75
+  },
+  "A24": {
+   "formula": null,
+   "value": "SUBTOTAL - PROCESS & VENDOR COST"
+  },
+  "A25": {
+   "formula": null,
+   "value": "Total Process & Vendor Cost / pc (Rs.)"
+  },
+  "B25": {
+   "formula": "=F22",
+   "value": 189.75
+  },
+  "A27": {
+   "formula": null,
+   "value": "SECTION D - ADDITIONAL COST (Manual Entry)"
+  },
+  "A28": {
+   "formula": null,
+   "value": "Additional Cost / pc (Rs.)"
+  },
+  "B28": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A29": {
+   "formula": null,
+   "value": "Remarks"
+  },
+  "A31": {
+   "formula": null,
+   "value": "SECTION E - COMPONENT COST SUMMARY"
+  },
+  "A32": {
+   "formula": null,
+   "value": "Cost Head"
+  },
+  "B32": {
+   "formula": null,
+   "value": "Rs. / pc"
+  },
+  "A33": {
+   "formula": null,
+   "value": "Material Cost"
+  },
+  "B33": {
+   "formula": "=B17",
+   "value": "#N/A"
+  },
+  "A34": {
+   "formula": null,
+   "value": "Process Cost"
+  },
+  "B34": {
+   "formula": "=B25",
+   "value": 189.75
+  },
+  "A35": {
+   "formula": null,
+   "value": "Additional Cost"
+  },
+  "B35": {
+   "formula": "=B28",
+   "value": 0
+  },
+  "A36": {
+   "formula": null,
+   "value": "TOTAL STOP TUBE COST / pc"
+  },
+  "B36": {
+   "formula": "=B17+B25+B28",
+   "value": "#N/A"
+  },
+  "A37": {
+   "formula": null,
+   "value": "TOTAL STOP TUBE COST for Qty"
+  },
+  "B37": {
+   "formula": "=B36*B10",
+   "value": "#N/A"
+  }
+ },
+ "Rear Eye": {
+  "A1": {
+   "formula": null,
+   "value": "REAR EYE - COSTING SHEET"
+  },
+  "A3": {
+   "formula": null,
+   "value": "SECTION A - MATERIAL INPUTS"
+  },
+  "A4": {
+   "formula": null,
+   "value": "New Material? (Yes/No)"
+  },
+  "B4": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "C4": {
+   "formula": null,
+   "value": "Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero."
+  },
+  "A5": {
+   "formula": null,
+   "value": "Parameter"
+  },
+  "B5": {
+   "formula": null,
+   "value": "Value"
+  },
+  "C5": {
+   "formula": null,
+   "value": "Unit"
+  },
+  "A6": {
+   "formula": null,
+   "value": "Material Grade"
+  },
+  "B6": {
+   "formula": null,
+   "value": "MS-PLATE-IS2062"
+  },
+  "A7": {
+   "formula": null,
+   "value": "Raw Plate Thickness"
+  },
+  "B7": {
+   "formula": null,
+   "value": 40.0
+  },
+  "C7": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A8": {
+   "formula": null,
+   "value": "Width"
+  },
+  "B8": {
+   "formula": null,
+   "value": 160.0
+  },
+  "C8": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A9": {
+   "formula": null,
+   "value": "Height"
+  },
+  "B9": {
+   "formula": null,
+   "value": 200.0
+  },
+  "C9": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A10": {
+   "formula": null,
+   "value": "Pin Hole Diameter"
+  },
+  "B10": {
+   "formula": null,
+   "value": 56.0
+  },
+  "C10": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A11": {
+   "formula": null,
+   "value": "Quantity (Nos)"
+  },
+  "B11": {
+   "formula": null,
+   "value": 1.0
+  },
+  "A13": {
+   "formula": null,
+   "value": "AUTO CALCULATE - MATERIAL"
+  },
+  "A14": {
+   "formula": null,
+   "value": "Density (g/cm3)"
+  },
+  "B14": {
+   "formula": "=INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),3)",
+   "value": "#N/A"
+  },
+  "A15": {
+   "formula": null,
+   "value": "Material Rate (Rs./kg)"
+  },
+  "B15": {
+   "formula": "=INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),4)",
+   "value": "#N/A"
+  },
+  "A16": {
+   "formula": null,
+   "value": "Unit Weight (kg / pc)"
+  },
+  "B16": {
+   "formula": "=(B8)*(B9)*(B7)*B14/1000000",
+   "value": "#N/A"
+  },
+  "A17": {
+   "formula": null,
+   "value": "Total Weight for Qty (kg)"
+  },
+  "B17": {
+   "formula": "=B16*B11",
+   "value": "#N/A"
+  },
+  "A18": {
+   "formula": null,
+   "value": "Material Cost / pc (Rs.)"
+  },
+  "B18": {
+   "formula": "=IF(B4=\"No\",0,B16*B15)",
+   "value": "#N/A"
+  },
+  "A19": {
+   "formula": null,
+   "value": "Total Material Cost for Qty (Rs.)"
+  },
+  "B19": {
+   "formula": "=B18*B11",
+   "value": "#N/A"
+  },
+  "A21": {
+   "formula": null,
+   "value": "No. of Pin Holes"
+  },
+  "B21": {
+   "formula": null,
+   "value": 1.0
+  },
+  "A23": {
+   "formula": null,
+   "value": "SECTION B - PROCESS ROUTING"
+  },
+  "A24": {
+   "formula": null,
+   "value": "Apply?"
+  },
+  "B24": {
+   "formula": null,
+   "value": "Process"
+  },
+  "C24": {
+   "formula": null,
+   "value": "Machine / Basis"
+  },
+  "D24": {
+   "formula": null,
+   "value": "Hours / Qty Basis"
+  },
+  "E24": {
+   "formula": null,
+   "value": "Rate (Rs.)"
+  },
+  "F24": {
+   "formula": null,
+   "value": "Cost (Rs.)"
+  },
+  "A25": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B25": {
+   "formula": null,
+   "value": "Profile Cutting"
+  },
+  "C25": {
+   "formula": null,
+   "value": "Process Rate Master (Rs./kg)"
+  },
+  "D25": {
+   "formula": "=B16",
+   "value": "#N/A"
+  },
+  "E25": {
+   "formula": "=ProfileCuttingRate",
+   "value": 1.25
+  },
+  "F25": {
+   "formula": "=IF(A25=\"Yes\",D25*E25,0)",
+   "value": "#N/A"
+  },
+  "A26": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B26": {
+   "formula": null,
+   "value": "Milling"
+  },
+  "C26": {
+   "formula": null,
+   "value": "Milling Machine"
+  },
+  "D26": {
+   "formula": "=VLOOKUP((B8)*(B9),MillingTable,3,TRUE())",
+   "value": 1
+  },
+  "E26": {
+   "formula": "=INDEX(MachineRateMaster_Range,MATCH(\"Milling Machine\",INDEX(MachineRateMaster_Range,0,1),0),2)",
+   "value": 350
+  },
+  "F26": {
+   "formula": "=IF(A26=\"Yes\",D26*E26,0)",
+   "value": 350
+  },
+  "A27": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B27": {
+   "formula": null,
+   "value": "Drilling"
+  },
+  "C27": {
+   "formula": null,
+   "value": "Drilling Machine"
+  },
+  "D27": {
+   "formula": "=VLOOKUP(B10,DrillingTable,3,TRUE())*B21",
+   "value": 0.12
+  },
+  "E27": {
+   "formula": "=INDEX(MachineRateMaster_Range,MATCH(\"Drilling Machine\",INDEX(MachineRateMaster_Range,0,1),0),2)",
+   "value": 250
+  },
+  "F27": {
+   "formula": "=IF(A27=\"Yes\",D27*E27,0)",
+   "value": 30
+  },
+  "A29": {
+   "formula": null,
+   "value": "SUBTOTAL - PROCESS & VENDOR COST"
+  },
+  "A30": {
+   "formula": null,
+   "value": "Total Process & Vendor Cost / pc (Rs.)"
+  },
+  "B30": {
+   "formula": "=F25+F26+F27",
+   "value": "#N/A"
+  },
+  "A32": {
+   "formula": null,
+   "value": "SECTION D - ADDITIONAL COST (Manual Entry)"
+  },
+  "A33": {
+   "formula": null,
+   "value": "Additional Cost / pc (Rs.)"
+  },
+  "B33": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A34": {
+   "formula": null,
+   "value": "Remarks"
+  },
+  "A36": {
+   "formula": null,
+   "value": "SECTION E - COMPONENT COST SUMMARY"
+  },
+  "A37": {
+   "formula": null,
+   "value": "Cost Head"
+  },
+  "B37": {
+   "formula": null,
+   "value": "Rs. / pc"
+  },
+  "A38": {
+   "formula": null,
+   "value": "Material Cost"
+  },
+  "B38": {
+   "formula": "=B18",
+   "value": "#N/A"
+  },
+  "A39": {
+   "formula": null,
+   "value": "Process Cost"
+  },
+  "B39": {
+   "formula": "=B30",
+   "value": "#N/A"
+  },
+  "A40": {
+   "formula": null,
+   "value": "Additional Cost"
+  },
+  "B40": {
+   "formula": "=B33",
+   "value": 0
+  },
+  "A41": {
+   "formula": null,
+   "value": "TOTAL REAR EYE COST / pc"
+  },
+  "B41": {
+   "formula": "=B18+B30+B33",
+   "value": "#N/A"
+  },
+  "A42": {
+   "formula": null,
+   "value": "TOTAL REAR EYE COST for Qty"
+  },
+  "B42": {
+   "formula": "=B41*B11",
+   "value": "#N/A"
+  }
+ },
+ "Rod Eye": {
+  "A1": {
+   "formula": null,
+   "value": "ROD EYE - COSTING SHEET"
+  },
+  "A3": {
+   "formula": null,
+   "value": "SECTION A - MATERIAL INPUTS"
+  },
+  "A4": {
+   "formula": null,
+   "value": "New Material? (Yes/No)"
+  },
+  "B4": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "C4": {
+   "formula": null,
+   "value": "Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero."
+  },
+  "A5": {
+   "formula": null,
+   "value": "Raw Material Shape"
+  },
+  "B5": {
+   "formula": null,
+   "value": "Round"
+  },
+  "C5": {
+   "formula": null,
+   "value": "Round = solid round bar (uses Diameter). Profile / Cuboid Block = flat/rectangular stock (uses Width & Height). Fill only the dimensions that apply."
+  },
+  "A6": {
+   "formula": null,
+   "value": "Parameter"
+  },
+  "B6": {
+   "formula": null,
+   "value": "Value"
+  },
+  "C6": {
+   "formula": null,
+   "value": "Unit"
+  },
+  "A7": {
+   "formula": null,
+   "value": "Material Grade"
+  },
+  "B7": {
+   "formula": null,
+   "value": "MS-PLATE-IS2062"
+  },
+  "A8": {
+   "formula": null,
+   "value": "Diameter"
+  },
+  "B8": {
+   "formula": null,
+   "value": 100.0
+  },
+  "C8": {
+   "formula": null,
+   "value": "mm - fill if Shape = Round"
+  },
+  "A9": {
+   "formula": null,
+   "value": "Width"
+  },
+  "B9": {
+   "formula": null,
+   "value": 160.0
+  },
+  "C9": {
+   "formula": null,
+   "value": "mm - fill if Shape = Profile / Cuboid Block"
+  },
+  "A10": {
+   "formula": null,
+   "value": "Height"
+  },
+  "B10": {
+   "formula": null,
+   "value": 100.0
+  },
+  "C10": {
+   "formula": null,
+   "value": "mm - fill if Shape = Profile / Cuboid Block"
+  },
+  "A11": {
+   "formula": null,
+   "value": "Thickness"
+  },
+  "B11": {
+   "formula": null,
+   "value": 60.0
+  },
+  "C11": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A12": {
+   "formula": null,
+   "value": "Pin Hole Diameter"
+  },
+  "B12": {
+   "formula": null,
+   "value": 56.0
+  },
+  "C12": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A13": {
+   "formula": null,
+   "value": "Quantity (Nos)"
+  },
+  "B13": {
+   "formula": null,
+   "value": 1.0
+  },
+  "A15": {
+   "formula": null,
+   "value": "AUTO CALCULATE - MATERIAL"
+  },
+  "A16": {
+   "formula": null,
+   "value": "Density (g/cm3)"
+  },
+  "B16": {
+   "formula": "=INDEX(MaterialMaster_Range,MATCH(B7,INDEX(MaterialMaster_Range,0,1),0),3)",
+   "value": "#N/A"
+  },
+  "A17": {
+   "formula": null,
+   "value": "Material Rate (Rs./kg)"
+  },
+  "B17": {
+   "formula": "=INDEX(MaterialMaster_Range,MATCH(B7,INDEX(MaterialMaster_Range,0,1),0),4)",
+   "value": "#N/A"
+  },
+  "A18": {
+   "formula": null,
+   "value": "Unit Weight (kg / pc)"
+  },
+  "B18": {
+   "formula": "=IF(B5=\"Round\",(PI()/4)*(B8)^2*B11*B16/1000000,(B9)*(B10)*B11*B16/1000000)",
+   "value": "#N/A"
+  },
+  "A19": {
+   "formula": null,
+   "value": "Total Weight for Qty (kg)"
+  },
+  "B19": {
+   "formula": "=B18*B13",
+   "value": "#N/A"
+  },
+  "A20": {
+   "formula": null,
+   "value": "Material Cost / pc (Rs.)"
+  },
+  "B20": {
+   "formula": "=IF(B4=\"No\",0,B18*B17)",
+   "value": "#N/A"
+  },
+  "A21": {
+   "formula": null,
+   "value": "Total Material Cost for Qty (Rs.)"
+  },
+  "B21": {
+   "formula": "=B20*B13",
+   "value": "#N/A"
+  },
+  "A23": {
+   "formula": null,
+   "value": "No. of Pin Holes"
+  },
+  "B23": {
+   "formula": null,
+   "value": 1.0
+  },
+  "A25": {
+   "formula": null,
+   "value": "SECTION B - PROCESS ROUTING"
+  },
+  "A26": {
+   "formula": null,
+   "value": "Apply?"
+  },
+  "B26": {
+   "formula": null,
+   "value": "Process"
+  },
+  "C26": {
+   "formula": null,
+   "value": "Machine / Basis"
+  },
+  "D26": {
+   "formula": null,
+   "value": "Hours / Qty Basis"
+  },
+  "E26": {
+   "formula": null,
+   "value": "Rate (Rs.)"
+  },
+  "F26": {
+   "formula": null,
+   "value": "Cost (Rs.)"
+  },
+  "A27": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B27": {
+   "formula": null,
+   "value": "Profile Cutting"
+  },
+  "C27": {
+   "formula": null,
+   "value": "Process Rate Master (Rs./kg)"
+  },
+  "D27": {
+   "formula": "=B18",
+   "value": "#N/A"
+  },
+  "E27": {
+   "formula": "=ProfileCuttingRate",
+   "value": 1.25
+  },
+  "F27": {
+   "formula": "=IF(A27=\"Yes\",D27*E27,0)",
+   "value": "#N/A"
+  },
+  "A28": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B28": {
+   "formula": null,
+   "value": "Milling"
+  },
+  "C28": {
+   "formula": null,
+   "value": "Milling Machine"
+  },
+  "D28": {
+   "formula": "=VLOOKUP((B9)*(B10),MillingTable,3,TRUE())",
+   "value": 0.6
+  },
+  "E28": {
+   "formula": "=INDEX(MachineRateMaster_Range,MATCH(\"Milling Machine\",INDEX(MachineRateMaster_Range,0,1),0),2)",
+   "value": 350
+  },
+  "F28": {
+   "formula": "=IF(A28=\"Yes\",D28*E28,0)",
+   "value": 210
+  },
+  "A29": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B29": {
+   "formula": null,
+   "value": "Drilling"
+  },
+  "C29": {
+   "formula": null,
+   "value": "Drilling Machine"
+  },
+  "D29": {
+   "formula": "=VLOOKUP(B12,DrillingTable,3,TRUE())*B23",
+   "value": 0.12
+  },
+  "E29": {
+   "formula": "=INDEX(MachineRateMaster_Range,MATCH(\"Drilling Machine\",INDEX(MachineRateMaster_Range,0,1),0),2)",
+   "value": 250
+  },
+  "F29": {
+   "formula": "=IF(A29=\"Yes\",D29*E29,0)",
+   "value": 30
+  },
+  "A31": {
+   "formula": null,
+   "value": "SUBTOTAL - PROCESS & VENDOR COST"
+  },
+  "A32": {
+   "formula": null,
+   "value": "Total Process & Vendor Cost / pc (Rs.)"
+  },
+  "B32": {
+   "formula": "=F27+F28+F29",
+   "value": "#N/A"
+  },
+  "A34": {
+   "formula": null,
+   "value": "SECTION D - ADDITIONAL COST (Manual Entry)"
+  },
+  "A35": {
+   "formula": null,
+   "value": "Additional Cost / pc (Rs.)"
+  },
+  "B35": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A36": {
+   "formula": null,
+   "value": "Remarks"
+  },
+  "A38": {
+   "formula": null,
+   "value": "SECTION E - COMPONENT COST SUMMARY"
+  },
+  "A39": {
+   "formula": null,
+   "value": "Cost Head"
+  },
+  "B39": {
+   "formula": null,
+   "value": "Rs. / pc"
+  },
+  "A40": {
+   "formula": null,
+   "value": "Material Cost"
+  },
+  "B40": {
+   "formula": "=B20",
+   "value": "#N/A"
+  },
+  "A41": {
+   "formula": null,
+   "value": "Process Cost"
+  },
+  "B41": {
+   "formula": "=B32",
+   "value": "#N/A"
+  },
+  "A42": {
+   "formula": null,
+   "value": "Additional Cost"
+  },
+  "B42": {
+   "formula": "=B35",
+   "value": 0
+  },
+  "A43": {
+   "formula": null,
+   "value": "TOTAL ROD EYE COST / pc"
+  },
+  "B43": {
+   "formula": "=B20+B32+B35",
+   "value": "#N/A"
+  },
+  "A44": {
+   "formula": null,
+   "value": "TOTAL ROD EYE COST for Qty"
+  },
+  "B44": {
+   "formula": "=B43*B13",
+   "value": "#N/A"
+  }
+ },
+ "Piston": {
+  "A1": {
+   "formula": null,
+   "value": "PISTON - COSTING SHEET"
+  },
+  "A2": {
+   "formula": null,
+   "value": "Only Outer Diameter and Length are taken for this component, per HISPL costing standard."
+  },
+  "A3": {
+   "formula": null,
+   "value": "SECTION A - MATERIAL INPUTS"
+  },
+  "A4": {
+   "formula": null,
+   "value": "New Material? (Yes/No)"
+  },
+  "B4": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "C4": {
+   "formula": null,
+   "value": "Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero."
+  },
+  "A5": {
+   "formula": null,
+   "value": "Parameter"
+  },
+  "B5": {
+   "formula": null,
+   "value": "Value"
+  },
+  "C5": {
+   "formula": null,
+   "value": "Unit"
+  },
+  "A6": {
+   "formula": null,
+   "value": "Material Grade"
+  },
+  "B6": {
+   "formula": null,
+   "value": "MS-EN8"
+  },
+  "A7": {
+   "formula": null,
+   "value": "OD"
+  },
+  "B7": {
+   "formula": null,
+   "value": 100.0
+  },
+  "C7": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A8": {
+   "formula": null,
+   "value": "Length"
+  },
+  "B8": {
+   "formula": null,
+   "value": 45.0
+  },
+  "C8": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A9": {
+   "formula": null,
+   "value": "Quantity (Nos)"
+  },
+  "B9": {
+   "formula": null,
+   "value": 1.0
+  },
+  "A11": {
+   "formula": null,
+   "value": "AUTO CALCULATE - MATERIAL"
+  },
+  "A12": {
+   "formula": null,
+   "value": "Density (g/cm3)"
+  },
+  "B12": {
+   "formula": "=INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),3)",
+   "value": "#N/A"
+  },
+  "A13": {
+   "formula": null,
+   "value": "Material Rate (Rs./kg)"
+  },
+  "B13": {
+   "formula": "=INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),4)",
+   "value": "#N/A"
+  },
+  "A14": {
+   "formula": null,
+   "value": "Unit Weight (kg / pc)"
+  },
+  "B14": {
+   "formula": "=(PI()/4)*((B7)^2)*B8*B12/1000000",
+   "value": "#N/A"
+  },
+  "A15": {
+   "formula": null,
+   "value": "Total Weight for Qty (kg)"
+  },
+  "B15": {
+   "formula": "=B14*B9",
+   "value": "#N/A"
+  },
+  "A16": {
+   "formula": null,
+   "value": "Material Cost / pc (Rs.)"
+  },
+  "B16": {
+   "formula": "=IF(B4=\"No\",0,B14*B13)",
+   "value": "#N/A"
+  },
+  "A17": {
+   "formula": null,
+   "value": "Total Material Cost for Qty (Rs.)"
+  },
+  "B17": {
+   "formula": "=B16*B9",
+   "value": "#N/A"
+  },
+  "A19": {
+   "formula": null,
+   "value": "Machined Width (mm) [Groove Milling]"
+  },
+  "B19": {
+   "formula": null,
+   "value": 10.0
+  },
+  "A20": {
+   "formula": null,
+   "value": "Machined Length (mm) [Groove Milling]"
+  },
+  "B20": {
+   "formula": null,
+   "value": 314.0
+  },
+  "A21": {
+   "formula": null,
+   "value": "Hole Diameter (mm)"
+  },
+  "B21": {
+   "formula": null,
+   "value": 10.0
+  },
+  "A22": {
+   "formula": null,
+   "value": "No. of Holes"
+  },
+  "B22": {
+   "formula": null,
+   "value": 4.0
+  },
+  "A24": {
+   "formula": null,
+   "value": "SECTION B - PROCESS ROUTING"
+  },
+  "A25": {
+   "formula": null,
+   "value": "Apply?"
+  },
+  "B25": {
+   "formula": null,
+   "value": "Process"
+  },
+  "C25": {
+   "formula": null,
+   "value": "Machine / Basis"
+  },
+  "D25": {
+   "formula": null,
+   "value": "Hours / Qty Basis"
+  },
+  "E25": {
+   "formula": null,
+   "value": "Rate (Rs.)"
+  },
+  "F25": {
+   "formula": null,
+   "value": "Cost (Rs.)"
+  },
+  "A26": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B26": {
+   "formula": null,
+   "value": "Finish Turning"
+  },
+  "C26": {
+   "formula": null,
+   "value": "Process Rate Master (Rs./kg)"
+  },
+  "D26": {
+   "formula": "=B14",
+   "value": "#N/A"
+  },
+  "E26": {
+   "formula": "=ProfileCuttingRate",
+   "value": 1.25
+  },
+  "F26": {
+   "formula": "=IF(A26=\"Yes\",D26*E26,0)",
+   "value": "#N/A"
+  },
+  "A27": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B27": {
+   "formula": null,
+   "value": "Milling"
+  },
+  "C27": {
+   "formula": null,
+   "value": "Milling Machine"
+  },
+  "D27": {
+   "formula": "=VLOOKUP((B19)*(B20),MillingTable,3,TRUE())",
+   "value": 0.3
+  },
+  "E27": {
+   "formula": "=INDEX(MachineRateMaster_Range,MATCH(\"Milling Machine\",INDEX(MachineRateMaster_Range,0,1),0),2)",
+   "value": 350
+  },
+  "F27": {
+   "formula": "=IF(A27=\"Yes\",D27*E27,0)",
+   "value": 105
+  },
+  "A28": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B28": {
+   "formula": null,
+   "value": "Drilling"
+  },
+  "C28": {
+   "formula": null,
+   "value": "Drilling Machine"
+  },
+  "D28": {
+   "formula": "=VLOOKUP(B21,DrillingTable,3,TRUE())*B22",
+   "value": 0.12
+  },
+  "E28": {
+   "formula": "=INDEX(MachineRateMaster_Range,MATCH(\"Drilling Machine\",INDEX(MachineRateMaster_Range,0,1),0),2)",
+   "value": 250
+  },
+  "F28": {
+   "formula": "=IF(A28=\"Yes\",D28*E28,0)",
+   "value": 30
+  },
+  "A30": {
+   "formula": null,
+   "value": "SUBTOTAL - PROCESS & VENDOR COST"
+  },
+  "A31": {
+   "formula": null,
+   "value": "Total Process & Vendor Cost / pc (Rs.)"
+  },
+  "B31": {
+   "formula": "=F26+F27+F28",
+   "value": "#N/A"
+  },
+  "A33": {
+   "formula": null,
+   "value": "SECTION D - ADDITIONAL COST (Manual Entry)"
+  },
+  "A34": {
+   "formula": null,
+   "value": "Additional Cost / pc (Rs.)"
+  },
+  "B34": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A35": {
+   "formula": null,
+   "value": "Remarks"
+  },
+  "A37": {
+   "formula": null,
+   "value": "SECTION E - COMPONENT COST SUMMARY"
+  },
+  "A38": {
+   "formula": null,
+   "value": "Cost Head"
+  },
+  "B38": {
+   "formula": null,
+   "value": "Rs. / pc"
+  },
+  "A39": {
+   "formula": null,
+   "value": "Material Cost"
+  },
+  "B39": {
+   "formula": "=B16",
+   "value": "#N/A"
+  },
+  "A40": {
+   "formula": null,
+   "value": "Process Cost"
+  },
+  "B40": {
+   "formula": "=B31",
+   "value": "#N/A"
+  },
+  "A41": {
+   "formula": null,
+   "value": "Additional Cost"
+  },
+  "B41": {
+   "formula": "=B34",
+   "value": 0
+  },
+  "A42": {
+   "formula": null,
+   "value": "TOTAL PISTON COST / pc"
+  },
+  "B42": {
+   "formula": "=B16+B31+B34",
+   "value": "#N/A"
+  },
+  "A43": {
+   "formula": null,
+   "value": "TOTAL PISTON COST for Qty"
+  },
+  "B43": {
+   "formula": "=B42*B9",
+   "value": "#N/A"
+  }
+ },
+ "Flange": {
+  "A1": {
+   "formula": null,
+   "value": "FLANGE - COSTING SHEET"
+  },
+  "A3": {
+   "formula": null,
+   "value": "SECTION A - MATERIAL INPUTS"
+  },
+  "A4": {
+   "formula": null,
+   "value": "New Material? (Yes/No)"
+  },
+  "B4": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "C4": {
+   "formula": null,
+   "value": "Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero."
+  },
+  "A5": {
+   "formula": null,
+   "value": "Parameter"
+  },
+  "B5": {
+   "formula": null,
+   "value": "Value"
+  },
+  "C5": {
+   "formula": null,
+   "value": "Unit"
+  },
+  "A6": {
+   "formula": null,
+   "value": "Material Grade"
+  },
+  "B6": {
+   "formula": null,
+   "value": "MS-C45"
+  },
+  "A7": {
+   "formula": null,
+   "value": "OD"
+  },
+  "B7": {
+   "formula": null,
+   "value": 220.0
+  },
+  "C7": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A8": {
+   "formula": null,
+   "value": "Length"
+  },
+  "B8": {
+   "formula": null,
+   "value": 60.0
+  },
+  "C8": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A9": {
+   "formula": null,
+   "value": "Quantity (Nos)"
+  },
+  "B9": {
+   "formula": null,
+   "value": 1.0
+  },
+  "A11": {
+   "formula": null,
+   "value": "AUTO CALCULATE - MATERIAL"
+  },
+  "A12": {
+   "formula": null,
+   "value": "Density (g/cm3)"
+  },
+  "B12": {
+   "formula": "=INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),3)",
+   "value": "#N/A"
+  },
+  "A13": {
+   "formula": null,
+   "value": "Material Rate (Rs./kg)"
+  },
+  "B13": {
+   "formula": "=INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),4)",
+   "value": "#N/A"
+  },
+  "A14": {
+   "formula": null,
+   "value": "Unit Weight (kg / pc)"
+  },
+  "B14": {
+   "formula": "=(PI()/4)*((B7)^2)*B8*B12/1000000",
+   "value": "#N/A"
+  },
+  "A15": {
+   "formula": null,
+   "value": "Total Weight for Qty (kg)"
+  },
+  "B15": {
+   "formula": "=B14*B9",
+   "value": "#N/A"
+  },
+  "A16": {
+   "formula": null,
+   "value": "Material Cost / pc (Rs.)"
+  },
+  "B16": {
+   "formula": "=IF(B4=\"No\",0,B14*B13)",
+   "value": "#N/A"
+  },
+  "A17": {
+   "formula": null,
+   "value": "Total Material Cost for Qty (Rs.)"
+  },
+  "B17": {
+   "formula": "=B16*B9",
+   "value": "#N/A"
+  },
+  "A19": {
+   "formula": null,
+   "value": "Machined Width (mm) [for Milling]"
+  },
+  "B19": {
+   "formula": null,
+   "value": 40.0
+  },
+  "A20": {
+   "formula": null,
+   "value": "Machined Length (mm) [for Milling]"
+  },
+  "B20": {
+   "formula": null,
+   "value": 40.0
+  },
+  "A21": {
+   "formula": null,
+   "value": "Hole Diameter (mm) [for Drilling]"
+  },
+  "B21": {
+   "formula": null,
+   "value": 14.0
+  },
+  "A22": {
+   "formula": null,
+   "value": "No. of Holes"
+  },
+  "B22": {
+   "formula": null,
+   "value": 4.0
+  },
+  "A24": {
+   "formula": null,
+   "value": "SECTION B - PROCESS ROUTING"
+  },
+  "A25": {
+   "formula": null,
+   "value": "Apply?"
+  },
+  "B25": {
+   "formula": null,
+   "value": "Process"
+  },
+  "C25": {
+   "formula": null,
+   "value": "Machine / Basis"
+  },
+  "D25": {
+   "formula": null,
+   "value": "Hours / Qty Basis"
+  },
+  "E25": {
+   "formula": null,
+   "value": "Rate (Rs.)"
+  },
+  "F25": {
+   "formula": null,
+   "value": "Cost (Rs.)"
+  },
+  "A26": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B26": {
+   "formula": null,
+   "value": "Turning"
+  },
+  "C26": {
+   "formula": null,
+   "value": "CNC Lathe"
+  },
+  "D26": {
+   "formula": "=INDEX(RoughTurningTable,MATCH(B7,TurningODBins,1),MATCH(B8,TurningLenBins,1))",
+   "value": 0.8
+  },
+  "E26": {
+   "formula": "=INDEX(MachineRateMaster_Range,MATCH(\"CNC Lathe\",INDEX(MachineRateMaster_Range,0,1),0),2)",
+   "value": 550
+  },
+  "F26": {
+   "formula": "=IF(A26=\"Yes\",D26*E26,0)",
+   "value": 440
+  },
+  "A27": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B27": {
+   "formula": null,
+   "value": "Milling"
+  },
+  "C27": {
+   "formula": null,
+   "value": "Milling Machine"
+  },
+  "D27": {
+   "formula": "=VLOOKUP((B19)*(B20),MillingTable,3,TRUE())",
+   "value": 0.3
+  },
+  "E27": {
+   "formula": "=INDEX(MachineRateMaster_Range,MATCH(\"Milling Machine\",INDEX(MachineRateMaster_Range,0,1),0),2)",
+   "value": 350
+  },
+  "F27": {
+   "formula": "=IF(A27=\"Yes\",D27*E27,0)",
+   "value": 105
+  },
+  "A28": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B28": {
+   "formula": null,
+   "value": "Drilling"
+  },
+  "C28": {
+   "formula": null,
+   "value": "Drilling Machine"
+  },
+  "D28": {
+   "formula": "=VLOOKUP(B21,DrillingTable,3,TRUE())*B22",
+   "value": 0.2
+  },
+  "E28": {
+   "formula": "=INDEX(MachineRateMaster_Range,MATCH(\"Drilling Machine\",INDEX(MachineRateMaster_Range,0,1),0),2)",
+   "value": 250
+  },
+  "F28": {
+   "formula": "=IF(A28=\"Yes\",D28*E28,0)",
+   "value": 50
+  },
+  "A30": {
+   "formula": null,
+   "value": "SUBTOTAL - PROCESS & VENDOR COST"
+  },
+  "A31": {
+   "formula": null,
+   "value": "Total Process & Vendor Cost / pc (Rs.)"
+  },
+  "B31": {
+   "formula": "=F26+F27+F28",
+   "value": 595
+  },
+  "A33": {
+   "formula": null,
+   "value": "SECTION D - ADDITIONAL COST (Manual Entry)"
+  },
+  "A34": {
+   "formula": null,
+   "value": "Additional Cost / pc (Rs.)"
+  },
+  "B34": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A35": {
+   "formula": null,
+   "value": "Remarks"
+  },
+  "A37": {
+   "formula": null,
+   "value": "SECTION E - COMPONENT COST SUMMARY"
+  },
+  "A38": {
+   "formula": null,
+   "value": "Cost Head"
+  },
+  "B38": {
+   "formula": null,
+   "value": "Rs. / pc"
+  },
+  "A39": {
+   "formula": null,
+   "value": "Material Cost"
+  },
+  "B39": {
+   "formula": "=B16",
+   "value": "#N/A"
+  },
+  "A40": {
+   "formula": null,
+   "value": "Process Cost"
+  },
+  "B40": {
+   "formula": "=B31",
+   "value": 595
+  },
+  "A41": {
+   "formula": null,
+   "value": "Additional Cost"
+  },
+  "B41": {
+   "formula": "=B34",
+   "value": 0
+  },
+  "A42": {
+   "formula": null,
+   "value": "TOTAL FLANGE COST / pc"
+  },
+  "B42": {
+   "formula": "=B16+B31+B34",
+   "value": "#N/A"
+  },
+  "A43": {
+   "formula": null,
+   "value": "TOTAL FLANGE COST for Qty"
+  },
+  "B43": {
+   "formula": "=B42*B9",
+   "value": "#N/A"
+  }
+ },
+ "Trunnion": {
+  "A1": {
+   "formula": null,
+   "value": "TRUNNION - COSTING SHEET"
+  },
+  "A2": {
+   "formula": null,
+   "value": "Costed as a rectangular block (Length x Width x Height). Rough Turning, Finish Turning and Pin Grinding are entered manually (Rs.); Milling and Drilling are auto-calculated as usual."
+  },
+  "A3": {
+   "formula": null,
+   "value": "SECTION A - MATERIAL INPUTS"
+  },
+  "A4": {
+   "formula": null,
+   "value": "New Material? (Yes/No)"
+  },
+  "B4": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "C4": {
+   "formula": null,
+   "value": "Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero."
+  },
+  "A5": {
+   "formula": null,
+   "value": "Parameter"
+  },
+  "B5": {
+   "formula": null,
+   "value": "Value"
+  },
+  "C5": {
+   "formula": null,
+   "value": "Unit"
+  },
+  "A6": {
+   "formula": null,
+   "value": "Material Grade"
+  },
+  "B6": {
+   "formula": null,
+   "value": "EN8"
+  },
+  "A7": {
+   "formula": null,
+   "value": "Length"
+  },
+  "B7": {
+   "formula": null,
+   "value": 200.0
+  },
+  "C7": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A8": {
+   "formula": null,
+   "value": "Width"
+  },
+  "B8": {
+   "formula": null,
+   "value": 100.0
+  },
+  "C8": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A9": {
+   "formula": null,
+   "value": "Height"
+  },
+  "B9": {
+   "formula": null,
+   "value": 100.0
+  },
+  "C9": {
+   "formula": null,
+   "value": "mm"
+  },
+  "A10": {
+   "formula": null,
+   "value": "Quantity (Nos)"
+  },
+  "B10": {
+   "formula": null,
+   "value": 2.0
+  },
+  "A12": {
+   "formula": null,
+   "value": "AUTO CALCULATE - MATERIAL"
+  },
+  "A13": {
+   "formula": null,
+   "value": "Density (g/cm3)"
+  },
+  "B13": {
+   "formula": "=INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),3)",
+   "value": 7.85
+  },
+  "A14": {
+   "formula": null,
+   "value": "Material Rate (Rs./kg)"
+  },
+  "B14": {
+   "formula": "=INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),4)",
+   "value": 68
+  },
+  "A15": {
+   "formula": null,
+   "value": "Unit Weight (kg / pc)"
+  },
+  "B15": {
+   "formula": "=(B7)*(B8)*(B9)*B13/1000000",
+   "value": 15.7
+  },
+  "A16": {
+   "formula": null,
+   "value": "Total Weight for Qty (kg)"
+  },
+  "B16": {
+   "formula": "=B15*B10",
+   "value": 31.4
+  },
+  "A17": {
+   "formula": null,
+   "value": "Material Cost / pc (Rs.)"
+  },
+  "B17": {
+   "formula": "=IF(B4=\"No\",0,B15*B14)",
+   "value": 1067.6
+  },
+  "A18": {
+   "formula": null,
+   "value": "Total Material Cost for Qty (Rs.)"
+  },
+  "B18": {
+   "formula": "=B17*B10",
+   "value": 2135.2
+  },
+  "A20": {
+   "formula": null,
+   "value": "Machined Width (mm) [for Milling]"
+  },
+  "B20": {
+   "formula": null,
+   "value": 40.0
+  },
+  "A21": {
+   "formula": null,
+   "value": "Machined Length (mm) [for Milling]"
+  },
+  "B21": {
+   "formula": null,
+   "value": 40.0
+  },
+  "A22": {
+   "formula": null,
+   "value": "Hole Diameter (mm) [for Drilling]"
+  },
+  "B22": {
+   "formula": null,
+   "value": 12.0
+  },
+  "A23": {
+   "formula": null,
+   "value": "No. of Holes"
+  },
+  "B23": {
+   "formula": null,
+   "value": 2.0
+  },
+  "A25": {
+   "formula": null,
+   "value": "SECTION B - PROCESS ROUTING"
+  },
+  "A26": {
+   "formula": null,
+   "value": "Apply?"
+  },
+  "B26": {
+   "formula": null,
+   "value": "Process"
+  },
+  "C26": {
+   "formula": null,
+   "value": "Machine / Basis"
+  },
+  "D26": {
+   "formula": null,
+   "value": "Hours / Qty Basis"
+  },
+  "E26": {
+   "formula": null,
+   "value": "Rate (Rs.)"
+  },
+  "F26": {
+   "formula": null,
+   "value": "Cost (Rs.)"
+  },
+  "A27": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B27": {
+   "formula": null,
+   "value": "Rough Turning"
+  },
+  "C27": {
+   "formula": null,
+   "value": "Manual Entry"
+  },
+  "D27": {
+   "formula": null,
+   "value": "Manual"
+  },
+  "E27": {
+   "formula": null,
+   "value": "Manual"
+  },
+  "F27": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A28": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B28": {
+   "formula": null,
+   "value": "Finished Turning"
+  },
+  "C28": {
+   "formula": null,
+   "value": "Manual Entry"
+  },
+  "D28": {
+   "formula": null,
+   "value": "Manual"
+  },
+  "E28": {
+   "formula": null,
+   "value": "Manual"
+  },
+  "F28": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A29": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B29": {
+   "formula": null,
+   "value": "Pin Grinding"
+  },
+  "C29": {
+   "formula": null,
+   "value": "Manual Entry"
+  },
+  "D29": {
+   "formula": null,
+   "value": "Manual"
+  },
+  "E29": {
+   "formula": null,
+   "value": "Manual"
+  },
+  "F29": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A30": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B30": {
+   "formula": null,
+   "value": "Milling"
+  },
+  "C30": {
+   "formula": null,
+   "value": "Milling Machine"
+  },
+  "D30": {
+   "formula": "=VLOOKUP((B20)*(B21),MillingTable,3,TRUE())",
+   "value": 0.3
+  },
+  "E30": {
+   "formula": "=INDEX(MachineRateMaster_Range,MATCH(\"Milling Machine\",INDEX(MachineRateMaster_Range,0,1),0),2)",
+   "value": 350
+  },
+  "F30": {
+   "formula": "=IF(A30=\"Yes\",D30*E30,0)",
+   "value": 105
+  },
+  "A31": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "B31": {
+   "formula": null,
+   "value": "Drilling"
+  },
+  "C31": {
+   "formula": null,
+   "value": "Drilling Machine"
+  },
+  "D31": {
+   "formula": "=VLOOKUP(B22,DrillingTable,3,TRUE())*B23",
+   "value": 0.1
+  },
+  "E31": {
+   "formula": "=INDEX(MachineRateMaster_Range,MATCH(\"Drilling Machine\",INDEX(MachineRateMaster_Range,0,1),0),2)",
+   "value": 250
+  },
+  "F31": {
+   "formula": "=IF(A31=\"Yes\",D31*E31,0)",
+   "value": 25
+  },
+  "A33": {
+   "formula": null,
+   "value": "SUBTOTAL - PROCESS & VENDOR COST"
+  },
+  "A34": {
+   "formula": null,
+   "value": "Total Process & Vendor Cost / pc (Rs.)"
+  },
+  "B34": {
+   "formula": "=F27+F28+F29+F30+F31",
+   "value": 130
+  },
+  "A36": {
+   "formula": null,
+   "value": "SECTION D - ADDITIONAL COST (Manual Entry)"
+  },
+  "A37": {
+   "formula": null,
+   "value": "Additional Cost / pc (Rs.)"
+  },
+  "B37": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A38": {
+   "formula": null,
+   "value": "Remarks"
+  },
+  "A40": {
+   "formula": null,
+   "value": "SECTION E - COMPONENT COST SUMMARY"
+  },
+  "A41": {
+   "formula": null,
+   "value": "Cost Head"
+  },
+  "B41": {
+   "formula": null,
+   "value": "Rs. / pc"
+  },
+  "A42": {
+   "formula": null,
+   "value": "Material Cost"
+  },
+  "B42": {
+   "formula": "=B17",
+   "value": 1067.6
+  },
+  "A43": {
+   "formula": null,
+   "value": "Process Cost"
+  },
+  "B43": {
+   "formula": "=B34",
+   "value": 130
+  },
+  "A44": {
+   "formula": null,
+   "value": "Additional Cost"
+  },
+  "B44": {
+   "formula": "=B37",
+   "value": 0
+  },
+  "A45": {
+   "formula": null,
+   "value": "TOTAL TRUNNION COST / pc"
+  },
+  "B45": {
+   "formula": "=B17+B34+B37",
+   "value": 1197.6
+  },
+  "A46": {
+   "formula": null,
+   "value": "TOTAL TRUNNION COST for Qty"
+  },
+  "B46": {
+   "formula": "=B45*B10",
+   "value": 2395.2
+  }
+ },
+ "Bought Out & Seal Kit Master": {
+  "A1": {
+   "formula": null,
+   "value": "BOUGHT OUT ITEMS & SEAL KIT MASTER"
+  },
+  "A2": {
+   "formula": null,
+   "value": "Add bought-out items, seal kit components, and any other purchased part here. Set Include? = No to exclude an item without deleting it. All entries are manual."
+  },
+  "A3": {
+   "formula": null,
+   "value": "Item Description"
+  },
+  "B3": {
+   "formula": null,
+   "value": "Category"
+  },
+  "C3": {
+   "formula": null,
+   "value": "Include? (Yes/No)"
+  },
+  "D3": {
+   "formula": null,
+   "value": "Rate (Rs.)"
+  },
+  "E3": {
+   "formula": null,
+   "value": "Qty"
+  },
+  "F3": {
+   "formula": null,
+   "value": "Cost (Rs.)"
+  },
+  "G3": {
+   "formula": null,
+   "value": "Remarks"
+  },
+  "A4": {
+   "formula": null,
+   "value": "Seal"
+  },
+  "B4": {
+   "formula": null,
+   "value": "Seal Kit"
+  },
+  "C4": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "D4": {
+   "formula": null,
+   "value": 0.0
+  },
+  "E4": {
+   "formula": null,
+   "value": 1.0
+  },
+  "F4": {
+   "formula": "=IF(C4=\"Yes\",D4*E4,0)",
+   "value": 0
+  },
+  "G4": {
+   "formula": null,
+   "value": "Enter total seal kit cost for this cylinder (piston seal + rod seal + wiper + O-rings, etc.)"
+  },
+  "A5": {
+   "formula": null,
+   "value": "Bearing"
+  },
+  "B5": {
+   "formula": null,
+   "value": "Bought Out"
+  },
+  "C5": {
+   "formula": null,
+   "value": "Yes"
+  },
+  "D5": {
+   "formula": null,
+   "value": 180.0
+  },
+  "E5": {
+   "formula": null,
+   "value": 2.0
+  },
+  "F5": {
+   "formula": "=IF(C5=\"Yes\",D5*E5,0)",
+   "value": 360
+  },
+  "B6": {
+   "formula": null,
+   "value": "Bought Out"
+  },
+  "C6": {
+   "formula": null,
+   "value": "No"
+  },
+  "D6": {
+   "formula": null,
+   "value": 0.0
+  },
+  "E6": {
+   "formula": null,
+   "value": 1.0
+  },
+  "F6": {
+   "formula": "=IF(C6=\"Yes\",D6*E6,0)",
+   "value": 0
+  },
+  "A7": {
+   "formula": null,
+   "value": "Check Valve"
+  },
+  "B7": {
+   "formula": null,
+   "value": "Bought Out"
+  },
+  "C7": {
+   "formula": null,
+   "value": "No"
+  },
+  "D7": {
+   "formula": null,
+   "value": 650.0
+  },
+  "E7": {
+   "formula": null,
+   "value": 1.0
+  },
+  "F7": {
+   "formula": "=IF(C7=\"Yes\",D7*E7,0)",
+   "value": 0
+  },
+  "A8": {
+   "formula": null,
+   "value": "Transducer"
+  },
+  "B8": {
+   "formula": null,
+   "value": "Bought Out"
+  },
+  "C8": {
+   "formula": null,
+   "value": "No"
+  },
+  "D8": {
+   "formula": null,
+   "value": 4500.0
+  },
+  "E8": {
+   "formula": null,
+   "value": 1.0
+  },
+  "F8": {
+   "formula": "=IF(C8=\"Yes\",D8*E8,0)",
+   "value": 0
+  },
+  "G8": {
+   "formula": null,
+   "value": "Position sensor / LVDT, if applicable"
+  },
+  "A9": {
+   "formula": null,
+   "value": "Bellows"
+  },
+  "B9": {
+   "formula": null,
+   "value": "Bought Out"
+  },
+  "C9": {
+   "formula": null,
+   "value": "No"
+  },
+  "D9": {
+   "formula": null,
+   "value": 850.0
+  },
+  "E9": {
+   "formula": null,
+   "value": 1.0
+  },
+  "F9": {
+   "formula": "=IF(C9=\"Yes\",D9*E9,0)",
+   "value": 0
+  },
+  "G9": {
+   "formula": null,
+   "value": "Rod protection bellow, if applicable"
+  },
+  "A10": {
+   "formula": null,
+   "value": "Other Component 1"
+  },
+  "B10": {
+   "formula": null,
+   "value": "Bought Out"
+  },
+  "C10": {
+   "formula": null,
+   "value": "No"
+  },
+  "D10": {
+   "formula": null,
+   "value": 0.0
+  },
+  "E10": {
+   "formula": null,
+   "value": 1.0
+  },
+  "F10": {
+   "formula": "=IF(C10=\"Yes\",D10*E10,0)",
+   "value": 0
+  },
+  "G10": {
+   "formula": null,
+   "value": "Manual entry - rename as needed"
+  },
+  "A11": {
+   "formula": null,
+   "value": "Other Component 2"
+  },
+  "B11": {
+   "formula": null,
+   "value": "Bought Out"
+  },
+  "C11": {
+   "formula": null,
+   "value": "No"
+  },
+  "D11": {
+   "formula": null,
+   "value": 0.0
+  },
+  "E11": {
+   "formula": null,
+   "value": 1.0
+  },
+  "F11": {
+   "formula": "=IF(C11=\"Yes\",D11*E11,0)",
+   "value": 0
+  },
+  "G11": {
+   "formula": null,
+   "value": "Manual entry - rename as needed"
+  },
+  "A12": {
+   "formula": null,
+   "value": "Other Component 3"
+  },
+  "B12": {
+   "formula": null,
+   "value": "Bought Out"
+  },
+  "C12": {
+   "formula": null,
+   "value": "No"
+  },
+  "D12": {
+   "formula": null,
+   "value": 0.0
+  },
+  "E12": {
+   "formula": null,
+   "value": 1.0
+  },
+  "F12": {
+   "formula": "=IF(C12=\"Yes\",D12*E12,0)",
+   "value": 0
+  },
+  "G12": {
+   "formula": null,
+   "value": "Manual entry - rename as needed"
+  },
+  "A13": {
+   "formula": null,
+   "value": "Other Component 4"
+  },
+  "B13": {
+   "formula": null,
+   "value": "Bought Out"
+  },
+  "C13": {
+   "formula": null,
+   "value": "No"
+  },
+  "D13": {
+   "formula": null,
+   "value": 0.0
+  },
+  "E13": {
+   "formula": null,
+   "value": 1.0
+  },
+  "F13": {
+   "formula": "=IF(C13=\"Yes\",D13*E13,0)",
+   "value": 0
+  },
+  "G13": {
+   "formula": null,
+   "value": "Manual entry - rename as needed"
+  },
+  "A14": {
+   "formula": null,
+   "value": "Other Component 5"
+  },
+  "B14": {
+   "formula": null,
+   "value": "Bought Out"
+  },
+  "C14": {
+   "formula": null,
+   "value": "No"
+  },
+  "D14": {
+   "formula": null,
+   "value": 0.0
+  },
+  "E14": {
+   "formula": null,
+   "value": 1.0
+  },
+  "F14": {
+   "formula": "=IF(C14=\"Yes\",D14*E14,0)",
+   "value": 0
+  },
+  "G14": {
+   "formula": null,
+   "value": "Manual entry - rename as needed"
+  },
+  "A16": {
+   "formula": null,
+   "value": "TOTAL SEAL KIT COST (Rs.)"
+  },
+  "B16": {
+   "formula": "=SUMIFS(F4:F14,B4:B14,\"Seal Kit\",C4:C14,\"Yes\")",
+   "value": 0
+  },
+  "A17": {
+   "formula": null,
+   "value": "TOTAL BOUGHT OUT COST (Rs.)"
+  },
+  "B17": {
+   "formula": "=SUMIFS(F4:F14,B4:B14,\"Bought Out\",C4:C14,\"Yes\")",
+   "value": 360
+  }
+ },
+ "Assembly Painting Packing": {
+  "A1": {
+   "formula": null,
+   "value": "ASSEMBLY + PAINTING + PACKING"
+  },
+  "A2": {
+   "formula": null,
+   "value": "Finishing costs applied to the fully assembled cylinder. Painting/Packing use Process Rate Master; Assembly is labour-hour based."
+  },
+  "A4": {
+   "formula": null,
+   "value": "ASSEMBLY"
+  },
+  "A5": {
+   "formula": null,
+   "value": "Assembly Labour Hours"
+  },
+  "B5": {
+   "formula": null,
+   "value": 3.0
+  },
+  "A6": {
+   "formula": null,
+   "value": "Assembly Labour Rate (Rs./Hr)"
+  },
+  "B6": {
+   "formula": null,
+   "value": 250.0
+  },
+  "A7": {
+   "formula": null,
+   "value": "Assembly Cost (Rs.)"
+  },
+  "B7": {
+   "formula": "=B5*B6",
+   "value": 750
+  },
+  "A9": {
+   "formula": null,
+   "value": "PAINTING"
+  },
+  "A10": {
+   "formula": null,
+   "value": "Cylinder Outer Surface Area (cm2)"
+  },
+  "B10": {
+   "formula": null,
+   "value": 4500.0
+  },
+  "C10": {
+   "formula": null,
+   "value": "PI() x OD x (Stroke+Bore) approx; enter measured/derived value"
+  },
+  "A11": {
+   "formula": null,
+   "value": "Painting Rate (Rs./cm2)"
+  },
+  "B11": {
+   "formula": "=PaintingRate",
+   "value": 0.2
+  },
+  "A12": {
+   "formula": null,
+   "value": "Painting Cost (Rs.)"
+  },
+  "B12": {
+   "formula": "=B10*B11",
+   "value": 900
+  },
+  "A14": {
+   "formula": null,
+   "value": "PACKING"
+  },
+  "A15": {
+   "formula": null,
+   "value": "Packing Type"
+  },
+  "B15": {
+   "formula": null,
+   "value": "Wooden Box"
+  },
+  "A16": {
+   "formula": null,
+   "value": "Total Cylinder Weight for Packing (kg)"
+  },
+  "B16": {
+   "formula": null,
+   "value": 150.0
+  },
+  "C16": {
+   "formula": null,
+   "value": "Pull from Cost Summary total weight or enter manually"
+  },
+  "A17": {
+   "formula": null,
+   "value": "Packing Rate (Rs./kg)"
+  },
+  "B17": {
+   "formula": "=IF(B15=\"Wooden Box\",PackingWoodenRate,PackingLooseRate)",
+   "value": 15
+  },
+  "A18": {
+   "formula": null,
+   "value": "Packing Cost (Rs.)"
+  },
+  "B18": {
+   "formula": "=B16*B17",
+   "value": 2250
+  },
+  "A20": {
+   "formula": null,
+   "value": "TOTAL"
+  },
+  "A21": {
+   "formula": null,
+   "value": "TOTAL ASSEMBLY + PAINTING + PACKING COST (Rs.)"
+  },
+  "B21": {
+   "formula": "=B7+B12+B18",
+   "value": 3900
+  }
+ },
+ "Reconditioning": {
+  "A1": {
+   "formula": null,
+   "value": "RECONDITIONING - COSTING SHEET"
+  },
+  "A2": {
+   "formula": null,
+   "value": "Used when the WHOLE cylinder job is a repair / overhaul rather than new manufacture. Replacement costs flow to Cost Summary only if included below."
+  },
+  "A3": {
+   "formula": null,
+   "value": "Include this Reconditioning Cost in Cost Summary?"
+  },
+  "B3": {
+   "formula": null,
+   "value": "No"
+  },
+  "A5": {
+   "formula": null,
+   "value": "SECTION 1 - RECONDITIONING PROCESS COST (Manual / Rate Entry)"
+  },
+  "A6": {
+   "formula": null,
+   "value": "Process"
+  },
+  "B6": {
+   "formula": null,
+   "value": "Cost (Rs.)"
+  },
+  "D6": {
+   "formula": null,
+   "value": "Remarks"
+  },
+  "A7": {
+   "formula": null,
+   "value": "Inspection"
+  },
+  "B7": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A8": {
+   "formula": null,
+   "value": "Dismantling"
+  },
+  "B8": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A9": {
+   "formula": null,
+   "value": "Grinding"
+  },
+  "B9": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A10": {
+   "formula": null,
+   "value": "Dechroming"
+  },
+  "B10": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A11": {
+   "formula": null,
+   "value": "Rechroming"
+  },
+  "B11": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A12": {
+   "formula": null,
+   "value": "Honing"
+  },
+  "B12": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A13": {
+   "formula": null,
+   "value": "Seal Replacement (Labour)"
+  },
+  "B13": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A14": {
+   "formula": null,
+   "value": "Assembly"
+  },
+  "B14": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A15": {
+   "formula": null,
+   "value": "Testing"
+  },
+  "B15": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A16": {
+   "formula": null,
+   "value": "Painting"
+  },
+  "B16": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A17": {
+   "formula": null,
+   "value": "SUBTOTAL - PROCESS COST"
+  },
+  "B17": {
+   "formula": "=SUM(B7:B16)",
+   "value": 0
+  },
+  "A19": {
+   "formula": null,
+   "value": "SECTION 2 - REPLACEMENT MATERIAL"
+  },
+  "A20": {
+   "formula": null,
+   "value": "Component Replaced"
+  },
+  "B20": {
+   "formula": null,
+   "value": "Qty"
+  },
+  "C20": {
+   "formula": null,
+   "value": "Rate (Rs.)"
+  },
+  "D20": {
+   "formula": null,
+   "value": "Cost (Rs.)"
+  },
+  "A21": {
+   "formula": null,
+   "value": "Tube"
+  },
+  "B21": {
+   "formula": null,
+   "value": 0.0
+  },
+  "C21": {
+   "formula": null,
+   "value": 0.0
+  },
+  "D21": {
+   "formula": "=B21*C21",
+   "value": 0
+  },
+  "A22": {
+   "formula": null,
+   "value": "Rod"
+  },
+  "B22": {
+   "formula": null,
+   "value": 0.0
+  },
+  "C22": {
+   "formula": null,
+   "value": 0.0
+  },
+  "D22": {
+   "formula": "=B22*C22",
+   "value": 0
+  },
+  "A23": {
+   "formula": null,
+   "value": "Gland"
+  },
+  "B23": {
+   "formula": null,
+   "value": 0.0
+  },
+  "C23": {
+   "formula": null,
+   "value": 0.0
+  },
+  "D23": {
+   "formula": "=B23*C23",
+   "value": 0
+  },
+  "A24": {
+   "formula": null,
+   "value": "Piston"
+  },
+  "B24": {
+   "formula": null,
+   "value": 0.0
+  },
+  "C24": {
+   "formula": null,
+   "value": 0.0
+  },
+  "D24": {
+   "formula": "=B24*C24",
+   "value": 0
+  },
+  "A25": {
+   "formula": null,
+   "value": "Rear Eye / Rod Eye"
+  },
+  "B25": {
+   "formula": null,
+   "value": 0.0
+  },
+  "C25": {
+   "formula": null,
+   "value": 0.0
+  },
+  "D25": {
+   "formula": "=B25*C25",
+   "value": 0
+  },
+  "A26": {
+   "formula": null,
+   "value": "Bushes"
+  },
+  "B26": {
+   "formula": null,
+   "value": 0.0
+  },
+  "C26": {
+   "formula": null,
+   "value": 0.0
+  },
+  "D26": {
+   "formula": "=B26*C26",
+   "value": 0
+  },
+  "A27": {
+   "formula": null,
+   "value": "Additional Item 1"
+  },
+  "B27": {
+   "formula": null,
+   "value": 0.0
+  },
+  "C27": {
+   "formula": null,
+   "value": 0.0
+  },
+  "D27": {
+   "formula": "=B27*C27",
+   "value": 0
+  },
+  "A28": {
+   "formula": null,
+   "value": "Additional Item 2"
+  },
+  "B28": {
+   "formula": null,
+   "value": 0.0
+  },
+  "C28": {
+   "formula": null,
+   "value": 0.0
+  },
+  "D28": {
+   "formula": "=B28*C28",
+   "value": 0
+  },
+  "A29": {
+   "formula": null,
+   "value": "SUBTOTAL - REPLACEMENT MATERIAL COST"
+  },
+  "B29": {
+   "formula": "=SUM(D21:D28)",
+   "value": 0
+  },
+  "A31": {
+   "formula": null,
+   "value": "TOTAL RECONDITIONING COST"
+  },
+  "A32": {
+   "formula": null,
+   "value": "TOTAL RECONDITIONING COST (Rs.)"
+  },
+  "B32": {
+   "formula": "=B17+B29",
+   "value": 0
+  }
+ },
+ "Cost Summary": {
+  "A1": {
+   "formula": null,
+   "value": "COST SUMMARY"
+  },
+  "A2": {
+   "formula": null,
+   "value": "Cylinder Name:"
+  },
+  "B2": {
+   "formula": "=CylinderName",
+   "value": "Excavator Boom Cylinder"
+  },
+  "A3": {
+   "formula": null,
+   "value": "Inquiry No.:"
+  },
+  "B3": {
+   "formula": "=InquiryNo",
+   "value": "INQ-0001"
+  },
+  "A5": {
+   "formula": null,
+   "value": "COMPONENT COSTS (auto-pulled, Rs. for component Qty; each component sheet has its own New / Reconditioning selector)"
+  },
+  "A6": {
+   "formula": null,
+   "value": "Component"
+  },
+  "B6": {
+   "formula": null,
+   "value": "Cost (Rs.)"
+  },
+  "C6": {
+   "formula": null,
+   "value": "Remarks"
+  },
+  "A7": {
+   "formula": null,
+   "value": "Tube"
+  },
+  "B7": {
+   "formula": "=Tube_TotalCost",
+   "value": 4914.416685
+  },
+  "A8": {
+   "formula": null,
+   "value": "Piston Rod"
+  },
+  "B8": {
+   "formula": "=PistonRod_TotalCost",
+   "value": 7314.242382
+  },
+  "A9": {
+   "formula": null,
+   "value": "Cap End Cover"
+  },
+  "B9": {
+   "formula": "=CEC_TotalCost",
+   "value": "#N/A"
+  },
+  "A10": {
+   "formula": null,
+   "value": "Head End Cover"
+  },
+  "B10": {
+   "formula": "=HEC_TotalCost",
+   "value": "#N/A"
+  },
+  "A11": {
+   "formula": null,
+   "value": "Gland"
+  },
+  "B11": {
+   "formula": "=Gland_TotalCost",
+   "value": "#N/A"
+  },
+  "A12": {
+   "formula": null,
+   "value": "Cushion Bush"
+  },
+  "B12": {
+   "formula": "=CushionBush_TotalCost",
+   "value": 3798.467346
+  },
+  "A13": {
+   "formula": null,
+   "value": "Stop Tube"
+  },
+  "B13": {
+   "formula": "=StopTube_TotalCost",
+   "value": "#N/A"
+  },
+  "A14": {
+   "formula": null,
+   "value": "Rear Eye"
+  },
+  "B14": {
+   "formula": "=RearEye_TotalCost",
+   "value": "#N/A"
+  },
+  "A15": {
+   "formula": null,
+   "value": "Rod Eye"
+  },
+  "B15": {
+   "formula": "=RodEye_TotalCost",
+   "value": "#N/A"
+  },
+  "A16": {
+   "formula": null,
+   "value": "Piston"
+  },
+  "B16": {
+   "formula": "=Piston_TotalCost",
+   "value": "#N/A"
+  },
+  "A17": {
+   "formula": null,
+   "value": "Flange"
+  },
+  "B17": {
+   "formula": "=Flange_TotalCost",
+   "value": "#N/A"
+  },
+  "A18": {
+   "formula": null,
+   "value": "Trunnion"
+  },
+  "B18": {
+   "formula": "=Trunnion_TotalCost",
+   "value": 2395.2
+  },
+  "A19": {
+   "formula": null,
+   "value": "SUBTOTAL - COMPONENT MANUFACTURING COST"
+  },
+  "B19": {
+   "formula": "=SUM(B7:B18)",
+   "value": "#N/A"
+  },
+  "A21": {
+   "formula": null,
+   "value": "CYLINDER WEIGHT (auto-summed from all component sheets)"
+  },
+  "A22": {
+   "formula": null,
+   "value": "Total Cylinder Weight (Nett, all components)"
+  },
+  "B22": {
+   "formula": "=IFERROR(Tube_Weight,0)+IFERROR(PistonRod_Weight,0)+IFERROR(CEC_Weight,0)+IFERROR(HEC_Weight,0)+IFERROR(Gland_Weight,0)+IFERROR(CushionBush_Weight,0)+IFERROR(StopTube_Weight,0)+IFERROR(RearEye_Weight,0)+IFERROR(RodEye_Weight,0)+IFERROR(Piston_Weight,0)+IFERROR(Flange_Weight,0)+IFERROR(Trunnion_Weight,0)",
+   "value": 76.54190031
+  },
+  "C22": {
+   "formula": null,
+   "value": "kg"
+  },
+  "A23": {
+   "formula": null,
+   "value": "Weight Adjustment / Allowance (manual, e.g. paint, fittings)"
+  },
+  "B23": {
+   "formula": null,
+   "value": 0.0
+  },
+  "C23": {
+   "formula": null,
+   "value": "kg - optional manual add-on"
+  },
+  "A24": {
+   "formula": null,
+   "value": "TOTAL CYLINDER WEIGHT (Rs. quoted on, for records)"
+  },
+  "B24": {
+   "formula": "=B22+B23",
+   "value": 76.54190031
+  },
+  "C24": {
+   "formula": null,
+   "value": "kg"
+  },
+  "A26": {
+   "formula": null,
+   "value": "BOUGHT OUT / SEAL / FINISHING COSTS"
+  },
+  "A27": {
+   "formula": null,
+   "value": "Seal Kit Cost"
+  },
+  "B27": {
+   "formula": "=TotalSealKitCost",
+   "value": 0
+  },
+  "A28": {
+   "formula": null,
+   "value": "Bought Out Items Cost"
+  },
+  "B28": {
+   "formula": "=TotalBoughtOutCost",
+   "value": 360
+  },
+  "A29": {
+   "formula": null,
+   "value": "Assembly Cost"
+  },
+  "B29": {
+   "formula": "=AssemblyCost",
+   "value": 750
+  },
+  "A30": {
+   "formula": null,
+   "value": "Painting Cost"
+  },
+  "B30": {
+   "formula": "=PaintingCost",
+   "value": 900
+  },
+  "A31": {
+   "formula": null,
+   "value": "Packing Cost"
+  },
+  "B31": {
+   "formula": "=PackingCost",
+   "value": 2250
+  },
+  "A32": {
+   "formula": null,
+   "value": "SUBTOTAL - OTHER COSTS"
+  },
+  "B32": {
+   "formula": "=SUM(B27:B31)",
+   "value": 4260
+  },
+  "A34": {
+   "formula": null,
+   "value": "RECONDITIONING (whole-cylinder overhaul job - included only if flagged 'Yes' on Reconditioning sheet)"
+  },
+  "A35": {
+   "formula": null,
+   "value": "Reconditioning Cost"
+  },
+  "B35": {
+   "formula": "=IF(ReconditioningInclude=\"Yes\",Reconditioning_TotalCost,0)",
+   "value": 0
+  },
+  "A37": {
+   "formula": null,
+   "value": "TOTAL MANUFACTURING COST"
+  },
+  "A38": {
+   "formula": null,
+   "value": "TOTAL MANUFACTURING COST (Rs.)"
+  },
+  "B38": {
+   "formula": "=B19+B32+B35",
+   "value": "#N/A"
+  }
+ },
+ "Actual Cost Tracker": {
+  "A1": {
+   "formula": null,
+   "value": "ACTUAL COST TRACKER"
+  },
+  "A2": {
+   "formula": null,
+   "value": "Production team enters ACTUAL costs (yellow). Estimated values are pulled automatically from each component sheet. Variance is calculated automatically."
+  },
+  "A4": {
+   "formula": null,
+   "value": "Component"
+  },
+  "B4": {
+   "formula": null,
+   "value": "Est. Material Cost"
+  },
+  "C4": {
+   "formula": null,
+   "value": "Actual Material Cost"
+  },
+  "D4": {
+   "formula": null,
+   "value": "Est. Process Cost"
+  },
+  "E4": {
+   "formula": null,
+   "value": "Actual Process Cost"
+  },
+  "F4": {
+   "formula": null,
+   "value": "Variance Rs."
+  },
+  "G4": {
+   "formula": null,
+   "value": "Variance %"
+  },
+  "A5": {
+   "formula": null,
+   "value": "Tube"
+  },
+  "B5": {
+   "formula": "=Tube_MaterialCost",
+   "value": 762.1280197
+  },
+  "C5": {
+   "formula": null,
+   "value": 0.0
+  },
+  "D5": {
+   "formula": "=Tube_ProcessCost",
+   "value": 4152.288666
+  },
+  "E5": {
+   "formula": null,
+   "value": 0.0
+  },
+  "F5": {
+   "formula": "=(C5+E5)-(B5+D5)",
+   "value": -4914.416685
+  },
+  "G5": {
+   "formula": "=IF((B5+D5)=0,0,F5/(B5+D5))",
+   "value": -1
+  },
+  "A6": {
+   "formula": null,
+   "value": "Piston Rod"
+  },
+  "B6": {
+   "formula": "=PistonRod_MaterialCost",
+   "value": 2507.428656
+  },
+  "C6": {
+   "formula": null,
+   "value": 0.0
+  },
+  "D6": {
+   "formula": "=PistonRod_ProcessCost",
+   "value": 4806.813726
+  },
+  "E6": {
+   "formula": null,
+   "value": 0.0
+  },
+  "F6": {
+   "formula": "=(C6+E6)-(B6+D6)",
+   "value": -7314.242382
+  },
+  "G6": {
+   "formula": "=IF((B6+D6)=0,0,F6/(B6+D6))",
+   "value": -1
+  },
+  "A7": {
+   "formula": null,
+   "value": "Cap End Cover"
+  },
+  "B7": {
+   "formula": "=CEC_MaterialCost",
+   "value": "#N/A"
+  },
+  "C7": {
+   "formula": null,
+   "value": 0.0
+  },
+  "D7": {
+   "formula": "=CEC_ProcessCost",
+   "value": 545
+  },
+  "E7": {
+   "formula": null,
+   "value": 0.0
+  },
+  "F7": {
+   "formula": "=(C7+E7)-(B7+D7)",
+   "value": "#N/A"
+  },
+  "G7": {
+   "formula": "=IF((B7+D7)=0,0,F7/(B7+D7))",
+   "value": "#N/A"
+  },
+  "A8": {
+   "formula": null,
+   "value": "Head End Cover"
+  },
+  "B8": {
+   "formula": "=HEC_MaterialCost",
+   "value": "#N/A"
+  },
+  "C8": {
+   "formula": null,
+   "value": 0.0
+  },
+  "D8": {
+   "formula": "=HEC_ProcessCost",
+   "value": 595
+  },
+  "E8": {
+   "formula": null,
+   "value": 0.0
+  },
+  "F8": {
+   "formula": "=(C8+E8)-(B8+D8)",
+   "value": "#N/A"
+  },
+  "G8": {
+   "formula": "=IF((B8+D8)=0,0,F8/(B8+D8))",
+   "value": "#N/A"
+  },
+  "A9": {
+   "formula": null,
+   "value": "Gland"
+  },
+  "B9": {
+   "formula": "=Gland_MaterialCost",
+   "value": "#N/A"
+  },
+  "C9": {
+   "formula": null,
+   "value": 0.0
+  },
+  "D9": {
+   "formula": "=Gland_ProcessCost",
+   "value": 445.1398188
+  },
+  "E9": {
+   "formula": null,
+   "value": 0.0
+  },
+  "F9": {
+   "formula": "=(C9+E9)-(B9+D9)",
+   "value": "#N/A"
+  },
+  "G9": {
+   "formula": "=IF((B9+D9)=0,0,F9/(B9+D9))",
+   "value": "#N/A"
+  },
+  "A10": {
+   "formula": null,
+   "value": "Cushion Bush"
+  },
+  "B10": {
+   "formula": "=CushionBush_MaterialCost",
+   "value": 3473.327528
+  },
+  "C10": {
+   "formula": null,
+   "value": 0.0
+  },
+  "D10": {
+   "formula": "=CushionBush_ProcessCost",
+   "value": 325.1398188
+  },
+  "E10": {
+   "formula": null,
+   "value": 0.0
+  },
+  "F10": {
+   "formula": "=(C10+E10)-(B10+D10)",
+   "value": -3798.467346
+  },
+  "G10": {
+   "formula": "=IF((B10+D10)=0,0,F10/(B10+D10))",
+   "value": -1
+  },
+  "A11": {
+   "formula": null,
+   "value": "Stop Tube"
+  },
+  "B11": {
+   "formula": "=StopTube_MaterialCost",
+   "value": "#N/A"
+  },
+  "C11": {
+   "formula": null,
+   "value": 0.0
+  },
+  "D11": {
+   "formula": "=StopTube_ProcessCost",
+   "value": 189.75
+  },
+  "E11": {
+   "formula": null,
+   "value": 0.0
+  },
+  "F11": {
+   "formula": "=(C11+E11)-(B11+D11)",
+   "value": "#N/A"
+  },
+  "G11": {
+   "formula": "=IF((B11+D11)=0,0,F11/(B11+D11))",
+   "value": "#N/A"
+  },
+  "A12": {
+   "formula": null,
+   "value": "Rear Eye"
+  },
+  "B12": {
+   "formula": "=RearEye_MaterialCost",
+   "value": "#N/A"
+  },
+  "C12": {
+   "formula": null,
+   "value": 0.0
+  },
+  "D12": {
+   "formula": "=RearEye_ProcessCost",
+   "value": "#N/A"
+  },
+  "E12": {
+   "formula": null,
+   "value": 0.0
+  },
+  "F12": {
+   "formula": "=(C12+E12)-(B12+D12)",
+   "value": "#N/A"
+  },
+  "G12": {
+   "formula": "=IF((B12+D12)=0,0,F12/(B12+D12))",
+   "value": "#N/A"
+  },
+  "A13": {
+   "formula": null,
+   "value": "Rod Eye"
+  },
+  "B13": {
+   "formula": "=RodEye_MaterialCost",
+   "value": "#N/A"
+  },
+  "C13": {
+   "formula": null,
+   "value": 0.0
+  },
+  "D13": {
+   "formula": "=RodEye_ProcessCost",
+   "value": "#N/A"
+  },
+  "E13": {
+   "formula": null,
+   "value": 0.0
+  },
+  "F13": {
+   "formula": "=(C13+E13)-(B13+D13)",
+   "value": "#N/A"
+  },
+  "G13": {
+   "formula": "=IF((B13+D13)=0,0,F13/(B13+D13))",
+   "value": "#N/A"
+  },
+  "A14": {
+   "formula": null,
+   "value": "Piston"
+  },
+  "B14": {
+   "formula": "=Piston_MaterialCost",
+   "value": "#N/A"
+  },
+  "C14": {
+   "formula": null,
+   "value": 0.0
+  },
+  "D14": {
+   "formula": "=Piston_ProcessCost",
+   "value": "#N/A"
+  },
+  "E14": {
+   "formula": null,
+   "value": 0.0
+  },
+  "F14": {
+   "formula": "=(C14+E14)-(B14+D14)",
+   "value": "#N/A"
+  },
+  "G14": {
+   "formula": "=IF((B14+D14)=0,0,F14/(B14+D14))",
+   "value": "#N/A"
+  },
+  "A15": {
+   "formula": null,
+   "value": "Flange"
+  },
+  "B15": {
+   "formula": "=Flange_MaterialCost",
+   "value": "#N/A"
+  },
+  "C15": {
+   "formula": null,
+   "value": 0.0
+  },
+  "D15": {
+   "formula": "=Flange_ProcessCost",
+   "value": 595
+  },
+  "E15": {
+   "formula": null,
+   "value": 0.0
+  },
+  "F15": {
+   "formula": "=(C15+E15)-(B15+D15)",
+   "value": "#N/A"
+  },
+  "G15": {
+   "formula": "=IF((B15+D15)=0,0,F15/(B15+D15))",
+   "value": "#N/A"
+  },
+  "A16": {
+   "formula": null,
+   "value": "Trunnion"
+  },
+  "B16": {
+   "formula": "=Trunnion_MaterialCost",
+   "value": 1067.6
+  },
+  "C16": {
+   "formula": null,
+   "value": 0.0
+  },
+  "D16": {
+   "formula": "=Trunnion_ProcessCost",
+   "value": 130
+  },
+  "E16": {
+   "formula": null,
+   "value": 0.0
+  },
+  "F16": {
+   "formula": "=(C16+E16)-(B16+D16)",
+   "value": -1197.6
+  },
+  "G16": {
+   "formula": "=IF((B16+D16)=0,0,F16/(B16+D16))",
+   "value": -1
+  },
+  "A17": {
+   "formula": null,
+   "value": "TOTAL"
+  },
+  "B17": {
+   "formula": "=SUM(B5:B16)",
+   "value": "#N/A"
+  },
+  "C17": {
+   "formula": "=SUM(C5:C16)",
+   "value": 0
+  },
+  "D17": {
+   "formula": "=SUM(D5:D16)",
+   "value": "#N/A"
+  },
+  "E17": {
+   "formula": "=SUM(E5:E16)",
+   "value": 0
+  },
+  "F17": {
+   "formula": "=SUM(F5:F16)",
+   "value": "#N/A"
+  },
+  "G17": {
+   "formula": "=IF(SUM(B5:B16,D5:D16)=0,0,F17/SUM(B5:B16,D5:D16))",
+   "value": "#N/A"
+  },
+  "A19": {
+   "formula": null,
+   "value": "OVERALL ACTUAL COST ENTRY"
+  },
+  "A20": {
+   "formula": null,
+   "value": "Actual Vendor Cost (Rs.)"
+  },
+  "B20": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A21": {
+   "formula": null,
+   "value": "Actual Welding Cost (Rs.)"
+  },
+  "B21": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A22": {
+   "formula": null,
+   "value": "Actual Assembly Cost (Rs.)"
+  },
+  "B22": {
+   "formula": null,
+   "value": 0.0
+  },
+  "A23": {
+   "formula": null,
+   "value": "Actual Total Manufacturing Cost (Rs.)"
+  },
+  "B23": {
+   "formula": "=C17+E17+B20+B21+B22",
+   "value": 0
+  },
+  "A24": {
+   "formula": null,
+   "value": "Estimated Total Manufacturing Cost (Rs.)"
+  },
+  "B24": {
+   "formula": "=TotalManufacturingCost",
+   "value": "#N/A"
+  },
+  "A25": {
+   "formula": null,
+   "value": "Overall Variance Rs."
+  },
+  "B25": {
+   "formula": "=B23-B24",
+   "value": "#N/A"
+  },
+  "A26": {
+   "formula": null,
+   "value": "Overall Variance %"
+  },
+  "B26": {
+   "formula": "=IF(B24=0,0,(B23-B24)/B24)",
+   "value": "#N/A"
+  }
+ },
+ "Cylinder Database": {
+  "A1": {
+   "formula": null,
+   "value": "CYLINDER DATABASE (Historical Costing Records)"
+  },
+  "A2": {
+   "formula": null,
+   "value": "Row 5 auto-pulls the CURRENT job from Inquiry Input / Cost Summary / Actual Cost Tracker. Copy row 5, Paste Special > Values into a new row below to permanently log this job to history."
+  },
+  "A4": {
+   "formula": null,
+   "value": "Cylinder ID"
+  },
+  "B4": {
+   "formula": null,
+   "value": "Inquiry No"
+  },
+  "C4": {
+   "formula": null,
+   "value": "Customer"
+  },
+  "D4": {
+   "formula": null,
+   "value": "Cylinder Name"
+  },
+  "E4": {
+   "formula": null,
+   "value": "Bore (mm)"
+  },
+  "F4": {
+   "formula": null,
+   "value": "Rod (mm)"
+  },
+  "G4": {
+   "formula": null,
+   "value": "Stroke (mm)"
+  },
+  "H4": {
+   "formula": null,
+   "value": "Mounting"
+  },
+  "I4": {
+   "formula": null,
+   "value": "Estimated Cost"
+  },
+  "J4": {
+   "formula": null,
+   "value": "Quoted Price"
+  },
+  "K4": {
+   "formula": null,
+   "value": "Actual Cost"
+  },
+  "L4": {
+   "formula": null,
+   "value": "Margin %"
+  },
+  "M4": {
+   "formula": null,
+   "value": "Date"
+  },
+  "A5": {
+   "formula": "=CONCATENATE(\"CYL-\",TEXT(InquiryDate,\"YYYYMMDD\"))",
+   "value": "CYL-20260814"
+  },
+  "B5": {
+   "formula": "=InquiryNo",
+   "value": "INQ-0001"
+  },
+  "C5": {
+   "formula": "=CustomerName",
+   "value": "Sample Customer Pvt Ltd"
+  },
+  "D5": {
+   "formula": "=CylinderName",
+   "value": "Excavator Boom Cylinder"
+  },
+  "E5": {
+   "formula": "=Bore",
+   "value": 100
+  },
+  "F5": {
+   "formula": "=RodDia",
+   "value": 56
+  },
+  "G5": {
+   "formula": "=Stroke",
+   "value": 800
+  },
+  "H5": {
+   "formula": "=Mounting",
+   "value": "Clevis"
+  },
+  "I5": {
+   "formula": "=TotalManufacturingCost",
+   "value": "#N/A"
+  },
+  "J5": {
+   "formula": null,
+   "value": 0.0
+  },
+  "K5": {
+   "formula": "=IFERROR(ActualTotalCost,0)",
+   "value": 0
+  },
+  "L5": {
+   "formula": "=IF(J5=0,0,(J5-I5)/J5)",
+   "value": 0
+  },
+  "M5": {
+   "formula": "=InquiryDate",
+   "value": "2026-08-14 00:00:00"
+  },
+  "A18": {
+   "formula": null,
+   "value": "Quoted Price (column J) is entered manually once negotiated with the customer - no automatic profit % is applied anywhere in this workbook."
+  },
+  "A19": {
+   "formula": null,
+   "value": "Keep this Database sheet as your master job-history record. When you copy this workbook for a new cylinder job, you can remove this sheet from the per-job copy and keep it only in your master tracking file."
+  }
+ },
+ "Final Output": {
+  "A1": {
+   "formula": null,
+   "value": "ENQ NO "
+  },
+  "B1": {
+   "formula": "=InquiryNo",
+   "value": "INQ-0001"
+  },
+  "A2": {
+   "formula": null,
+   "value": "COST SHEET NO "
+  },
+  "A3": {
+   "formula": null,
+   "value": "DATE :"
+  },
+  "B3": {
+   "formula": "=InquiryDate",
+   "value": "2026-08-14 00:00:00"
+  },
+  "A4": {
+   "formula": null,
+   "value": "CUSTOMER:"
+  },
+  "B4": {
+   "formula": "=CustomerName",
+   "value": "Sample Customer Pvt Ltd"
+  },
+  "A5": {
+   "formula": null,
+   "value": "CYLINDER TYPE"
+  },
+  "B5": {
+   "formula": "=CylinderName",
+   "value": "Excavator Boom Cylinder"
+  },
+  "A6": {
+   "formula": null,
+   "value": "SPECIFICATION :"
+  },
+  "B6": {
+   "formula": "=\"Bore \"&Bore&\"mm x Rod \"&RodDia&\"mm x Stroke \"&Stroke&\"mm | \"&Mounting&\" | \"&WorkingPressure&\" bar\"",
+   "value": "Bore 100mm x Rod 56mm x Stroke 800mm | Clevis | 250 bar"
+  },
+  "A7": {
+   "formula": null,
+   "value": "MATERIAL : "
+  },
+  "C7": {
+   "formula": null,
+   "value": "(primary material - see component sheets for full BOM)"
+  },
+  "A8": {
+   "formula": null,
+   "value": "WT OF CYLINDER : "
+  },
+  "B8": {
+   "formula": "=TotalCylinderWeight",
+   "value": 76.54190031
+  },
+  "C8": {
+   "formula": null,
+   "value": "kg"
+  },
+  "A9": {
+   "formula": null,
+   "value": "QTY :"
+  },
+  "B9": {
+   "formula": null,
+   "value": 1.0
+  },
+  "A10": {
+   "formula": null,
+   "value": "SL NO"
+  },
+  "B10": {
+   "formula": null,
+   "value": "DESCRIPTION"
+  },
+  "C10": {
+   "formula": null,
+   "value": "RATE"
+  },
+  "D10": {
+   "formula": null,
+   "value": "REMARKS"
+  },
+  "A11": {
+   "formula": null,
+   "value": 1.0
+  },
+  "B11": {
+   "formula": null,
+   "value": "RAW MATERIAL COST"
+  },
+  "C11": {
+   "formula": "=IFERROR(Tube_MaterialCost,0)+IFERROR(PistonRod_MaterialCost,0)+IFERROR(CEC_MaterialCost,0)+IFERROR(HEC_MaterialCost,0)+IFERROR(Gland_MaterialCost,0)+IFERROR(CushionBush_MaterialCost,0)+IFERROR(StopTube_MaterialCost,0)+IFERROR(RearEye_MaterialCost,0)+IFERROR(RodEye_MaterialCost,0)+IFERROR(Piston_MaterialCost,0)+IFERROR(Flange_MaterialCost,0)+IFERROR(Trunnion_MaterialCost,0)",
+   "value": 7810.484203
+  },
+  "A12": {
+   "formula": null,
+   "value": 2.0
+  },
+  "B12": {
+   "formula": null,
+   "value": "PROCESS COST"
+  },
+  "C12": {
+   "formula": "=IFERROR(Tube_ProcessCost,0)+IFERROR(PistonRod_ProcessCost,0)+IFERROR(CEC_ProcessCost,0)+IFERROR(HEC_ProcessCost,0)+IFERROR(Gland_ProcessCost,0)+IFERROR(CushionBush_ProcessCost,0)+IFERROR(StopTube_ProcessCost,0)+IFERROR(RearEye_ProcessCost,0)+IFERROR(RodEye_ProcessCost,0)+IFERROR(Piston_ProcessCost,0)+IFERROR(Flange_ProcessCost,0)+IFERROR(Trunnion_ProcessCost,0)",
+   "value": 11784.13203
+  },
+  "A13": {
+   "formula": null,
+   "value": 3.0
+  },
+  "B13": {
+   "formula": null,
+   "value": "BOC"
+  },
+  "C13": {
+   "formula": "=TotalBoughtOutCost",
+   "value": 360
+  },
+  "A14": {
+   "formula": null,
+   "value": 5.0
+  },
+  "B14": {
+   "formula": null,
+   "value": "SEALS COST"
+  },
+  "C14": {
+   "formula": "=TotalSealKitCost",
+   "value": 0
+  },
+  "A15": {
+   "formula": null,
+   "value": 6.0
+  },
+  "B15": {
+   "formula": null,
+   "value": " PACKING,ASSLY,TESTING"
+  },
+  "C15": {
+   "formula": "=AssemblyPaintingPackingTotal",
+   "value": 3900
+  },
+  "B16": {
+   "formula": null,
+   "value": "TOTAL / CYLINDER  COST"
+  },
+  "C16": {
+   "formula": "=SUM(C11:C15)",
+   "value": 23854.61623
+  }
+ }
+}

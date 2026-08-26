@@ -402,7 +402,7 @@ was **present in the workbook and absent from this specification**. The
 workbook ranks above this document, so where they differ the workbook
 governs and this section records the correction.
 
-Evidence: `hispl-v2/source/EXTRACTED_FORMULAS.md` (all 456 formulas with
+Evidence: `hispl-v2/source/EXTRACTED_FORMULAS.md` (all 436 formulas with
 cached values), `RECONCILIATION.md`, `STRUCTURE_MAP.md`.
 
 ## A1 — The weld length formula

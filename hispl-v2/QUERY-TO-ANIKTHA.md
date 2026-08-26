@@ -16,9 +16,9 @@ against the reference document and the cost sheet. The workbook is a good
 spec — the process routing, rate cards and welding logic are all clear
 enough to build from.
 
-Seven things below. The first two block us. The third is a set of
+Eight things below. The first two block us. The third is a set of
 defects in the workbook that you'll want to fix regardless — it does not
-currently produce a total. The last four are short data questions.
+currently produce a total. The last five are short data questions.
 
 Each is answerable in a sentence.
 
@@ -42,9 +42,15 @@ Complete cylinder: **Rs 25,167** — using the workbook's welding formula,
 and mapping the eight `MS-` grades to the real ones (see question 3a;
 without that mapping the workbook produces no total at all).
 
-The engine is reading your logic correctly. Everything below is about
-what the workbook doesn't contain, not about whether we've understood
-what it does.
+**What this demonstrates is that the engine is correct — not that the
+numbers are real.** Some of the sample's dimensions look like
+placeholders rather than a measured cylinder (question 8). Reproducing
+them exactly proves we compute your formulas the way you do; it does not
+prove the cylinder was ever built. Both are worth having, but they are
+different claims.
+
+Everything below is about what the workbook doesn't contain, not about
+whether we've understood what it does.
 
 One number from that run matters for question 1: **all twelve components
 weigh 127.59 kg, where the tube and rod alone weigh 38.46 kg.** The
@@ -92,6 +98,38 @@ expected — Rs 789, Rs 839 and Rs 834, about 3% each.
 > with?** Those alone would take us from 1.4% to roughly half the
 > cylinder. This is one cylinder, so if the ranking looks wrong for your
 > typical job, tell us and we will follow yours.
+
+### 1d. Why we need three or four bores, not one
+
+This is the part worth a minute, because it decides how much work we are
+asking for.
+
+Your sample has a Cap End Cover Finished OD of **220 mm at bore 100**.
+That is one data point, and every plausible rule fits it exactly:
+
+| Rule | b100 | b125 | b160 | b200 |
+|---|---|---|---|---|
+| 2.2 x bore | 220 | 275 | 352 | 440 |
+| bore + 120 | 220 | 245 | 280 | 320 |
+| 1.8 x bore + 40 | 220 | 265 | 328 | 400 |
+| 2 x bore + 20 | 220 | 270 | 340 | 420 |
+
+All four agree at bore 100 and diverge from there. In material cost for
+that one cover, at 60 mm thick in C45:
+
+| | b100 | b125 | b160 | b200 |
+|---|---|---|---|---|
+| lowest | Rs 1,182 | Rs 1,466 | Rs 1,914 | Rs 2,500 |
+| highest | Rs 1,182 | Rs 1,846 | Rs 3,025 | Rs 4,727 |
+| spread | — | Rs 381 | Rs 1,111 | **Rs 2,227** |
+
+At bore 200 the candidates differ by **1.89x** on that component alone,
+and nothing in the workbook indicates which is right.
+
+> **So the ask is three or four bores across your range, not one.** With
+> a single point every rule fits by definition. With four, most stop
+> fitting. That is the difference between a standard and a guess, and we
+> would rather ask you for more data than quietly pick one of the four.
 
 ### 1b. Who populates them?
 
@@ -326,6 +364,42 @@ does not mention Job Type anywhere.
 
 We have built to the document's ten. Adding an eleventh is easy if it
 belongs.
+
+---
+
+## 8. Is the sample cylinder real, or placeholders?
+
+Several components in the sample share dimensions in ways that a built
+cylinder would not:
+
+| Sheet | Dia | Width | Height | Thickness | 5th |
+|---|---|---|---|---|---|
+| Cap End Cover | 100 | 160 | 100 | 60 | 220 (Finished OD) |
+| Head End Cover | 100 | 160 | 100 | 60 | 220 (Finished OD) |
+| Rod Eye | 100 | 160 | 100 | 60 | 56 (Pin Hole) |
+
+The Cap End Cover and Head End Cover are **identical on all five
+values**, and the Rod Eye shares the first four. Separately:
+
+| Sheet | OD | ID | Length |
+|---|---|---|---|
+| Gland | 130 | 57 | 70 |
+| Cushion Bush | 130 | 57 | 70 |
+
+Also identical.
+
+A cap end cover and a head end cover cannot be the same part — the head
+end has to carry the gland bore for the rod to pass through, and the cap
+end is closed. A gland and a cushion bush are not the same part either.
+
+> **Are these placeholder values typed in to make the sheet compute, or
+> dimensions from a real job?**
+
+It does not affect whether our engine is right — we reproduce your
+arithmetic either way. It affects what the sample can be used for. If
+they are placeholders, the sample cannot serve as a reference cylinder,
+and it is a further reason we need real dimensions at three or four
+bores (question 1d).
 
 ---
 
