@@ -99,9 +99,14 @@ don't, the tool asks the estimator for those dimensions rather than
 inventing them, which is what your own document instructs. What we
 cannot do is guess.
 
-There is a working preview that makes this concrete: it lists all 52
+There is a working preview that makes this concrete — it lists all 52
 dimensions it needs, by component and by your own cell reference, and
-shows what it can already compute without them.
+shows what it can already compute without them:
+
+**https://aew-costing-erp.pages.dev/products/costing/preview**
+
+It isn't linked from anywhere and isn't indexed, so it won't be seen by
+anyone you don't send it to. Worth a look before we speak.
 
 **This might be faster on a call — twenty minutes with whoever does the
 estimating would probably settle it.** A written answer to "do standards
@@ -316,8 +321,11 @@ quote nobody can explain six months later.
 
 ## What we're doing meanwhile
 
-- Everything is built from the workbook, not from the reference document.
-  Where the two disagree, the workbook wins.
+- Every number comes from the workbook — the document's tables were
+  mangled in export, so we don't trust its figures. But the document is
+  the higher authority on what the tool should *do*, which is why
+  questions 1 and 2 come to you rather than us picking the workbook's
+  answer.
 - Nothing is guessed. Any dimension we can't derive from an approved rule
   will be shown as **ENGINEERING INPUT REQUIRED** rather than filled with
   a plausible-looking number.
