@@ -381,12 +381,37 @@ implementation this pass.
 
 ### EXTRA (in the spec, absent from the workbook)
 
-1. **Geometry derivation from the 11 inputs.** `SPECIFICATION.md` §7
-   states that changing Bore, Tube OD, Stroke or Rod Diameter *"must
-   cascade"* to all dependent dimensions. **No such cascade exists in the
-   workbook.** This is a v2 design goal, correctly stated as a
-   requirement — but it must not be read as transcribed HISPL logic,
-   because there is none.
+1. ~~**Geometry derivation from the 11 inputs.**~~ **CORRECTION — this
+   is not an EXTRA.** It is a genuine document-vs-workbook disagreement,
+   and it belongs in that category, not this one.
+
+   I first logged the cascade requirement as possibly invented in
+   `SPECIFICATION.md`. It is not. It is in Aniktha's reference document
+   verbatim:
+
+   > "Changing Bore, Tube OD, Stroke or Rod Diameter must cascade to
+   > dependent geometry and costing."
+
+   **No such cascade exists in the workbook**, so the document and the
+   workbook contradict each other on the central design question. Under
+   rule 5 that is a finding to report, not a call to make alone — it is
+   question 1 to HISPL.
+
+   Two neighbouring lines in the same document sharpen it:
+
+   > "Do not invent missing geometry values. Missing engineering
+   > dimensions must be marked ENGINEERING INPUT REQUIRED."
+
+   — which is precisely the behaviour `engine.js` implements, so the
+   document already sanctions the fallback; and
+
+   > "Maintain source/basis and confidence for **future** geometry
+   > standards."
+
+   — which reads as though the standards are still to be established.
+   Combined with a workbook in which every dimension is typed, the
+   likeliest reading is that no written standard exists yet. That is a
+   reading, not a conclusion, and HISPL must confirm it.
 2. **`rawTubeID = Bore + Tube Boring Allowance`** (`geometryRules` in
    `hispl-masters.json`). The Tube sheet has **no Raw ID input at all** —
    only Raw OD, Finished OD, Finished ID. The rule describes a quantity

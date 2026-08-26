@@ -623,7 +623,7 @@ Disagreements found so far, all reported rather than resolved:
 |---|---|---|---|
 | Honing rates | 300 / 400 / 550 / 700 | 0.30 / 0.40 Rs/cm² | Workbook used; document's table is the mangled turning card |
 | Welding method | "later approved instruction: Rs 14 per inch per bead" | full formula, Rs 312 per 108 mm weld | **Unresolved** — held behind `weldingStatus()`, question 2 to HISPL |
-| Geometry cascade | §7: changing bore "must cascade" to dependent dimensions | no derivation exists; every dimension typed | **Unresolved** — question 1 to HISPL; all dimensions surface `ENGINEERING INPUT REQUIRED` |
+| Geometry cascade | "Changing Bore, Tube OD, Stroke or Rod Diameter must cascade to dependent geometry and costing" — verified verbatim in the .docx | no derivation exists anywhere; every dimension typed by the estimator | **Unresolved** — question 1 to HISPL. The same document also says "do not invent missing geometry values… mark ENGINEERING INPUT REQUIRED" and refers to "future geometry standards", so the fallback is already sanctioned |
 
 ## What the test enforces
 

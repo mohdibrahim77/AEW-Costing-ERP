@@ -17,8 +17,9 @@ enough to build from, and the engine already reproduces your own cached
 figures where we have the dimensions (your Cushion Bush sheet comes out
 at Rs 3,798 against your Rs 3,798.47).
 
-Six things need your answer first. The first three block us; the rest are
-data issues you'll want to know about regardless.
+Six things below. The first two block us. The third is a set of defects
+in the workbook that you'll want to fix regardless — it does not
+currently produce a total. The last three are data questions.
 
 Each is answerable in a sentence.
 
@@ -26,7 +27,43 @@ Each is answerable in a sentence.
 
 ## 1. Do written geometry standards exist? — **blocks everything**
 
-This is the big one. We've now measured it rather than guessed at it.
+Your reference document and your workbook disagree on this, and it is
+the central question for the whole build.
+
+**Your reference document says:**
+
+> "Changing Bore, Tube OD, Stroke or Rod Diameter must cascade to
+> dependent geometry and costing."
+
+**Your workbook derives no dimension from any of them.** We checked all
+24 sheets. Bore, Rod and Stroke are referenced 16 times, every one of
+them for a label or a database record. Tube Raw OD 110, Finished OD 108,
+Finished ID 100.4, Length 900 — all typed in by hand.
+
+So:
+
+> **Which is the intent — is the cascade something that already exists
+> and we haven't found it, something you want built, or something the
+> estimator does in his head?**
+
+Three lines above the cascade requirement, the same document says:
+
+> "Do not invent missing geometry values. Missing engineering dimensions
+> must be marked ENGINEERING INPUT REQUIRED."
+
+That is exactly what we have built, so we are not proposing a change of
+direction. And two lines below it:
+
+> "Maintain source/basis and confidence for **future** geometry
+> standards."
+
+which reads as though the standards are still to be established. If that
+is right, we would rather hear it plainly than keep looking for a
+document that was never written.
+
+### Why it matters this much
+
+We have now measured it rather than guessed at it.
 
 We ran all 295 cylinders from your cost sheet through the engine and
 compared against what you actually charged. The tool comes in about
@@ -46,28 +83,17 @@ the rod. It cannot compute the covers, gland, piston, eyes, bushes or
 trunnion — and it cannot compute them because there is nothing to
 compute them *from*.
 
-In the workbook, **every component dimension is typed in by hand.** Tube
-Raw OD 110, Finished OD 108, Finished ID 100.4, Length 900 — all typed.
-We checked all 24 sheets: Bore, Rod and Stroke are referenced 16 times,
-every one of them for a label or a database record. Not one formula
-derives a dimension from them.
+To show how little the rates matter here: correcting them alone would
+move a median quote from Rs 19,197 to Rs 19,672, against a real figure
+of Rs 55,350. It barely moves. The mass is the whole gap, and no rate
+change reaches it.
 
-So the question is not "please send us the standards." It is:
-
-> **Do documented standards exist for deriving component dimensions from
-> bore, rod and stroke — or does the estimator work from experience and
-> judgement?**
-
-Either answer is fine and we'll build accordingly. What we can't do is
-guess: correcting the rates alone would move a median quote from
-Rs 19,197 to Rs 19,672, against a real figure of Rs 55,350. It barely
-moves. The mass is the whole gap, and no rate change reaches it.
-
-If standards *do* exist, even partially — tube OD by bore, boring
-allowance, tube length vs stroke, rod raw bar sizing — anything you have
-is useful. If they don't, the tool will ask the estimator for those
-dimensions rather than invent them. That is the honest behaviour, but it
-changes the design significantly, so we need to know now.
+Any answer is workable and we'll build accordingly. If standards *do*
+exist, even partially — tube OD by bore, boring allowance, tube length
+vs stroke, rod raw bar sizing — anything you have is useful. If they
+don't, the tool asks the estimator for those dimensions rather than
+inventing them, which is what your own document instructs. What we
+cannot do is guess.
 
 There is a working preview that makes this concrete: it lists all 52
 dimensions it needs, by component and by your own cell reference, and
