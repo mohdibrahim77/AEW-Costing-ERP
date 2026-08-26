@@ -1,5 +1,13 @@
 # Costing v2 — questions before we build
 
+> **Two things are blocking us.** (1) Do written standards exist for
+> deriving component dimensions from bore, rod and stroke, or does the
+> estimator work from experience? (2) Is welding costed by the workbook
+> formula or the later Rs 14 per inch per bead instruction?
+>
+> Everything else below is a data issue you'll want to know about, but
+> it isn't holding up work.
+
 Aniktha,
 
 We've extracted every formula from `Trunion Included.xlsx` and checked it
@@ -63,8 +71,14 @@ changes the design significantly, so we need to know now.
 
 There is a working preview that makes this concrete: it lists all 52
 dimensions it needs, by component and by your own cell reference, and
-shows what it can already compute without them. Happy to walk you
-through it.
+shows what it can already compute without them.
+
+**This might be faster on a call — twenty minutes with whoever does the
+estimating would probably settle it.** A written answer to "do standards
+exist" will be one word either way. What would actually help is watching
+him pick a cap end cover OD for a given bore: whether he reaches for a
+chart, a past job, or judgement tells us what to build. We can share the
+preview on screen and go through the 52 dimensions with him directly.
 
 ---
 
@@ -85,16 +99,26 @@ Your reference document also notes a later approved HISPL instruction of
 **Rs 14 per inch per bead**, to be applied as a controlled update if not
 already in the workbook.
 
-They give very different numbers. On the workbook's own sample —
-108 mm weld diameter, 5 beads:
+They give very different numbers — consistently about **3x**.
 
-| Method | Per weld |
-|---|---|
-| Workbook formula | **Rs 312** |
-| Rs 14 / inch / bead | **Rs 935** |
+A cylinder has four welds, and they are not all the same size: the three
+tube welds are on the 108 mm tube, the rod eye weld is on the 56 mm rod.
+So the difference per weld varies. On your own workbook sample:
 
-That's about **3x**. The Tube has three welds and the Piston Rod one, so
-on a single cylinder it's roughly **Rs 1,868** difference.
+| Weld | Dia | Workbook | Rs 14/in/bead | Difference |
+|---|---|---|---|---|
+| Tube — Part Welding | 108 mm | Rs 312 | Rs 935 | Rs 623 |
+| Tube — CEC Welding | 108 mm | Rs 312 | Rs 935 | Rs 623 |
+| Tube — Rear Eye Welding | 108 mm | Rs 312 | Rs 935 | Rs 623 |
+| Piston Rod — Rod Eye Welding | 56 mm | Rs 162 | Rs 485 | Rs 323 |
+| **Per cylinder** | | **Rs 1,099** | **Rs 3,290** | **Rs 2,191** |
+
+So it is roughly **Rs 2,191 per cylinder**, and at qty 10 that is
+**Rs 21,910** on one order.
+
+(Our Rs 312 and Rs 162 reproduce your workbook's own cached figures
+exactly — B42 and B46 — so the only open point is which method, not
+whether we've read it correctly.)
 
 > **Which is current — the workbook formula, or Rs 14 per inch per bead?**
 
