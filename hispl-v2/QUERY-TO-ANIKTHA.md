@@ -77,6 +77,10 @@ compared against what you actually charged. The tool comes in about
 **Your rates are essentially right.** The engine prices a kilogram at
 397 Rs/kg where you charged 435. That is not the problem.
 
+That comparison is against your FY-25 prices — if your rates have moved
+since, send the current ones and we'll re-run it. The mass finding
+doesn't depend on prices either way.
+
 The problem is mass. The engine predicts a median **48 kg** where the
 cylinder actually weighed **127 kg**, because it only models the tube and
 the rod. It cannot compute the covers, gland, piston, eyes, bushes or
