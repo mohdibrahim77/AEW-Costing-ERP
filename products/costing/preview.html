@@ -4,443 +4,743 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#0d1b2a">
 <title>Costing v2 — Engine Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css?v=2026.08.27-1">
 <style>
-  :root{
-    --bg:#f6f7f8; --panel:#fff; --ink:#101418; --muted:#5b6672;
-    --line:#e3e7ea; --accent:#059669; --accent-weak:#e7f5f0;
-    --warn:#b45309; --warn-weak:#fdf4e7; --stop:#b42318; --stop-weak:#fdf0ef;
-    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
-  }
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);
-    font:15px/1.55 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
-  .wrap{max-width:1240px;margin:0 auto;padding:28px 22px 80px}
+  html{touch-action:manipulation;-webkit-tap-highlight-color:rgba(52,211,153,.24)}
+  body{
+    margin:0;background:var(--surface-2);color:var(--ink-900);
+    font:400 var(--fs-sm)/var(--lh-normal) var(--sans);
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 var(--d-7) var(--sp-8)}
 
-  .banner{background:var(--warn-weak);border:1px solid #f0d9b5;
-    border-left:3px solid var(--warn);border-radius:6px;padding:12px 16px;
-    margin-bottom:26px;font-size:13.5px;color:#7c4a06}
-  .banner b{color:var(--warn)}
+  /* ── skip link + focus ─────────────────────────────────── */
+  .skip{position:absolute;left:-9999px;top:0;background:var(--ink-950);
+    color:var(--on-dark);padding:var(--d-5) var(--d-6);z-index:100;border-radius:0 0 var(--r8) 0}
+  .skip:focus{left:0}
+  :where(a,button,input,select,summary):focus-visible{
+    outline:2px solid var(--emerald);outline-offset:2px;border-radius:var(--r4)}
 
-  h1{font-size:26px;letter-spacing:-.02em;margin:0 0 6px}
-  .sub{color:var(--muted);font-size:14px;margin:0 0 26px;max-width:78ch}
+  /* ── masthead ──────────────────────────────────────────── */
+  .mast{background:var(--ink-950);color:var(--on-dark);
+    border-bottom:1px solid var(--on-dark-border)}
+  .mast .wrap{padding-top:var(--d-7);padding-bottom:var(--d-7)}
+  .eyebrow{display:flex;align-items:center;gap:var(--d-4);
+    font-family:var(--mono);font-size:var(--fs-xs);letter-spacing:var(--ls-wider);
+    text-transform:uppercase;color:var(--on-dark-faint);margin:0 0 var(--d-5)}
+  .dot{width:6px;height:6px;border-radius:50%;background:var(--emerald-m);
+    box-shadow:0 0 0 0 rgba(52,211,153,.6);animation:pulse 2.8s var(--ease) infinite}
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(52,211,153,.5)}
+    70%{box-shadow:0 0 0 7px rgba(52,211,153,0)}
+    100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}}
+  h1{font-size:var(--fs-h3);line-height:var(--lh-snug);letter-spacing:var(--ls-tight);
+    margin:0 0 var(--d-5);font-weight:700;max-width:22ch}
+  .lede{color:var(--on-dark-muted);max-width:62ch;margin:0;font-size:var(--fs-base)}
+  .notice{margin-top:var(--d-7);padding:var(--d-5) var(--d-6);
+    border-left:2px solid var(--amber);background:rgba(217,119,6,.10);
+    color:rgba(255,255,255,.82);font-size:var(--fs-xs);border-radius:0 var(--r4) var(--r4) 0}
 
-  .card{background:var(--panel);border:1px solid var(--line);border-radius:8px;
-    padding:20px 22px;margin-bottom:20px}
-  .card h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;
-    color:var(--muted);margin:0 0 16px;font-weight:600}
+  /* ── section scaffolding ───────────────────────────────── */
+  section{margin-top:var(--sp-7)}
+  .shead{display:flex;align-items:baseline;justify-content:space-between;
+    gap:var(--d-6);margin-bottom:var(--d-6);padding-bottom:var(--d-5);
+    border-bottom:1px solid var(--ink-200)}
+  .shead h2{margin:0;font-size:var(--fs-md);font-weight:600;letter-spacing:var(--ls-snug)}
+  .shead p{margin:var(--d-2) 0 0;color:var(--ink-500);font-size:var(--fs-xs);max-width:64ch}
+  .hint{font-family:var(--mono);font-size:var(--fs-xs);color:var(--ink-400);
+    white-space:nowrap}
 
-  .inputs{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end}
-  .f{display:flex;flex-direction:column;gap:5px}
-  .f label{font-size:12px;color:var(--muted)}
-  .f input{width:112px;padding:8px 10px;border:1px solid var(--line);
-    border-radius:5px;font:inherit;font-family:var(--mono);font-size:14px}
-  .f input:focus-visible{outline:2px solid var(--accent);outline-offset:1px;
-    border-color:var(--accent)}
-  button{padding:9px 16px;border:1px solid var(--accent);background:var(--accent);
-    color:#fff;border-radius:5px;font:inherit;font-size:14px;cursor:pointer}
-  button:hover{filter:brightness(1.06)}
-  button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
-  button.ghost{background:#fff;color:var(--accent)}
+  .card{background:var(--surface);border:1px solid var(--ink-200);
+    border-radius:var(--r8);padding:var(--d-7)}
 
-  .cols{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-  @media(max-width:900px){.cols{grid-template-columns:1fr}}
+  /* ── enquiry form ──────────────────────────────────────── */
+  .fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));
+    gap:var(--d-5)}
+  .f{display:flex;flex-direction:column;gap:var(--d-3);min-width:0}
+  /* A two-line label pushed its input below the others and broke the row
+     baseline. Reserve two lines for every label so the grid stays flush,
+     and let the long one wrap into the space already allowed. */
+  .f label{font-size:var(--fs-xs);color:var(--ink-500);font-weight:500;
+    line-height:1.3;min-height:2.6em;display:flex;align-items:flex-end}
+  .f input{width:100%;padding:var(--d-4) var(--d-5);border:1px solid var(--ink-200);
+    border-radius:var(--r4);font:500 var(--fs-sm)/1.4 var(--mono);
+    font-variant-numeric:tabular-nums;background:var(--surface);color:var(--ink-900);
+    transition:border-color var(--dur-1) var(--ease),box-shadow var(--dur-1) var(--ease)}
+  .f input:hover{border-color:var(--ink-400)}
+  .f input:focus{border-color:var(--emerald);box-shadow:0 0 0 3px rgba(5,150,105,.12);outline:none}
+  .f input[data-invalid="1"]{border-color:var(--red);background:var(--red-l)}
+  .ferr{font-size:var(--fs-xs);color:var(--red);min-height:1em}
 
-  .big{font-family:var(--mono);font-size:30px;letter-spacing:-.02em;margin:2px 0 4px}
-  .big.eir{font-size:15px;color:var(--stop);letter-spacing:0;line-height:1.4}
-  .note{font-size:12.5px;color:var(--muted)}
+  .actions{display:flex;flex-wrap:wrap;gap:var(--d-5);margin-top:var(--d-7);
+    padding-top:var(--d-6);border-top:1px solid var(--ink-100);align-items:center}
+  button{font:500 var(--fs-sm)/1 var(--sans);cursor:pointer;border-radius:var(--r4);
+    padding:11px var(--d-6);border:1px solid transparent;min-height:40px;
+    transition:background var(--dur-1) var(--ease),border-color var(--dur-1) var(--ease),
+      transform var(--dur-1) var(--ease),color var(--dur-1) var(--ease)}
+  button:active{transform:translateY(1px)}
+  .btn-p{background:var(--emerald);color:#fff}
+  .btn-p:hover{background:#047857}
+  .btn-s{background:var(--surface);color:var(--ink-700);border-color:var(--ink-200)}
+  .btn-s:hover{border-color:var(--ink-400);background:var(--ink-100)}
+  .btn-s[aria-pressed="true"]{background:var(--emerald-l);border-color:var(--emerald);
+    color:var(--emerald-d)}
 
-  table{width:100%;border-collapse:collapse;font-size:13px}
-  th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);
-    vertical-align:top}
-  th{font-size:11px;text-transform:uppercase;letter-spacing:.06em;
-    color:var(--muted);font-weight:600}
-  td.n{text-align:right;font-family:var(--mono);white-space:nowrap}
-  .scroll{overflow-x:auto}
+  /* ── coverage meter — the headline ─────────────────────── */
+  .cover{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);
+    gap:var(--sp-6);align-items:center}
+  @media(max-width:820px){.cover{grid-template-columns:1fr;gap:var(--d-7)}}
+  .bignum{font-family:var(--mono);font-weight:600;
+    font-size:clamp(48px,8vw,84px);line-height:.9;letter-spacing:var(--ls-tightest);
+    color:var(--ink-950);font-variant-numeric:tabular-nums}
+  .bignum .unit{font-size:.36em;color:var(--ink-400);margin-left:.12em;letter-spacing:0}
+  .bigcap{margin:var(--d-5) 0 0;color:var(--ink-600);max-width:40ch}
+  .meter{height:10px;border-radius:99px;background:var(--ink-100);overflow:hidden;
+    margin-top:var(--d-6);position:relative}
+  .meter i{display:block;height:100%;border-radius:99px;
+    background:linear-gradient(90deg,var(--emerald),var(--emerald-m));
+    width:0;transition:width 900ms var(--ease)}
+  .legend{display:flex;gap:var(--d-7);margin-top:var(--d-6);flex-wrap:wrap}
+  .legend div{font-size:var(--fs-xs);color:var(--ink-500)}
+  .legend b{display:block;font-family:var(--mono);font-size:var(--fs-md);
+    color:var(--ink-900);font-weight:600;font-variant-numeric:tabular-nums;
+    margin-bottom:var(--d-2)}
 
-  .pill{display:inline-block;padding:1px 7px;border-radius:20px;font-size:11px;
+  /* ── waterfall ─────────────────────────────────────────── */
+  .wf{display:flex;flex-direction:column;gap:var(--d-5)}
+  .wf-row{display:grid;grid-template-columns:130px 1fr 92px;align-items:center;
+    gap:var(--d-5);font-size:var(--fs-xs)}
+  .wf-lab{color:var(--ink-600)}
+  .wf-bar{height:26px;background:var(--ink-100);border-radius:var(--r4);overflow:hidden}
+  .wf-bar i{display:block;height:100%;width:0;border-radius:var(--r4);
+    transition:width 780ms var(--ease)}
+  .wf-bar.a i{background:var(--ink-400)}
+  .wf-bar.b i{background:var(--emerald)}
+  .wf-bar.c i{background:var(--blueprint)}
+  .wf-val{text-align:right;font-family:var(--mono);font-weight:600;
+    font-variant-numeric:tabular-nums;color:var(--ink-900)}
+
+  /* ── component table ───────────────────────────────────── */
+  .tbl{width:100%;border-collapse:collapse;font-size:var(--fs-xs)}
+  .tbl th{text-align:left;font-size:var(--fs-xs);font-weight:600;color:var(--ink-500);
+    padding:0 var(--d-5) var(--d-4);border-bottom:1px solid var(--ink-200);
+    letter-spacing:var(--ls-wide);text-transform:uppercase}
+  .tbl th.r,.tbl td.r{text-align:right}
+  .tbl td{padding:var(--d-5);border-bottom:1px solid var(--ink-100);vertical-align:middle}
+  .tbl tbody tr{transition:background var(--dur-1) var(--ease)}
+  .tbl tbody tr:hover{background:var(--surface-2)}
+  .tbl td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .cname{font-weight:600;color:var(--ink-900)}
+  .csheet{color:var(--ink-400);font-family:var(--mono);font-size:11px;
+    display:block;margin-top:1px}
+  .rowbtn{all:unset;cursor:pointer;display:block;width:100%}
+  .rowbtn:focus-visible{outline:2px solid var(--emerald);outline-offset:-2px}
+
+  .tag{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;
+    border-radius:99px;font-size:11px;font-weight:500;white-space:nowrap;
     font-family:var(--mono)}
-  .pill.ok{background:var(--accent-weak);color:#065f46}
-  .pill.no{background:var(--stop-weak);color:var(--stop)}
-  .pill.off{background:#eef1f3;color:var(--muted)}
+  .tag.ok{background:var(--emerald-l);color:var(--emerald-d)}
+  .tag.no{background:var(--red-l);color:#991b1b}
+  .tag.hold{background:var(--amber-l);color:#92400e}
+  .tag svg{width:11px;height:11px;flex:none}
 
-  .eirbox{background:var(--stop-weak);border:1px solid #f4d5d2;border-radius:6px;
-    padding:14px 16px}
-  .eirbox h3{margin:0 0 4px;font-size:14px;color:var(--stop)}
-  .grp{margin-top:12px}
-  .grp b{font-size:12.5px}
-  .dims{font-family:var(--mono);font-size:12px;color:#7a2c25;margin-top:3px;
-    line-height:1.7}
-  .dims span{background:#fff;border:1px solid #f0cfcb;border-radius:3px;
-    padding:1px 6px;margin-right:4px;display:inline-block}
+  .detail td{background:var(--surface-2);padding:0;border-bottom:1px solid var(--ink-200)}
+  .detail-in{padding:var(--d-6) var(--d-7);display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:var(--d-7)}
+  .detail h4{margin:0 0 var(--d-5);font-size:11px;letter-spacing:var(--ls-wider);
+    text-transform:uppercase;color:var(--ink-400);font-weight:600}
+  .plist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:var(--d-4)}
+  .plist li{display:flex;justify-content:space-between;gap:var(--d-5);
+    padding-bottom:var(--d-4);border-bottom:1px dotted var(--ink-200)}
+  .plist li:last-child{border-bottom:0;padding-bottom:0}
+  .plist .src{color:var(--ink-400);font-size:11px;font-family:var(--mono);
+    display:block;margin-top:2px;word-break:break-word}
+  .plist .amt{font-family:var(--mono);font-variant-numeric:tabular-nums;
+    font-weight:600;white-space:nowrap}
+  .off{color:var(--ink-400)}
 
-  code{font-family:var(--mono);font-size:12.5px;background:#eef1f3;
-    padding:1px 5px;border-radius:3px}
-  .src{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
-  iframe{position:absolute;width:1200px;height:900px;left:-99999px;top:0;
-    border:0}
-  .foot{color:var(--muted);font-size:12.5px;margin-top:30px;
-    border-top:1px solid var(--line);padding-top:16px}
+  /* ── gap panel ─────────────────────────────────────────── */
+  .gap{border:1px solid #f4d5d2;background:var(--red-l);border-radius:var(--r8);
+    padding:var(--d-7)}
+  .gap.clear{border-color:#bbf7d0;background:var(--emerald-l)}
+  .gapgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:var(--d-6);margin-top:var(--d-6)}
+  .gcomp b{display:block;font-size:var(--fs-xs);margin-bottom:var(--d-4);color:var(--ink-900)}
+  .chip{display:inline-block;background:var(--surface);border:1px solid #f0cfcb;
+    color:#7a2c25;border-radius:var(--r2);padding:2px 7px;margin:0 3px 4px 0;
+    font-family:var(--mono);font-size:11px}
+
+  /* ── rules ─────────────────────────────────────────────── */
+  .rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:var(--d-7)}
+  .rule{border:1px solid var(--ink-200);border-radius:var(--r8);padding:var(--d-6);
+    background:var(--surface)}
+  .rule.live{border-color:var(--emerald);background:var(--emerald-l)}
+  .rule code{font-family:var(--mono);font-size:var(--fs-xs);color:var(--ink-900)}
+  .rule p{margin:var(--d-4) 0 0;font-size:11px;color:var(--ink-500)}
+
+  footer{margin-top:var(--sp-8);padding-top:var(--d-6);border-top:1px solid var(--ink-200);
+    color:var(--ink-400);font-size:var(--fs-xs)}
+  code{font-family:var(--mono);font-size:.94em;background:var(--ink-100);
+    padding:1px 5px;border-radius:var(--r2)}
+  /* The masthead is a dark zone; the light chip background reads as a
+     white block there. Same token family, inverted. */
+  .mast code{background:rgba(255,255,255,.10);color:var(--on-dark);
+    border:1px solid var(--on-dark-border)}
+  iframe.hidden-erp{position:absolute;width:1280px;height:900px;left:-99999px;top:0;border:0}
+
+  /* ── entrance motion, opt-in ───────────────────────────── */
+  [data-rise]{opacity:1;transform:none}
+  .motion-ready [data-rise]{opacity:0;transform:translateY(14px)}
+  .motion-ready [data-rise].seen{opacity:1;transform:none;
+    transition:opacity var(--dur-3) var(--ease),transform var(--dur-3) var(--ease)}
 </style>
 </head>
 <body>
-<div class="wrap">
+<a class="skip" href="#main">Skip to content</a>
 
-  <div class="banner">
-    <b>Internal preview — not linked from the dashboard.</b>
-    This page runs the Stage 3 costing engine built from
-    <code>Trunion_Included.xlsx</code>. It changes nothing in the live
-    tool and is not part of any customer workflow.
-  </div>
-
-  <h1>Costing v2 — engine preview</h1>
-  <p class="sub">
-    Side by side: what the tool computes today, what the new engine can
-    compute from HISPL's workbook alone, and the dimensions it needs but
-    cannot derive — because no formula anywhere in the workbook derives
-    them.
-  </p>
-
-  <div class="card">
-    <h2>Enquiry</h2>
-    <div class="inputs">
-      <div class="f"><label for="p-bore">Bore (mm)</label>
-        <input id="p-bore" type="number" value="100"></div>
-      <div class="f"><label for="p-rod">Rod dia (mm)</label>
-        <input id="p-rod" type="number" value="56"></div>
-      <div class="f"><label for="p-stroke">Stroke (mm)</label>
-        <input id="p-stroke" type="number" value="800"></div>
-      <div class="f"><label for="p-qty">Qty</label>
-        <input id="p-qty" type="number" value="1"></div>
-      <button id="p-run">Recalculate</button>
-      <button id="p-v1" class="ghost">Load v1 comparison</button>
-      <button id="p-fill" class="ghost">Fill tube from workbook sample</button>
-    </div>
-    <p class="note" style="margin-top:12px">
-      The workbook sample is its own Tube sheet — EN8, raw OD&nbsp;110,
-      finished OD&nbsp;108, finished ID&nbsp;100.4, length&nbsp;900,
-      4&nbsp;holes at 12&nbsp;mm. Filling it shows what the engine produces
-      once one component's dimensions are known.
+<header class="mast">
+  <div class="wrap">
+    <p class="eyebrow"><span class="dot" aria-hidden="true"></span>Internal preview · not linked from the dashboard</p>
+    <h1>What the engine can cost, and what it cannot</h1>
+    <p class="lede">
+      Built entirely from <code>Trunion_Included.xlsx</code>. Every rate, table and
+      formula comes from the workbook; nothing is inferred. Where a dimension has no
+      approved rule, the tool says so rather than inventing one.
     </p>
+    <div class="notice">
+      Changes nothing in the live costing tool. No part of any customer workflow.
+    </div>
   </div>
+</header>
 
-  <div class="cols">
-    <div class="card">
-      <h2>v1 — the tool today</h2>
-      <div id="v1-cost" class="big">—</div>
-      <div class="note" id="v1-note">
-        Not loaded. The comparison runs the live ERP in a hidden frame, so
-        the figure is the real tool's, not a copy of its logic.
+<main id="main" class="wrap">
+
+  <section aria-labelledby="s-enq">
+    <div class="shead">
+      <div>
+        <h2 id="s-enq">Enquiry</h2>
+        <p>The complete input surface — ten fields, from section 7 of the reference
+           document. There is no eleventh.</p>
       </div>
-      <table style="margin-top:14px"><tbody id="v1-rows"></tbody></table>
+      <span class="hint" id="valid-hint"></span>
     </div>
-
     <div class="card">
-      <h2>v2 — from the workbook</h2>
-      <div id="v2-cost" class="big">—</div>
-      <div class="note" id="v2-note"></div>
-      <table style="margin-top:14px"><tbody id="v2-rows"></tbody></table>
+      <div class="fields" id="fields"></div>
+      <div class="actions">
+        <button class="btn-p" id="run" type="button">Recalculate</button>
+        <button class="btn-s" id="dims" type="button" aria-pressed="false">
+          Supply the workbook's dimensions</button>
+        <button class="btn-s" id="v1" type="button">Compare with the live tool</button>
+        <span class="hint" id="run-state"></span>
+      </div>
     </div>
-  </div>
+  </section>
 
-  <div class="card">
-    <h2>Components</h2>
-    <div class="scroll">
-      <table>
+  <section aria-labelledby="s-cov" data-rise>
+    <div class="shead">
+      <div>
+        <h2 id="s-cov">Coverage</h2>
+        <p>How much of the cylinder the ten inputs actually reach.</p>
+      </div>
+    </div>
+    <div class="card cover">
+      <div>
+        <div class="bignum"><span id="cov-pct">0.0</span><span class="unit">%</span></div>
+        <p class="bigcap" id="cov-cap">of the cylinder's cost is reachable from bore,
+          rod and stroke alone.</p>
+        <div class="meter"><i id="cov-bar"></i></div>
+      </div>
+      <div>
+        <div class="wf">
+          <div class="wf-row">
+            <span class="wf-lab">Ten inputs</span>
+            <span class="wf-bar a"><i id="wf-a"></i></span>
+            <span class="wf-val" id="wf-av">—</span>
+          </div>
+          <div class="wf-row">
+            <span class="wf-lab">Engine, dimensions supplied</span>
+            <span class="wf-bar b"><i id="wf-b"></i></span>
+            <span class="wf-val" id="wf-bv">—</span>
+          </div>
+          <div class="wf-row">
+            <span class="wf-lab">Live tool today</span>
+            <span class="wf-bar c"><i id="wf-c"></i></span>
+            <span class="wf-val" id="wf-cv">—</span>
+          </div>
+        </div>
+        <div class="legend">
+          <div><b id="lg-comp">0 / 12</b>components costed</div>
+          <div><b id="lg-wt">—</b>cylinder weight</div>
+          <div><b id="lg-eir">0</b>dimensions outstanding</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="s-comp" data-rise>
+    <div class="shead">
+      <div>
+        <h2 id="s-comp">Components</h2>
+        <p>The twelve sheets of the workbook, in its own Cost Summary order.
+           Select a row to see how each figure was reached.</p>
+      </div>
+      <span class="hint">click a row</span>
+    </div>
+    <div class="card" style="padding:var(--d-6) var(--d-5)">
+      <table class="tbl">
         <thead><tr>
-          <th>Component</th><th>Sheet</th><th>Grade</th>
-          <th class="n">Weight</th><th class="n">Material</th>
-          <th class="n">Process</th><th class="n">Total</th><th>Status</th>
+          <th scope="col">Component</th>
+          <th scope="col" class="r">Weight</th>
+          <th scope="col" class="r">Material</th>
+          <th scope="col" class="r">Process</th>
+          <th scope="col" class="r">Total</th>
+          <th scope="col">Status</th>
         </tr></thead>
-        <tbody id="comp-rows"></tbody>
+        <tbody id="comp-body"></tbody>
       </table>
     </div>
-  </div>
+  </section>
 
-  <div class="card">
-    <h2>Engineering input required</h2>
-    <div id="eir-wrap"></div>
-  </div>
-
-  <div class="card">
-    <h2>Traceability — where each resolved value came from</h2>
-    <div class="scroll">
-      <table>
-        <thead><tr>
-          <th>Component</th><th>Cell</th><th>Value</th>
-          <th class="n">Result</th><th>Source</th>
-        </tr></thead>
-        <tbody id="trace-rows"></tbody>
-      </table>
+  <section aria-labelledby="s-rules" data-rise>
+    <div class="shead">
+      <div>
+        <h2 id="s-rules">Geometry rules</h2>
+        <p>Section 9 of the reference document states eight. One runs from the ten
+           inputs; the rest need masters section 8 says do not yet exist.</p>
+      </div>
+      <span class="hint" id="rule-count"></span>
     </div>
-    <p class="note" id="trace-note" style="margin-top:12px"></p>
-  </div>
+    <div class="rules" id="rules"></div>
+  </section>
 
-  <p class="foot">
-    Engine: <code>assets/js/costing/{masters,components,engine}.js</code> ·
-    Extracted from <code>Trunion_Included.xlsx</code> ·
-    Formulas in <code>hispl-v2/source/EXTRACTED_FORMULAS.md</code> ·
-    Open questions in <code>hispl-v2/QUERY-TO-ANIKTHA.md</code>
-  </p>
-</div>
+  <section aria-labelledby="s-gap" data-rise>
+    <div class="shead">
+      <div>
+        <h2 id="s-gap">Engineering input required</h2>
+        <p>Named by component and by the workbook cell each would occupy.</p>
+      </div>
+    </div>
+    <div id="gap"></div>
+  </section>
 
-<script src="../../assets/js/costing/masters.js?v=2026.08.26-1"></script>
-<script src="../../assets/js/costing/components.js?v=2026.08.26-1"></script>
-<script src="../../assets/js/costing/engine.js?v=2026.08.26-1"></script>
+  <footer>
+    Engine <code>assets/js/costing/{masters,inputs,components,geometry,engine}.js</code> ·
+    formulas in <code>hispl-v2/source/EXTRACTED_FORMULAS.md</code> ·
+    open questions in <code>hispl-v2/QUERY-TO-ANIKTHA.md</code>
+  </footer>
+</main>
+
+<script src="../../assets/js/costing/masters.js?v=2026.08.27-1"></script>
+<script src="../../assets/js/costing/inputs.js?v=2026.08.27-1"></script>
+<script src="../../assets/js/costing/components.js?v=2026.08.27-1"></script>
+<script src="../../assets/js/costing/geometry.js?v=2026.08.27-1"></script>
+<script src="../../assets/js/costing/engine.js?v=2026.08.27-1"></script>
 <script>
 (function () {
   'use strict';
-  var M = window.AEW.masters, C = window.AEW.components, E = window.AEW.engine;
+  var M = window.AEW.masters, I = window.AEW.inputs, C = window.AEW.components,
+      G = window.AEW.geometry, E = window.AEW.engine;
   var EIR = M.EIR;
 
-  function $(id) { return document.getElementById(id); }
-  function num(id) { return Number($(id).value) || 0; }
-  function isNum(v) { return typeof v === 'number' && isFinite(v); }
-  function rs(n) { return '₹' + Math.round(n).toLocaleString('en-IN'); }
-  function cell(txt, cls) {
-    var td = document.createElement('td');
-    if (cls) td.className = cls;
-    td.textContent = txt;
-    return td;
+  function $(id){ return document.getElementById(id); }
+  function el(t,c,txt){ var e=document.createElement(t); if(c)e.className=c;
+    if(txt!==undefined)e.textContent=txt; return e; }
+  function clear(n){ while(n.firstChild) n.removeChild(n.firstChild); }
+  function isNum(v){ return typeof v==='number' && isFinite(v); }
+  function rs(n){ return '₹' + Math.round(n).toLocaleString('en-IN'); }
+
+  var ICON_OK='M20 6 9 17l-5-5', ICON_NO='M18 6 6 18M6 6l12 12',
+      ICON_HOLD='M12 8v5m0 3h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L14.7 3.9a2 2 0 0 0-3.4 0z';
+  function icon(d){
+    var s=document.createElementNS('http://www.w3.org/2000/svg','svg');
+    s.setAttribute('viewBox','0 0 24 24'); s.setAttribute('fill','none');
+    s.setAttribute('stroke','currentColor'); s.setAttribute('stroke-width','2.4');
+    s.setAttribute('stroke-linecap','round'); s.setAttribute('stroke-linejoin','round');
+    s.setAttribute('aria-hidden','true');
+    var p=document.createElementNS('http://www.w3.org/2000/svg','path');
+    p.setAttribute('d',d); s.appendChild(p); return s;
   }
-  function clear(el) { while (el.firstChild) el.removeChild(el.firstChild); }
 
-  /* Dimensions the operator has supplied by hand, per component. */
-  var supplied = {};
+  /* ── the ten fields ─────────────────────────────────────── */
+  var SEED = { inquiryNo:'INQ-0001', inquiryDate:'2026-08-27',
+    customerName:'HISPL', customerLoc:'Peenya, Bengaluru',
+    cylinderName:'Excavator Boom Cylinder',
+    bore:100, rodDia:56, stroke:800, mounting:'Clevis', workingPress:250 };
 
-  /* ── v2 ─────────────────────────────────────────────────────── */
-  function runV2() {
-    var inq = { bore: num('p-bore'), rodDia: num('p-rod'),
-                stroke: num('p-stroke'), qty: num('p-qty') };
-    var res = E.cost(inq, supplied);
+  var fieldsBox=$('fields');
+  I.all().forEach(function(f){
+    var w=el('div','f');
+    var lab=el('label',null,f.label); lab.setAttribute('for','i-'+f.key);
+    var inp=document.createElement('input');
+    inp.id='i-'+f.key; inp.value=SEED[f.key]!==undefined?SEED[f.key]:'';
+    inp.type = f.type==='number' ? 'number' : (f.type==='date' ? 'date' : 'text');
+    if(f.required) inp.required=true;
+    inp.setAttribute('inputmode', f.type==='number'?'decimal':'text');
+    var err=el('span','ferr'); err.id='e-'+f.key;
+    inp.setAttribute('aria-describedby',err.id);
+    w.appendChild(lab); w.appendChild(inp); w.appendChild(err);
+    fieldsBox.appendChild(w);
+    inp.addEventListener('input', schedule);
+  });
 
-    var costEl = $('v2-cost'), noteEl = $('v2-note');
-    if (isNum(res.totalManufacturingCost)) {
-      costEl.className = 'big';
-      costEl.textContent = rs(res.totalManufacturingCost);
-      noteEl.textContent = 'All twelve components costed.';
-    } else {
-      costEl.className = 'big eir';
-      costEl.textContent = 'ENGINEERING INPUT REQUIRED';
-      noteEl.textContent = res.blockedComponents.length +
-        ' of 12 components cannot be costed without dimensions the ' +
-        'workbook does not derive.';
+  function readInputs(){
+    var raw={};
+    I.all().forEach(function(f){ raw[f.key]=$('i-'+f.key).value; });
+    return I.validate(raw);
+  }
+
+  /* ── animated number ────────────────────────────────────── */
+  /* Animated only when it can be seen. requestAnimationFrame is throttled
+     to a stop in a hidden or background tab, which left the figure frozen
+     at its previous value while every other number on the page updated —
+     the one state where a stale number looks like a real one. So the
+     target is written immediately whenever animating is not possible, and
+     a timeout backstops the frame loop in case it never runs. */
+  function countTo(node,to,suffix,dp){
+    var d=dp||0, txt=function(v){ node.textContent=v.toFixed(d)+(suffix||''); };
+    var canAnimate = document.body.classList.contains('motion-ready') &&
+                     !document.hidden &&
+                     !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(!canAnimate){ txt(to); return; }
+
+    var from=parseFloat(node.textContent.replace(/[^0-9.\-]/g,''))||0;
+    if(from===to){ txt(to); return; }
+
+    var t0=null, dur=760, done=false;
+    var backstop=setTimeout(function(){ if(!done){ done=true; txt(to); } }, dur+400);
+    function step(t){
+      if(done) return;
+      if(!t0)t0=t;
+      var p=Math.min(1,(t-t0)/dur), e=1-Math.pow(1-p,3);
+      txt(from+(to-from)*e);
+      if(p<1){ requestAnimationFrame(step); }
+      else { done=true; clearTimeout(backstop); txt(to); }
     }
+    requestAnimationFrame(step);
+  }
 
-    var rows = $('v2-rows'); clear(rows);
-    function add(label, value, extra) {
-      var tr = document.createElement('tr');
-      tr.appendChild(cell(label));
-      tr.appendChild(cell(value, 'n'));
-      if (extra) tr.appendChild(cell(extra, 'n'));
-      rows.appendChild(tr);
-    }
-    add('Cylinder weight', isNum(res.cylinderWeight)
-      ? res.cylinderWeight.toFixed(2) + ' kg'
-      : 'blocked (' + res.weightMissing.length + ' components)');
-    add('Bought-out', rs(res.other.boughtOut));
-    add('Other costs', rs(res.other.subtotal));
-    add('Welding', res.welding.resolved ? 'included'
-        : 'withheld — method unresolved');
+  /* ── workbook dimensions, typed by HISPL's estimator ────── */
+  var WORKBOOK_DIMS = {
+    tube:{grade:'EN8',dims:{rawOD:110,finishedOD:108,finishedID:100.4,length:900,holeDia:12,holeCount:4}},
+    pistonRod:{grade:'EN19',dims:{rawDia:62,finishedDia:56,length:1150,millWidth:20,millLength:40,deepHoleCost:0}},
+    capEndCover:{grade:'C45',shape:'Round',dims:{diameter:100,width:160,height:100,thickness:60,finishedOD:220,millWidth:40,millLength:40,holeDia:14,holeCount:4}},
+    headEndCover:{grade:'C45',shape:'Round',dims:{diameter:100,width:160,height:100,thickness:60,finishedOD:220,millWidth:40,millLength:40,holeDia:14,holeCount:4}},
+    gland:{grade:'C45',dims:{od:130,id:57,length:70,millWidth:30,millLength:30,holeDia:10,holeCount:2}},
+    cushionBush:{grade:'BR-SAE660',dims:{od:130,id:57,length:70}},
+    stopTube:{grade:'EN8',dims:{rawDia:60,finishedDia:56,length:150}},
+    rearEye:{grade:'PLATE-IS2062',dims:{thickness:40,width:160,height:200,pinHoleDia:56,holeCount:1,millWidth:160,millLength:200}},
+    rodEye:{grade:'PLATE-IS2062',shape:'Round',dims:{diameter:100,width:160,height:100,thickness:60,pinHoleDia:56,holeCount:1,millWidth:160,millLength:100}},
+    piston:{grade:'EN8',dims:{od:100,length:45,millWidth:10,millLength:314,holeDia:10,holeCount:4}},
+    flange:{grade:'C45',dims:{od:220,length:60,millWidth:40,millLength:40,holeDia:14,holeCount:4}},
+    trunnion:{grade:'EN8',qty:2,dims:{length:200,width:100,height:100,millWidth:40,millLength:40,holeDia:12,holeCount:2}}
+  };
+  var useDims=false;
+
+  /* Value of everything the engine reached, adding back components blocked
+     only on welding, priced with the workbook's own formula. */
+  function reached(res){
+    var total=res.other.boughtOut;
+    res.components.forEach(function(c){
+      if(isNum(c.totalForQty)){ total+=c.totalForQty; return; }
+      if(!c.weldingWithheld) return;
+      var mat=isNum(c.materialCost)?c.materialCost:0;
+      var proc=c.processes.reduce(function(n,p){ return n+(isNum(p.cost)?p.cost:0); },0);
+      var w=c.welds.reduce(function(n,x){ return n+(x.labour+x.wire); },0);
+      total+=(mat+proc+w)*c.qty;
+    });
+    return total;
+  }
+
+  var lastRes=null, ceiling=0;
+
+  function render(){
+    var v=readInputs();
+
+    I.all().forEach(function(f){
+      var inp=$('i-'+f.key), er=$('e-'+f.key);
+      var bad=v.errors.filter(function(x){ return x.key===f.key; })[0];
+      if(bad){ inp.setAttribute('data-invalid','1'); er.textContent=bad.why; }
+      else { inp.removeAttribute('data-invalid'); er.textContent=''; }
+    });
+    $('valid-hint').textContent = v.ok ? 'valid' : v.errors.length+' to fix';
+
+    var geo=G.applyTo(useDims?WORKBOOK_DIMS:{}, v.values);
+    var res=E.cost(v.values, geo.supply);
+    lastRes=res;
+
+    /* ceiling = same enquiry with dimensions supplied */
+    var full=E.cost(v.values, G.applyTo(WORKBOOK_DIMS, v.values).supply);
+    ceiling=reached(full);
+    var got=reached(res);
+    var pct = ceiling>0 ? (got/ceiling)*100 : 0;
+
+    countTo($('cov-pct'), pct, '', 1);
+    $('cov-bar').style.width = Math.max(0.6,pct).toFixed(1)+'%';
+    $('cov-cap').textContent = useDims
+      ? 'of the cylinder is costed — because the dimensions were supplied by hand.'
+      : 'of the cylinder’s cost is reachable from bore, rod and stroke alone.';
+
+    var costed=res.components.filter(function(c){ return isNum(c.total); }).length;
+    $('lg-comp').textContent = costed+' / 12';
+    $('lg-eir').textContent = res.engineeringInputRequired.length;
+    var wt=res.components.reduce(function(n,c){
+      return n+(isNum(c.weight)?c.weight*c.qty:0); },0);
+    $('lg-wt').textContent = wt>0 ? wt.toFixed(1)+' kg' : '—';
+
+    var maxV=Math.max(ceiling,got,1);
+    $('wf-a').style.width=((got/maxV)*100).toFixed(1)+'%';
+    $('wf-av').textContent=rs(got);
+    $('wf-b').style.width='100%';
+    $('wf-bv').textContent=rs(ceiling);
 
     renderComponents(res);
-    renderEIR(res);
-    renderTrace(res);
-    return res;
+    renderRules(geo);
+    renderGap(res);
   }
 
-  function renderComponents(res) {
-    var tb = $('comp-rows'); clear(tb);
-    res.components.forEach(function (c) {
-      var tr = document.createElement('tr');
-      tr.appendChild(cell(c.name));
-      tr.appendChild(cell(c.sheet));
-      tr.appendChild(cell(c.grade));
-      tr.appendChild(cell(isNum(c.weight) ? c.weight.toFixed(2) + ' kg' : '—', 'n'));
-      tr.appendChild(cell(isNum(c.materialCost) ? rs(c.materialCost) : '—', 'n'));
-      tr.appendChild(cell(isNum(c.processCost) ? rs(c.processCost) : '—', 'n'));
-      tr.appendChild(cell(isNum(c.total) ? rs(c.total) : '—', 'n'));
+  /* ── components ─────────────────────────────────────────── */
+  var openRow=null;
+  function renderComponents(res){
+    var tb=$('comp-body'); clear(tb);
+    res.components.forEach(function(c,i){
+      var tr=el('tr');
+      tr.setAttribute('tabindex','0'); tr.setAttribute('role','button');
+      tr.setAttribute('aria-expanded','false');
+      tr.style.cursor='pointer';
 
-      var td = document.createElement('td');
-      var span = document.createElement('span');
-      if (isNum(c.total)) {
-        span.className = 'pill ok'; span.textContent = 'costed';
-      } else if (c.missingDims.length) {
-        span.className = 'pill no';
-        span.textContent = c.missingDims.length + ' dims needed';
-      } else {
-        span.className = 'pill off'; span.textContent = 'blocked';
-      }
-      td.appendChild(span);
-      tr.appendChild(td);
+      var td0=el('td');
+      td0.appendChild(el('span','cname',c.name));
+      td0.appendChild(el('span','csheet',c.sheet));
+      tr.appendChild(td0);
+      tr.appendChild(el('td','n r', isNum(c.weight)? c.weight.toFixed(2)+' kg':'—'));
+      tr.appendChild(el('td','n r', isNum(c.materialCost)? rs(c.materialCost):'—'));
+      tr.appendChild(el('td','n r', isNum(c.processCost)? rs(c.processCost):'—'));
+      var tdT=el('td','n r', isNum(c.total)? rs(c.total):'—');
+      if(isNum(c.total)) tdT.style.fontWeight='600';
+      tr.appendChild(tdT);
+
+      var tdS=el('td'), tag;
+      if(isNum(c.total)){ tag=el('span','tag ok'); tag.appendChild(icon(ICON_OK));
+        tag.appendChild(document.createTextNode('costed')); }
+      else if(c.weldingWithheld){ tag=el('span','tag hold'); tag.appendChild(icon(ICON_HOLD));
+        tag.appendChild(document.createTextNode('welding held')); }
+      else { tag=el('span','tag no'); tag.appendChild(icon(ICON_NO));
+        tag.appendChild(document.createTextNode(c.missingDims.length+' dims')); }
+      tdS.appendChild(tag); tr.appendChild(tdS);
       tb.appendChild(tr);
+
+      function toggle(){
+        var next=tr.nextSibling;
+        if(next && next.className==='detail'){
+          tb.removeChild(next); tr.setAttribute('aria-expanded','false'); openRow=null; return;
+        }
+        if(openRow){ var o=openRow.nextSibling;
+          if(o&&o.className==='detail') tb.removeChild(o);
+          openRow.setAttribute('aria-expanded','false'); }
+        tb.insertBefore(detailFor(c), tr.nextSibling);
+        tr.setAttribute('aria-expanded','true'); openRow=tr;
+      }
+      tr.addEventListener('click',toggle);
+      tr.addEventListener('keydown',function(ev){
+        if(ev.key==='Enter'||ev.key===' '){ ev.preventDefault(); toggle(); }});
     });
   }
 
-  function renderEIR(res) {
-    var wrap = $('eir-wrap'); clear(wrap);
-    if (!res.engineeringInputRequired.length) {
-      var p = document.createElement('p');
-      p.className = 'note';
-      p.textContent = 'Nothing outstanding — every dimension has been supplied.';
-      wrap.appendChild(p);
-      return;
+  function detailFor(c){
+    var tr=el('tr','detail'); var td=el('td'); td.colSpan=6;
+    var box=el('div','detail-in');
+
+    var p=el('div');
+    p.appendChild(el('h4',null,'Process routing'));
+    var ul=el('ul','plist');
+    c.processes.forEach(function(pr){
+      var li=el('li');
+      var l=el('div');
+      l.appendChild(document.createTextNode(pr.process));
+      if(pr.source) l.appendChild(el('span','src',pr.source));
+      li.appendChild(l);
+      var amt=el('span','amt', pr.cost===EIR?'blocked':(pr.applied?rs(pr.cost):'off'));
+      if(!pr.applied||pr.cost===EIR) amt.className='amt off';
+      li.appendChild(amt); ul.appendChild(li);
+    });
+    p.appendChild(ul); box.appendChild(p);
+
+    if(c.welds.length){
+      var w=el('div');
+      w.appendChild(el('h4',null,'Welding — computed, not applied'));
+      var wl=el('ul','plist');
+      c.welds.forEach(function(x){
+        var li=el('li');
+        var l=el('div');
+        l.appendChild(document.createTextNode(x.label));
+        if(isNum(x.weldLength))
+          l.appendChild(el('span','src', x.beads+' beads · '+
+            x.weldLength.toFixed(0)+' mm · '+x.hours.toFixed(3)+' hr'));
+        li.appendChild(l);
+        li.appendChild(el('span','amt off', isNum(x.labour)? rs(x.labour+x.wire)+' held':'—'));
+        wl.appendChild(li);
+      });
+      w.appendChild(wl); box.appendChild(w);
     }
 
-    var box = document.createElement('div');
-    box.className = 'eirbox';
-    var h = document.createElement('h3');
-    h.textContent = res.engineeringInputRequired.length +
-      ' dimensions cannot be derived';
-    box.appendChild(h);
-
-    var p = document.createElement('p');
-    p.className = 'note';
-    p.style.color = '#7a2c25';
-    p.textContent = 'Every component dimension in Trunion_Included.xlsx is ' +
-      'typed by the estimator. No formula in any of its 24 sheets computes ' +
-      'one from bore, rod or stroke, so the engine asks rather than guesses.';
-    box.appendChild(p);
-
-    var byComp = {};
-    res.engineeringInputRequired.forEach(function (r) {
-      (byComp[r.componentName] = byComp[r.componentName] || []).push(r);
-    });
-    Object.keys(byComp).forEach(function (name) {
-      var g = document.createElement('div');
-      g.className = 'grp';
-      var b = document.createElement('b');
-      b.textContent = name;
-      g.appendChild(b);
-      var d = document.createElement('div');
-      d.className = 'dims';
-      byComp[name].forEach(function (r) {
-        var s = document.createElement('span');
-        s.textContent = r.label + (r.cell ? ' (' + r.cell + ')' : '');
-        d.appendChild(s);
+    if(c.trace && c.trace.length){
+      var t=el('div');
+      t.appendChild(el('h4',null,'Traceability'));
+      var tl=el('ul','plist');
+      c.trace.slice(0,8).forEach(function(x){
+        var li=el('li'); var l=el('div');
+        l.appendChild(document.createTextNode((x.cell?x.cell+' · ':'')+x.what));
+        l.appendChild(el('span','src',x.source));
+        li.appendChild(l);
+        li.appendChild(el('span','amt', typeof x.value==='number'
+          ? (Math.abs(x.value)>=100?Math.round(x.value):x.value.toFixed(2)) : '—'));
+        tl.appendChild(li);
       });
-      g.appendChild(d);
-      box.appendChild(g);
-    });
-    wrap.appendChild(box);
+      t.appendChild(tl); box.appendChild(t);
+    }
+
+    if(c.missingDims.length){
+      var m=el('div');
+      m.appendChild(el('h4',null,'Needs'));
+      var mb=el('div');
+      c.missingDims.forEach(function(d){
+        mb.appendChild(el('span','chip', d.label+(d.cell?' ('+d.cell+')':'')));
+      });
+      m.appendChild(mb); box.appendChild(m);
+    }
+
+    td.appendChild(box); tr.appendChild(td); return tr;
   }
 
-  function renderTrace(res) {
-    var tb = $('trace-rows'); clear(tb);
-    var rows = E.traceability(res);
-    var resolved = rows.filter(function (r) { return r.value !== EIR; });
-    resolved.slice(0, 60).forEach(function (r) {
-      var tr = document.createElement('tr');
-      tr.appendChild(cell(r.component));
-      tr.appendChild(cell(r.cell || '—'));
-      tr.appendChild(cell(r.what));
-      tr.appendChild(cell(
-        typeof r.value === 'number'
-          ? (Math.abs(r.value) >= 1000 || r.value % 1 === 0
-              ? String(Math.round(r.value)) : r.value.toFixed(4))
-          : String(r.value), 'n'));
-      var td = cell(r.source); td.className = 'src';
-      tr.appendChild(td);
-      tb.appendChild(tr);
+  /* ── rules ──────────────────────────────────────────────── */
+  function renderRules(geo){
+    var box=$('rules'); clear(box);
+    geo.applied.forEach(function(r){
+      var d=el('div','rule live');
+      var c=el('code'); c.textContent=r.label+' = '+r.rule+'  →  '+r.value;
+      d.appendChild(c);
+      d.appendChild(el('p',null,r.source));
+      box.appendChild(d);
     });
-    $('trace-note').textContent = resolved.length
-      ? resolved.length + ' values resolved, each traced to the master it ' +
-        'came from' + (resolved.length > 60 ? ' (first 60 shown)' : '') + '.'
-      : 'No values resolve yet — supply a component’s dimensions to ' +
-        'see the chain.';
+    geo.blocked.forEach(function(r){
+      var d=el('div','rule');
+      var c=el('code'); c.textContent=r.label+' = '+r.rule;
+      d.appendChild(c);
+      d.appendChild(el('p',null,'needs '+r.needs));
+      box.appendChild(d);
+    });
+    $('rule-count').textContent=geo.applied.length+' of '+
+      (geo.applied.length+geo.blocked.length)+' run';
   }
 
-  /* ── v1, via the live ERP in a hidden frame ─────────────────── */
-  var frame = null;
-  function loadV1() {
-    $('v1-note').textContent = 'Loading the live ERP…';
-    if (frame) { frame.parentNode.removeChild(frame); frame = null; }
-    frame = document.createElement('iframe');
-    frame.setAttribute('title', 'v1 ERP, driven for comparison');
-    frame.src = 'index.html';
-    frame.addEventListener('load', function () { setTimeout(driveV1, 1200); });
+  /* ── gap ────────────────────────────────────────────────── */
+  function renderGap(res){
+    var box=$('gap'); clear(box);
+    var list=res.engineeringInputRequired;
+    if(!list.length){
+      var okd=el('div','gap clear');
+      okd.appendChild(el('b',null,'Nothing outstanding.'));
+      okd.appendChild(el('p',null,'Every dimension has been supplied.'));
+      box.appendChild(okd); return;
+    }
+    var d=el('div','gap');
+    var h=el('b',null,list.length+' dimensions cannot be derived');
+    h.style.fontSize='var(--fs-base)'; d.appendChild(h);
+    var p=el('p',null,'Every component dimension in the workbook is typed by the '+
+      'estimator. No formula in any of its 24 sheets computes one from bore, rod or '+
+      'stroke, so the engine asks rather than guesses.');
+    p.style.cssText='margin:var(--d-4) 0 0;font-size:var(--fs-xs);color:#7a2c25;max-width:70ch';
+    d.appendChild(p);
+    var grid=el('div','gapgrid');
+    var by={};
+    list.forEach(function(r){ (by[r.componentName]=by[r.componentName]||[]).push(r); });
+    Object.keys(by).forEach(function(n){
+      var g=el('div','gcomp'); g.appendChild(el('b',null,n));
+      by[n].forEach(function(r){
+        g.appendChild(el('span','chip', r.label+(r.cell?' ('+r.cell+')':''))); });
+      grid.appendChild(g);
+    });
+    d.appendChild(grid); box.appendChild(d);
+  }
+
+  /* ── v1 comparison, via the live ERP in a frame ─────────── */
+  var frame=null;
+  function loadV1(){
+    $('run-state').textContent='loading the live tool…';
+    if(frame){ frame.parentNode.removeChild(frame); frame=null; }
+    frame=document.createElement('iframe');
+    frame.className='hidden-erp'; frame.title='v1 ERP, driven for comparison';
+    frame.src='index.html';
+    frame.addEventListener('load',function(){ setTimeout(driveV1,1200); });
     document.body.appendChild(frame);
   }
+  function driveV1(){
+    var w,d;
+    try{ w=frame.contentWindow; d=w.document; }
+    catch(e){ $('run-state').textContent='frame unreachable'; return; }
+    if(typeof w.bootERP!=='function'){
+      $('run-state').textContent='the live tool redirected to sign-in — open it in a tab first';
+      return; }
+    try{ w.bootERP({name:'P',avatar:'P',color:'#059669'}); }catch(e){}
+    var v=readInputs().values;
+    setTimeout(function(){
+      function set(id,val){ var e=d.getElementById(id);
+        if(e){ e.value=val; e.dispatchEvent(new w.Event('input',{bubbles:true})); } }
+      set('inq-qty',1); set('inq-bore',v.bore);
+      setTimeout(function(){ set('inq-rod',v.rodDia); },40);
+      setTimeout(function(){ set('inq-stroke',v.stroke); },80);
+      setTimeout(function(){
+        var e=d.getElementById('ss-mfg');
+        var mfg=e?(Number(String(e.textContent).replace(/[^0-9.]/g,''))||0):0;
+        $('wf-c').style.width=(ceiling>0?Math.min(100,(mfg/ceiling)*100):0).toFixed(1)+'%';
+        $('wf-cv').textContent=mfg?rs(mfg):'—';
+        $('run-state').textContent='live tool: '+(mfg?rs(mfg):'no figure')+
+          ' — tube and rod only';
+      },760);
+    },420);
+  }
 
-  function driveV1() {
-    var w, d;
-    try { w = frame.contentWindow; d = w.document; }
-    catch (e) { $('v1-note').textContent = 'Could not reach the ERP frame.'; return; }
+  /* ── wiring ─────────────────────────────────────────────── */
+  var timer=null;
+  function schedule(){ clearTimeout(timer); timer=setTimeout(render,220); }
 
-    if (typeof w.bootERP !== 'function') {
-      $('v1-note').textContent =
-        'The ERP did not start in the frame — it may have redirected to ' +
-        'sign in. Open the ERP in a tab first, then reload this page.';
+  $('run').addEventListener('click',function(){ render(); if(frame) driveV1(); });
+  $('dims').addEventListener('click',function(){
+    useDims=!useDims;
+    this.setAttribute('aria-pressed',String(useDims));
+    this.textContent=useDims?'Clear the supplied dimensions'
+                            :'Supply the workbook’s dimensions';
+    render();
+  });
+  $('v1').addEventListener('click',loadV1);
+
+  render();
+
+  /* Motion last, so a slow paint never leaves content hidden. */
+  requestAnimationFrame(function(){
+    document.body.classList.add('motion-ready');
+    var items=document.querySelectorAll('[data-rise]');
+    if(!('IntersectionObserver' in window)){
+      Array.prototype.forEach.call(items,function(n){ n.classList.add('seen'); });
       return;
     }
-    try { w.bootERP({ name: 'P', avatar: 'P', color: '#059669' }); } catch (e) {}
-
-    setTimeout(function () {
-      function set(id, v) {
-        var e = d.getElementById(id);
-        if (e) { e.value = v; e.dispatchEvent(new w.Event('input', { bubbles: true })); }
-      }
-      set('inq-qty', num('p-qty'));
-      set('inq-bore', num('p-bore'));
-      setTimeout(function () { set('inq-rod', num('p-rod')); }, 40);
-      setTimeout(function () { set('inq-stroke', num('p-stroke')); }, 80);
-      setTimeout(readV1, 700);
-    }, 400);
-  }
-
-  function readV1() {
-    var d = frame.contentWindow.document;
-    function txt(id) {
-      var e = d.getElementById(id);
-      return e ? (e.textContent || e.value || '') : '';
-    }
-    function val(id) {
-      var e = d.getElementById(id);
-      return e ? (parseFloat(e.value) || 0) : 0;
-    }
-    var mfg = Number(String(txt('ss-mfg')).replace(/[^0-9.]/g, '')) || 0;
-    $('v1-cost').className = 'big';
-    $('v1-cost').textContent = mfg ? rs(mfg) : '—';
-    $('v1-note').textContent =
-      'From the live ERP. Models the tube and rod only — the covers, ' +
-      'gland, piston, eyes, bushes and trunnion are not computed from ' +
-      'geometry.';
-
-    var rows = $('v1-rows'); clear(rows);
-    [['Tube weight', val('t-wt') + ' kg'],
-     ['Rod weight', val('r-wt') + ' kg'],
-     ['Tube stock OD', val('t-rod') + ' mm'],
-     ['Rod raw bar', val('r-rdia') + ' mm']].forEach(function (p) {
-      var tr = document.createElement('tr');
-      tr.appendChild(cell(p[0]));
-      tr.appendChild(cell(String(p[1]), 'n'));
-      rows.appendChild(tr);
-    });
-  }
-
-  /* ── the workbook's own tube, so the engine has something real ── */
-  function fillTube() {
-    supplied.tube = {
-      grade: 'EN8',
-      dims: { rawOD: 110, finishedOD: 108, finishedID: 100.4, length: 900,
-              holeDia: 12, holeCount: 4 },
-      qty: 1
-    };
-    supplied.cushionBush = {
-      grade: 'BR-SAE660',
-      dims: { od: 130, id: 57, length: 70 }, qty: 1
-    };
-    runV2();
-  }
-
-  $('p-run').addEventListener('click', function () {
-    runV2();
-    if (frame) driveV1();
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(en,i){
+        if(!en.isIntersecting) return;
+        var n=en.target;
+        setTimeout(function(){ n.classList.add('seen'); }, i*55);
+        io.unobserve(n);
+      });
+    },{rootMargin:'0px 0px -8% 0px',threshold:.06});
+    Array.prototype.forEach.call(items,function(n){ io.observe(n); });
   });
-  $('p-v1').addEventListener('click', loadV1);
-  $('p-fill').addEventListener('click', fillTube);
-
-  runV2();
 })();
 </script>
 </body>

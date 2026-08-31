@@ -1,0 +1,99 @@
+/**
+ * tokens.css — AEW Platform design tokens
+ * ─────────────────────────────────────────────────────────
+ * Extracted from index.html, which is where this system was worked out
+ * and refined against real accessibility failures. The comments marking
+ * corrected values are kept: they record contrast ratios that failed
+ * WCAG AA and must not be reverted.
+ *
+ * Emerald is the brand accent and Inter/IBM Plex Mono the type pairing —
+ * both owner decisions, taken deliberately over the alternatives.
+ *
+ * The DENSE scale below is the addition for data surfaces (the costing
+ * preview, and any future dashboard). Marketing pages use the roomier
+ * --sp-* scale; tables and breakdowns use --d-*.
+ */
+
+:root{
+  /* ── Ink ─────────────────────────────────────────────────── */
+  --ink-950:#0d1b2a;   /* primary dark zone bg — matches login.html body */
+  --ink-800:#1e3a5f;
+  --ink-700:#132234;
+  --ink-900:#0d1117;   /* body text on light surfaces */
+  --ink-600:#334155;
+  --ink-500:#64748b;
+  --ink-400:#6b7688;   /* was #94a3b8 — 2.56:1 on white, failed WCAG AA */
+  --ink-200:#e2e8f0;
+  --ink-100:#f1f5f9;
+  --surface:#ffffff;
+  --surface-2:#f8fafc;
+
+  /* ── Accent ──────────────────────────────────────────────── */
+  --emerald:#059669;
+  --emerald-l:#ecfdf5;
+  --emerald-d:#064e3b;
+  --emerald-m:#34d399;
+  --blueprint:#0369a1;
+  --blueprint-l:#f0f9ff;
+  --blueprint-m:#0ea5e9;
+
+  --amber:#d97706;
+  --amber-l:#fffbeb;
+  --red:#dc2626;
+  --red-l:#fef2f2;
+
+  --on-dark:#ffffff;
+  --on-dark-muted:rgba(255,255,255,.56);
+  --on-dark-faint:rgba(255,255,255,.50);   /* was .32 — 2.88:1, failed AA */
+  --on-dark-border:rgba(255,255,255,.12);
+
+  /* ── Radius ──────────────────────────────────────────────── */
+  --r2:2px;--r4:4px;--r8:8px;--r12:12px;
+
+  /* ── Spacing — marketing ─────────────────────────────────── */
+  --sp-1:4px;--sp-2:8px;--sp-3:12px;--sp-4:16px;--sp-5:24px;
+  --sp-6:32px;--sp-7:48px;--sp-8:64px;
+
+  /* ── Spacing — dense data surfaces ───────────────────────── */
+  --d-1:2px;--d-2:4px;--d-3:6px;--d-4:8px;--d-5:12px;
+  --d-6:16px;--d-7:24px;--d-8:32px;
+
+  /* ── Type ────────────────────────────────────────────────── */
+  --fs-xs:12px;--fs-sm:13px;--fs-base:16px;--fs-md:17px;--fs-lg:19px;
+  --fs-h4:clamp(20px,2.2vw,24px);
+  --fs-h3:clamp(26px,3.2vw,36px);
+  --fs-h2:clamp(30px,4vw,46px);
+  --fs-h1:clamp(3rem,7.4vw,7.5rem);
+
+  --lh-tight:.95;--lh-snug:1.2;--lh-normal:1.5;--lh-relaxed:1.7;
+  --ls-tightest:-.04em;--ls-tight:-.03em;--ls-snug:-.015em;
+  --ls-wide:.05em;--ls-wider:.08em;
+
+  --measure:65ch;
+
+  --sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+
+  /* ── Motion ──────────────────────────────────────────────── */
+  /* the one easing curve: sharp start, settled end. Never bouncy. */
+  --ease:cubic-bezier(0.22,1,0.36,1);
+  --dur-1:140ms;   /* state change  */
+  --dur-2:240ms;   /* reveal        */
+  --dur-3:420ms;   /* entrance      */
+  --stagger:55ms;  /* per list item */
+}
+
+/* Numbers in a column must not shuffle width as they change. Applied to
+   every figure the eye is meant to compare down a column. */
+.num{ font-family:var(--mono); font-variant-numeric:tabular-nums; }
+
+/* Motion is opt-in per surface via .motion-ready, so a slow first paint
+   never leaves content stuck invisible. */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+    scroll-behavior:auto !important;
+  }
+}
