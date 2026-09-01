@@ -533,6 +533,56 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
 @media(max-width:600px){.footer-top{grid-template-columns:1fr}}
 
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* ══ RECONCILIATION — the engine against the customer's own sheet ══
+   Last before the CTA because it is the only claim on this page a
+   reader can check. Motion here is a process, not decoration: the
+   figures resolve one component at a time, the way the check runs. */
+.recon-section{background:var(--surface);padding:var(--sp-8) 0;border-top:1px solid var(--ink-200)}
+.recon-inner{max-width:1080px;margin:0 auto;padding:0 var(--sp-5)}
+.recon-head{max-width:62ch;margin-bottom:var(--sp-6)}
+.recon-kicker{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:var(--fs-xs);
+  letter-spacing:var(--ls-wider);text-transform:uppercase;color:var(--emerald);margin:0 0 var(--sp-3)}
+.recon-h2{font-size:var(--fs-h3);line-height:var(--lh-snug);letter-spacing:var(--ls-tight);
+  margin:0 0 var(--sp-4);color:var(--ink-900);font-weight:700}
+.recon-lede{color:var(--ink-600);font-size:var(--fs-md);margin:0;line-height:var(--lh-relaxed)}
+.recon-panel{border:1px solid var(--ink-200);border-radius:var(--r12);overflow:hidden;background:var(--surface-2)}
+.recon-bar{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-4);
+  padding:var(--sp-4) var(--sp-5);background:var(--ink-950);flex-wrap:wrap}
+.recon-bar span{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:var(--fs-xs);
+  color:var(--on-dark-muted);letter-spacing:var(--ls-wide)}
+.recon-run{font:500 var(--fs-sm)/1 'Inter',system-ui,sans-serif;background:var(--emerald);
+  color:#fff;border:0;border-radius:var(--r4);padding:10px 18px;cursor:pointer;
+  transition:background 140ms var(--ease),transform 140ms var(--ease)}
+.recon-run:hover{background:#047857}
+.recon-run:active{transform:translateY(1px)}
+.recon-run:disabled{background:var(--ink-400);cursor:default}
+.recon-run:focus-visible{outline:2px solid var(--emerald-m);outline-offset:2px}
+.recon-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 84px}
+.recon-grid>div{padding:var(--sp-4) var(--sp-5);border-bottom:1px solid var(--ink-200);
+  display:flex;align-items:center;font-size:var(--fs-sm)}
+.recon-grid .rh{background:var(--ink-100);font-size:var(--fs-xs);color:var(--ink-500);
+  font-weight:600;letter-spacing:var(--ls-wide);text-transform:uppercase}
+.recon-grid .rn{font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;
+  justify-content:flex-end;color:var(--ink-900);font-weight:600}
+.recon-grid .rc{font-weight:600;color:var(--ink-900);flex-direction:column;align-items:flex-start;gap:2px}
+.recon-grid .rc small{font-weight:400;color:var(--ink-400);font-size:var(--fs-xs);
+  font-family:'IBM Plex Mono',ui-monospace,monospace}
+.recon-grid .rm{justify-content:center}
+.recon-row{opacity:.34;transition:opacity 380ms var(--ease),background 380ms var(--ease)}
+.recon-row.done{opacity:1}
+.recon-row.active{background:var(--emerald-l)}
+.tickmark{width:20px;height:20px;color:var(--emerald);opacity:0;transform:scale(.6);
+  transition:opacity 300ms var(--ease),transform 300ms var(--ease)}
+.recon-row.done .tickmark,
+.tickmark.is-on{opacity:1;transform:scale(1)}
+.recon-foot{padding:var(--sp-5);background:var(--surface);border-top:1px solid var(--ink-200);
+  color:var(--ink-600);font-size:var(--fs-sm);line-height:var(--lh-relaxed)}
+.recon-foot b{color:var(--ink-900)}
+.recon-caveat{margin:var(--sp-3) 0 0;color:var(--ink-500);font-size:var(--fs-xs);max-width:72ch}
+@media(max-width:720px){
+  .recon-grid{grid-template-columns:1.4fr 1fr 1fr 48px}
+  .recon-grid>div{padding:var(--sp-3);font-size:var(--fs-xs)}}
 </style>
 </head>
 <body>
@@ -725,6 +775,37 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
 </section>
 
 <!-- CLOSING -->
+<!-- RECONCILIATION -->
+<section class="recon-section" id="reconciliation" aria-labelledby="recon-h">
+  <div class="recon-inner">
+    <div class="recon-head">
+      <p class="recon-kicker">Checked, not asserted</p>
+      <h2 class="recon-h2" id="recon-h">We ran their spreadsheet&rsquo;s own cylinder through our engine.</h2>
+      <p class="recon-lede">HISPL&rsquo;s costing workbook holds one fully dimensioned cylinder. We read its
+      dimensions straight out of the sheets and costed it independently. These are the four
+      components their workbook still computes.</p>
+    </div>
+    <div class="recon-panel">
+      <div class="recon-bar">
+        <span>&Oslash;100 bore &middot; &Oslash;56 rod &middot; 800 stroke</span>
+        <button class="recon-run" id="reconRun" type="button">Run the reconciliation</button>
+      </div>
+      <div class="recon-grid" id="reconGrid">
+        <div class="rh">Component</div>
+        <div class="rh rn">Their workbook</div>
+        <div class="rh rn">Our engine</div>
+        <div class="rh rm">Match</div>
+      </div>
+      <div class="recon-foot">
+        <b id="reconVerdict">Four of four, reproduced to the rupee.</b>
+        <p class="recon-caveat">This shows the engine computes their methodology correctly. It is not a
+        claim that the sample cylinder was ever built &mdash; several of its dimensions look like
+        placeholders, which is one of the questions currently with their engineer.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="closing-section" id="hispl">
   <div class="closing-inner" data-reveal-group>
     <div>
@@ -854,7 +935,7 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
 
   /* ── DERIVED FROM THE ERP — DO NOT HAND-EDIT ─────────────────────
      A real costing run: Ø100 bore × Ø56 rod × 500 stroke, qty 10, at
-     the shipped rate card, build 2026.08.26-1. Every figure is an ERP
+     the shipped rate card, build 2026.09.01-1. Every figure is an ERP
      summary line. The eight meshed parts carry their own ERP line; the
      four remaining labels aggregate the ten smaller lines exactly as
      the ERP's own PDF groups them. There is no balancing entry — the
@@ -1421,5 +1502,142 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
 })();
 </script>
 
+<script>
+/* The reconciliation panel gets its OWN script block on purpose.
+   The main block initialises the WebGL hero, and anything that throws in
+   there takes every later statement with it — which is how the parts
+   labels can silently vanish. A checkable claim about a customer's own
+   figures must not depend on a 3D scene starting. */
+(function () {
+  'use strict';
+  var grid = document.getElementById('reconGrid');
+  var btn  = document.getElementById('reconRun');
+  if (!grid || !btn) return;
+
+  /* ── DERIVED FROM THE WORKBOOK — DO NOT HAND-EDIT ──────────────
+     The four component totals Trunion_Included.xlsx still resolves,
+     against what the v2 engine computes from the same typed dimensions.
+     Regenerate with:  node tests/workbook-costing.js
+     Tube and Piston Rod agree only once the workbook's own welding
+     formula is applied; welding is otherwise withheld pending HISPL. */
+  var RECON = [
+    { name:'Tube',         cell:'Tube!B74',         book:4914, engine:4914, note:'incl. 3 welds' },
+    { name:'Piston Rod',   cell:'Piston Rod!B60',   book:7314, engine:7314, note:'incl. 1 weld'  },
+    { name:'Cushion Bush', cell:'Cushion Bush!B38', book:3798, engine:3798, note:''              },
+    { name:'Trunnion',     cell:'Trunnion!B45',     book:1198, engine:1198, note:'per piece'     }
+  ];
+
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  function tick() {
+    var g = document.createElementNS(SVGNS, 'svg');
+    g.setAttribute('viewBox', '0 0 24 24');
+    g.setAttribute('fill', 'none');
+    g.setAttribute('stroke', 'currentColor');
+    g.setAttribute('stroke-width', '3');
+    g.setAttribute('stroke-linecap', 'round');
+    g.setAttribute('stroke-linejoin', 'round');
+    g.setAttribute('class', 'tickmark');
+    g.setAttribute('aria-hidden', 'true');
+    var p = document.createElementNS(SVGNS, 'path');
+    p.setAttribute('d', 'M20 6 9 17l-5-5');
+    g.appendChild(p);
+    return g;
+  }
+
+  var rows = RECON.map(function (r) {
+    var c0 = document.createElement('div'); c0.className = 'rc recon-row';
+    c0.appendChild(document.createTextNode(r.name));
+    var sm = document.createElement('small');
+    sm.textContent = r.cell + (r.note ? '  \u00B7  ' + r.note : '');
+    c0.appendChild(sm);
+    var c1 = document.createElement('div'); c1.className = 'rn recon-row';
+    var c2 = document.createElement('div'); c2.className = 'rn recon-row';
+    var c3 = document.createElement('div'); c3.className = 'rm recon-row';
+    c3.appendChild(tick());
+    [c0, c1, c2, c3].forEach(function (c) { grid.appendChild(c); });
+    return { data: r, cells: [c0, c1, c2, c3], book: c1, engine: c2 };
+  });
+
+  function money(n) {
+    return '\u20B9' + Math.round(n).toLocaleString('en-IN');
+  }
+  function reset() {
+    rows.forEach(function (r) {
+      r.book.textContent = '\u2014';
+      r.engine.textContent = '\u2014';
+      r.cells.forEach(function (c) { c.classList.remove('done', 'active'); });
+      var m = r.cells[3].querySelector('.tickmark');
+      if (m) m.classList.remove('is-on');
+    });
+  }
+  function still() {
+    return document.hidden ||
+      (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  }
+
+  /* Counts one row, then stamps it. A hidden tab throttles rAF to a stop,
+     so those cases jump straight to the settled figure — a frozen
+     half-counted number would read as a real one. */
+  function settle(row, done) {
+    row.cells.forEach(function (c) { c.classList.add('active'); });
+    function land() {
+      row.book.textContent   = money(row.data.book);
+      row.engine.textContent = money(row.data.engine);
+      row.cells.forEach(function (c) {
+        c.classList.remove('active'); c.classList.add('done');
+      });
+      var mark = row.cells[3].querySelector('.tickmark');
+      if (mark) mark.classList.add('is-on');
+    }
+    if (still()) { land(); done(); return; }
+    var t0 = null, dur = 520, fin = false;
+    var backstop = setTimeout(function () {
+      if (!fin) { fin = true; land(); done(); }
+    }, dur + 400);
+    function step(t) {
+      if (fin) return;
+      if (!t0) t0 = t;
+      var q = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - q, 3);
+      row.book.textContent   = money(row.data.book   * e);
+      row.engine.textContent = money(row.data.engine * e);
+      if (q < 1) { requestAnimationFrame(step); }
+      else { fin = true; clearTimeout(backstop); land(); setTimeout(done, 90); }
+    }
+    requestAnimationFrame(step);
+  }
+
+  var running = false;
+  function run() {
+    if (running) return;
+    running = true; btn.disabled = true; btn.textContent = 'Reconciling\u2026';
+    reset();
+    var i = 0;
+    (function next() {
+      if (i >= rows.length) {
+        running = false; btn.disabled = false; btn.textContent = 'Run it again';
+        return;
+      }
+      settle(rows[i++], next);
+    })();
+  }
+
+  btn.addEventListener('click', run);
+  reset();
+
+  /* Runs itself once on scroll-in, so the proof is not hidden behind a
+     button nobody presses. */
+  if ('IntersectionObserver' in window) {
+    var fired = false;
+    new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting || fired) return;
+        fired = true; obs.disconnect(); setTimeout(run, 260);
+      });
+    }, { threshold: 0.35 }).observe(grid);
+  } else {
+    run();
+  }
+})();
+</script>
 </body>
 </html>
