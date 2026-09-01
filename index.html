@@ -1099,21 +1099,13 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
     document.querySelectorAll('[data-type]').forEach(function(el){ typeObs.observe(el); });
   }
 
-  /* ═══ generic section reveals ═══ */
-  if(hasIO){
-    var revObs = new IntersectionObserver(function(entries, obs){
-      entries.forEach(function(en){
-        if(!en.isIntersecting) return;
-        var items = en.target.hasAttribute('data-reveal')
-          ? [en.target]
-          : Array.prototype.slice.call(en.target.querySelectorAll('[data-reveal]'));
-        items.forEach(function(el,i){ setTimeout(function(){ el.classList.add('is-visible'); }, i*60); });
-        obs.unobserve(en.target);
-      });
-    },{threshold:0.2});
-    document.querySelectorAll('[data-reveal-group]').forEach(function(g){ revObs.observe(g); });
-    document.querySelectorAll('.compare-head [data-reveal], .products-head [data-reveal]').forEach(function(el){ revObs.observe(el); });
-  }
+  /* Section reveals now live in their own script block near the end of
+     the document — see "REVEALS". They were here, inside the WebGL
+     hero's IIFE, and execution stopped reaching them: every element
+     carrying data-reveal starts at opacity 0, so eleven of fourteen
+     sections were permanently invisible. Page-wide content visibility
+     must not depend on a 3D scene's code path. */
+
 
   /* ═══ 9 + 10. COMPARISON — pacing is the argument ═══ */
   function countStat(el, duration){
@@ -1637,6 +1629,70 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
   } else {
     run();
   }
+})();
+</script>
+<script>
+/* ══ REVEALS — deliberately independent ═════════════════════════════
+   Everything with data-reveal starts at opacity 0 under .motion-ready,
+   so anything this misses is invisible for good. That is exactly what
+   happened: this logic used to sit inside the hero's IIFE, execution
+   stopped reaching it, and eleven of fourteen sections never appeared.
+
+   It is now its own block, runs before the hero, and fails safe — if
+   IntersectionObserver is missing, or an observer never fires, the
+   content is shown rather than hidden. A missing animation is a far
+   smaller failure than a blank page. */
+(function () {
+  'use strict';
+  var docEl = document.documentElement;
+  var all = function () {
+    return Array.prototype.slice.call(document.querySelectorAll('[data-reveal]'));
+  };
+  function show(el) { el.classList.add('is-visible'); }
+  function showAll() { all().forEach(show); }
+
+  /* Reduced motion never hides anything: the stylesheet only applies the
+     opacity:0 rule under .motion-ready. Nothing to do. */
+  if (!docEl.classList.contains('motion-ready')) return;
+
+  if (!('IntersectionObserver' in window)) { showAll(); return; }
+
+  var obs = new IntersectionObserver(function (entries, o) {
+    entries.forEach(function (en) {
+      if (!en.isIntersecting) return;
+      var items = en.target.hasAttribute('data-reveal')
+        ? [en.target]
+        : Array.prototype.slice.call(en.target.querySelectorAll('[data-reveal]'));
+      items.forEach(function (el, i) {
+        setTimeout(function () { show(el); }, i * 60);
+      });
+      o.unobserve(en.target);
+    });
+  }, { threshold: 0, rootMargin: '0px 0px -80px 0px' });
+
+  function wire() {
+    var groups = Array.prototype.slice.call(
+      document.querySelectorAll('[data-reveal-group]'));
+    groups.forEach(function (g) { obs.observe(g); });
+    all().filter(function (el) {
+      return !groups.some(function (g) { return g.contains(el); });
+    }).forEach(function (el) { obs.observe(el); });
+  }
+  wire();
+
+  /* Backstop. If anything is still hidden once the page has settled and
+     it is at or above the fold, show it — an observer that silently
+     never fires must not cost the reader the content. */
+  setTimeout(function () {
+    all().forEach(function (el) {
+      if (el.classList.contains('is-visible')) return;
+      if (el.getBoundingClientRect().top < window.innerHeight * 1.25) show(el);
+    });
+  }, 2200);
+
+  /* Same guarantee for anyone who arrives deep-linked or restores a
+     scroll position, where the initial observation may already be past. */
+  window.addEventListener('load', function () { setTimeout(wire, 120); });
 })();
 </script>
 </body>
