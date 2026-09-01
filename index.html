@@ -7,8 +7,8 @@
 <meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <meta name="theme-color" content="#0d1b2a">
-<meta name="description" content="AEW — Manufacturing intelligence tools for Indian factories. Quote a hydraulic cylinder in 30 seconds, not 4 hours.">
-<title>AEW — Manufacturing Intelligence Platform</title>
+<meta name="description" content="AEW. Manufacturing intelligence tools for Indian factories. Quote a hydraulic cylinder in 30 seconds, not 4 hours.">
+<title>AEW, Manufacturing Intelligence Platform</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -257,7 +257,9 @@ p{text-wrap:pretty}
   font-size:11px;font-weight:600;letter-spacing:var(--ls-wider);text-transform:uppercase;
   margin-bottom:20px;
 }
-.hero-badge-dot{width:5px;height:5px;border-radius:50%;background:var(--emerald-m)}
+/* .hero-badge / .hero-badge-dot removed: a pulsing status dot plus a
+   middle-dot separator plus a city name is the stock landing-page
+   eyebrow. Replaced by .hero-titleblock below. */
 .hero-h1{font-size:var(--fs-h1);font-weight:900;line-height:var(--lh-tight);letter-spacing:var(--ls-tightest);color:var(--on-dark);margin-bottom:22px}
 .hero-h1 .accent{color:var(--emerald-m)}
 .hero-sub{font-size:var(--fs-md);color:var(--on-dark-muted);max-width:38ch;line-height:var(--lh-relaxed);margin-bottom:26px;font-weight:400}
@@ -357,13 +359,8 @@ p{text-wrap:pretty}
 .motion-ready .hero-scale span{opacity:0}
 .motion-ready .hero-scale span.lit{opacity:1;transition:opacity .2s var(--ease)}
 
-.scroll-hint{
-  position:absolute;left:0;right:0;bottom:24px;z-index:3;
-  display:flex;flex-direction:column;align-items:center;gap:8px;
-  color:var(--on-dark-faint);
-}
-.scroll-hint-label{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;letter-spacing:var(--ls-wider);text-transform:uppercase}
-.scroll-hint-icon{width:14px;height:22px}
+/* .scroll-hint removed. See markup note. */
+
 
 @media(max-width:900px){
   .hero-grid{grid-template-columns:1fr;padding:120px 24px 0}
@@ -583,6 +580,42 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
 @media(max-width:720px){
   .recon-grid{grid-template-columns:1.4fr 1fr 1fr 48px}
   .recon-grid>div{padding:var(--sp-3);font-size:var(--fs-xs)}}
+
+/* ══ HERO TITLE BLOCK ═══════════════════════════════════════════════
+   The four numbers that define the cylinder every figure on this page
+   is derived from. Set like the title block of an engineering drawing:
+   labels small and quiet, values large and tabular, a hairline rule
+   under the row the way a drawing sheet divides its fields.
+
+   This replaces a badge that read "Now live · Peenya Industrial Area,
+   Bangalore" behind a pulsing dot. That line was decoration. This one
+   is the specification, and the reader can check it against the
+   breakdown further down the page. */
+.hero-titleblock{
+  display:flex;gap:var(--sp-5);margin:0 0 18px;padding:0 0 10px;
+  border-bottom:1px solid var(--on-dark-border);max-width:34ch;
+}
+.hero-titleblock>div{display:flex;flex-direction:column;gap:3px}
+.hero-titleblock dt{
+  font-family:'IBM Plex Mono',ui-monospace,monospace;
+  font-size:10px;font-weight:500;letter-spacing:var(--ls-wider);
+  text-transform:uppercase;color:var(--on-dark-faint);
+}
+.hero-titleblock dd{
+  margin:0;font-family:'IBM Plex Mono',ui-monospace,monospace;
+  font-size:17px;font-weight:600;color:var(--on-dark);
+  font-variant-numeric:tabular-nums;letter-spacing:var(--ls-snug);
+}
+/* The unit belongs to the row, not to each figure repeated four times. */
+.hero-titleblock::after{
+  content:'mm';align-self:flex-end;padding-bottom:2px;
+  font-family:'IBM Plex Mono',ui-monospace,monospace;
+  font-size:10px;letter-spacing:var(--ls-wide);color:var(--on-dark-faint);
+}
+@media(max-width:640px){
+  .hero-titleblock{gap:var(--sp-4);max-width:none}
+  .hero-titleblock dd{font-size:15px}
+}
 </style>
 </head>
 <body>
@@ -618,7 +651,12 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
 
     <div class="hero-grid">
       <div class="hero-copy">
-        <div class="hero-badge" data-reveal><span class="hero-badge-dot"></span>Now live · Peenya Industrial Area, Bangalore</div>
+        <dl class="hero-titleblock" data-reveal>
+          <div><dt>Bore</dt><dd class="num">100</dd></div>
+          <div><dt>Rod</dt><dd class="num">56</dd></div>
+          <div><dt>Stroke</dt><dd class="num">500</dd></div>
+          <div><dt>Qty</dt><dd class="num">10</dd></div>
+        </dl>
         <h1 class="hero-h1">
           <span class="hline" id="heroLine1">Quote a hydraulic</span>
           <span class="hline" id="heroLine2">cylinder in</span>
@@ -641,7 +679,7 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
             <rect x="264" y="46" width="20" height="28" rx="3" stroke="#0369a1" stroke-width="1.2" stroke-dasharray="3 3"/>
             <line x1="0" y1="60" x2="320" y2="60" stroke="#0369a1" stroke-width="1" stroke-dasharray="1 4"/>
           </svg>
-          <div class="cylinder-mount-label"><b>Hydraulic cylinder — Ø100 × Ø56 × 500</b><br>Total ₹18,092 per unit</div>
+          <div class="cylinder-mount-label"><b>Hydraulic cylinder, Ø100 × Ø56 × 500</b><br>Total ₹18,092 per unit</div>
         </div>
         <div class="hero-figure-number num" id="heroTotal" aria-hidden="true">₹18,092</div>
         <div class="hero-running" id="heroRunning" aria-hidden="true">
@@ -663,27 +701,21 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
       <span>0</span><span>100</span><span>200</span><span>300</span><span>400</span><span>500&nbsp;mm</span>
     </div>
 
-    <div class="scroll-hint">
-      <div class="scroll-hint-label">Scroll for the cost breakdown</div>
-      <svg class="scroll-hint-icon" viewBox="0 0 16 24" fill="none" aria-hidden="true">
-        <rect x="1" y="1" width="14" height="22" rx="7" stroke="currentColor" stroke-width="1.2"/>
-        <circle cx="8" cy="7" r="1.6" fill="currentColor"/>
-      </svg>
-    </div>
+
   </div>
 </section>
 
 <!-- TODAY vs WITH AEW -->
 <section class="compare-section" id="compare">
   <div class="compare-head">
-    <span class="doc-tag" data-type><b>Sheet 02 / 04</b> — The gap</span>
+    <span class="doc-tag" data-type><b>Sheet 02 / 04</b>  The gap</span>
     <h2 class="section-h2" data-reveal>The same job, two very different ways to do it.</h2>
     <p class="section-sub" data-reveal>Nothing about the cylinder changes. What changes is who can price it, how long it takes, and whether two estimators land on the same number.</p>
   </div>
   <div class="compare-grid" id="compareGrid">
     <div class="compare-today">
       <div class="compare-eyebrow">Today</div>
-      <div class="compare-stat num" data-count>2–4 hrs</div>
+      <div class="compare-stat num" data-count>2-4 hrs</div>
       <div class="compare-stat-lbl">per quotation</div>
       <ul class="compare-list">
         <li><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>One person who knows the formulas</li>
@@ -710,7 +742,7 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
 <section class="products-section" id="products">
   <div class="products-inner">
     <div class="products-head">
-      <span class="doc-tag" data-type><b>Sheet 03 / 04</b> — Product index</span>
+      <span class="doc-tag" data-type><b>Sheet 03 / 04</b>  Product index</span>
       <h2 class="section-h2" data-reveal>Every tool your factory needs, and the ones you'll need next.</h2>
       <p class="section-sub" data-reveal>One tool solves the problem in front of you today. The rest are built for the ones coming next quarter.</p>
     </div>
@@ -722,7 +754,7 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
           <h3>Product Costing ERP</h3>
           <span class="doc-tag status-live" style="margin:0">● Status: Live</span>
         </div>
-        <p class="parts-featured-desc">Enter bore, rod and stroke. Get the full manufacturing cost, margin and selling price — machine time calculated from lookup tables, not guesswork.</p>
+        <p class="parts-featured-desc">Enter bore, rod and stroke. Get the full manufacturing cost, margin and selling price. Machine time calculated from lookup tables, not guesswork.</p>
         <div class="parts-featured-cols">
           <ul class="feat-list">
             <li><svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3.5 3.5L13 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Auto-calculates from cylinder dimensions</li>
@@ -743,7 +775,7 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
       <div class="parts-row">
         <div class="parts-row-num num" data-plot="num">02</div>
         <div class="parts-row-name" data-plot="text">Carbon Tracking &amp; CBAM</div>
-        <div class="parts-row-desc" data-plot="text">Enter electricity, diesel and gas consumption. Get the CBAM number — tonnes of CO₂ per tonne of product — the figure your European buyer needs.</div>
+        <div class="parts-row-desc" data-plot="text">Enter electricity, diesel and gas consumption. Get the CBAM number, tonnes of CO₂ per tonne of product, the figure your European buyer needs.</div>
         <div class="parts-row-status is-next" data-plot="status">Coming next</div>
       </div>
       <div class="parts-row">
@@ -767,7 +799,7 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
       <div class="parts-row">
         <div class="parts-row-num num" data-plot="num">06</div>
         <div class="parts-row-name" data-plot="text">Quotation Manager</div>
-        <div class="parts-row-desc" data-plot="text">Every quotation tracked by customer, cylinder size and margin — win/loss rate and pricing trends over time.</div>
+        <div class="parts-row-desc" data-plot="text">Every quotation tracked by customer, cylinder size and margin. Win/loss rate and pricing trends over time.</div>
         <div class="parts-row-status is-next" data-plot="status">Coming next</div>
       </div>
     </div>
@@ -809,7 +841,7 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
 <section class="closing-section" id="hispl">
   <div class="closing-inner" data-reveal-group>
     <div>
-      <span class="doc-tag on-dark" data-type><b>Sheet 04 / 04</b> — Credits</span>
+      <span class="doc-tag on-dark" data-type><b>Sheet 04 / 04</b>  Credits</span>
       <h2 class="closing-h2" data-reveal>Built with HISPL</h2>
       <p class="closing-loc" data-reveal>Hydraulics India Services Pvt. Ltd., Peenya Industrial Area, Bangalore.</p>
 
@@ -856,12 +888,12 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
             <text x="203" y="164" text-anchor="middle">ST52 TUBE · EN8 CHROMED ROD</text>
           </g>
         </svg>
-        <figcaption>Fig. 02 — the costing reference. Every figure on this page is one run of this cylinder.</figcaption>
+        <figcaption>Fig. 02, the costing reference. Every figure on this page is one run of this cylinder.</figcaption>
       </figure>
     </div>
     <div>
       <p class="closing-quote" data-reveal>Every formula is transcribed, dimensionally checked and verified against hand calculation. The rates and machining times are being validated with HISPL now.</p>
-      <div class="closing-attrib" data-reveal>Costing methodology — validation in progress</div>
+      <div class="closing-attrib" data-reveal>Costing methodology, validation in progress</div>
       <div class="closing-role" data-reveal>With HISPL, Peenya Industrial Area, Bangalore</div>
       <div class="closing-ctas" data-reveal>
         <a class="btn-closing-p" href="mailto:hello@aew.in?subject=Demo Request">Book a factory visit →</a>
@@ -1013,7 +1045,7 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
     l3.classList.add('is-visible');
     l3chars.forEach(function(c,i){ setTimeout(function(){ c.classList.add('lit'); }, i*25); });
   }, 300);
-  ['.hero-badge','.hero-sub','.hero-cta'].forEach(function(sel,i){
+  ['.hero-titleblock','.hero-sub','.hero-cta'].forEach(function(sel,i){
     var el = document.querySelector(sel);
     if(el) setTimeout(function(){ el.classList.add('is-visible'); }, 120 + i*120);
   });
