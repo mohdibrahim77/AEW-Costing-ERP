@@ -569,8 +569,14 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
 .recon-row{opacity:.34;transition:opacity 380ms var(--ease),background 380ms var(--ease)}
 .recon-row.done{opacity:1}
 .recon-row.active{background:var(--emerald-l)}
-.tickmark{width:20px;height:20px;color:var(--emerald);opacity:0;transform:scale(.6);
-  transition:opacity 300ms var(--ease),transform 300ms var(--ease)}
+.tickmark{width:20px;height:20px;color:var(--emerald);opacity:0;transform:scale(.4);
+  /* The figures settle on a spring; the tick that confirms them should
+     too. Overshoot and settle rather than fade in on a schedule: a
+     confirmation arrives, it does not appear. zeta here is roughly .58,
+     livelier than the .93 the numbers use, because a tick is an event
+     and a rupee figure is a measurement. */
+  transition:opacity 220ms var(--ease),
+             transform 460ms cubic-bezier(.34,1.56,.64,1)}
 .recon-row.done .tickmark,
 .tickmark.is-on{opacity:1;transform:scale(1)}
 .recon-foot{padding:var(--sp-5);background:var(--surface);border-top:1px solid var(--ink-200);
@@ -1602,6 +1608,45 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
   /* Counts one row, then stamps it. A hidden tab throttles rAF to a stop,
      so those cases jump straight to the settled figure — a frozen
      half-counted number would read as a real one. */
+  /* A damped harmonic oscillator, integrated per frame.
+
+     Worth the fifteen lines over a cubic ease, and worth more than a
+     library. An ease decelerates on a fixed schedule: it is always the
+     same shape no matter what it is animating. A spring decelerates by
+     how far it still has to go, so a figure lands the way a needle
+     settles on a dial. On a panel whose whole job is to show a
+     measurement being checked, that is the difference between motion
+     that decorates and motion that means something.
+
+     Semi-implicit Euler. dt is clamped because a backgrounded tab
+     resumes with one enormous frame, and an unclamped step would fling
+     the value somewhere absurd before it recovered.
+
+     zeta = damping / (2 * sqrt(stiffness * mass)). Below is 0.93:
+     just short of critical, so it arrives firmly with a trace of
+     overshoot rather than creeping in. */
+  function spring(opts) {
+    var k = opts.stiffness, c = opts.damping, m = opts.mass || 1;
+    var x = 0, v = 0, last = null, dead = false;
+    function frame(t) {
+      if (dead) return;
+      if (last === null) last = t;
+      var dt = Math.min((t - last) / 1000, 1 / 30);
+      last = t;
+      v += ((-k * (x - 1) - c * v) / m) * dt;
+      x += v * dt;
+      opts.onUpdate(x);
+      if (Math.abs(1 - x) < 0.0015 && Math.abs(v) < 0.0015) {
+        dead = true; opts.onUpdate(1);
+        if (opts.onDone) opts.onDone();
+        return;
+      }
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+    return { cancel: function () { dead = true; } };
+  }
+
   function settle(row, done) {
     row.cells.forEach(function (c) { c.classList.add('active'); });
     function land() {
@@ -1614,20 +1659,26 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
       if (mark) mark.classList.add('is-on');
     }
     if (still()) { land(); done(); return; }
-    var t0 = null, dur = 520, fin = false;
+
+    var fin = false;
+    /* rAF stops in a hidden tab, so a frozen half-counted figure would
+       sit there reading like a real number. This lands it regardless. */
     var backstop = setTimeout(function () {
-      if (!fin) { fin = true; land(); done(); }
-    }, dur + 400);
-    function step(t) {
-      if (fin) return;
-      if (!t0) t0 = t;
-      var q = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - q, 3);
-      row.book.textContent   = money(row.data.book   * e);
-      row.engine.textContent = money(row.data.engine * e);
-      if (q < 1) { requestAnimationFrame(step); }
-      else { fin = true; clearTimeout(backstop); land(); setTimeout(done, 90); }
-    }
-    requestAnimationFrame(step);
+      if (!fin) { fin = true; sp.cancel(); land(); done(); }
+    }, 1600);
+
+    var sp = spring({
+      stiffness: 140, damping: 22, mass: 1,
+      onUpdate: function (p) {
+        if (fin) return;
+        row.book.textContent   = money(row.data.book   * p);
+        row.engine.textContent = money(row.data.engine * p);
+      },
+      onDone: function () {
+        if (fin) return;
+        fin = true; clearTimeout(backstop); land(); setTimeout(done, 90);
+      }
+    });
   }
 
   var running = false;
