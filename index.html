@@ -1668,7 +1668,10 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
     }, 1600);
 
     var sp = spring({
-      stiffness: 140, damping: 22, mass: 1,
+      /* 240/28.8 settles in 0.80s at 60fps. Stiffness and damping are
+         raised together so zeta stays 0.93 — a stiffer spring alone would
+         have made it bounce. */
+      stiffness: 240, damping: 28.8, mass: 1,
       onUpdate: function (p) {
         if (fin) return;
         row.book.textContent   = money(row.data.book   * p);
