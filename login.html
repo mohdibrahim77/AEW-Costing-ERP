@@ -114,14 +114,14 @@ body{font-family:'Inter',system-ui,sans-serif;min-height:100vh;display:flex;back
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="assets/js/config.js?v=2026.08.26-1"></script>
-<script src="assets/js/supabase.js?v=2026.08.26-1"></script>
-<script src="assets/js/session.js?v=2026.08.26-1"></script>
-<script src="assets/js/router.js?v=2026.08.26-1"></script>
-<script src="assets/js/auth.js?v=2026.08.26-1"></script>
-<script src="assets/js/ui.js?v=2026.08.26-1"></script>
-<script src="assets/js/api.js?v=2026.08.26-1"></script>
-<script src="assets/js/common.js?v=2026.08.26-1"></script>
+<script src="assets/js/config.js?v=2026.09.01-1"></script>
+<script src="assets/js/supabase.js?v=2026.09.01-1"></script>
+<script src="assets/js/session.js?v=2026.09.01-1"></script>
+<script src="assets/js/router.js?v=2026.09.01-1"></script>
+<script src="assets/js/auth.js?v=2026.09.01-1"></script>
+<script src="assets/js/ui.js?v=2026.09.01-1"></script>
+<script src="assets/js/api.js?v=2026.09.01-1"></script>
+<script src="assets/js/common.js?v=2026.09.01-1"></script>
 <script>
 /* login.html */
 document.addEventListener('DOMContentLoaded', function () {
@@ -159,8 +159,35 @@ function doSignIn() {
   AEW.auth.login(email, pass).then(function (r) {
     if (r.error) {
       AEW.ui.setLoading('sbtn', 'spinner', 'btn-text', false, 'Sign in');
-      _fieldErr('password', 'Incorrect email or password.');
-      var p = document.getElementById('password'); if (p) p.value = '';
+
+      /* Every failure used to read "Incorrect email or password." That is
+         true for exactly one of them. When the backend is unreachable —
+         and on the free tier it pauses itself after a week idle — a user
+         with perfectly good credentials was told their password was
+         wrong, then retyped it, then doubted it. The message has to
+         distinguish "we rejected you" from "we never asked anyone".
+
+         Supabase answers a bad credential with HTTP 400. A paused
+         project, a dropped connection or a DNS failure produce no status
+         at all, or a 5xx. */
+      var st  = r.error.status;
+      var msg = String(r.error.message || '');
+      var badCredential = st === 400 || st === 401 ||
+                          /invalid login credentials/i.test(msg);
+
+      if (badCredential) {
+        _fieldErr('password', 'Incorrect email or password.');
+        var p = document.getElementById('password'); if (p) p.value = '';
+      } else {
+        /* Not the user's fault, so do not mark their fields or wipe what
+           they typed — they will want to press Sign in again unchanged. */
+        _clearAlerts();
+        AEW.ui.show('a-err', 'flex');
+        AEW.ui.setText('err-msg',
+          'Cannot reach the sign-in service right now. Your details were not sent. ' +
+          'Please try again in a moment.');
+        if (window.console) console.error('[AEW:login] sign-in unavailable:', st, msg);
+      }
       return;
     }
     AEW.router.routeUser(r.data.user);
