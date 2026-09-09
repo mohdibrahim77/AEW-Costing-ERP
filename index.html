@@ -178,7 +178,7 @@ p{text-wrap:pretty}
   transition:background .2s,border-color .2s;
 }
 .nav.is-light{background:rgba(255,255,255,.86);border-bottom-color:rgba(0,0,0,.06)}
-.nav-logo{display:flex;align-items:center;gap:11px;font-size:15px;font-weight:700;color:var(--on-dark);letter-spacing:var(--ls-tight);transition:color .2s}
+.nav-logo{display:flex;align-items:center;gap:11px;min-height:44px;font-size:15px;font-weight:700;color:var(--on-dark);letter-spacing:var(--ls-tight);transition:color .2s}
 .nav.is-light .nav-logo{color:var(--ink-900)}
 .nav-logo-mark{
   width:30px;height:30px;border-radius:var(--r8);
@@ -211,7 +211,57 @@ p{text-wrap:pretty}
   cursor:pointer;font-family:inherit;transition:background .2s;
 }
 .btn-solid:hover{background:var(--emerald-d)}
-@media(max-width:860px){.nav-links{display:none}.nav{padding:0 20px}}
+.nav-toggle{
+  display:none;width:44px;height:44px;margin-right:-10px;
+  align-items:center;justify-content:center;
+  background:none;border:0;cursor:pointer;color:var(--on-dark);
+}
+.nav.is-light .nav-toggle{color:var(--ink-900)}
+.nav-toggle-bars{position:relative;display:block;width:19px;height:11px}
+.nav-toggle-bars i{
+  position:absolute;left:0;width:100%;height:1.5px;border-radius:1px;
+  background:currentColor;transition:transform .22s var(--ease),opacity .16s var(--ease);
+}
+.nav-toggle-bars i:first-child{top:0}
+.nav-toggle-bars i:last-child{bottom:0}
+.nav-toggle[aria-expanded="true"] .nav-toggle-bars i:first-child{transform:translateY(4.75px) rotate(45deg)}
+.nav-toggle[aria-expanded="true"] .nav-toggle-bars i:last-child{transform:translateY(-4.75px) rotate(-45deg)}
+
+.nav-panel{
+  position:fixed;top:60px;left:0;right:0;z-index:59;
+  display:flex;flex-direction:column;
+  padding:var(--sp-2) 20px calc(var(--sp-4) + env(safe-area-inset-bottom));
+  background:var(--ink-950);border-bottom:1px solid rgba(255,255,255,.10);
+  max-height:calc(100dvh - 60px);overflow-y:auto;
+}
+.nav-panel[hidden]{display:none}
+.nav-panel a{
+  display:flex;align-items:center;min-height:48px;   /* Apple HIG floor, with room */
+  padding:2px 4px;font-size:15px;font-weight:500;
+  color:var(--on-dark-muted);border-bottom:1px solid rgba(255,255,255,.07);
+}
+.nav-panel a:last-child{border-bottom:none}
+.nav-panel a.np-solid{
+  margin-top:var(--sp-3);justify-content:center;
+  background:var(--emerald);color:#fff;font-weight:600;border-radius:var(--r8);
+}
+.motion-ready .nav-panel{opacity:0;transform:translateY(-6px)}
+.motion-ready .nav-panel.open{
+  opacity:1;transform:none;
+  transition:opacity .18s var(--ease),transform .18s var(--ease);
+}
+
+@media(max-width:860px){
+  .nav-links{display:none}
+  .nav{padding:0 20px}
+  .nav-toggle{display:inline-flex}
+  /* Request demo is the one CTA worth its width up here; Sign in moves
+     into the panel rather than crowding a 375px bar. */
+  .nav-cta .btn-ghost{display:none}
+}
+@media(max-width:420px){
+  .nav-cta .btn-solid{display:none}   /* the panel carries both */
+}
 
 /* ══════════════════════════════════════════════
    HERO + EXPLODE TRACK
@@ -242,6 +292,10 @@ p{text-wrap:pretty}
   transition:opacity .4s var(--ease);
 }
 .cursor-light.on{opacity:1}
+/* A pointer effect with no pointer to follow. body{overflow-x:hidden}
+   already stops it scrolling the page now the stage no longer clips, but
+   painting a 400px layer a touch device can never move is still waste. */
+@media(hover:none),(max-width:900px){ .cursor-light{display:none} }
 
 .hero-grid{
   position:absolute;inset:0;z-index:3;
@@ -458,7 +512,10 @@ p{text-wrap:pretty}
 .feat-list{display:flex;flex-direction:column;gap:9px}
 .feat-list li{display:flex;align-items:flex-start;gap:9px;font-size:13.5px;color:var(--ink-600)}
 .feat-list svg{flex-shrink:0;margin-top:2px;color:var(--emerald)}
-.parts-featured-link{font-size:13.5px;font-weight:700;color:var(--emerald);display:inline-flex;align-items:center;gap:6px}
+.parts-featured-link{
+  font-size:13.5px;font-weight:700;color:var(--emerald);
+  display:inline-flex;align-items:center;gap:6px;min-height:44px;
+}
 
 .parts-list{display:flex;flex-direction:column}
 .parts-row{
@@ -537,7 +594,16 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
 .footer-brand-mark{width:26px;height:26px;border-radius:var(--r8);background:linear-gradient(135deg,var(--ink-800),var(--emerald));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:#fff}
 .footer-brand p{font-size:13px;color:rgba(255,255,255,.4);line-height:var(--lh-relaxed);max-width:32ch}
 .footer-col h4{font-size:10.5px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:var(--ls-wider);margin-bottom:14px}
-.footer-col a{display:block;font-size:13px;color:rgba(255,255,255,.5);margin-bottom:10px;transition:color .15s}
+.footer-col a{
+  display:flex;align-items:center;min-height:24px;
+  font-size:13px;color:rgba(255,255,255,.5);margin-bottom:10px;transition:color .15s;
+}
+@media(max-width:860px){
+  /* Stacked on a phone these are the primary navigation, so they get a
+     real target rather than a line of text. */
+  .footer-col a{min-height:44px;margin-bottom:0;border-bottom:1px solid rgba(255,255,255,.06)}
+  .footer-col a:last-child{border-bottom:none}
+}
 .footer-col a:hover{color:#fff}
 .footer-bottom{border-top:1px solid rgba(255,255,255,.08);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
 .footer-copy{font-size:12.5px;color:rgba(255,255,255,.3)}
@@ -567,7 +633,7 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
   color:var(--on-dark-muted);letter-spacing:var(--ls-wide)}
 .recon-run{font:500 var(--fs-sm)/1 'Inter',system-ui,sans-serif;background:var(--emerald);
   color:#fff;border:0;border-radius:var(--r4);padding:10px 18px;cursor:pointer;
-  transition:background 140ms var(--ease),transform 140ms var(--ease)}
+  transition:background 140ms var(--ease),transform 140ms var(--ease);min-height:44px}
 .recon-run:hover{background:#047857}
 .recon-run:active{transform:translateY(1px)}
 .recon-run:disabled{background:var(--ink-400);cursor:default}
@@ -814,7 +880,18 @@ html:not(.motion-ready) .dimline em{opacity:1}
     <a class="btn-ghost" href="login.html">Sign in</a>
     <a class="btn-solid" href="login.html">Request demo →</a>
   </div>
+  <button class="nav-toggle" id="navToggle" type="button"
+          aria-expanded="false" aria-controls="navPanel" aria-label="Open menu">
+    <span class="nav-toggle-bars" aria-hidden="true"><i></i><i></i></span>
+  </button>
 </nav>
+<div class="nav-panel" id="navPanel" hidden>
+  <a href="#compare">Why AEW</a>
+  <a href="#products">Products</a>
+  <a href="mailto:hello@aew.in">Contact</a>
+  <a href="login.html">Sign in</a>
+  <a class="np-solid" href="login.html">Request demo</a>
+</div>
 
 <!-- HERO + EXPLODE TRACK -->
 <main id="main">
@@ -1382,21 +1459,9 @@ html:not(.motion-ready) .dimline em{opacity:1}
   var runValEl = document.getElementById('heroRunningVal');
   var counterLive = false;
   function calibrate(finalStr, duration, done){
-    /* The spin shows random digits until each place locks. That is the
-       whole charm of it and also its one danger: requestAnimationFrame
-       does not run in a background tab, so a page opened in one and read
-       later would sit frozen on a fabricated number — this field says
-       "Cost / unit", and Rs.52,507 for a cylinder that costs Rs.18,092 is
-       the exact class of error that put a quotation Rs.1,522 below cost
-       once already.
-
-       So the effect is opt-in on the tab being visible. Hidden, it lands
-       on the real figure at once and stays there. */
-    if (document.hidden) {
-      totalEl.textContent = finalStr;
-      if (done) done();
-      return;
-    }
+    /* Digits spin until each place locks, odometer-style. See land()
+       below for why the real figure is guaranteed by a timer rather than
+       by the frame loop. */
     totalEl.textContent = '';
     var spans = [];
     finalStr.split('').forEach(function(c){
@@ -1406,8 +1471,33 @@ html:not(.motion-ready) .dimline em{opacity:1}
       spans.push({el:s, ch:c, isDigit:/[0-9]/.test(c)});
     });
     var digits = spans.filter(function(s){ return s.isDigit; });
-    var start = null;
+    var start = null, landed = false;
+
+    /* A wall-clock backstop, independent of requestAnimationFrame.
+
+       document.hidden is not a reliable signal for "will rAF actually
+       run": a tab can report itself visible and still not paint, and in
+       that state the spin freezes on whatever random digits it had
+       reached. This field is labelled "Cost / unit", so a frozen frame
+       reads as a price. Rs.52,507 for a cylinder that costs Rs.18,092 is
+       the same class of error that once put a quotation Rs.1,522 below
+       cost, and no animation is worth reintroducing it.
+
+       So the real figure lands on a timer no matter what the frame loop
+       does. The spin is decoration on top of a value that is already
+       guaranteed to arrive. */
+    function land(){
+      if(landed) return;
+      landed = true;
+      spans.forEach(function(sp){ sp.el.textContent = sp.ch; });
+      if(done) done();
+    }
+    setTimeout(land, duration + 250);
+    if(document.hidden){ land(); return; }
     function frame(ts){
+      /* First, not last: once land() has run, this loop must not put
+         random digits back over the settled figure. */
+      if(landed) return;
       if(start === null) start = ts;
       var t = ts - start, settled = 0;
       digits.forEach(function(d,i){
@@ -1422,14 +1512,10 @@ html:not(.motion-ready) .dimline em{opacity:1}
       if(settled < digits.length){
         /* Backgrounded mid-spin: land it rather than freeze on a
            half-random figure that the next reader would take as the price. */
-        if(document.hidden){
-          digits.forEach(function(d){ d.el.textContent = d.ch; });
-          if(done) done();
-          return;
-        }
+        if(document.hidden){ land(); return; }
         requestAnimationFrame(frame);
       }
-      else if(done) done();
+      else land();
     }
     requestAnimationFrame(frame);
   }
@@ -2120,6 +2206,77 @@ html:not(.motion-ready) .dimline em{opacity:1}
   /* Same guarantee for anyone who arrives deep-linked or restores a
      scroll position, where the initial observation may already be past. */
   window.addEventListener('load', function () { setTimeout(wire, 120); });
+})();
+</script>
+<script>
+/* ══ MOBILE NAVIGATION ═══════════════════════════════════════════════
+   Under 860px the links were display:none with nothing in their place,
+   so a phone reached the site and could not get to Why AEW, Products or
+   Contact at all. This is that menu.
+
+   Its own block, and deliberately not inside the hero's script: the
+   pattern on this page has been that anything living inside the 3D
+   scene's setup dies with it. Navigation is not allowed to depend on a
+   cylinder rendering. */
+(function () {
+  'use strict';
+  var btn   = document.getElementById('navToggle');
+  var panel = document.getElementById('navPanel');
+  if (!btn || !panel) return;
+
+  var open = false;
+
+  function set(next) {
+    open = next;
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    if (open) {
+      panel.hidden = false;
+      /* One frame between unhiding and animating, or the transition has
+         nothing to move from and the panel simply appears. */
+      requestAnimationFrame(function () { panel.classList.add('open'); });
+    } else {
+      panel.classList.remove('open');
+      /* Wait out the fade before hiding, but never leave it half-open if
+         the transition does not run — a background tab throttles it to
+         nothing, and a menu stuck over the page would be worse than an
+         unanimated one. */
+      var done = false;
+      var finish = function () {
+        if (done) return;
+        done = true;
+        if (!open) panel.hidden = true;
+      };
+      panel.addEventListener('transitionend', finish, { once: true });
+      setTimeout(finish, 260);
+    }
+  }
+
+  btn.addEventListener('click', function () { set(!open); });
+
+  /* Following a link should close it. In-page anchors do not navigate
+     away, so without this the panel stays open over the section it just
+     jumped to. */
+  panel.addEventListener('click', function (e) {
+    if (e.target.closest('a')) set(false);
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && open) { set(false); btn.focus(); }
+  });
+
+  document.addEventListener('click', function (e) {
+    if (!open) return;
+    if (panel.contains(e.target) || btn.contains(e.target)) return;
+    set(false);
+  });
+
+  /* Rotating a phone, or resizing a desktop window down and back up,
+     must not leave a panel open that its toggle is no longer visible to
+     close. */
+  window.addEventListener('resize', function () {
+    if (open && window.innerWidth > 860) set(false);
+  });
 })();
 </script>
 </body>
