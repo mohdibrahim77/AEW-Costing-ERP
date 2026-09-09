@@ -1,0 +1,40 @@
+A1: "FRONT FLANGE - COSTING SHEET (active only when Mounting = Front Flange)"
+A2: "ISO 6020-1 MF1 (Head rectangular flange mounting). Excludes Rod Eye - a Front Flange-mounted cylinder carries its mounting load through this flange, not a rod-end pivot. Geometry approved 27-Aug-2026, rounded to the upper end deliberately since this is a costing tool, not final design."
+A4: "New Material? (Yes/No)"  ||  B4: "Yes"  ||  H4: "APPROXIMATE COSTING GEOMETRY - FINAL DIMENSIONS SUBJECT TO GA/DESIGN (Bore driven)"
+A5: "SECTION A - MATERIAL INPUTS"  ||  H5: "Source: ISO 6020-1 MF1 (Head rectangular flange), rounded UP to standard sizes per HISPL - costing tool, upper-end bias intentional."
+A6: "Material Grade"  ||  B6: "MS-PLATE-IS2062"  ||  H6: "Bore Bin Start"  ||  I6: "Width"  ||  J6: "Thickness"  ||  K6: "Hole Dia"
+A7: "Flange Width (mm) [from approved geometry table]"  ||  B7: =FrontFlange_Width  {235}  ||  H7: 25  ||  I7: 50  ||  J7: 10  ||  K7: 11
+A8: "Thickness (mm) [from approved geometry table]"  ||  B8: =FrontFlange_Thickness  {50}  ||  H8: 32  ||  I8: 60  ||  J8: 13  ||  K8: 13
+A9: "Hole Diameter (mm) [from approved geometry table]"  ||  B9: =FrontFlange_HoleDia  {23}  ||  H9: 40  ||  I9: 75  ||  J9: 16  ||  K9: 13
+A10: "Number of Bolt Holes"  ||  B10: 4  ||  H10: 50  ||  I10: 95  ||  J10: 20  ||  K10: 15
+A11: "Quantity (Nos)"  ||  B11: 1  ||  H11: 63  ||  I11: 120  ||  J11: 25  ||  K11: 15
+H12: 80  ||  I12: 150  ||  J12: 32  ||  K12: 19
+A13: "AUTO CALCULATE - MATERIAL"  ||  H13: 100  ||  I13: 190  ||  J13: 40  ||  K13: 19
+A14: "Density (g/cm3)"  ||  B14: =INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),3)  {7.85}  ||  H14: 125  ||  I14: 235  ||  J14: 50  ||  K14: 23
+A15: "Material Rate (Rs./kg)"  ||  B15: =INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),4)  {85}  ||  H15: 160  ||  I15: 300  ||  J15: 62  ||  K15: 27
+A16: "Gross Volume (mm3) = Width x Width x Thickness (square flange)"  ||  B16: =B7*B7*B8  {2761250}  ||  H16: 200  ||  I16: 375  ||  J16: 78  ||  K16: 27
+A17: "Hole Volume (mm3) = PI/4 x HoleDia^2 x T x No. of Holes"  ||  B17: =(PI()/4)*(B9)^2*B8*B10  {83095.12569}
+A18: "Net Volume (mm3)"  ||  B18: =B16-B17  {2678154.874}  ||  H18: "Manual Overrides (blank = use table; enter to force from GA/drawing):"
+A19: "Unit Weight (kg / pc)"  ||  B19: =B18*B14/1000000  {21.02351576}  ||  H19: "Width Override"  ||  I19: "Thickness Override"  ||  J19: "Hole Dia Override"
+A20: "Material Cost / pc (Rs.)"  ||  B20: =IF(B4="No",0,B19*B15)  {1786.99884}
+A22: "SECTION F - AUTOMATIC PROCESS ROUTING (existing Machine Time Master)"  ||  H22: "FINAL (Standard or Override):"
+A23: "Route: Milling (flange facing) + Drilling (bolt holes) - same methodology as CEC Clevis / Foot Lug."  ||  H23: "Width"  ||  I23: =IF(H20="",IFERROR(VLOOKUP(Bore,FrontFlangeGeomTable,2,TRUE()),0),H20)  {235}
+A24: "Apply?"  ||  B24: "Process"  ||  C24: "Machine / Basis"  ||  D24: "Hours / Qty Basis"  ||  E24: "Rate (Rs.)"  ||  F24: "Cost (Rs.)"  ||  H24: "Thickness"  ||  I24: =IF(I20="",IFERROR(VLOOKUP(Bore,FrontFlangeGeomTable,3,TRUE()),0),I20)  {50}
+A25: "Yes"  ||  B25: "Milling (flange facing)"  ||  C25: "Milling Machine"  ||  D25: =VLOOKUP((B7)*(B7),MillingTable,3,TRUE())  {1.8}  ||  E25: =INDEX(MachineRateMaster_Range,MATCH("Milling Machine",INDEX(MachineRateMaster_Range,0,1),0),2)  {350}  ||  F25: =IF(A25="Yes",D25*E25,0)  {630}  ||  H25: "Hole Dia"  ||  I25: =IF(J20="",IFERROR(VLOOKUP(Bore,FrontFlangeGeomTable,4,TRUE()),0),J20)  {23}
+A26: "Yes"  ||  B26: "Drilling (bolt holes)"  ||  C26: "Drilling Machine"  ||  D26: =VLOOKUP(B9,DrillingTable,3,TRUE())*B10  {0.32}  ||  E26: =INDEX(MachineRateMaster_Range,MATCH("Drilling Machine",INDEX(MachineRateMaster_Range,0,1),0),2)  {350}  ||  F26: =(shared//inherited)  {112}
+A28: "SUBTOTAL - PROCESS COST (Rs.)"  ||  B28: =F25+F26  {742}
+A30: "SECTION G - WELDING (Tube OD driven, HISPL Simplified Rs./inch/bead)"
+A31: "Weld Diameter (mm) [auto = Tube_OD]"  ||  B31: =Tube_OD  {150}
+A32: "No. of Beads (auto, from Weld Bead Table)"  ||  B32: =VLOOKUP(B31,WeldBeadTable,3,TRUE())  {5}
+A33: "No. of Weld Locations"  ||  B33: 1
+A34: "Circumference (inch)"  ||  B34: =(B31*3.14)/25.4  {18.54330709}
+A35: "Welding Rate (Rs./inch/bead)"  ||  B35: =WeldRatePerInchBead  {14}
+A36: "Total Welding Cost (Rs.)"  ||  B36: =B34*B35*B32*B33  {1298.031496}
+A38: "SECTION D - ADDITIONAL COST (Manual Entry)"
+A39: "Additional Cost / pc (Rs.)"  ||  B39: 0
+A41: "SECTION E - COMPONENT COST SUMMARY (gated by Mounting)"
+A42: "Material Cost"  ||  B42: =B20  {1786.99884}
+A43: "Process Cost (incl. welding)"  ||  B43: =B28+B36  {2040.031496}
+A44: "Additional Cost"  ||  B44: =B39  {0}
+A45: "TOTAL FRONT FLANGE COST / pc"  ||  B45: =B42+B43+B39  {3827.030336}
+A46: "TOTAL FRONT FLANGE COST (Rs.) [gated by Mounting]"  ||  B46: =IF(Mounting_FrontFlange="Yes",B45*B11,0)  {0}

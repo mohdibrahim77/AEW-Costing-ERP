@@ -1,0 +1,68 @@
+A1: "MACHINE TIME MASTER"
+A2: "Single source of machine time standards. Every component sheet looks up hours from these tables via INDEX/MATCH or VLOOKUP - never enter machine hours manually."
+A4: "SECTION 2 - CUTTING TIME (Hrs)  |  Inputs: OD, Length"
+A5: "Bin Start"  ||  B5: "OD (mm)"  ||  C5: "Up to 500"  ||  D5: "501-1000"  ||  E5: "1001-2000"  ||  F5: "2001-3000"
+B6: "Length/Area Bin Start (helper)"  ||  C6: 0  ||  D6: 501  ||  E6: 1001  ||  F6: 2001
+A7: 0  ||  B7: "Up to 80"  ||  C7: 0.08  ||  D7: 0.1  ||  E7: 0.15  ||  F7: 0.2
+A8: 81  ||  B8: "81-150"  ||  C8: 0.1  ||  D8: 0.15  ||  E8: 0.2  ||  F8: 0.3
+A9: 151  ||  B9: "151-250"  ||  C9: 0.15  ||  D9: 0.2  ||  E9: 0.3  ||  F9: 0.4
+A10: 251  ||  B10: "Above 250"  ||  C10: 0.25  ||  D10: 0.35  ||  E10: 0.5  ||  F10: 0.7
+A12: "SECTION 3 - ROUGH TURNING TIME (Hrs)  |  Inputs: Finished OD, Length. Stock Removal = Raw OD - Finished OD"
+A13: "Bin Start"  ||  B13: "Finished OD (mm)"  ||  C13: "Up to 500"  ||  D13: "501-1000"  ||  E13: "1001-2000"  ||  F13: "2001-3000"
+B14: "Length/Area Bin Start (helper)"  ||  C14: 0  ||  D14: 501  ||  E14: 1001  ||  F14: 2001
+A15: 0  ||  B15: "Up to 80"  ||  C15: 0.3  ||  D15: 0.6  ||  E15: 1.2  ||  F15: 1.8
+A16: 81  ||  B16: "81-150"  ||  C16: 0.5  ||  D16: 0.9  ||  E16: 1.7  ||  F16: 2.5
+A17: 151  ||  B17: "151-250"  ||  C17: 0.8  ||  D17: 1.5  ||  E17: 2.8  ||  F17: 4
+A18: 251  ||  B18: "Above 250"  ||  C18: 1.2  ||  D18: 2.2  ||  E18: 4  ||  F18: 6
+A20: "STOCK REMOVAL CORRECTION FACTOR (applied to Rough Turning Time)"
+A21: "Bin Start (helper)"  ||  B21: "Stock Removal (mm)"  ||  C21: "Factor"
+A22: 0  ||  B22: "<= 2 mm"  ||  C22: 1
+A23: 2.0001  ||  B23: "> 2 - 5 mm"  ||  C23: 1.15
+A24: 5.0001  ||  B24: "> 5 - 10 mm"  ||  C24: 1.35
+A25: 10.0001  ||  B25: "> 10 mm"  ||  C25: 1.6
+A27: "SECTION 4 - Finish Turning Time = Rough Turning Time (looked up the same way) x 0.70  (applied directly in component sheets)"
+A29: "SECTION 5 - BORING TIME (Hrs)  |  Inputs: Finished ID, Bore Length"
+A30: "Bin Start"  ||  B30: "ID (mm)"  ||  C30: "Up to 250"  ||  D30: "251-500"  ||  E30: "501-1000"  ||  F30: "1001-2000"
+B31: "Length/Area Bin Start (helper)"  ||  C31: 0  ||  D31: 251  ||  E31: 501  ||  F31: 1001
+A32: 0  ||  B32: "Up to 80"  ||  C32: 0.25  ||  D32: 0.4  ||  E32: 0.7  ||  F32: 1.2
+A33: 81  ||  B33: "81-150"  ||  C33: 0.4  ||  D33: 0.7  ||  E33: 1.2  ||  F33: 2
+A34: 151  ||  B34: "151-250"  ||  C34: 0.7  ||  D34: 1.2  ||  E34: 2.2  ||  F34: 3.5
+A35: 251  ||  B35: "Above 250"  ||  C35: 1.2  ||  D35: 2  ||  E35: 3.5  ||  F35: 5.5
+A37: "SECTION 6 - HONING TIME (Hrs, utilisation reference)  |  Cost is via Honing Rate Card (Process Rate Master), NOT this table"
+A38: "Bin Start"  ||  B38: "ID (mm)"  ||  C38: "Up to 500"  ||  D38: "501-1000"  ||  E38: "1001-2000"
+B39: "Length/Area Bin Start (helper)"  ||  C39: 0  ||  D39: 501  ||  E39: 1001
+A40: 0  ||  B40: "Up to 80"  ||  C40: 0.3  ||  D40: 0.6  ||  E40: 1.2
+A41: 81  ||  B41: "81-150"  ||  C41: 0.5  ||  D41: 0.9  ||  E41: 1.6
+A42: 151  ||  B42: "151-250"  ||  C42: 0.8  ||  D42: 1.4  ||  E42: 2.4
+A43: 251  ||  B43: "Above 250"  ||  C43: 1.2  ||  D43: 2  ||  E43: 3.5
+A45: "SECTION 7 - GRINDING TIME (Hrs, machine utilisation reference)  |  Surface Area(cm2) = PI() x OD x Length / 100"
+A46: "Grinding COST is charged via Process Rate Master (Rs./cm2). This table is for machine hour / utilisation tracking on the Dashboard."
+A47: "Bin Start"  ||  B47: "OD (mm)"  ||  C47: "Up to 500"  ||  D47: "501-1000"  ||  E47: "1001-2000"
+B48: "Length/Area Bin Start (helper)"  ||  C48: 0  ||  D48: 501  ||  E48: 1001
+A49: 0  ||  B49: "Up to 80"  ||  C49: 0.3  ||  D49: 0.5  ||  E49: 0.9
+A50: 81  ||  B50: "81-150"  ||  C50: 0.5  ||  D50: 0.8  ||  E50: 1.4
+A51: 151  ||  B51: "151-250"  ||  C51: 0.8  ||  D51: 1.3  ||  E51: 2.2
+A52: 251  ||  B52: "Above 250"  ||  C52: 1.2  ||  D52: 2  ||  E52: 3.2
+A54: "SECTION 8 - MILLING TIME (Hrs)  |  Input: Machined Area (mm2) = Width x Length"
+A55: "Bin Start (helper)"  ||  B55: "Machined Area (mm2)"  ||  C55: "Time (Hr)"
+A56: 0  ||  B56: "Up to 10,000"  ||  C56: 0.3
+A57: 10001  ||  B57: "10,001-25,000"  ||  C57: 0.6
+A58: 25001  ||  B58: "25,001-50,000"  ||  C58: 1
+A59: 50001  ||  B59: "Above 50,000"  ||  C59: 1.8
+A61: "SECTION 9 - DRILLING TIME (Hrs per hole)  |  Total Time = Time/Hole x No. of Holes"
+A62: "Bin Start (helper)"  ||  B62: "Hole Dia (mm)"  ||  C62: "Time/Hole (Hr)"
+A63: 0  ||  B63: "Up to 10"  ||  C63: 0.03
+A64: 11  ||  B64: "11-20"  ||  C64: 0.05
+A65: 21  ||  B65: "21-30"  ||  C65: 0.08
+A66: 31  ||  B66: "Above 30"  ||  C66: 0.12
+A68: "SECTION 10 - PROFILE CUTTING TIME (Hrs, utilisation reference)  |  Input: Weight (kg)"
+A69: "Profile Cutting COST is charged via Process Rate Master (Rs./kg). This table is for utilisation tracking."
+A70: "Bin Start (helper)"  ||  B70: "Weight (kg)"  ||  C70: "Time (Hr)"
+A71: 0  ||  B71: "Up to 10"  ||  C71: 0.1
+A72: 11  ||  B72: "11-25"  ||  C72: 0.2
+A73: 26  ||  B73: "26-50"  ||  C73: 0.35
+A74: 51  ||  B74: "Above 50"  ||  C74: 0.6
+A76: "SECTION 11 - SURFACE AREA MASTER (cm2) - referenced formulas, applied locally in each component sheet"
+A77: "Process"  ||  B77: "Formula"
+A78: "Grinding / Chrome Plating / Dechrome Plating / Polishing / Painting / Induction Hardening (on OD)"  ||  B78: "PI() x OD(mm) x Length(mm) / 100"
+A79: "Honing (on ID)"  ||  B79: "PI() x ID(mm) x Length(mm) / 100"

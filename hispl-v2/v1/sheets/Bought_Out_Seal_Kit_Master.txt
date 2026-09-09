@@ -1,0 +1,16 @@
+A1: "BOUGHT OUT ITEMS & SEAL KIT MASTER"
+A2: "Add bought-out items, seal kit components, and any other purchased part here. Set Include? = No to exclude an item without deleting it. All entries are manual."
+A3: "Item Description"  ||  B3: "Category"  ||  C3: "Include? (Yes/No)"  ||  D3: "Rate (Rs.)"  ||  E3: "Qty"  ||  F3: "Cost (Rs.)"  ||  G3: "Remarks"  ||  H3: "Dimension / Specification"
+A4: ="Seal Kit ("&SealBrand&" / "&SealMaterial&" / "&SealType&")"  {Seal Kit (Freudenberg / Viton / Normal Glide Ring)}  ||  B4: "Seal Kit"  ||  C4: "Yes"  ||  D4: =IF(ISNUMBER(SealSalePrice),SealSalePrice,0)  {12188}  ||  E4: 1  ||  F4: =IF(C4="Yes",D4*E4,0)  {12188}  ||  G4: =IF(ISNUMBER(SealSalePrice),"Auto-priced from Seal Master (Universal brand catalogue, 25% sale markup applied). Verify against latest supplier list before final quotation.",SealSalePrice)  {Auto-priced from Seal Master (Universal brand catalogue, 25% sale markup applied). Verify against latest supplier list before final quotation.}
+A5: "Bearing"  ||  B5: "Bought Out"  ||  C5: "Yes"  ||  D5: 180  ||  E5: 2  ||  F5: =(shared//inherited)  {360}
+A6: "Bearing Strip"  ||  B6: "Bought Out"  ||  C6: "No"  ||  D6: 0  ||  E6: 1  ||  F6: =(shared//inherited)  {0}
+A7: "Valve"  ||  B7: "Bought Out"  ||  C7: "No"  ||  D7: 650  ||  E7: 1  ||  F7: =(shared//inherited)  {0}
+A8: "Transducer"  ||  B8: "Bought Out"  ||  C8: "No"  ||  E8: 1  ||  F8: =(shared//inherited)  {0}  ||  G8: "Position sensor / LVDT, if applicable"
+A9: "Bellows"  ||  B9: "Bought Out"  ||  C9: "No"  ||  D9: 850  ||  E9: 1  ||  F9: =(shared//inherited)  {0}  ||  G9: "Rod protection bellow, if applicable"
+A10: "Fasteners"  ||  B10: "Bought Out"  ||  C10: "No"  ||  D10: 0  ||  E10: 1  ||  F10: =(shared//inherited)  {0}
+A11: "Other Component 2"  ||  B11: "Bought Out"  ||  C11: "No"  ||  D11: 0  ||  E11: 1  ||  F11: =(shared//inherited)  {0}  ||  G11: "Manual entry - rename as needed"
+A12: "Other Component 3"  ||  B12: "Bought Out"  ||  C12: "No"  ||  D12: 0  ||  E12: 1  ||  F12: =(shared//inherited)  {0}  ||  G12: "Manual entry - rename as needed"
+A13: "Other Component 4"  ||  B13: "Bought Out"  ||  C13: "No"  ||  D13: 0  ||  E13: 1  ||  F13: =(shared//inherited)  {0}  ||  G13: "Manual entry - rename as needed"
+A14: "Other Component 5"  ||  B14: "Bought Out"  ||  C14: "No"  ||  D14: 0  ||  E14: 1  ||  F14: =(shared//inherited)  {0}  ||  G14: "Manual entry - rename as needed"
+A16: "TOTAL SEAL KIT COST (Rs.)"  ||  B16: =SUMIFS(F4:F14,B4:B14,"Seal Kit",C4:C14,"Yes")  {12188}
+A17: "TOTAL BOUGHT OUT COST (Rs.)"  ||  B17: =SUMIFS(F4:F14,B4:B14,"Bought Out",C4:C14,"Yes")  {360}

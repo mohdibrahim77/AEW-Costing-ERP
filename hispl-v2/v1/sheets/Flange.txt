@@ -1,0 +1,47 @@
+A1: "FLANGE - COSTING SHEET"
+A3: "SECTION A - MATERIAL INPUTS"
+A4: "New Material? (Yes/No)"  ||  B4: "Yes"  ||  C4: "Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero."
+A5: "Parameter"  ||  B5: "Value"  ||  C5: "Unit"
+A6: "Material Grade"  ||  B6: "MS-C45"
+A7: "OD"  ||  B7: =FlangeOwn_OD  {225}  ||  C7: "mm"
+A8: "Length"  ||  B8: =FlangeOwn_Length  {45}  ||  C8: "mm"
+A9: "Quantity (Nos)"  ||  B9: 1
+A11: "AUTO CALCULATE - MATERIAL"  ||  G11: "APPROXIMATE COSTING GEOMETRY - FINAL DIMENSIONS SUBJECT TO GA/DESIGN (Tube OD driven)"
+A12: "Density (g/cm3)"  ||  B12: =INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),3)  {7.85}  ||  G12: "This is the always-present round Flange (likely gland-retainer flange), separate from Front Flange mounting. OD=1.5x Tube OD, Length=0.3x Tube OD - lower confidence, no formal published source found."
+A13: "Material Rate (Rs./kg)"  ||  B13: =IF(B6="MS-C45",IFERROR(VLOOKUP(FlangeOwn_Length,C45RateTable,3,TRUE()),INDEX(C45RateTable,1,3)),INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),4))  {100}  ||  G13: "TubeOD Bin"  ||  H13: "OD"  ||  I13: "Length"
+A14: "Unit Weight (kg / pc)"  ||  B14: =(PI()/4)*((B7)^2)*B8*B12/1000000  {14.04549625}  ||  G14: 70  ||  H14: 105  ||  I14: 21
+A15: "Total Weight for Qty (kg)"  ||  B15: =B14*B9  {14.04549625}  ||  G15: 80  ||  H15: 120  ||  I15: 24
+A16: "Material Cost / pc (Rs.)"  ||  B16: =IF(B4="No",0,B14*B13)  {1404.549625}  ||  G16: 90  ||  H16: 135  ||  I16: 27
+A17: "Total Material Cost for Qty (Rs.)"  ||  B17: =B16*B9  {1404.549625}  ||  G17: 100  ||  H17: 150  ||  I17: 30
+G18: 110  ||  H18: 165  ||  I18: 33
+A19: "Machined Width (mm) [for Milling]"  ||  B19: 40  ||  G19: 120  ||  H19: 180  ||  I19: 36
+A20: "Machined Length (mm) [for Milling]"  ||  B20: 40  ||  G20: 140  ||  H20: 210  ||  I20: 42
+A21: "Hole Diameter (mm) [for Drilling]"  ||  B21: 14  ||  G21: 150  ||  H21: 225  ||  I21: 45
+A22: "No. of Holes"  ||  B22: 4  ||  G22: 160  ||  H22: 240  ||  I22: 48
+G23: 180  ||  H23: 270  ||  I23: 54
+A24: "SECTION B - PROCESS ROUTING"  ||  G24: 200  ||  H24: 300  ||  I24: 60
+A25: "Apply?"  ||  B25: "Process"  ||  C25: "Machine / Basis"  ||  D25: "Hours / Qty Basis"  ||  E25: "Rate (Rs.)"  ||  F25: "Cost (Rs.)"
+A26: "Yes"  ||  B26: "Turning"  ||  C26: "CNC Lathe"  ||  D26: =INDEX(RoughTurningTable,MATCH(B7,TurningODBins,1),MATCH(B8,TurningLenBins,1))  {0.8}  ||  E26: =INDEX(MachineRateMaster_Range,MATCH("CNC Lathe",INDEX(MachineRateMaster_Range,0,1),0),2)  {550}  ||  F26: =IF(A26="Yes",D26*E26,0)  {440}  ||  G26: "Manual Overrides (blank = use table):"
+A27: "Yes"  ||  B27: "Milling"  ||  C27: "Milling Machine"  ||  D27: =VLOOKUP((B19)*(B20),MillingTable,3,TRUE())  {0.3}  ||  E27: =INDEX(MachineRateMaster_Range,MATCH("Milling Machine",INDEX(MachineRateMaster_Range,0,1),0),2)  {350}  ||  F27: =(shared//inherited)  {105}  ||  G27: "OD Override"  ||  H27: "Length Override"
+A28: "Yes"  ||  B28: "Drilling"  ||  C28: "Drilling Machine"  ||  D28: =VLOOKUP(B21,DrillingTable,3,TRUE())*B22  {0.2}  ||  E28: =INDEX(MachineRateMaster_Range,MATCH("Drilling Machine",INDEX(MachineRateMaster_Range,0,1),0),2)  {350}  ||  F28: =(shared//inherited)  {70}
+A30: "SUBTOTAL - PROCESS & VENDOR COST"  ||  G30: "FINAL:"
+A31: "Total Process & Vendor Cost / pc (Rs.)"  ||  B31: =F26+F27+F28  {615}  ||  G31: "OD"  ||  H31: =IF(G28="",IFERROR(VLOOKUP(Tube_OD,FlangeGeomTable,2,TRUE()),0),G28)  {225}
+G32: "Length"  ||  H32: =IF(H28="",IFERROR(VLOOKUP(Tube_OD,FlangeGeomTable,3,TRUE()),0),H28)  {45}
+A33: "SECTION D - ADDITIONAL COST (Manual Entry)"
+A34: "Additional Cost / pc (Rs.)"  ||  B34: 0
+A35: "Remarks"
+A37: "SECTION E - COMPONENT COST SUMMARY"
+A38: "Cost Head"  ||  B38: "Rs. / pc"
+A39: "Material Cost"  ||  B39: =B16  {1404.549625}
+A40: "Process Cost"  ||  B40: =B31+B52  {1913.031496}
+A41: "Additional Cost"  ||  B41: =B34  {0}
+A42: "TOTAL FLANGE COST / pc"  ||  B42: =B39+B40+B41  {3317.581121}
+A43: "TOTAL FLANGE COST for Qty"  ||  B43: =B42*B9  {3317.581121}
+A45: "SECTION F - WELDING (HISPL Simplified - Rs./inch/bead) [NEW - added by Change 2]"
+A46: "WELDING - Flange Welding (auto = Tube OD)"
+A47: "Weld Diameter (mm) [auto = Tube_OD]"  ||  B47: =Tube_OD  {150}
+A48: "No. of Beads (auto, from Weld Bead Table)"  ||  B48: =VLOOKUP(B47,WeldBeadTable,3,TRUE())  {5}
+A49: "No. of Weld Locations"  ||  B49: 1
+A50: "Circumference (inch)"  ||  B50: =(B47*3.14)/25.4  {18.54330709}
+A51: "Welding Rate (Rs./inch/bead)"  ||  B51: =WeldRatePerInchBead  {14}
+A52: "Total Welding Cost (Rs.)"  ||  B52: =B50*B51*B48*B49  {1298.031496}

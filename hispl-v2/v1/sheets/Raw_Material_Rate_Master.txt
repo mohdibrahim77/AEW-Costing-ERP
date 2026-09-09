@@ -1,0 +1,13 @@
+A1: "RAW MATERIAL RATE MASTER - DIAMETER/THICKNESS TIERED PRICING"
+A2: "Source: HISPL handwritten rate card, 3-Sep-2026. Larger raw stock costs more per kg - real procurement pricing, not a flat per-grade rate. Overrides Material Master's flat rate for EN8 (by diameter) and C45 (by thickness/axial dimension) on the components listed below."
+A4: "EN-8 (by Diameter, mm) - applies to: Stop Tube, Piston, Trunnion"
+B5: "Range From (mm)"  ||  C5: "Range To (mm)"  ||  D5: "Rate (Rs./kg)"
+B6: 20  ||  C6: 140  ||  D6: 75
+B7: 150  ||  C7: 200  ||  D7: 80
+B8: 210  ||  C8: 290  ||  D8: 90
+B9: 300  ||  C9: 350  ||  D9: 100
+A12: "C-45 PROFILES (by Thickness/Axial Dimension, mm) - applies to: CEC, HEC, Foot Lug, Gland, Flange, CEC Clevis"
+B13: "Range From (mm)"  ||  C13: "Range To (mm)"  ||  D13: "Rate (Rs./kg)"
+B14: 50  ||  C14: 100  ||  D14: 100
+B15: 110  ||  C15: 150  ||  D15: 120
+B16: 150  ||  C16: 200  ||  D16: 140

@@ -1,6 +1,7 @@
 # HISPL Costing System v2 — Specification
 
-**Source of truth:** `Trunion_Included.xlsx` and
+**Source of truth:** `VERSION_1.xlsx` (supersedes `Trunion_Included.xlsx`,
+2026-09-09) and
 `HISPL_Costing_Master_Tables_Developer_Reference.docx`, supplied by
 Aniktha Patirat, HISPL.
 
@@ -556,7 +557,7 @@ Governs every value in the v2 application. Enforced by
 | Source | Role | Supplies | Never supplies |
 |---|---|---|---|
 | `HISPL_..._Developer_Reference.docx` | **Structure and intent** | What the tool should do, which inputs are permitted, how components are organised, the rules of the process | **Any numeric value** |
-| `Trunion_Included.xlsx` | **Values and calculations** | All rates, tables, rate cards, constants, weight formulas, process routing, roll-up logic | — |
+| `VERSION_1.xlsx` | **Values and calculations** | All rates, tables, rate cards, constants, weight formulas, geometry tables, process routing, roll-up logic | — |
 | `COST_SHEET.xlsx` | **Reference and validation** | What a realistic job looks like, which mounting codes occur, what size range matters; may be compared against | **Any value used by the application** |
 
 **Structure from the document, values and calculations from the
@@ -644,3 +645,79 @@ node tests/source-purity.js
   never used as a rate
 - Every costing module names the workbook as its provenance
 - `CLAUDE.md` and this document actually state the rule
+
+---
+
+# VERSION 1 — the workbook that closed the geometry question
+
+**Received** 2026-09-09. Supersedes `Trunion_Included.xlsx` as the value
+source. 33 sheets, 1,714 formulas, 231 defined names.
+
+Everything in this section is recorded in full in
+`hispl-v2/v1/RECONCILIATION.md`; this is the short form.
+
+## What it settles
+
+The first build could not dimension a cylinder. The workbook it was
+built from contained exactly one dimensioned example, and one example is
+not a rule, so every dimension past bore, rod and stroke surfaced as
+`ENGINEERING INPUT REQUIRED`. The ten permitted inputs reached ₹360 of a
+₹25,167 cylinder.
+
+VERSION 1 ships a **stepped geometry table per component**, keyed on
+bore, rod diameter or tube OD and read with `VLOOKUP(...,TRUE)`. Eleven
+of thirteen components now derive their geometry; the tie rod is sized
+from thrust and allowable stress instead.
+
+Measured on the workbook's own worked example:
+
+- **32 of 36 dimensions** derive from the 22 inputs (89 %)
+- **₹42,958 of ₹63,384** needs no engineering input at all (68 %)
+- The remaining 32 % is the tube and rod **raw stock** sizes only
+
+It also settles the welding question the earlier file left open. One
+method, priced, on all eight welds:
+`circumference(inch) × ₹14/inch/bead × beads × locations`.
+
+## What it does not settle
+
+Confidence is not uniform and the workbook says so per sheet. Five
+tables are HISPL-approved against a published standard (ISO 6020-1/-2,
+ISO 6022, ISO 8140, NFPA MS2/MS7). Three carry the wording *"general
+proportion, no formal published source found"* — cushion bush, stop tube
+and flange — and on the reference job the two that are fitted are
+**₹10,556, 17 % of the cylinder**. That wording is carried into the
+interface verbatim rather than averaged away.
+
+Four dimensions remain engineering inputs because no validated allowance
+exists for them: tube raw OD and length, rod raw diameter and length.
+They are seeded with the values HISPL's own sheets carry. **Seeding is
+not deriving**, and the interface says which is which.
+
+## Defects
+
+**Nine, reproduced rather than corrected**, per the standing instruction.
+Full detail and rupee impacts in `RECONCILIATION.md` §5. The two that
+matter most:
+
+- **W-1** — the tube is charged ₹1,298 to weld on a rear eye that the
+  inquiry says is not fitted. All three tube weld blocks are
+  unconditional.
+- **FO-1 / FO-2** — the workbook's two grand totals disagree by
+  **₹1,498.78**. `Final Output` bills four components without checking
+  their presence flags, and omits tie rod, foot lug and front flange
+  entirely. Both totals are reproduced; the tool shows both and names
+  the gap, because choosing between them is not ours to do.
+
+## Build
+
+```
+assets/js/costing/v1/{masters,geometry,inputs,engine}.js
+products/costing/v1.html          unlinked, not wired to the ERP
+tests/workbook-v1.js              222 assertions
+```
+
+Every assertion in `workbook-v1.js` is a value read out of the
+workbook's own cached formula results — weights, material costs, process
+costs, individual machine hours, weld bead counts, both grand totals.
+None was chosen by hand.

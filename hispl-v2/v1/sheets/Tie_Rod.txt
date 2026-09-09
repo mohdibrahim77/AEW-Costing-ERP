@@ -1,0 +1,44 @@
+A1: "TIE ROD - COSTING SHEET (active only when Mounting = Rod Eye + Tie Rod)"
+A2: "Tie Rod diameter is structurally calculated from Bore + Working Pressure + Quantity (not a mounting-proportion guess like Trunnion/Foot Lug/Clevis). Length is Stroke + a documented closed-length allowance (overridable). See chat approval, 27-Aug-2026."
+A4: "Mounting Status (reference only)"  ||  B4: =Mounting_TieRod  {No}
+A5: "Quantity (from Inquiry Input Tie Rod Quantity)"  ||  B5: =IF(ISNUMBER(TieRodQuantityActive),TieRodQuantityActive,4)  {4}
+A7: "SECTION A - STRUCTURAL DIAMETER CALCULATION"
+A8: "Bore (mm)"  ||  B8: =Bore  {125}
+A9: "Working Pressure (bar)"  ||  B9: =WorkingPressure  {250}
+A10: "Tie Rod Material Grade"  ||  B10: "MS-ST52"
+A11: "Yield Stress Assumed (N/mm2, ST52)"  ||  B11: 294  ||  C11: "Standard ST52 yield reference. Editable if HISPL uses a different tie rod steel/spec."
+A12: "Safety Factor"  ||  B12: 3  ||  C12: "Source: hydraulic cylinder design reference - SF=3 on ST52 yield gives ~98 N/mm2 allowable, matches the figure cited."
+A13: "Allowable Design Stress (N/mm2)"  ||  B13: =B11/B12  {98}
+A15: "Total Hydraulic Thrust Force (N) = (pi/4 x Bore^2) x (Pressure/10)"  ||  B15: =(PI()/4)*(B8)^2*(B9/10)  {306796.1576}
+A16: "Force per Tie Rod (N)"  ||  B16: =B15/B5  {76699.03939}
+A17: "Required Tensile Area (mm2)"  ||  B17: =B16/B13  {782.6432591}
+A18: "Calculated Diameter (mm)"  ||  B18: =SQRT(4*B17/PI())  {31.56726702}
+A19: "Standard Diameter (mm) [rounded UP to nearest 5mm stock size]"  ||  B19: =CEILING(B18,5)  {35}
+A20: "Diameter Override (blank = use Standard above; enter to force from GA/drawing)"
+A21: "FINAL Tie Rod Diameter (mm)"  ||  B21: =IF(B20="",B19,B20)  {35}
+A23: "SECTION B - LENGTH"
+A24: "Stroke (mm)"  ||  B24: =Stroke  {115}
+A25: "Closed-Length Allowance (mm)"  ||  B25: 150  ||  C25: "Assumption for head+cap+piston+gland+nut engagement. Not from a specific HISPL drawing - override once real GA data exists."
+A26: "Standard Length (mm) = Stroke + Allowance"  ||  B26: =B24+B25  {265}
+A27: "Length Override (blank = use Standard above)"
+A28: "FINAL Tie Rod Length (mm)"  ||  B28: =IF(B27="",B26,B27)  {265}
+A29: "AUTO CALCULATE - MATERIAL"
+A30: "New Material? (Yes/No)"  ||  B30: "Yes"
+A31: "Density (g/cm3)"  ||  B31: =INDEX(MaterialMaster_Range,MATCH(B10,INDEX(MaterialMaster_Range,0,1),0),3)  {7.85}
+A32: "Material Rate (Rs./kg)"  ||  B32: =INDEX(MaterialMaster_Range,MATCH(B10,INDEX(MaterialMaster_Range,0,1),0),4)  {160}
+A33: "Unit Weight per Rod (kg)"  ||  B33: =(PI()/4)*(B21)^2*(B28)*B31/1000000  {2.001435049}
+A34: "Total Weight, all rods (kg / set)"  ||  B34: =B33*B5  {8.005740194}
+A35: "Material Cost (Rs. / set)"  ||  B35: =IF(B30="No",0,B34*B32)  {1280.918431}
+A37: "SECTION F - MACHINING (Cutting to length + Threading both ends. No welding - tie rods are through-bolted with nuts.)"
+A38: "Apply?"  ||  B38: "Process"  ||  C38: "Machine / Basis"  ||  D38: "Hours or Qty Basis"  ||  E38: "Rate (Rs.)"  ||  F38: "Cost (Rs.)"
+A39: "Yes"  ||  B39: "Cutting (bar to length, per rod x Qty)"  ||  C39: "Cutting Machine"  ||  D39: =VLOOKUP(B21,CuttingTable,MATCH(B28,CuttingLenBins,1),TRUE())*B5  {1}  ||  E39: =INDEX(MachineRateMaster_Range,MATCH("Cutting Machine",INDEX(MachineRateMaster_Range,0,1),0),2)  {350}  ||  F39: =IF(A39="Yes",D39*E39,0)  {350}
+A41: "Threading (both ends, per rod - vendor/manual, Rs. per rod)"  ||  B41: 25  ||  C41: "No dedicated threading table in Machine Time Master - manual Rs./rod entry, same as Deep Hole Drilling pattern used on Piston Rod."
+A42: "Threading Cost (Rs. / set) = Rate x Qty"  ||  B42: =B41*B5  {100}
+A44: "SUBTOTAL - PROCESS COST (Rs.)"  ||  B44: =F39+B42  {450}
+A46: "SECTION D - ADDITIONAL COST (Manual, e.g. nuts/washers/locking compound)"
+A47: "Additional Cost / set (Rs.)"  ||  B47: 0
+A49: "SECTION E - COMPONENT COST SUMMARY (gated by Mounting)"
+A50: "Material Cost"  ||  B50: =B35  {1280.918431}
+A51: "Process Cost"  ||  B51: =B44  {450}
+A52: "Additional Cost"  ||  B52: =B47  {0}
+A53: "TOTAL TIE ROD COST (Rs.) [gated by Mounting]"  ||  B53: =IF(Mounting_TieRod="Yes",B50+B51+B47,0)  {0}

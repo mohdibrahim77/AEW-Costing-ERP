@@ -1,0 +1,17 @@
+A1: "ENQ NO "  ||  B1: =InquiryNo  {INQ-0001}
+A2: "COST SHEET NO "
+A3: "DATE :"  ||  B3: =InquiryDate  {}
+A4: "CUSTOMER:"  ||  B4: =CustomerName  {}
+A5: "CYLINDER TYPE"  ||  B5: =CylinderName  {}
+A6: "SPECIFICATION :"  ||  B6: ="Bore "&Bore&"mm x Rod "&RodDia&"mm x Stroke "&Stroke&"mm | "&Mounting  {Bore 125mm x Rod 90mm x Stroke 115mm | Rod Eye + Trunnion}
+A7: "MATERIAL : "  ||  C7: "(primary material - see component sheets for full BOM)"
+A8: "WT OF CYLINDER : "  ||  B8: =TotalCylinderWeight  {178.7657712}  ||  C8: "kg"
+A9: "QTY :"  ||  B9: 1
+A10: "SL NO"  ||  B10: "DESCRIPTION"  ||  C10: "RATE (Rs.)"  ||  D10: "REMARKS"
+A11: 1  ||  B11: "RAW MATERIAL COST"  ||  C11: =IFERROR(Tube_MaterialCost*Tube!$B$11,0)+IFERROR(PistonRod_MaterialCost*'Piston Rod'!$B$10,0)+IFERROR(CEC_MaterialCost*'Cap End Cover'!$B$13,0)+IFERROR(HEC_MaterialCost*'Head End Cover'!$B$13,0)+IFERROR(Gland_MaterialCost*Gland!$B$10,0)+IFERROR(CushionBush_MaterialCost*'Cushion Bush'!$B$10,0)+IFERROR(StopTube_MaterialCost*'Stop Tube'!$B$10,0)+IFERROR(RearEye_MaterialCost*'Rear Eye'!$B$11,0)+IFERROR(RodEye_MaterialCost*'Rod Eye'!$B$13,0)+IFERROR(Piston_MaterialCost*Piston!$B$9,0)+IFERROR(Flange_MaterialCost*Flange!$B$9,0)+IF(Mounting_Trunnion="Yes",IFERROR(Trunnion_MaterialCost*Trunnion!$B$10,0),0)+IF(Mounting_CECClevis="Yes",IFERROR(CECClevis_MaterialCost*'CEC Clevis'!$B$15,0),0)  {26735.42769}
+A12: 2  ||  B12: "PROCESS COST"  ||  C12: =IFERROR(Tube_ProcessCost*Tube!$B$11,0)+IFERROR(PistonRod_ProcessCost*'Piston Rod'!$B$10,0)+IFERROR(CEC_ProcessCost*'Cap End Cover'!$B$13,0)+IFERROR(HEC_ProcessCost*'Head End Cover'!$B$13,0)+IFERROR(Gland_ProcessCost*Gland!$B$10,0)+IFERROR(CushionBush_ProcessCost*'Cushion Bush'!$B$10,0)+IFERROR(StopTube_ProcessCost*'Stop Tube'!$B$10,0)+IFERROR(RearEye_ProcessCost*'Rear Eye'!$B$11,0)+IFERROR(RodEye_ProcessCost*'Rod Eye'!$B$13,0)+IFERROR(Piston_ProcessCost*Piston!$B$9,0)+IFERROR(Flange_ProcessCost*Flange!$B$9,0)+IF(Mounting_Trunnion="Yes",IFERROR(Trunnion_ProcessCost*Trunnion!$B$10,0),0)+IF(Mounting_CECClevis="Yes",IFERROR(CECClevis_ProcessCost*'CEC Clevis'!$B$15,0),0)  {18701.89385}
+A13: 3  ||  B13: "BOC"  ||  C13: =TotalBoughtOutCost  {360}
+A14: 4  ||  B14: "SEALS COST"  ||  C14: =TotalSealKitCost  {12188}
+A15: 5  ||  B15: " PACKING,ASSLY,TESTING"  ||  C15: =AssemblyPaintingPackingTotal  {3900}
+B16: "TOTAL / CYLINDER  COST"  ||  C16: =SUM(C11:C15)  {61885.32154}
+A18: "This is an approximate manufacturing cost estimate for quotation purposes. Final dimensions and engineering details are subject to the approved GA/design drawing. Seal prices maintained manually by HISPL."

@@ -1,0 +1,24 @@
+A1: "ACTUAL COST TRACKER"
+A2: "Production team enters ACTUAL costs (yellow). Estimated values are pulled automatically from each component sheet. Variance is calculated automatically."
+A4: "Component"  ||  B4: "Est. Material Cost"  ||  C4: "Actual Material Cost"  ||  D4: "Est. Process Cost"  ||  E4: "Actual Process Cost"  ||  F4: "Variance Rs."  ||  G4: "Variance %"
+A5: "Tube"  ||  B5: =Tube_MaterialCost  {6323.455813}  ||  C5: 0  ||  D5: =Tube_ProcessCost  {6112.48377}  ||  E5: 0  ||  F5: =(C5+E5)-(B5+D5)  {-12435.93958}  ||  G5: =IF((B5+D5)=0,0,F5/(B5+D5))  {-1}
+A6: "Piston Rod"  ||  B6: =PistonRod_MaterialCost  {3394.193393}  ||  C6: 0  ||  D6: =PistonRod_ProcessCost  {4596.17003}  ||  E6: 0  ||  F6: =(shared//inherited)  {-7990.363423}  ||  G6: =(shared//inherited)  {-1}
+A7: "Cap End Cover"  ||  B7: =CEC_MaterialCost  {765.650866}  ||  C7: 0  ||  D7: =CEC_ProcessCost  {615}  ||  E7: 0  ||  F7: =(shared//inherited)  {-1380.650866}  ||  G7: =(shared//inherited)  {-1}
+A8: "Head End Cover"  ||  B8: =HEC_MaterialCost  {765.650866}  ||  C8: 0  ||  D8: =HEC_ProcessCost  {615}  ||  E8: 0  ||  F8: =(shared//inherited)  {-1380.650866}  ||  G8: =(shared//inherited)  {-1}
+A9: "Gland"  ||  B9: =Gland_MaterialCost  {1487.026937}  ||  C9: 0  ||  D9: =Gland_ProcessCost  {680.3539726}  ||  E9: 0  ||  F9: =(shared//inherited)  {-2167.380909}  ||  G9: =(shared//inherited)  {-1}
+A10: "Cushion Bush"  ||  B10: =CushionBush_MaterialCost  {6880.383849}  ||  C10: 0  ||  D10: =CushionBush_ProcessCost  {357.3348603}  ||  E10: 0  ||  F10: =(shared//inherited)  {-7237.71871}  ||  G10: =(shared//inherited)  {-1}
+A11: "Stop Tube"  ||  B11: =StopTube_MaterialCost  {1032.361314}  ||  C11: 0  ||  D11: =StopTube_ProcessCost  {371.25}  ||  E11: 0  ||  F11: =(shared//inherited)  {-1403.611314}  ||  G11: =(shared//inherited)  {-1}
+A12: "Rear Eye"  ||  B12: =RearEye_MaterialCost  {103.5905625}  ||  C12: 0  ||  D12: =RearEye_ProcessCost  {148.5233906}  ||  E12: 0  ||  F12: =(shared//inherited)  {-252.1139531}  ||  G12: =(shared//inherited)  {-1}
+A13: "Rod Eye"  ||  B13: =RodEye_MaterialCost  {588.3377469}  ||  C13: 0  ||  D13: =RodEye_ProcessCost  {260.6520257}  ||  E13: 0  ||  F13: =(shared//inherited)  {-848.9897726}  ||  G13: =(shared//inherited)  {-1}
+A14: "Piston"  ||  B14: =Piston_MaterialCost  {541.8787133}  ||  C14: 0  ||  D14: =Piston_ProcessCost  {156.0313119}  ||  E14: 0  ||  F14: =(shared//inherited)  {-697.9100252}  ||  G14: =(shared//inherited)  {-1}
+A15: "Flange"  ||  B15: =Flange_MaterialCost  {1404.549625}  ||  C15: 0  ||  D15: =Flange_ProcessCost  {1913.031496}  ||  E15: 0  ||  F15: =(shared//inherited)  {-3317.581121}  ||  G15: =(shared//inherited)  {-1}
+A16: "Trunnion"  ||  B16: =Trunnion_MaterialCost  {1724.174}  ||  C16: 0  ||  D16: =Trunnion_ProcessCost  {1438.031496}  ||  E16: 0  ||  F16: =(shared//inherited)  {-3162.205496}  ||  G16: =(shared//inherited)  {-1}
+A17: "TOTAL"  ||  B17: =SUM(B5:B16)  {25011.25369}  ||  C17: =(shared//inherited)  {0}  ||  D17: =(shared//inherited)  {17263.86235}  ||  E17: =(shared//inherited)  {0}  ||  F17: =(shared//inherited)  {-42275.11604}  ||  G17: =IF(SUM(B5:B16,D5:D16)=0,0,F17/SUM(B5:B16,D5:D16))  {-1}
+A19: "OVERALL ACTUAL COST ENTRY"
+A20: "Actual Vendor Cost (Rs.)"  ||  B20: 0
+A21: "Actual Welding Cost (Rs.)"  ||  B21: 0
+A22: "Actual Assembly Cost (Rs.)"  ||  B22: 0
+A23: "Actual Total Manufacturing Cost (Rs.)"  ||  B23: =C17+E17+B20+B21+B22  {0}
+A24: "Estimated Total Manufacturing Cost (Rs.)"  ||  B24: =TotalManufacturingCost  {63384.10479}
+A25: "Overall Variance Rs."  ||  B25: =B23-B24  {-63384.10479}
+A26: "Overall Variance %"  ||  B26: =IF(B24=0,0,(B23-B24)/B24)  {-1}

@@ -1,0 +1,40 @@
+A1: "ROD EYE - COSTING SHEET"
+A3: "SECTION A - MATERIAL INPUTS"
+A4: "New Material? (Yes/No)"  ||  B4: "Yes"  ||  C4: "Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero."  ||  E4: "APPROXIMATE COSTING GEOMETRY - FINAL DIMENSIONS SUBJECT TO GA/DESIGN (Piston Rod Diameter driven, HISPL-approved stepped table)"
+A5: "Raw Material Shape"  ||  B5: "Round"  ||  C5: "Round = solid round bar (uses Diameter). Profile / Cuboid Block = flat/rectangular stock (uses Width & Height). Fill only the dimensions that apply. [Change 6: Raw material weight is now always calculated as a ring (OD/ID/Thickness) per HISPL Section 11 - this Shape selection no longer affects the weight formula. Width/Height below remain in use for the Milling area calculation only.]"  ||  E5: "Source: rod-end/clevis design guidance (pin dia 0.3-0.5x rod dia; eye OD/thickness/length ratios), rounded to standard sizes. Approved by HISPL."
+A6: "Parameter"  ||  B6: "Value"  ||  C6: "Unit"  ||  E6: "Rod Dia Bin Start"  ||  F6: "Eye ID"  ||  G6: "Eye OD"  ||  H6: "Thickness"  ||  I6: "Pin Hole"
+A7: "Material Grade"  ||  B7: "MS-PLATE-IS2062"  ||  E7: 40  ||  F7: 16  ||  G7: 71  ||  H7: 20  ||  I7: 16.5
+A8: "OD (mm) [ring outer diameter]"  ||  B8: =F23  {162}  ||  C8: "mm - fill if Shape = Round"  ||  E8: 45  ||  F8: 18  ||  G8: 80  ||  H8: 22  ||  I8: 18.5
+A9: "Width"  ||  B9: 160  ||  C9: "mm - fill if Shape = Profile / Cuboid Block"  ||  E9: 50  ||  F9: 20  ||  G9: 90  ||  H9: 25  ||  I9: 20.5
+A10: "Height"  ||  B10: 100  ||  C10: "mm - fill if Shape = Profile / Cuboid Block"  ||  E10: 56  ||  F10: 22  ||  G10: 100  ||  H10: 28  ||  I10: 22.5
+A11: "Thickness"  ||  B11: =F24  {45}  ||  C11: "Now = approved geometry table value."  ||  E11: 63  ||  F11: 25  ||  G11: 112  ||  H11: 32  ||  I11: 25.5
+A12: "Pin Hole Diameter"  ||  B12: =(shared//inherited)  {36.5}  ||  C12: "Now = approved geometry table value."  ||  E12: 70  ||  F12: 28  ||  G12: 125  ||  H12: 35  ||  I12: 28.5
+A13: "Quantity (Nos)"  ||  B13: 1  ||  E13: 80  ||  F13: 32  ||  G13: 144  ||  H13: 40  ||  I13: 32.5
+E14: 90  ||  F14: 36  ||  G14: 162  ||  H14: 45  ||  I14: 36.5
+A15: "AUTO CALCULATE - MATERIAL"  ||  E15: 100  ||  F15: 40  ||  G15: 180  ||  H15: 50  ||  I15: 40.5
+A16: "Density (g/cm3)"  ||  B16: =INDEX(MaterialMaster_Range,MATCH(B7,INDEX(MaterialMaster_Range,0,1),0),3)  {7.85}
+A17: "Material Rate (Rs./kg)"  ||  B17: =INDEX(MaterialMaster_Range,MATCH(B7,INDEX(MaterialMaster_Range,0,1),0),4)  {85}  ||  E17: "Manual Overrides (blank = use table above; enter to force a value from an actual GA/design drawing):"
+A18: "Unit Weight (kg / pc)"  ||  B18: =(PI()/4)*((B8)^2-(B22)^2)*B11*B16/1000000  {6.921620552}  ||  E18: "Eye ID Override"  ||  F18: "Eye OD Override"  ||  G18: "Thickness Override"  ||  H18: "Pin Hole Override"
+A19: "Total Weight for Qty (kg)"  ||  B19: =B18*B13  {6.921620552}
+A20: "Material Cost / pc (Rs.)"  ||  B20: =IF(B4="No",0,B18*B17)  {588.3377469}
+A21: "Total Material Cost for Qty (Rs.)"  ||  B21: =B20*B13  {588.3377469}  ||  E21: "FINAL (Standard from table, or Override above if entered):"
+A22: "ID (mm) [ring bore]"  ||  B22: =F22  {36}  ||  C22: "Now = approved geometry table value (Rod Diameter driven), or override above."  ||  E22: "Eye ID"  ||  F22: =IF(E19="",IFERROR(VLOOKUP(RodDia,RodEyeGeomTable,2,TRUE()),0),E19)  {36}
+A23: "No. of Pin Holes"  ||  B23: 1  ||  E23: "Eye OD"  ||  F23: =IF(F19="",IFERROR(VLOOKUP(RodDia,RodEyeGeomTable,3,TRUE()),0),F19)  {162}
+E24: "Thickness"  ||  F24: =IF(G19="",IFERROR(VLOOKUP(RodDia,RodEyeGeomTable,4,TRUE()),0),G19)  {45}
+A25: "SECTION B - PROCESS ROUTING"  ||  E25: "Pin Hole"  ||  F25: =IF(H19="",IFERROR(VLOOKUP(RodDia,RodEyeGeomTable,5,TRUE()),0),H19)  {36.5}
+A26: "Apply?"  ||  B26: "Process"  ||  C26: "Machine / Basis"  ||  D26: "Hours / Qty Basis"  ||  E26: "Rate (Rs.)"  ||  F26: "Cost (Rs.)"
+A27: "Yes"  ||  B27: "Profile Cutting"  ||  C27: "Process Rate Master (Rs./kg)"  ||  D27: =B18  {6.921620552}  ||  E27: =ProfileCuttingRate  {1.25}  ||  F27: =IF(A27="Yes",D27*E27,0)  {8.65202569}
+A28: "Yes"  ||  B28: "Milling"  ||  C28: "Milling Machine"  ||  D28: =VLOOKUP((B9)*(B10),MillingTable,3,TRUE())  {0.6}  ||  E28: =INDEX(MachineRateMaster_Range,MATCH("Milling Machine",INDEX(MachineRateMaster_Range,0,1),0),2)  {350}  ||  F28: =(shared//inherited)  {210}
+A29: "Yes"  ||  B29: "Drilling"  ||  C29: "Drilling Machine"  ||  D29: =VLOOKUP(B12,DrillingTable,3,TRUE())*B23  {0.12}  ||  E29: =INDEX(MachineRateMaster_Range,MATCH("Drilling Machine",INDEX(MachineRateMaster_Range,0,1),0),2)  {350}  ||  F29: =(shared//inherited)  {42}
+A31: "SUBTOTAL - PROCESS & VENDOR COST"
+A32: "Total Process & Vendor Cost / pc (Rs.)"  ||  B32: =F27+F28+F29  {260.6520257}
+A34: "SECTION D - ADDITIONAL COST (Manual Entry)"
+A35: "Additional Cost / pc (Rs.)"  ||  B35: 0
+A36: "Remarks"
+A38: "SECTION E - COMPONENT COST SUMMARY"
+A39: "Cost Head"  ||  B39: "Rs. / pc"
+A40: "Material Cost"  ||  B40: =B20  {588.3377469}
+A41: "Process Cost"  ||  B41: =B32  {260.6520257}
+A42: "Additional Cost"  ||  B42: =B35  {0}
+A43: "TOTAL ROD EYE COST / pc"  ||  B43: =B20+B32+B35  {848.9897726}
+A44: "TOTAL ROD EYE COST for Qty"  ||  B44: =B43*B13  {848.9897726}

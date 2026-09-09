@@ -1,0 +1,17 @@
+A1: "ASSEMBLY + PAINTING + PACKING"
+A2: "Finishing costs applied to the fully assembled cylinder. Painting/Packing use Process Rate Master; Assembly is labour-hour based."
+A4: "ASSEMBLY"
+A5: "Assembly Labour Hours"  ||  B5: 3
+A6: "Assembly Labour Rate (Rs./Hr)"  ||  B6: 250
+A7: "Assembly Cost (Rs.)"  ||  B7: =B5*B6  {750}
+A9: "PAINTING"
+A10: "Cylinder Outer Surface Area (cm2)"  ||  B10: 4500  ||  C10: "PI() x OD x (Stroke+Bore) approx; enter measured/derived value"
+A11: "Painting Rate (Rs./cm2)"  ||  B11: =PaintingRate  {0.2}
+A12: "Painting Cost (Rs.)"  ||  B12: =B10*B11  {900}
+A14: "PACKING"
+A15: "Packing Type"  ||  B15: "Wooden Box"
+A16: "Total Cylinder Weight for Packing (kg)"  ||  B16: 150  ||  C16: "Pull from Cost Summary total weight or enter manually"
+A17: "Packing Rate (Rs./kg)"  ||  B17: =IF(B15="Wooden Box",PackingWoodenRate,PackingLooseRate)  {15}
+A18: "Packing Cost (Rs.)"  ||  B18: =B16*B17  {2250}
+A20: "TOTAL"
+A21: "TOTAL ASSEMBLY + PAINTING + PACKING COST (Rs.)"  ||  B21: =B7+B12+B18  {3900}

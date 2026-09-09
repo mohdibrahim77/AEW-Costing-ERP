@@ -1,0 +1,45 @@
+A1: "PROCESS & VENDOR RATE MASTER"
+A2: "Rates for area/weight based finishing & vendor processes and welding constants. Referenced by every component sheet - edit only here."
+A3: "Process"  ||  B3: "Rate"  ||  C3: "Unit"  ||  D3: "Remarks"
+A4: "Heat Treatment"  ||  B4: 12  ||  C4: "Rs./kg"
+A5: "Induction Hardening"  ||  B5: 0.45  ||  C5: "Rs./cm2"
+A6: "Grinding"  ||  B6: 0.4  ||  C6: "Rs./cm2"
+A7: "Polishing"  ||  B7: 0.2  ||  C7: "Rs./cm2"
+A8: "Painting"  ||  B8: 0.2  ||  C8: "Rs./cm2"
+A9: "Chrome Plating"  ||  B9: 0.6  ||  C9: "Rs./cm2"
+A10: "Dechrome Plating"  ||  B10: 0.35  ||  C10: "Rs./cm2"
+A11: "Profile Cutting"  ||  B11: 1.25  ||  C11: "Rs./kg"
+A12: "Packing - Loose"  ||  B12: 5  ||  C12: "Rs./kg"
+A13: "Packing - Wooden Box"  ||  B13: 15  ||  C13: "Rs./kg"
+A16: "TURNING RATE CARD (Conventional / CNC Lathe - by Finished Diameter)"
+A17: "Overrides the flat machine rate for Rough Turning and Finish Turning specifically, in Tube and Piston Rod sheets."
+A18: "Bin Start (helper)"  ||  B18: "Diameter Range"  ||  C18: "Rough Turning Rate (Rs./Hr)"  ||  D18: "Finish Turning Rate (Rs./Hr)"
+A19: 0  ||  B19: "Up to 100 mm"  ||  C19: 300  ||  D19: 400
+A20: 101  ||  B20: "101-250 mm"  ||  C20: 550  ||  D20: 550
+A21: 251  ||  B21: "Above 250 mm"  ||  C21: 700  ||  D21: 700
+A23: "HONING RATE CARD (Rough Honing & Finished Honing)"
+A24: "Cost = Internal Surface Area (cm2) x Rate. Threshold applies to BOTH Length (Stroke) AND ID together."
+A25: "Rate up to 4000mm Stroke & 100mm ID (Rs./cm2)"  ||  B25: 0.3
+A26: "Rate beyond 4000mm Stroke or 100mm ID (Rs./cm2)"  ||  B26: 0.4
+A27: "Length / Stroke Threshold (mm)"  ||  B27: 4000
+A28: "ID Threshold (mm)"  ||  B28: 100
+A30: "WELDING CONSTANTS (HISPL FORMULA)"
+A31: "Labour Rate (Rs./Hr)"  ||  B31: 375
+A32: "Wire Cost (Rs./kg)"  ||  B32: 360
+A33: "Deposition Rate (kg/Hr)"  ||  B33: 0.8
+A34: "Welding Speed (mm/Hr)"  ||  B34: 3600
+A35: "Dia Threshold for Bead Count (mm)"  ||  B35: 250
+A36: "Beads if Dia <= Threshold"  ||  B36: 5
+A37: "Beads if Dia > Threshold"  ||  B37: 8
+A39: "WELDING RATE - HISPL SIMPLIFIED METHOD (Rs./inch/bead)"
+A40: "Used for ALL welding in the workbook (CEC/Flange/Trunnion/CEC Clevis/Foot Lug/Front Flange welding via Tube OD, Rod Eye welding via Piston Rod Diameter, and Tube Part Welding + Rear Eye Welding - unified onto this single method). The legacy welding constants above (rows 30-37) are historical reference only and are no longer used anywhere in the current model."
+A41: "Welding Rate (Rs. per inch per bead)"  ||  B41: 14
+A43: "STANDARD BEAD COUNT TABLE (circular welds, by Welding Diameter)"
+A44: "Bead count is looked up automatically from Weld Diameter (approximate match). Table currently covers 50-200mm only, per HISPL instruction - extend if a diameter outside this range is needed."
+A45: "Bin Start (helper)"  ||  B45: "Diameter Range"  ||  C45: "Standard Beads"
+A46: 50  ||  B46: "50-75 mm"  ||  C46: 3
+A47: 76  ||  B47: "76-100 mm"  ||  C47: 4
+A48: 101  ||  B48: "101-125 mm"  ||  C48: 4
+A49: 126  ||  B49: "126-150 mm"  ||  C49: 5
+A50: 151  ||  B50: "151-175 mm"  ||  C50: 6
+A51: 176  ||  B51: "176-200 mm"  ||  C51: 6

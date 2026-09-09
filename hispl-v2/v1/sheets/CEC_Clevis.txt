@@ -1,0 +1,51 @@
+A1: "CEC CLEVIS - COSTING SHEET  (active only when Mounting = Rod Eye + CEC Clevis)"
+A2: "Built in Change 6. Geometry driven by Barrel ID / Bore per HISPL Section 16, but no approved HISPL geometry table exists yet - all dimensions below are ENGINEERING INPUT REQUIRED (manual, default blank). Weight/cost formulas are fully wired and ready; this component contributes Rs.0 until real dimensions are entered."
+A4: "SECTION A - MATERIAL INPUTS"  ||  E4: "APPROXIMATE COSTING GEOMETRY - FINAL DIMENSIONS SUBJECT TO GA/DESIGN (Bore driven, HISPL-approved stepped table)"
+A5: "New Material? (Yes/No)"  ||  B5: "Yes"  ||  E5: "Source: ISO 6022 clevis mount (MP1/MP3) proportions + ISO 8140 fork/clevis ratios, rounded to standard sizes. Approved by HISPL."
+A6: "Parameter"  ||  B6: "Value"  ||  C6: "Unit / Note"  ||  E6: "Bore Bin Start"  ||  F6: "Clevis Width"  ||  G6: "Pin Diameter"  ||  H6: "Pin Hole"  ||  I6: "Thickness"  ||  J6: "Length"
+A7: "Material Grade"  ||  B7: "MS-C45"  ||  E7: 50  ||  F7: 40  ||  G7: 20  ||  H7: 20.5  ||  I7: 20  ||  J7: 45
+A8: "Barrel ID / Bore (mm) [auto = Bore]"  ||  B8: =Bore  {125}  ||  C8: "Auto-linked to primary Bore input"  ||  E8: 63  ||  F8: 50  ||  G8: 25  ||  H8: 25.5  ||  I8: 25  ||  J8: 56
+A9: "Length (mm)"  ||  B9: =F26  {110}  ||  C9: "Now = approved geometry table value (Bore driven), or override above."  ||  E9: 80  ||  F9: 63  ||  G9: 32  ||  H9: 32.5  ||  I9: 32  ||  J9: 70
+A10: "Width (mm)"  ||  B10: =F22  {100}  ||  C10: "Now = approved geometry table value."  ||  E10: 100  ||  F10: 80  ||  G10: 40  ||  H10: 40.5  ||  I10: 40  ||  J10: 90
+A11: "Thickness (mm)"  ||  B11: =F25  {50}  ||  C11: "Now = approved geometry table value."  ||  E11: 125  ||  F11: 100  ||  G11: 50  ||  H11: 50.5  ||  I11: 50  ||  J11: 110
+A12: "Pin Diameter (mm)"  ||  B12: =F23  {50}  ||  C12: "Now = approved geometry table value."  ||  E12: 150  ||  F12: 112  ||  G12: 56  ||  H12: 56.5  ||  I12: 56  ||  J12: 125
+A13: "Hole Diameter (mm)"  ||  B13: =(shared//inherited)  {50.5}  ||  C13: "Now = approved geometry table value (Pin Dia + 0.5mm running clearance)."  ||  E13: 160  ||  F13: 125  ||  G13: 63  ||  H13: 63.5  ||  I13: 63  ||  J13: 140
+A14: "Number of Lugs"  ||  B14: 2  ||  C14: "Default 2 (typical clevis) - adjust if different"  ||  E14: 180  ||  F14: 140  ||  G14: 70  ||  H14: 70.5  ||  I14: 70  ||  J14: 160
+A15: "Quantity (Nos)"  ||  B15: 1  ||  E15: 200  ||  F15: 160  ||  G15: 80  ||  H15: 80.5  ||  I15: 80  ||  J15: 180
+A17: "AUTO CALCULATE - MATERIAL (Section 17 formula chain)"  ||  E17: "Manual Overrides (blank = use table above; enter to force a value from an actual GA/design drawing):"
+A18: "Density (g/cm3)"  ||  B18: =INDEX(MaterialMaster_Range,MATCH(B7,INDEX(MaterialMaster_Range,0,1),0),3)  {7.85}  ||  E18: "Width Override"  ||  F18: "Pin Dia Override"  ||  G18: "Pin Hole Override"  ||  H18: "Thickness Override"  ||  I18: "Length Override"
+A19: "Material Rate (Rs./kg)"  ||  B19: =IF(B7="MS-C45",IFERROR(VLOOKUP(F25,C45RateTable,3,TRUE()),INDEX(C45RateTable,1,3)),INDEX(MaterialMaster_Range,MATCH(B7,INDEX(MaterialMaster_Range,0,1),0),4))  {100}
+A20: "Gross Volume (mm3) = L x W x T"  ||  B20: =B9*B10*B11  {550000}
+A21: "Hole Volume (mm3) = PI/4 x HoleDia^2 x T"  ||  B21: =(PI()/4)*(B13)^2*B11  {100148.0833}  ||  E21: "FINAL (Standard from table, or Override above if entered):"
+A22: "Net Volume (mm3) = Gross - Hole"  ||  B22: =B20-B21  {449851.9167}  ||  E22: "Clevis Width"  ||  F22: =IF(E19="",IFERROR(VLOOKUP(Bore,CECClevisGeomTable,2,TRUE()),0),E19)  {100}
+A23: "Total Volume (mm3) = Net x No. of Lugs"  ||  B23: =B22*B14  {899703.8334}  ||  E23: "Pin Diameter"  ||  F23: =IF(F19="",IFERROR(VLOOKUP(Bore,CECClevisGeomTable,3,TRUE()),0),F19)  {50}
+A24: "Unit Weight (kg / pc)"  ||  B24: =B23*B18/1000000  {7.062675092}  ||  E24: "Pin Hole"  ||  F24: =IF(G19="",IFERROR(VLOOKUP(Bore,CECClevisGeomTable,4,TRUE()),0),G19)  {50.5}
+A25: "Material Cost / pc (Rs.)"  ||  B25: =IF(B5="No",0,B24*B19)  {706.2675092}  ||  E25: "Thickness"  ||  F25: =IF(H19="",IFERROR(VLOOKUP(Bore,CECClevisGeomTable,5,TRUE()),0),H19)  {50}
+E26: "Length"  ||  F26: =IF(I19="",IFERROR(VLOOKUP(Bore,CECClevisGeomTable,6,TRUE()),0),I19)  {110}
+A27: "SECTION B - PROCESS COST (manual - pending Machine Time / CEC Geometry Master linkage)"
+A28: "Process Cost / pc (Rs., manual entry)"  ||  B28: =B51  {302.8283439}  ||  C28: "Now = automatic Section F subtotal (Profile Cutting + Milling + Drilling)."
+A30: "SECTION C - WELDING"
+A31: "Welding Cost / pc (Rs.)"  ||  B31: "Now automatic - see Section G below"
+A32: "Welding Cost / pc (Rs., manual entry until formula defined)"  ||  B32: =B59  {1298.031496}  ||  C32: "Now = automatic Section G Total Welding Cost (Tube OD driven)."
+A34: "SECTION D - ADDITIONAL COST (Manual Entry)"
+A35: "Additional Cost / pc (Rs.)"  ||  B35: 0
+A37: "SECTION E - COMPONENT COST SUMMARY"
+A38: "Material Cost"  ||  B38: =B25  {706.2675092}
+A39: "Process Cost (incl. welding)"  ||  B39: =B28+B32  {1600.85984}
+A40: "Additional Cost"  ||  B40: =B35  {0}
+A41: "TOTAL CEC CLEVIS COST / pc"  ||  B41: =B25+B28+B32+B35  {2307.127349}
+A42: "TOTAL CEC CLEVIS COST for Qty"  ||  B42: =B41*B15  {2307.127349}
+A44: "SECTION F - AUTOMATIC PROCESS ROUTING (existing Machine Time Master, now driven by approved geometry)"
+A45: "Route: Profile Cutting (from plate) + Milling (fork/slot) + Drilling (pin hole) - same methodology already used for Rear Eye / Rod Eye / Piston."
+A46: "Apply?"  ||  B46: "Process"  ||  C46: "Machine / Basis"  ||  D46: "Hours / Qty Basis"  ||  E46: "Rate (Rs.)"  ||  F46: "Cost (Rs.)"
+A47: "Yes"  ||  B47: "Profile Cutting"  ||  C47: "Process Rate Master (Rs./kg)"  ||  D47: =B24  {7.062675092}  ||  E47: =ProfileCuttingRate  {1.25}  ||  F47: =IF(A47="Yes",D47*E47,0)  {8.828343865}
+A48: "Yes"  ||  B48: "Milling (fork/slot)"  ||  C48: "Milling Machine"  ||  D48: =VLOOKUP((B10)*(B9),MillingTable,3,TRUE())  {0.6}  ||  E48: =INDEX(MachineRateMaster_Range,MATCH("Milling Machine",INDEX(MachineRateMaster_Range,0,1),0),2)  {350}  ||  F48: =(shared//inherited)  {210}
+A49: "Yes"  ||  B49: "Drilling (pin hole)"  ||  C49: "Drilling Machine"  ||  D49: =VLOOKUP(B13,DrillingTable,3,TRUE())*B14  {0.24}  ||  E49: =INDEX(MachineRateMaster_Range,MATCH("Drilling Machine",INDEX(MachineRateMaster_Range,0,1),0),2)  {350}  ||  F49: =(shared//inherited)  {84}
+A51: "SUBTOTAL - PROCESS COST (Rs.)"  ||  B51: =F47+F48+F49  {302.8283439}
+A53: "SECTION G - WELDING (Tube OD driven, HISPL Simplified - Rs./inch/bead, same standard as CEC/Flange/Trunnion welding)"
+A54: "Weld Diameter (mm) [auto = Tube_OD]"  ||  B54: =Tube_OD  {150}
+A55: "No. of Beads (auto, from Weld Bead Table)"  ||  B55: =VLOOKUP(B54,WeldBeadTable,3,TRUE())  {5}
+A56: "No. of Weld Locations"  ||  B56: 1
+A57: "Circumference (inch)"  ||  B57: =(B54*3.14)/25.4  {18.54330709}
+A58: "Welding Rate (Rs./inch/bead)"  ||  B58: =WeldRatePerInchBead  {14}
+A59: "Total Welding Cost (Rs.)"  ||  B59: =B57*B58*B55*B56  {1298.031496}

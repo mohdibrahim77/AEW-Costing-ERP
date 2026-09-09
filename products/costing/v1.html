@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en" class="motion-ready">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Cylinder Costing — HISPL VERSION 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<style>
+/* ══════════════════════════════════════════════════════════════════
+   Cylinder costing — the working surface.
+
+   Two columns that hold their own scroll: what you type on the left,
+   what it costs on the right. The point of the layout is that a change
+   to bore and its effect on the total are visible in the same glance —
+   an estimator's real question is "what does that do to the number",
+   and making them scroll to find out answers it badly.
+   ══════════════════════════════════════════════════════════════════ */
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;background:var(--surface-2);color:var(--ink-900);
+  font-family:var(--sans);font-size:var(--fs-sm);line-height:var(--lh-normal);
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── masthead ─────────────────────────────────────────────────── */
+.top{
+  position:sticky;top:0;z-index:40;
+  display:flex;align-items:center;gap:var(--d-6);
+  padding:var(--d-5) var(--d-7);
+  background:var(--ink-950);color:var(--on-dark);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.top h1{
+  margin:0;font-size:var(--fs-sm);font-weight:600;
+  letter-spacing:var(--ls-snug);
+}
+.top .sub{
+  font-family:var(--mono);font-size:11px;letter-spacing:var(--ls-wide);
+  text-transform:uppercase;color:var(--on-dark-faint);
+}
+.top .spacer{flex:1}
+.badge{
+  font-family:var(--mono);font-size:10px;letter-spacing:var(--ls-wider);
+  text-transform:uppercase;padding:3px 8px;border-radius:var(--r4);
+  border:1px solid var(--on-dark-border);color:var(--on-dark-muted);
+}
+
+/* The running total lives in the masthead so it is never scrolled away.
+   It is the one number the whole page exists to produce. */
+.top-total{text-align:right;line-height:1.15}
+.top-total .lab{
+  display:block;font-family:var(--mono);font-size:10px;
+  letter-spacing:var(--ls-wider);text-transform:uppercase;color:var(--on-dark-faint);
+}
+.top-total .val{
+  display:block;font-family:var(--mono);font-size:22px;font-weight:600;
+  font-variant-numeric:tabular-nums;letter-spacing:var(--ls-snug);
+}
+.top-total .val.is-stale{color:var(--on-dark-faint)}
+
+/* ── shell ────────────────────────────────────────────────────── */
+.shell{
+  display:grid;grid-template-columns:minmax(340px,400px) 1fr;
+  height:calc(100vh - 57px);
+}
+.pane{overflow-y:auto;overscroll-behavior:contain}
+.pane-in{background:var(--surface);border-right:1px solid var(--ink-200);padding:var(--d-7)}
+.pane-out{padding:var(--d-7) var(--d-8)}
+
+@media(max-width:960px){
+  .shell{grid-template-columns:1fr;height:auto}
+  .pane{overflow:visible}
+  .pane-in{border-right:none;border-bottom:1px solid var(--ink-200)}
+}
+
+/* ── form ─────────────────────────────────────────────────────── */
+.sec{margin:0 0 var(--d-8)}
+.sec-h{
+  display:flex;align-items:baseline;gap:var(--d-4);
+  margin:0 0 var(--d-5);padding-bottom:var(--d-4);
+  border-bottom:1px solid var(--ink-200);
+}
+.sec-h h2{
+  margin:0;font-size:var(--fs-sm);font-weight:600;letter-spacing:var(--ls-snug);
+}
+.sec-h .cell{
+  margin-left:auto;font-family:var(--mono);font-size:10px;
+  color:var(--ink-400);letter-spacing:var(--ls-wide);
+}
+.sec-note{
+  margin:calc(var(--d-5) * -1) 0 var(--d-5);font-size:var(--fs-xs);
+  color:var(--ink-500);line-height:var(--lh-normal);
+}
+
+.f{margin:0 0 var(--d-5);position:relative}
+.f label{
+  display:block;margin:0 0 var(--d-2);
+  font-size:var(--fs-xs);font-weight:500;color:var(--ink-600);
+}
+.f .unit{
+  font-family:var(--mono);font-size:10px;color:var(--ink-400);
+  letter-spacing:var(--ls-wide);margin-left:4px;
+}
+.f input,.f select{
+  width:100%;padding:8px 10px;font-family:var(--sans);font-size:var(--fs-sm);
+  color:var(--ink-900);background:var(--surface);
+  border:1px solid var(--ink-200);border-radius:var(--r4);
+  transition:border-color var(--dur-1) var(--ease),box-shadow var(--dur-1) var(--ease);
+}
+.f input[type=number]{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.f input:focus,.f select:focus{
+  outline:none;border-color:var(--emerald);
+  box-shadow:0 0 0 3px rgba(5,150,105,.12);
+}
+.f input:invalid{border-color:var(--red)}
+.f .hint{
+  margin:var(--d-2) 0 0;font-size:11px;color:var(--ink-400);line-height:1.45;
+}
+.f .drives{
+  margin:var(--d-2) 0 0;font-size:11px;color:var(--emerald);
+  line-height:1.45;
+}
+.f .drives::before{content:'→ ';opacity:.7}
+
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:var(--d-5)}
+
+/* ── validation ───────────────────────────────────────────────── */
+.errs{
+  margin:0 0 var(--d-6);padding:var(--d-5);border-radius:var(--r8);
+  background:var(--red-l);border:1px solid rgba(220,38,38,.25);
+}
+.errs.warn{background:var(--amber-l);border-color:rgba(217,119,6,.28)}
+.errs h3{
+  margin:0 0 var(--d-3);font-size:var(--fs-xs);font-weight:600;
+  text-transform:uppercase;letter-spacing:var(--ls-wide);color:var(--red);
+}
+.errs.warn h3{color:var(--amber)}
+.errs ul{margin:0;padding-left:16px}
+.errs li{margin:0 0 var(--d-2);font-size:var(--fs-xs);line-height:1.5}
+.errs li:last-child{margin-bottom:0}
+
+/* ── output cards ─────────────────────────────────────────────── */
+.card{
+  background:var(--surface);border:1px solid var(--ink-200);
+  border-radius:var(--r12);margin:0 0 var(--d-7);overflow:hidden;
+}
+.card-h{
+  display:flex;align-items:center;gap:var(--d-4);
+  padding:var(--d-5) var(--d-6);border-bottom:1px solid var(--ink-200);
+  background:var(--surface-2);
+}
+.card-h h2{
+  margin:0;font-size:var(--fs-xs);font-weight:600;
+  text-transform:uppercase;letter-spacing:var(--ls-wide);color:var(--ink-600);
+}
+.card-h .meta{
+  margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-400);
+}
+
+/* ── the breakdown table ──────────────────────────────────────── */
+table.bd{width:100%;border-collapse:collapse}
+table.bd th{
+  padding:var(--d-4) var(--d-6);text-align:left;
+  font-size:10px;font-weight:600;text-transform:uppercase;
+  letter-spacing:var(--ls-wider);color:var(--ink-400);
+  border-bottom:1px solid var(--ink-200);
+}
+table.bd th.r,table.bd td.r{text-align:right}
+table.bd td{
+  padding:var(--d-4) var(--d-6);border-bottom:1px solid var(--ink-100);
+  vertical-align:top;
+}
+table.bd tr:last-child td{border-bottom:none}
+
+tr.comp{cursor:pointer;transition:background var(--dur-1) var(--ease)}
+tr.comp:hover{background:var(--surface-2)}
+tr.comp.absent{color:var(--ink-400)}
+tr.comp.absent .cname{font-weight:400}
+.cname{font-weight:500;display:flex;align-items:center;gap:6px}
+.caret{
+  width:0;height:0;border-left:4px solid var(--ink-400);
+  border-top:3.5px solid transparent;border-bottom:3.5px solid transparent;
+  transition:transform var(--dur-1) var(--ease);flex:none;
+}
+tr.comp.open .caret{transform:rotate(90deg)}
+.csheet{
+  font-family:var(--mono);font-size:10px;color:var(--ink-400);
+  letter-spacing:var(--ls-wide);
+}
+
+/* The provenance chip. A dimension that came from an ISO-derived table
+   and one that came from "general proportion, no source found" must not
+   look the same to whoever signs the quotation. */
+.chip{
+  display:inline-block;font-family:var(--mono);font-size:9px;
+  letter-spacing:var(--ls-wider);text-transform:uppercase;
+  padding:2px 6px;border-radius:var(--r2);white-space:nowrap;
+}
+.chip-approved{background:var(--emerald-l);color:var(--emerald-d)}
+.chip-medium-high{background:var(--blueprint-l);color:var(--blueprint)}
+.chip-medium{background:#fef9c3;color:#854d0e}
+.chip-low{background:var(--amber-l);color:var(--amber)}
+.chip-manual{background:var(--ink-100);color:var(--ink-500)}
+
+.money{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.money.big{font-size:var(--fs-md);font-weight:600}
+.pct{font-family:var(--mono);font-size:11px;color:var(--ink-400)}
+
+/* A hairline share bar under each component. Thirteen rupee figures in
+   a column do not show you that the tube is a fifth of the cylinder;
+   thirteen bars do, without costing a chart. */
+.share{height:2px;background:var(--ink-100);border-radius:1px;margin-top:5px;overflow:hidden}
+.share i{display:block;height:100%;background:var(--emerald);width:0;
+  transition:width var(--dur-3) var(--ease)}
+
+/* ── expanded detail ──────────────────────────────────────────── */
+tr.detail>td{padding:0;background:var(--surface-2);border-bottom:1px solid var(--ink-200)}
+.detail-in{
+  padding:var(--d-6);display:grid;gap:var(--d-6);
+  grid-template-columns:minmax(200px,260px) 1fr;
+}
+@media(max-width:760px){.detail-in{grid-template-columns:1fr}}
+.dl{margin:0}
+.dl h4{
+  margin:0 0 var(--d-4);font-size:10px;font-weight:600;text-transform:uppercase;
+  letter-spacing:var(--ls-wider);color:var(--ink-400);
+}
+.dl dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:var(--d-2) var(--d-5)}
+.dl dt{font-size:var(--fs-xs);color:var(--ink-500)}
+.dl dd{
+  margin:0;font-family:var(--mono);font-size:var(--fs-xs);
+  font-variant-numeric:tabular-nums;text-align:right;color:var(--ink-900);
+}
+.basis{
+  margin:var(--d-4) 0 0;padding:var(--d-4);border-radius:var(--r4);
+  background:var(--surface);border:1px solid var(--ink-200);
+  font-size:11px;line-height:1.5;color:var(--ink-500);
+}
+table.proc{width:100%;border-collapse:collapse;font-size:var(--fs-xs)}
+table.proc th{
+  padding:var(--d-2) var(--d-4);text-align:left;font-size:10px;font-weight:600;
+  text-transform:uppercase;letter-spacing:var(--ls-wide);color:var(--ink-400);
+  border-bottom:1px solid var(--ink-200);
+}
+table.proc th.r,table.proc td.r{text-align:right}
+table.proc td{padding:var(--d-2) var(--d-4);border-bottom:1px solid var(--ink-100)}
+table.proc tr:last-child td{border-bottom:none}
+table.proc td.op{color:var(--ink-900)}
+table.proc td.mc{font-family:var(--mono);font-size:10px;color:var(--ink-400)}
+table.proc tr.weld td.op{color:var(--blueprint)}
+table.proc tr.manual td{color:var(--ink-400);font-style:italic}
+
+/* ── totals block ─────────────────────────────────────────────── */
+.tot{padding:var(--d-6)}
+.tot-row{
+  display:flex;align-items:baseline;gap:var(--d-5);
+  padding:var(--d-3) 0;border-bottom:1px solid var(--ink-100);
+}
+.tot-row:last-child{border-bottom:none}
+.tot-row .lab{flex:1;color:var(--ink-600)}
+.tot-row .lab small{display:block;font-size:11px;color:var(--ink-400)}
+.tot-row.grand{
+  margin-top:var(--d-4);padding-top:var(--d-5);
+  border-top:2px solid var(--ink-900);border-bottom:none;
+}
+.tot-row.grand .lab{font-weight:600;color:var(--ink-900)}
+.tot-row.grand .money{font-size:var(--fs-lg);font-weight:600}
+
+/* ── notes ────────────────────────────────────────────────────── */
+.note{
+  display:flex;gap:var(--d-5);padding:var(--d-5) var(--d-6);
+  border-bottom:1px solid var(--ink-100);
+}
+.note:last-child{border-bottom:none}
+.note .tag{
+  flex:none;width:64px;font-family:var(--mono);font-size:9px;font-weight:600;
+  letter-spacing:var(--ls-wider);text-transform:uppercase;padding-top:2px;
+}
+.note.defect .tag{color:var(--red)}
+.note.warn .tag{color:var(--amber)}
+.note.error .tag{color:var(--red)}
+.note.info .tag{color:var(--ink-400)}
+.note .body{flex:1;font-size:var(--fs-xs);line-height:1.55;color:var(--ink-600)}
+.note .body b{color:var(--ink-900);font-weight:600}
+.note .who{
+  display:block;font-family:var(--mono);font-size:10px;color:var(--ink-400);
+  margin-bottom:2px;letter-spacing:var(--ls-wide);
+}
+
+/* ── derivation meter ─────────────────────────────────────────── */
+.meter{padding:var(--d-6)}
+.meter-bar{
+  display:flex;height:8px;border-radius:4px;overflow:hidden;
+  background:var(--ink-100);margin:0 0 var(--d-5);
+}
+.meter-bar i{
+  display:block;height:100%;width:0;
+  transition:width var(--dur-3) var(--ease);
+}
+.meter-bar i.derived{background:var(--emerald)}
+.meter-bar i.calculated{background:var(--blueprint-m)}
+.meter-bar i.manual{background:var(--ink-400)}
+.meter-key{display:flex;flex-wrap:wrap;gap:var(--d-5)}
+.meter-key span{display:flex;align-items:center;gap:6px;font-size:var(--fs-xs);color:var(--ink-500)}
+.meter-key i{width:8px;height:8px;border-radius:2px;flex:none}
+.meter-key b{color:var(--ink-900);font-weight:600;font-family:var(--mono)}
+
+/* ── engineering inputs (collapsed by default) ────────────────── */
+details.eng{border-top:1px solid var(--ink-200);margin-top:var(--d-7);padding-top:var(--d-6)}
+details.eng>summary{
+  cursor:pointer;list-style:none;font-size:var(--fs-xs);font-weight:600;
+  color:var(--ink-600);display:flex;align-items:center;gap:6px;
+}
+details.eng>summary::-webkit-details-marker{display:none}
+details.eng>summary::before{
+  content:'';width:0;height:0;border-left:4px solid var(--ink-400);
+  border-top:3.5px solid transparent;border-bottom:3.5px solid transparent;
+  transition:transform var(--dur-1) var(--ease);
+}
+details.eng[open]>summary::before{transform:rotate(90deg)}
+details.eng .why{
+  margin:var(--d-4) 0 var(--d-6);font-size:11px;line-height:1.55;color:var(--ink-500);
+}
+details.eng .grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--d-4) var(--d-5)}
+details.eng .grid .f{margin:0}
+details.eng .grid .f label{font-size:11px}
+details.eng .grid input{padding:6px 8px;font-size:var(--fs-xs)}
+
+.btn{
+  display:inline-flex;align-items:center;gap:6px;padding:7px 12px;
+  font-family:var(--sans);font-size:var(--fs-xs);font-weight:500;
+  color:var(--ink-600);background:var(--surface);cursor:pointer;
+  border:1px solid var(--ink-200);border-radius:var(--r4);
+  transition:border-color var(--dur-1) var(--ease),color var(--dur-1) var(--ease);
+}
+.btn:hover{border-color:var(--ink-400);color:var(--ink-900)}
+
+/* ── figure transitions ───────────────────────────────────────── */
+/* Numbers cross-fade on change rather than snapping. The eye catches a
+   value that moved; a hard swap in a column of thirteen is invisible. */
+.money,.dl dd{transition:color var(--dur-1) var(--ease)}
+.flash{animation:flash var(--dur-3) var(--ease)}
+@keyframes flash{
+  0%{background:rgba(5,150,105,.16)}
+  100%{background:transparent}
+}
+tr.detail{display:none}
+tr.detail.open{display:table-row}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div>
+    <h1>Cylinder Costing</h1>
+    <span class="sub">HISPL · VERSION 1 workbook</span>
+  </div>
+  <span class="badge">Preview — not wired to the ERP</span>
+  <span class="spacer"></span>
+  <div class="top-total">
+    <span class="lab">Total manufacturing cost</span>
+    <span class="val num" id="hero-total">—</span>
+  </div>
+</header>
+
+<div class="shell">
+
+  <!-- ══ INPUTS ══════════════════════════════════════════════════ -->
+  <div class="pane pane-in">
+    <div id="validation"></div>
+    <form id="form" autocomplete="off"></form>
+
+    <details class="eng" id="eng">
+      <summary>Engineering inputs</summary>
+      <p class="why">
+        The dimensions no lookup table derives. Each is seeded with the value
+        HISPL's own sheet carries, which is a starting point, not a
+        derivation — the workbook is explicit that no validated
+        stroke-to-length allowance exists, so the tool asks rather than
+        inventing one.
+      </p>
+      <div class="grid" id="eng-grid"></div>
+    </details>
+  </div>
+
+  <!-- ══ OUTPUT ══════════════════════════════════════════════════ -->
+  <div class="pane pane-out">
+
+    <div class="card">
+      <div class="card-h">
+        <h2>Where the dimensions come from</h2>
+        <span class="meta" id="meter-meta"></span>
+      </div>
+      <div class="meter">
+        <div class="meter-bar">
+          <i class="derived" id="mb-derived"></i>
+          <i class="calculated" id="mb-calculated"></i>
+          <i class="manual" id="mb-manual"></i>
+        </div>
+        <div class="meter-key">
+          <span><i style="background:var(--emerald)"></i>Derived from a lookup table <b id="k-derived">0</b></span>
+          <span><i style="background:var(--blueprint-m)"></i>Calculated from an input <b id="k-calculated">0</b></span>
+          <span><i style="background:var(--ink-400)"></i>Engineering input <b id="k-manual">0</b></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-h">
+        <h2>Components</h2>
+        <span class="meta" id="comp-meta"></span>
+      </div>
+      <table class="bd">
+        <thead><tr>
+          <th style="width:34%">Component</th>
+          <th>Geometry</th>
+          <th class="r">Material</th>
+          <th class="r">Process</th>
+          <th class="r" style="width:16%">Total</th>
+        </tr></thead>
+        <tbody id="comp-body"></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-h"><h2>Roll-up</h2>
+        <span class="meta" id="weight-meta"></span></div>
+      <div class="tot" id="totals"></div>
+    </div>
+
+    <div class="card" id="notes-card">
+      <div class="card-h">
+        <h2>Check before quoting</h2>
+        <span class="meta" id="notes-meta"></span>
+      </div>
+      <div id="notes"></div>
+    </div>
+
+  </div>
+</div>
+
+<script src="../../assets/js/costing/v1/masters.js"></script>
+<script src="../../assets/js/costing/v1/geometry.js"></script>
+<script src="../../assets/js/costing/v1/inputs.js"></script>
+<script src="../../assets/js/costing/v1/engine.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var IN = window.HISPL_INPUTS_V1;
+  var EN = window.HISPL_ENGINE_V1;
+  var GE = window.HISPL_GEOMETRY_V1;
+
+  var state = IN.defaults();
+  var eng   = EN.engineeringDefaults();
+  var open  = {};        /* which component rows are expanded */
+  var last  = {};        /* previous figures, so a change can be flashed */
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  function money(n) {
+    if (typeof n !== 'number' || isNaN(n)) return '—';
+    return '₹' + Math.round(n).toLocaleString('en-IN');
+  }
+  function money2(n) {
+    if (typeof n !== 'number' || isNaN(n)) return '—';
+    return '₹' + n.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  /* ══ FORM ═════════════════════════════════════════════════════ */
+  function buildForm() {
+    var html = '', i, j, s, f;
+    for (i = 0; i < IN.sections.length; i++) {
+      s = IN.sections[i];
+      html += '<section class="sec"><div class="sec-h"><h2>' + esc(s.title) + '</h2>' +
+              '<span class="cell">' + esc(s.cell) + '</span></div>';
+      if (s.note) html += '<p class="sec-note">' + esc(s.note) + '</p>';
+      for (j = 0; j < s.fields.length; j++) {
+        f = s.fields[j];
+        html += field(f);
+      }
+      html += '</section>';
+    }
+    $('form').innerHTML = html;
+    $('form').addEventListener('input', onInput);
+    $('form').addEventListener('change', onInput);
+  }
+
+  function field(f) {
+    var v = state[f.id], h = '<div class="f">';
+    h += '<label for="i-' + f.id + '">' + esc(f.label) +
+         (f.unit ? '<span class="unit">' + esc(f.unit) + '</span>' : '') + '</label>';
+    if (f.type === 'select' || f.type === 'yesno') {
+      var opts = f.type === 'yesno' ? ['Yes', 'No'] : f.options;
+      h += '<select id="i-' + f.id + '" data-f="' + f.id + '">';
+      for (var k = 0; k < opts.length; k++) {
+        h += '<option' + (opts[k] === v ? ' selected' : '') + '>' + esc(opts[k]) + '</option>';
+      }
+      h += '</select>';
+    } else {
+      h += '<input id="i-' + f.id + '" data-f="' + f.id + '" type="' +
+           (f.type === 'number' ? 'number' : f.type === 'date' ? 'date' : 'text') +
+           '" value="' + esc(v === null || v === undefined ? '' : v) + '"' +
+           (f.type === 'number' ? ' step="any" min="0"' : '') + '>';
+    }
+    if (f.drives) h += '<p class="drives">' + esc(f.drives) + '</p>';
+    if (f.note)   h += '<p class="hint">' + esc(f.note) + '</p>';
+    return h + '</div>';
+  }
+
+  /* The engineering-input panel. Only the dimensions the workbook says
+     are manual, plus the milling and drilling figures its own sheets
+     carry. Everything else on this page is derived. */
+  var ENG_FIELDS = [
+    ['tubeRawOD',      'Tube raw OD',            'mm'],
+    ['tubeLength',     'Tube raw length',        'mm'],
+    ['rodRawDia',      'Rod raw diameter',       'mm'],
+    ['rodLength',      'Rod length',             'mm'],
+    ['stopTubeLength', 'Stop tube length',       'mm'],
+    ['tubeHoles',      'Tube holes',             ''],
+    ['tubeHoleDia',    'Tube hole dia',          'mm'],
+    ['rodMillW',       'Rod milled width',       'mm'],
+    ['rodMillL',       'Rod milled length',      'mm'],
+    ['coverHoleDia',   'Cover hole dia',         'mm'],
+    ['coverHoles',     'Cover holes',            ''],
+    ['assemblyHours',  'Assembly hours',         'hr'],
+    ['assemblyRate',   'Assembly rate',          '₹/hr'],
+    ['paintArea',      'Painted area',           'cm²'],
+    ['packingWeight',  'Packing weight',         'kg'],
+    ['tieRodAllowance','Tie rod closed length',  'mm']
+  ];
+
+  function buildEng() {
+    var h = '', i, f;
+    for (i = 0; i < ENG_FIELDS.length; i++) {
+      f = ENG_FIELDS[i];
+      h += '<div class="f"><label for="e-' + f[0] + '">' + esc(f[1]) +
+           (f[2] ? '<span class="unit">' + esc(f[2]) + '</span>' : '') + '</label>' +
+           '<input id="e-' + f[0] + '" data-e="' + f[0] + '" type="number" step="any" min="0" value="' +
+           eng[f[0]] + '"></div>';
+    }
+    $('eng-grid').innerHTML = h;
+    $('eng-grid').addEventListener('input', function (ev) {
+      var key = ev.target.getAttribute('data-e');
+      if (!key) return;
+      var n = parseFloat(ev.target.value);
+      eng[key] = isNaN(n) ? 0 : n;
+      run();
+    });
+  }
+
+  function onInput(ev) {
+    var key = ev.target.getAttribute('data-f');
+    if (!key) return;
+    var fs = IN.fields(), i, def = null;
+    for (i = 0; i < fs.length; i++) if (fs[i].id === key) def = fs[i];
+    var raw = ev.target.value;
+    state[key] = (def && def.type === 'number') ? (raw === '' ? null : parseFloat(raw)) : raw;
+    run();
+  }
+
+  /* ══ RENDER ═══════════════════════════════════════════════════ */
+  function run() {
+    var r = EN.cost(state, eng);
+
+    if (!r.ok) {
+      $('validation').innerHTML =
+        '<div class="errs"><h3>Cannot cost this cylinder</h3><ul>' +
+        r.errors.map(function (e) { return '<li>' + esc(e) + '</li>'; }).join('') +
+        '</ul></div>';
+      $('hero-total').textContent = '—';
+      $('hero-total').classList.add('is-stale');
+      return;
+    }
+
+    $('validation').innerHTML = r.warnings.length
+      ? '<div class="errs warn"><h3>Worth a look</h3><ul>' +
+        r.warnings.map(function (w) { return '<li>' + esc(w) + '</li>'; }).join('') +
+        '</ul></div>'
+      : '';
+
+    $('hero-total').classList.remove('is-stale');
+    setFigure($('hero-total'), money(r.grandTotal), 'grand');
+
+    renderMeter(r);
+    renderComponents(r);
+    renderTotals(r);
+    renderNotes(r);
+  }
+
+  /* A figure that changed gets a brief wash of accent behind it. Not
+     decoration: with thirteen rows updating on every keystroke, the
+     ones that actually moved are otherwise impossible to spot. */
+  function setFigure(el, text, key) {
+    if (!el) return;
+    var prev = last[key];
+    el.textContent = text;
+    if (prev !== undefined && prev !== text) {
+      el.classList.remove('flash');
+      void el.offsetWidth;              /* restart the animation */
+      el.classList.add('flash');
+    }
+    last[key] = text;
+  }
+
+  function renderMeter(r) {
+    /* Counted from the run itself rather than from a constant, so it
+       stays true if a component drops out of the mounting. */
+    var derived = 0, calculated = 0, manual = 0, i, c;
+    for (i = 0; i < r.components.length; i++) {
+      c = r.components[i];
+      if (!c.present || c.blocked) continue;
+      if (c.geometry && c.geometry.values) {
+        derived += Object.keys(c.geometry.values).length;
+      }
+      if (c.dimSource) {
+        var k;
+        for (k in c.dimSource) {
+          if (!Object.prototype.hasOwnProperty.call(c.dimSource, k)) continue;
+          if (c.dimSource[k] === 'manual') manual++;
+          else if (c.dimSource[k] !== 'derived') calculated++;
+        }
+      }
+      if (c.structural) calculated += 2;   /* tie rod: diameter and length */
+    }
+    var total = derived + calculated + manual || 1;
+    $('mb-derived').style.width    = (derived / total * 100) + '%';
+    $('mb-calculated').style.width = (calculated / total * 100) + '%';
+    $('mb-manual').style.width     = (manual / total * 100) + '%';
+    $('k-derived').textContent    = derived;
+    $('k-calculated').textContent = calculated;
+    $('k-manual').textContent     = manual;
+    $('meter-meta').textContent =
+      Math.round((derived + calculated) / total * 100) + '% derived from ' +
+      IN.fields().length + ' inputs';
+  }
+
+  function renderComponents(r) {
+    var body = $('comp-body'), html = '', i, c;
+    var max = 0;
+    for (i = 0; i < r.components.length; i++) {
+      if (r.components[i].totalCost > max) max = r.components[i].totalCost;
+    }
+    for (i = 0; i < r.components.length; i++) {
+      c = r.components[i];
+      html += componentRow(c, max, r.componentTotal);
+      html += '<tr class="detail' + (open[c.id] ? ' open' : '') +
+              '" data-for="' + c.id + '"><td colspan="5">' +
+              (open[c.id] ? detailHTML(c) : '') + '</td></tr>';
+    }
+    body.innerHTML = html;
+
+    var rows = body.querySelectorAll('tr.comp');
+    for (i = 0; i < rows.length; i++) {
+      rows[i].addEventListener('click', toggleRow);
+    }
+    /* Flash whichever component totals actually moved. The table is
+       rebuilt wholesale on every keystroke, so without this a change to
+       bore silently redraws thirteen rows and the eye has no idea which
+       ones responded.
+
+       Done synchronously, not in requestAnimationFrame. rAF is throttled
+       to a standstill in a background tab, and this cue is worth more
+       than the frame of grow-in animation it would buy: a page that
+       renders its figures but never says which ones changed is worse
+       than one that renders them plainly. */
+    var cells = body.querySelectorAll('tr.comp'), j;
+    for (j = 0; j < cells.length; j++) {
+      var id = cells[j].getAttribute('data-id');
+      var cell = cells[j].querySelector('td.money.big');
+      if (!cell) { last['c-' + id] = '—'; continue; }
+      var txt = cell.firstChild.textContent, key = 'c-' + id;
+      if (last[key] !== undefined && last[key] !== txt) {
+        void cell.offsetWidth;
+        cell.classList.add('flash');
+      }
+      last[key] = txt;
+    }
+    $('comp-meta').textContent =
+      r.components.filter(function (x) { return x.present; }).length + ' of ' +
+      r.components.length + ' fitted';
+  }
+
+  function componentRow(c, max, total) {
+    if (!c.present) {
+      return '<tr class="comp absent" data-id="' + c.id + '">' +
+        '<td><span class="cname">' + esc(c.name) + '</span>' +
+        '<span class="csheet">' + esc(c.why || '') + '</span></td>' +
+        '<td colspan="3"></td><td class="r money">—</td></tr>';
+    }
+    if (c.blocked) {
+      return '<tr class="comp" data-id="' + c.id + '">' +
+        '<td><span class="cname">' + esc(c.name) + '</span></td>' +
+        '<td colspan="3" style="color:var(--red);font-size:11px">' + esc(c.reason) + '</td>' +
+        '<td class="r money">—</td></tr>';
+    }
+    var conf = c.geometry ? c.geometry.confidence
+             : { level: 'manual', label: 'Engineering input' };
+    var share = max > 0 ? (c.totalCost / max * 100) : 0;
+    var pct = total > 0 ? (c.totalCost / total * 100) : 0;
+    return '<tr class="comp' + (open[c.id] ? ' open' : '') + '" data-id="' + c.id + '">' +
+      '<td><span class="cname"><span class="caret"></span>' + esc(c.name) +
+        (c.qty > 1 ? ' <span class="csheet">x' + c.qty + '</span>' : '') + '</span>' +
+        '<span class="csheet">' + esc(c.materialName) + '</span>' +
+        '<div class="share"><i style="width:' + share.toFixed(1) + '%"></i></div></td>' +
+      '<td><span class="chip chip-' + conf.level + '">' + esc(conf.label) + '</span></td>' +
+      '<td class="r money">' + money(c.materialCost) + '</td>' +
+      '<td class="r money">' + money(c.processCost) + '</td>' +
+      '<td class="r money big">' + money(c.totalCost) +
+        '<div class="pct">' + pct.toFixed(1) + '%</div></td></tr>';
+  }
+
+  function detailHTML(c) {
+    var h = '<div class="detail-in"><div class="dl"><h4>Dimensions</h4><dl>';
+    var k, dims = c.dims || {};
+    for (k in dims) {
+      if (!Object.prototype.hasOwnProperty.call(dims, k)) continue;
+      h += '<dt>' + esc(label(k)) + '</dt><dd>' + fmtDim(dims[k]) + '</dd>';
+    }
+    h += '<dt>Weight</dt><dd>' + c.weight.toFixed(3) + ' kg</dd>';
+    h += '<dt>Material rate</dt><dd>' + money2(c.materialRate) + '/kg</dd>';
+    h += '</dl>';
+
+    if (c.geometry) {
+      h += '<div class="basis"><b>' + esc(c.geometry.confidence.label) + '</b> · keyed on ' +
+           esc(label(c.geometry.driver)) + ' ' + c.geometry.driverValue + 'mm, table row ' +
+           c.geometry.bin + '.<br>' + esc(c.geometry.basis) +
+           (c.geometry.atTopOfTable
+             ? '<br><b>The table stops at ' + c.geometry.bin +
+               'mm — this size is stretching its top row.</b>' : '') +
+           '</div>';
+    }
+    /* Components with no lookup table still owe the reader an account
+       of where their dimensions came from — more so, in fact, since
+       theirs are the ones a person typed. */
+    if (!c.geometry && c.dimSource) {
+      var derivedFrom = [], manualDims = [], dk;
+      for (dk in c.dimSource) {
+        if (!Object.prototype.hasOwnProperty.call(c.dimSource, dk)) continue;
+        if (c.dimSource[dk] === 'manual') manualDims.push(label(dk));
+        else derivedFrom.push(label(dk) + ' ← ' + c.dimSource[dk]);
+      }
+      h += '<div class="basis"><b>No geometry table.</b> ' +
+           (derivedFrom.length ? derivedFrom.join(', ') + '. ' : '') +
+           (manualDims.length
+             ? '<br>Engineering input: ' + manualDims.join(', ') +
+               ' — the workbook has no validated allowance for ' +
+               (manualDims.length === 1 ? 'it' : 'these') + ', so the tool asks.'
+             : '') + '</div>';
+    }
+    if (c.structural) {
+      h += '<div class="basis"><b>Calculated, not looked up.</b><br>' +
+           Math.round(c.structural.thrustN).toLocaleString('en-IN') + ' N thrust across ' +
+           c.qty + ' rods at ' + c.structural.allowableStress.toFixed(0) +
+           ' N/mm² allowable needs ' + c.structural.areaRequiredMm2.toFixed(0) +
+           ' mm² → Ø' + c.structural.calculatedDia.toFixed(1) +
+           'mm, rounded up to Ø' + c.structural.standardDia + 'mm stock.</div>';
+    }
+    h += '</div><div>';
+
+    h += '<h4 style="margin:0 0 var(--d-4);font-size:10px;font-weight:600;' +
+         'text-transform:uppercase;letter-spacing:var(--ls-wider);color:var(--ink-400)">' +
+         'Process routing</h4><table class="proc"><thead><tr>' +
+         '<th>Operation</th><th>Machine / basis</th><th class="r">Qty</th>' +
+         '<th class="r">Rate</th><th class="r">Cost</th></tr></thead><tbody>';
+
+    var i, p;
+    for (i = 0; i < c.processes.length; i++) {
+      p = c.processes[i];
+      h += '<tr' + (p.manual ? ' class="manual"' : '') + '>' +
+           '<td class="op">' + esc(p.name) + '</td>' +
+           '<td class="mc">' + esc(p.machine) + '</td>' +
+           '<td class="r money">' + (p.basis === null ? '—' :
+              p.basis.toFixed(p.basisLabel === 'hours' ? 3 : 2) + ' ' +
+              esc(p.basisLabel === 'hours' ? 'hr' : p.basisLabel)) + '</td>' +
+           '<td class="r money">' + (p.rate === null ? '—' : money2(p.rate)) + '</td>' +
+           '<td class="r money">' + money2(p.cost) + '</td></tr>';
+    }
+    for (i = 0; i < c.welds.length; i++) {
+      var w = c.welds[i];
+      h += '<tr class="weld"><td class="op">' + esc(w.label) + '</td>' +
+           '<td class="mc">Ø' + w.diameter + 'mm, ' + w.beads + ' beads × ' +
+             w.locations + '</td>' +
+           '<td class="r money">' + w.circumferenceIn.toFixed(2) + ' in</td>' +
+           '<td class="r money">' + money2(w.ratePerInchBead) + '</td>' +
+           '<td class="r money">' + money2(w.cost) + '</td></tr>';
+    }
+    h += '<tr><td class="op"><b>Material</b></td><td class="mc">' + esc(c.material) +
+         '</td><td class="r money">' + c.weight.toFixed(3) + ' kg</td>' +
+         '<td class="r money">' + money2(c.materialRate) + '</td>' +
+         '<td class="r money"><b>' + money2(c.materialCost) + '</b></td></tr>';
+    h += '</tbody></table></div></div>';
+    return h;
+  }
+
+  function fmtDim(v) {
+    return typeof v === 'number' ? v + ' mm' : esc(String(v));
+  }
+
+  function label(k) {
+    return k
+      .replace(/([A-Z])/g, ' $1')
+      .replace(/^./, function (m) { return m.toUpperCase(); })
+      .replace(/\bO D\b/, 'OD').replace(/\bI D\b/, 'ID')
+      .replace(/\bDia\b/, 'diameter');
+  }
+
+  function toggleRow(ev) {
+    var id = ev.currentTarget.getAttribute('data-id');
+    open[id] = !open[id];
+    run();
+  }
+
+  function renderTotals(r) {
+    var h = '';
+    function line(lab, sub, val, cls) {
+      h += '<div class="tot-row' + (cls || '') + '"><span class="lab">' + esc(lab) +
+           (sub ? '<small>' + esc(sub) + '</small>' : '') +
+           '</span><span class="money">' + money(val) + '</span></div>';
+    }
+    line('Component manufacturing', r.components.filter(function (c) {
+      return c.present; }).length + ' components', r.componentTotal);
+    line('Seal kit', r.sealKit.available
+      ? r.sealKit.description + ' — catalogue ' + money(r.sealKit.kitCost) + ' + 25% markup'
+      : r.sealKit.reason, r.sealKit.cost);
+    line('Bought-out items', r.boughtOut.items.filter(function (b) {
+      return b.include; }).map(function (b) {
+      return b.description + ' ×' + b.qty; }).join(', ') || 'none included',
+      r.boughtOut.total);
+    line('Bought-out (calculated)', r.bocCalculated.items.map(function (b) {
+      return b.name.split(' (')[0]; }).join(', '), r.bocCalculated.total);
+    line('Assembly, painting, packing',
+      r.finishing.assembly.hours + ' hr assembly · ' + r.finishing.packing.type,
+      r.finishing.total);
+    line('Total manufacturing cost', '', r.grandTotal, ' grand');
+
+    /* The workbook's own two totals disagree. Reporting one and hiding
+       the other would be picking a winner we have no standing to pick. */
+    var gap = r.totals.costSummary - r.totals.finalOutput.total;
+    if (Math.abs(gap) > 1) {
+      h += '<div class="tot-row" style="border-top:1px solid var(--ink-200);' +
+           'margin-top:var(--d-4);padding-top:var(--d-4)">' +
+           '<span class="lab" style="color:var(--amber)">Workbook’s “Final Output” sheet' +
+           '<small>Disagrees with the Cost Summary above by ' + money(Math.abs(gap)) +
+           '. Both totals are the workbook’s own — see FO-1 and FO-2 below for which ' +
+           'components each sheet counts.</small>' +
+           '</span><span class="money">' + money(r.totals.finalOutput.total) + '</span></div>';
+    }
+    $('totals').innerHTML = h;
+    $('weight-meta').textContent = r.totalWeight.toFixed(1) + ' kg';
+  }
+
+  function renderNotes(r) {
+    var order = { error: 0, defect: 1, warn: 2, info: 3 };
+    var ns = r.notes.slice().sort(function (a, b) {
+      return order[a.note.level] - order[b.note.level];
+    });
+    var h = '', i, n;
+    for (i = 0; i < ns.length; i++) {
+      n = ns[i];
+      h += '<div class="note ' + n.note.level + '">' +
+           '<span class="tag">' + esc(n.note.ref || n.note.level) + '</span>' +
+           '<span class="body"><span class="who">' + esc(n.component) + '</span>' +
+           esc(n.note.text) + '</span></div>';
+    }
+    $('notes').innerHTML = h || '<div class="note info"><span class="tag">ok</span>' +
+      '<span class="body">Nothing outstanding on this configuration.</span></div>';
+    var defects = ns.filter(function (x) { return x.note.level === 'defect'; }).length;
+    $('notes-meta').textContent = defects
+      ? defects + ' workbook defect' + (defects === 1 ? '' : 's') + ' reproduced, not corrected'
+      : '';
+  }
+
+  buildForm();
+  buildEng();
+  run();
+})();
+</script>
+</body>
+</html>

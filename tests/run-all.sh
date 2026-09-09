@@ -5,7 +5,7 @@ fail=0
 echo ""
 echo "═══ AEW Platform — full test suite ═══"
 echo ""
-for t in integrity source-purity input-layer liveserver formulas masters components engine stale test routing handlers erp values tube verify bores inputs inquiry demo scenario persistence calcbar full; do
+for t in integrity source-purity input-layer liveserver formulas masters components engine workbook-v1 stale test routing handlers erp values tube verify bores inputs inquiry demo scenario persistence calcbar full; do
   [ -f "$t.js" ] || continue
   printf "  %-12s " "$t"
   out=$(NODE_PATH="${NODE_PATH:-/tmp/node_modules}" node "$t.js" 2>/dev/null)

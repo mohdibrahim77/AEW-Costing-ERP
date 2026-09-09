@@ -3,7 +3,7 @@
 Context for any AI assistant working on this repository. Read this before
 changing anything.
 
-**Build** 2026.08.14-1 · **Status** Working prototype, pre-customer-demo
+**Build** 2026.09.09-1 · **Status** Working prototype, pre-customer-demo
 **Owner** Technical founder · **First customer** HISPL, Peenya Industrial Area, Bangalore
 
 ---
@@ -145,8 +145,19 @@ They are not interchangeable, and each has already misled us once.
 | Source | Supplies | Never supplies |
 |---|---|---|
 | `HISPL_..._Developer_Reference.docx` | **Structure and intent** — what the tool should do, which inputs are permitted, how components are organised, the rules of the process | **Any numeric value** |
-| `Trunion_Included.xlsx` | **Every value and every calculation** — rates, tables, rate cards, constants, weight formulas, process routing, roll-up logic | — |
+| `VERSION_1.xlsx` | **Every value and every calculation** — rates, tables, rate cards, constants, weight formulas, geometry tables, process routing, roll-up logic | — |
 | `COST_SHEET.xlsx` | **Reference and validation only** — what a realistic job looks like, which mounting codes occur, what size range matters | **Any value used by the application** |
+
+`VERSION_1.xlsx` arrived 2026-09-09 and **supersedes `Trunion_Included.xlsx`**
+as the value source. The rule did not change with the workbook, only the
+file it points at. The older workbook is kept in `hispl-v2/source/` as
+the record of what the first build was validated against; nothing reads
+from it.
+
+The new file is what the eight-question query was waiting on. It carries
+a stepped geometry table per component, so the dimensions that were
+`ENGINEERING INPUT REQUIRED` throughout the first build now derive —
+89% of them, from 22 inputs. See `hispl-v2/v1/RECONCILIATION.md`.
 
 **Structure from the document, values and calculations from the
 workbook, sanity-checking from the cost sheet.**
@@ -190,6 +201,25 @@ resolve alone.
 ```bash
 node tests/source-purity.js    # must print: ✓ SOURCE-PURITY
 ```
+
+#### The v1 costing modules
+
+`assets/js/costing/v1/` is built from `VERSION_1.xlsx` and validated by
+`tests/workbook-v1.js` — **222 assertions, every one a value read out of
+the workbook's own cached formula results.** Excel stores what it last
+computed in each formula cell; if the engine disagrees with that cached
+value, the engine is wrong. Both of the workbook's grand totals are
+reproduced exactly, including the ₹1,499 by which they disagree with
+each other.
+
+**Nine workbook defects are reproduced, not corrected**, and reported in
+the interface. The tool has to agree with the sheet HISPL quotes from; a
+silent divergence is worse than a documented defect. They are listed
+with rupee impacts in `hispl-v2/v1/RECONCILIATION.md` §5.
+
+`source-purity.js` covers this directory too. It did not at first — its
+directory read is not recursive, which left the newest and largest part
+of the costing code the only part the rule did not police.
 
 ### 6. Do not touch authentication without a very good reason
 
@@ -298,7 +328,7 @@ npm install          # jsdom — testing only; the app has zero dependencies
 bash run-all.sh
 ```
 
-**388 assertions across 17 suites. All must pass before any deployment.**
+**933 assertions across 25 suites. All must pass before any deployment.**
 
 | Suite | Guards against |
 |---|---|
@@ -312,9 +342,16 @@ bash run-all.sh
 | `demo` | Adversarial input: zero, negative, text, extremes |
 | `scenario` | The full customer demonstration flow |
 | `full` | Any blank or zero output across all 9 panels |
+| `source-purity` | A rate reaching the app from the document or the cost sheet |
+| `workbook-v1` | The v1 engine drifting from `VERSION_1.xlsx`'s cached values |
 
 Every suite was written in response to a real defect. None are
 speculative.
+
+`workbook-v1` is the one whose expectations were not written by hand:
+all 222 are values read out of the workbook's own formula cache, so the
+suite fails whenever the engine and HISPL's spreadsheet disagree by more
+than two paise.
 
 ---
 

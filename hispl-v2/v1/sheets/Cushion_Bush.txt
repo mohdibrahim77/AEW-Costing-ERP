@@ -1,0 +1,36 @@
+A1: "CUSHION BUSH - COSTING SHEET"
+A3: "SECTION A - MATERIAL INPUTS"
+A4: "New Material? (Yes/No)"  ||  B4: "Yes"  ||  C4: "Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero."
+A5: "Parameter"  ||  B5: "Value"  ||  C5: "Unit"
+A6: "Material Grade"  ||  B6: "BR-SAE660"
+A7: "OD"  ||  B7: =CushionBush_OD  {126}  ||  C7: "mm"
+A8: "ID"  ||  B8: =CushionBush_ID  {91}  ||  C8: "mm"
+A9: "Length"  ||  B9: =CushionBush_Length  {72}  ||  C9: "mm"
+A10: "Quantity (Nos)"  ||  B10: 1
+A12: "AUTO CALCULATE - MATERIAL"  ||  G12: "APPROXIMATE COSTING GEOMETRY - FINAL DIMENSIONS SUBJECT TO GA/DESIGN (Rod Diameter driven)"
+A13: "Density (g/cm3)"  ||  B13: =INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),3)  {8.9}  ||  G13: "OD=1.4x RodDia, ID=RodDia+1mm clearance, Length=0.8x RodDia - general proportion, lower confidence, no formal published source found."
+A14: "Material Rate (Rs./kg)"  ||  B14: =INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),4)  {1800}  ||  G14: "RodDia Bin"  ||  H14: "OD"  ||  I14: "ID"  ||  J14: "Length"
+A15: "Unit Weight (kg / pc)"  ||  B15: =(PI()/4)*((B7)^2-(B8)^2)*B9*B13/1000000  {3.822435472}  ||  G15: 40  ||  H15: 56  ||  I15: 41  ||  J15: 32
+A16: "Total Weight for Qty (kg)"  ||  B16: =B15*B10  {3.822435472}  ||  G16: 45  ||  H16: 63  ||  I16: 46  ||  J16: 36
+A17: "Material Cost / pc (Rs.)"  ||  B17: =IF(B4="No",0,B15*B14)  {6880.383849}  ||  G17: 50  ||  H17: 70  ||  I17: 51  ||  J17: 40
+A18: "Total Material Cost for Qty (Rs.)"  ||  B18: =B17*B10  {6880.383849}  ||  G18: 56  ||  H18: 78  ||  I18: 57  ||  J18: 45
+G19: 63  ||  H19: 88  ||  I19: 64  ||  J19: 50
+G20: 70  ||  H20: 98  ||  I20: 71  ||  J20: 56
+A21: "SECTION B - PROCESS ROUTING"  ||  G21: 80  ||  H21: 112  ||  I21: 81  ||  J21: 64
+A22: "Apply?"  ||  B22: "Process"  ||  C22: "Machine / Basis"  ||  D22: "Hours / Qty Basis"  ||  E22: "Rate (Rs.)"  ||  F22: "Cost (Rs.)"  ||  G22: 90  ||  H22: 126  ||  I22: 91  ||  J22: 72
+A23: "Yes"  ||  B23: "Turning"  ||  C23: "CNC Lathe"  ||  D23: =INDEX(RoughTurningTable,MATCH(B7,TurningODBins,1),MATCH(B9,TurningLenBins,1))  {0.5}  ||  E23: =INDEX(MachineRateMaster_Range,MATCH("CNC Lathe",INDEX(MachineRateMaster_Range,0,1),0),2)  {550}  ||  F23: =IF(A23="Yes",D23*E23,0)  {275}  ||  G23: 100  ||  H23: 140  ||  I23: 101  ||  J23: 80
+A24: "Yes"  ||  B24: "Grinding (ID bore)"  ||  C24: "In-house (Rs./cm2)"  ||  D24: =PI()*B8*B9/100  {205.8371507}  ||  E24: =GrindingRate  {0.4}  ||  F24: =(shared//inherited)  {82.33486027}
+G25: "Manual Overrides (blank = use table):"
+A26: "SUBTOTAL - PROCESS & VENDOR COST"  ||  G26: "OD Override"  ||  H26: "ID Override"  ||  I26: "Length Override"
+A27: "Total Process & Vendor Cost / pc (Rs.)"  ||  B27: =F23+F24  {357.3348603}
+A29: "SECTION D - ADDITIONAL COST (Manual Entry)"  ||  G29: "FINAL:"
+A30: "Additional Cost / pc (Rs.)"  ||  B30: 0  ||  G30: "OD"  ||  H30: =IF(G27="",IFERROR(VLOOKUP(RodDia,CushionBushGeomTable,2,TRUE()),0),G27)  {126}
+A31: "Remarks"  ||  G31: "ID"  ||  H31: =IF(H27="",IFERROR(VLOOKUP(RodDia,CushionBushGeomTable,3,TRUE()),0),H27)  {91}
+G32: "Length"  ||  H32: =IF(I27="",IFERROR(VLOOKUP(RodDia,CushionBushGeomTable,4,TRUE()),0),I27)  {72}
+A33: "SECTION E - COMPONENT COST SUMMARY"
+A34: "Cost Head"  ||  B34: "Rs. / pc"
+A35: "Material Cost"  ||  B35: =B17  {6880.383849}
+A36: "Process Cost"  ||  B36: =B27  {357.3348603}
+A37: "Additional Cost"  ||  B37: =B30  {0}
+A38: "TOTAL CUSHION BUSH COST / pc"  ||  B38: =B17+B27+B30  {7237.71871}
+A39: "TOTAL CUSHION BUSH COST for Qty"  ||  B39: =B38*B10  {7237.71871}

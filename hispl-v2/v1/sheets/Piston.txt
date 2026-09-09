@@ -1,0 +1,40 @@
+A1: "PISTON - COSTING SHEET"
+A2: "Only Outer Diameter and Length are taken for this component, per HISPL costing standard."
+A3: "SECTION A - MATERIAL INPUTS"
+A4: "New Material? (Yes/No)"  ||  B4: "Yes"  ||  C4: "Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero."
+A5: "Parameter"  ||  B5: "Value"  ||  C5: "Unit"  ||  G5: "APPROXIMATE COSTING GEOMETRY - FINAL DIMENSIONS SUBJECT TO GA/DESIGN (Bore driven)"
+A6: "Material Grade"  ||  B6: "MS-EN8"  ||  G6: "OD = Bore (piston seals directly against bore - confirmed by every seal-sizing source). Length = 0.6x Bore (seal groove + wear band allowance, general design practice). Medium-high confidence."
+A7: "OD"  ||  B7: =Piston_OD  {125}  ||  C7: "mm"  ||  G7: "Bore Bin Start"  ||  H7: "OD"  ||  I7: "Length"
+A8: "Length"  ||  B8: =Piston_Length  {75}  ||  C8: "mm"  ||  G8: 50  ||  H8: 50  ||  I8: 30
+A9: "Quantity (Nos)"  ||  B9: 1  ||  G9: 63  ||  H9: 63  ||  I9: 40
+G10: 80  ||  H10: 80  ||  I10: 50
+A11: "AUTO CALCULATE - MATERIAL"  ||  G11: 100  ||  H11: 100  ||  I11: 60
+A12: "Density (g/cm3)"  ||  B12: =INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),3)  {7.85}  ||  G12: 125  ||  H12: 125  ||  I12: 75
+A13: "Material Rate (Rs./kg)"  ||  B13: =IF(B6="MS-EN8",VLOOKUP(Piston_OD,EN8RateTable,3,TRUE()),INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),4))  {75}  ||  G13: 150  ||  H13: 150  ||  I13: 90
+A14: "Unit Weight (kg / pc)"  ||  B14: =(PI()/4)*((B7)^2)*B8*B12/1000000  {7.225049511}  ||  G14: 160  ||  H14: 160  ||  I14: 100
+A15: "Total Weight for Qty (kg)"  ||  B15: =B14*B9  {7.225049511}  ||  G15: 180  ||  H15: 180  ||  I15: 110
+A16: "Material Cost / pc (Rs.)"  ||  B16: =IF(B4="No",0,B14*B13)  {541.8787133}  ||  G16: 200  ||  H16: 200  ||  I16: 120
+A17: "Total Material Cost for Qty (Rs.)"  ||  B17: =B16*B9  {541.8787133}
+G18: "Manual Overrides (blank = use table):"
+A19: "Machined Width (mm) [Groove Milling]"  ||  B19: 10  ||  G19: "OD Override"  ||  H19: "Length Override"
+A20: "Machined Length (mm) [Groove Milling]"  ||  B20: 314
+A21: "Hole Diameter (mm)"  ||  B21: 10
+A22: "No. of Holes"  ||  B22: 4  ||  G22: "FINAL:"
+G23: "OD"  ||  H23: =IF(G20="",IFERROR(VLOOKUP(Bore,PistonGeomTable,2,TRUE()),0),G20)  {125}
+A24: "SECTION B - PROCESS ROUTING"  ||  G24: "Length"  ||  H24: =IF(H20="",IFERROR(VLOOKUP(Bore,PistonGeomTable,3,TRUE()),0),H20)  {75}
+A25: "Apply?"  ||  B25: "Process"  ||  C25: "Machine / Basis"  ||  D25: "Hours / Qty Basis"  ||  E25: "Rate (Rs.)"  ||  F25: "Cost (Rs.)"
+A26: "Yes"  ||  B26: "Finish Turning"  ||  C26: "Process Rate Master (Rs./kg)"  ||  D26: =B14  {7.225049511}  ||  E26: =ProfileCuttingRate  {1.25}  ||  F26: =IF(A26="Yes",D26*E26,0)  {9.031311889}
+A27: "Yes"  ||  B27: "Milling"  ||  C27: "Milling Machine"  ||  D27: =VLOOKUP((B19)*(B20),MillingTable,3,TRUE())  {0.3}  ||  E27: =INDEX(MachineRateMaster_Range,MATCH("Milling Machine",INDEX(MachineRateMaster_Range,0,1),0),2)  {350}  ||  F27: =(shared//inherited)  {105}
+A28: "Yes"  ||  B28: "Drilling"  ||  C28: "Drilling Machine"  ||  D28: =VLOOKUP(B21,DrillingTable,3,TRUE())*B22  {0.12}  ||  E28: =INDEX(MachineRateMaster_Range,MATCH("Drilling Machine",INDEX(MachineRateMaster_Range,0,1),0),2)  {350}  ||  F28: =(shared//inherited)  {42}
+A30: "SUBTOTAL - PROCESS & VENDOR COST"
+A31: "Total Process & Vendor Cost / pc (Rs.)"  ||  B31: =F26+F27+F28  {156.0313119}
+A33: "SECTION D - ADDITIONAL COST (Manual Entry)"
+A34: "Additional Cost / pc (Rs.)"  ||  B34: 0
+A35: "Remarks"
+A37: "SECTION E - COMPONENT COST SUMMARY"
+A38: "Cost Head"  ||  B38: "Rs. / pc"
+A39: "Material Cost"  ||  B39: =B16  {541.8787133}
+A40: "Process Cost"  ||  B40: =B31  {156.0313119}
+A41: "Additional Cost"  ||  B41: =B34  {0}
+A42: "TOTAL PISTON COST / pc"  ||  B42: =B16+B31+B34  {697.9100252}
+A43: "TOTAL PISTON COST for Qty"  ||  B43: =B42*B9  {697.9100252}

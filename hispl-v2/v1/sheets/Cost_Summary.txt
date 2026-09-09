@@ -1,0 +1,38 @@
+A1: "COST SUMMARY"
+A2: "Cylinder Name:"  ||  B2: =CylinderName  {}
+A3: "Inquiry No.:"  ||  B3: =InquiryNo  {INQ-0001}
+A4: =TRIM(IF(Tube!H10="CHECK RAW OD","WARNING: Tube Raw OD is invalid (Raw OD must exceed Raw ID) - Tube cost is EXCLUDED from the total below until fixed on the Tube sheet.  ","")&IF(OR(Bore<40,Bore>250),"WARNING: ENTER THE SEAL SIZE MANUALLY - Bore is outside the priced seal range (40-250mm), seal cost is not included.",""))  {}
+A5: "COMPONENT COSTS (auto-pulled, Rs. for component Qty; each component sheet has its own New Material? Yes/No toggle - set to No to zero out material cost for a reused part)"
+A6: "Component"  ||  B6: "Cost (Rs.)"  ||  C6: "Remarks"
+A7: "Tube"  ||  B7: =Tube_TotalCost  {12435.93958}
+A8: "Piston Rod"  ||  B8: =PistonRod_TotalCost  {7990.363423}
+A9: "Cap End Cover"  ||  B9: =CEC_TotalCost  {1380.650866}
+A10: "Head End Cover"  ||  B10: =HEC_TotalCost  {1380.650866}
+A11: "Gland"  ||  B11: =Gland_TotalCost  {2167.380909}
+A12: "Cushion Bush"  ||  B12: =IF(ComponentPresent_CushionBush="Yes",CushionBush_TotalCost,0)  {7237.71871}
+A13: "Stop Tube"  ||  B13: =IF(ComponentPresent_StopTube="Yes",StopTube_TotalCost,0)  {0}
+A14: "Rear Eye"  ||  B14: =IF(ComponentPresent_RearEye="Yes",RearEye_TotalCost,0)  {0}
+A15: "Rod Eye"  ||  B15: =IF(Mounting_RodEye="Yes",RodEye_TotalCost,0)  {848.9897726}
+A16: "Piston"  ||  B16: =Piston_TotalCost  {697.9100252}
+A17: "Flange"  ||  B17: =Flange_TotalCost  {3317.581121}
+A18: "Trunnion"  ||  B18: =IF(Mounting_Trunnion="Yes",Trunnion_TotalCost,0)  {6324.410992}
+A19: "SUBTOTAL - COMPONENT MANUFACTURING COST"  ||  B19: =SUM(B7:B18)+IF(Mounting_CECClevis="Yes",CECClevis_TotalCost,0)+IF(Mounting_TieRod="Yes",TieRod_TotalCost,0)+IF(Mounting_FootLug="Yes",FootLug_TotalCost,0)+IF(Mounting_FrontFlange="Yes",FrontFlange_TotalCost,0)  {43781.59627}
+A20: "  of which CEC Clevis (already included above, only if Mounting = Rod Eye + CEC Clevis):"  ||  B20: =IF(Mounting_CECClevis="Yes",CECClevis_TotalCost,0)  {0}
+A21: "CYLINDER WEIGHT (auto-summed from all component sheets)"
+A22: "Total Cylinder Weight (Nett, all components)"  ||  B22: =IFERROR(Tube_Weight,0)+IFERROR(PistonRod_Weight,0)+IFERROR(CEC_Weight,0)+IFERROR(HEC_Weight,0)+IFERROR(Gland_Weight,0)+IF(ComponentPresent_CushionBush="Yes",IFERROR(CushionBush_Weight,0),0)+IF(ComponentPresent_StopTube="Yes",IFERROR(StopTube_Weight,0),0)+IF(ComponentPresent_RearEye="Yes",IFERROR(RearEye_Weight,0),0)+IFERROR(RodEye_Weight,0)+IFERROR(Piston_Weight,0)+IFERROR(Flange_Weight,0)+IFERROR(Trunnion_Weight,0)+IF(Mounting_CECClevis="Yes",IFERROR(CECClevis_Weight,0),0)+IF(Mounting_FootLug="Yes",IFERROR(FootLug_Weight,0),0)+IF(Mounting_TieRod="Yes",IFERROR(TieRod_Weight,0),0)+IF(Mounting_FrontFlange="Yes",IFERROR(FrontFlange_Weight,0),0)  {178.7657712}  ||  C22: "kg"
+A23: "Weight Adjustment / Allowance (manual, e.g. paint, fittings)"  ||  B23: 0  ||  C23: "kg - optional manual add-on"
+A24: "TOTAL CYLINDER WEIGHT (Rs. quoted on, for records)"  ||  B24: =B22+B23  {178.7657712}  ||  C24: "kg"
+A25: "  of which Tie Rod (already included in Subtotal above, only if Mounting = Rod Eye + Tie Rod):"  ||  B25: =IF(Mounting_TieRod="Yes",TieRod_TotalCost,0)  {0}
+A26: "BOUGHT OUT / SEAL / FINISHING COSTS"
+A27: "Seal Kit Cost"  ||  B27: =TotalSealKitCost  {12188}
+A28: "Bought Out Items Cost"  ||  B28: =TotalBoughtOutCost+BOC_CalculatedItems_GrandTotal  {3514.508522}
+A29: "Assembly Cost"  ||  B29: =AssemblyCost  {750}
+A30: "Painting Cost"  ||  B30: =PaintingCost  {900}
+A31: "Packing Cost"  ||  B31: =PackingCost  {2250}
+A32: "SUBTOTAL - OTHER COSTS"  ||  B32: =SUM(B27:B31)  {19602.50852}
+A33: "  of which Foot Lug (already included in Subtotal above, only if Mounting = Rod Eye + Foot Lug):"  ||  B33: =IF(Mounting_FootLug="Yes",FootLug_TotalCost,0)  {0}
+A34: "ADDITIONAL COST (manual - e.g. special packaging, freight, contingency, other one-off costs)"
+A35: "Additional Cost"  ||  B35: 0  ||  C35: "Description"
+A36: "  of which Front Flange (already included in Subtotal above, only if Mounting = Front Flange):"  ||  B36: =IF(Mounting_FrontFlange="Yes",FrontFlange_TotalCost,0)  {0}
+A37: "TOTAL MANUFACTURING COST"
+A38: "TOTAL MANUFACTURING COST (Rs.)"  ||  B38: =B19+B32+B35  {63384.10479}

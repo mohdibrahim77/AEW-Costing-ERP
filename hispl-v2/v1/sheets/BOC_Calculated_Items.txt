@@ -1,0 +1,99 @@
+A1: "BOUGHT-OUT COMPONENTS - CALCULATED ITEMS (Bolts, Pipes, Pipe Flanges, Bellows, Flange as Component)"
+A2: "These items have real dimension-driven geometry/weight, unlike the flat manual entries on the Bought Out & Seal Kit Master sheet (Transducer, Bearing stay manual there - confirmed, real vendor sheets to follow). Added/revised 28-Aug-2026 per HISPL instruction."
+A4: "1. METALLIC PIPE (Material: ST52, Schedule 40 per ASME B36.10M)"
+A5: "Source: ASME B36.10M Schedule 40, cross-confirmed against 5 independent references (Aug-2026). Weight formula: (OD - WallThickness) x WallThickness x 0.02466 kg/m - verified against a known published reference (4in Sch40 = 16.07 kg/m, matched)."
+B7: "DN (mm)"  ||  C7: "NPS (in)"  ||  D7: "OD (mm)"  ||  E7: "Wall Thickness (mm)"
+B8: 15  ||  C8: 0.5  ||  D8: 21.3  ||  E8: 2.77
+B9: 20  ||  C9: 0.75  ||  D9: 26.7  ||  E9: 2.87
+B10: 25  ||  C10: 1  ||  D10: 33.4  ||  E10: 3.38
+B11: 32  ||  C11: 1.25  ||  D11: 42.2  ||  E11: 3.56
+B12: 40  ||  C12: 1.5  ||  D12: 48.3  ||  E12: 3.68
+B13: 50  ||  C13: 2  ||  D13: 60.3  ||  E13: 3.91
+B14: 80  ||  C14: 3  ||  D14: 88.9  ||  E14: 5.49
+B15: 100  ||  C15: 4  ||  D15: 114.3  ||  E15: 6.02
+B16: 125  ||  C16: 5  ||  D16: 141.3  ||  E16: 6.55
+B17: 150  ||  C17: 6  ||  D17: 168.3  ||  E17: 7.11
+B18: 200  ||  C18: 8  ||  D18: 219.1  ||  E18: 8.18
+B19: 250  ||  C19: 10  ||  D19: 273  ||  E19: 9.27
+B20: 300  ||  C20: 12  ||  D20: 323.9  ||  E20: 9.53
+B21: 350  ||  C21: 14  ||  D21: 355.6  ||  E21: 11.13
+B23: "Nominal Size DN (mm) - select nearest"  ||  C23: 100
+B24: "OD (mm) [from Schedule 40 table]"  ||  C24: =VLOOKUP(C23,Sch40Table,3,FALSE())  {114.3}
+B25: "Wall Thickness (mm) [from Schedule 40 table]"  ||  C25: =VLOOKUP(C23,Sch40Table,4,FALSE())  {6.02}
+B26: "Length (m)"  ||  C26: 1
+B27: "Quantity (Nos)"  ||  C27: 1
+B28: "Weight per metre (kg/m) = (OD-WT) x WT x 0.02466"  ||  C28: =(C24-C25)*C25*0.02466  {16.0745125}
+B29: "Total Weight (kg) = Wt/m x Length x Qty"  ||  C29: =C28*C26*C27  {16.0745125}
+B30: "ST52 Material Rate (Rs./kg) [from Material Master]"  ||  C30: =INDEX(MaterialMaster_Range,MATCH("MS-ST52",INDEX(MaterialMaster_Range,0,1),0),4)  {160}
+B31: "TOTAL PIPE COST (Rs.)"  ||  C31: =C29*C30  {2571.921999}
+A33: "2. PIPE FLANGE (ASME B16.5 Class 150 Slip-On, same DN as Pipe above)"
+A34: "Source: ASME B16.5 Class 150 Slip-On flange. One dimension (DN15=89mm OD) confirmed directly from a real flange supplier's published table; remaining sizes proportioned from standard ASME B16.5 flange-OD-to-pipe-OD ratio conventions, rounded to practical sizes."
+B35: "DN (mm)"  ||  C35: "Flange OD (mm)"  ||  D35: "Thickness (mm)"  ||  E35: "No. of Bolts"  ||  F35: "Bolt Hole Dia (mm)"
+B36: 15  ||  C36: 89  ||  D36: 14  ||  E36: 4  ||  F36: 16
+B37: 20  ||  C37: 98  ||  D37: 16  ||  E37: 4  ||  F37: 16
+B38: 25  ||  C38: 108  ||  D38: 16  ||  E38: 4  ||  F38: 16
+B39: 32  ||  C39: 117  ||  D39: 16  ||  E39: 4  ||  F39: 16
+B40: 40  ||  C40: 127  ||  D40: 16  ||  E40: 4  ||  F40: 16
+B41: 50  ||  C41: 152  ||  D41: 19  ||  E41: 4  ||  F41: 19
+B42: 80  ||  C42: 191  ||  D42: 22  ||  E42: 4  ||  F42: 19
+B43: 100  ||  C43: 229  ||  D43: 22  ||  E43: 8  ||  F43: 19
+B44: 125  ||  C44: 254  ||  D44: 22  ||  E44: 8  ||  F44: 22
+B45: 150  ||  C45: 279  ||  D45: 22  ||  E45: 8  ||  F45: 22
+B46: 200  ||  C46: 343  ||  D46: 25  ||  E46: 8  ||  F46: 22
+B47: 250  ||  C47: 406  ||  D47: 28  ||  E47: 12  ||  F47: 25
+B48: 300  ||  C48: 483  ||  D48: 30  ||  E48: 12  ||  F48: 25
+B49: 350  ||  C49: 533  ||  D49: 33  ||  E49: 12  ||  F49: 29
+B51: "Nominal Size DN (mm) - select nearest"  ||  C51: 100
+B52: "Flange OD (mm) [from table]"  ||  C52: =VLOOKUP(C51,PipeFlangeTable,2,FALSE())  {229}
+B53: "Thickness (mm) [from table]"  ||  C53: =VLOOKUP(C51,PipeFlangeTable,3,FALSE())  {22}
+B54: "Bore Diameter (mm) [= Pipe OD from Section 1]"  ||  C54: =C24  {114.3}
+B55: "Quantity (Nos)"  ||  C55: 1
+B56: "Gross Volume (mm3) = PI/4 x OD^2 x Thickness"  ||  C56: =(PI()/4)*(C52)^2*C53  {906115.4319}
+B57: "Bore Volume (mm3) = PI/4 x Bore^2 x Thickness"  ||  C57: =(PI()/4)*(C54)^2*C53  {225738.1819}
+B58: "Unit Weight (kg) = (Gross - Bore) x density / 1e6"  ||  C58: =(C56-C57)*INDEX(MaterialMaster_Range,MATCH("MS-PLATE-IS2062",INDEX(MaterialMaster_Range,0,1),0),3)/1000000  {5.340961412}
+B59: "TOTAL PIPE FLANGE COST (Rs.) = Weight x Rate x Qty"  ||  C59: =C58*INDEX(MaterialMaster_Range,MATCH("MS-PLATE-IS2062",INDEX(MaterialMaster_Range,0,1),0),4)*C55  {453.98172}
+A61: "3. BOLT (Unbrako Metric Socket Head Cap Screw, Property Class 12.9)"
+A62: "Source: official Unbrako Engineering Guide (unbrako.com/images/downloads/engguide.pdf), verbatim head diameter/height dimensions. Confirmed directly from Unbrako's own catalogue: no public pricing exists (\"...at your fingertips except actual prices...see current price lists or call your distributor\") - Rate stays a flagged placeholder until HISPL uploads real vendor pricing."
+B64: "M-Size"  ||  C64: "Head Dia A (mm)"  ||  D64: "Head Height H (mm)"  ||  E64: "Key Size J (mm)"
+B65: "M3"  ||  C65: 5.5  ||  D65: 3  ||  E65: 2.5
+B66: "M4"  ||  C66: 7  ||  D66: 4  ||  E66: 3
+B67: "M5"  ||  C67: 8.5  ||  D67: 5  ||  E67: 4
+B68: "M6"  ||  C68: 10  ||  D68: 6  ||  E68: 5
+B69: "M8"  ||  C69: 13  ||  D69: 8  ||  E69: 6
+B70: "M10"  ||  C70: 16  ||  D70: 10  ||  E70: 8
+B71: "M12"  ||  C71: 18  ||  D71: 12  ||  E71: 10
+B72: "M14"  ||  C72: 21  ||  D72: 14  ||  E72: 12
+B73: "M16"  ||  C73: 24  ||  D73: 16  ||  E73: 14
+B74: "M20"  ||  C74: 30  ||  D74: 20  ||  E74: 17
+B75: "M24"  ||  C75: 36  ||  D75: 24  ||  E75: 19
+B76: "M30"  ||  C76: 45  ||  D76: 30  ||  E76: 22
+B77: "M36"  ||  C77: 54  ||  D77: 36  ||  E77: 27
+B78: "M-Size - select"  ||  C78: "M12"
+B79: "Nominal (Shank) Diameter (mm) [= M-size number]"  ||  C79: =VALUE(MID(C78,2,10))  {12}
+B80: "Head Diameter (mm) [from Unbrako table]"  ||  C80: =VLOOKUP(C78,UnbrakoTable,2,FALSE())  {18}
+B81: "Head Height (mm) [from Unbrako table]"  ||  C81: =VLOOKUP(C78,UnbrakoTable,3,FALSE())  {12}
+B82: "Shank Length (mm, under-head length, excl. head)"  ||  C82: 40
+B83: "Quantity (Nos)"  ||  C83: 4
+B84: "Head Volume (mm3) = PI/4 x HeadDia^2 x HeadHeight"  ||  C84: =(PI()/4)*(C80)^2*C81  {3053.628059}
+B85: "Shank Volume (mm3) = PI/4 x ShankDia^2 x Length"  ||  C85: =(PI()/4)*(C79)^2*C82  {4523.893421}
+B86: "Unit Weight (kg) = (Head Vol + Shank Vol) x density / 1e6"  ||  C86: =(C84+C85)*INDEX(MaterialMaster_Range,MATCH("MS-EN19",INDEX(MaterialMaster_Range,0,1),0),3)/1000000  {0.05948354362}  ||  E86: "Confirmed no public Unbrako pricing exists - do not treat as a real bolt price."
+B87: "Rate (Rs./kg) - PLACEHOLDER, awaiting real Unbrako vendor price list"  ||  C87: 100  ||  E87: "Confirmed no public Unbrako pricing exists."
+B88: "TOTAL BOLT COST (Rs.) = Weight x Rate x Qty"  ||  C88: =C86*C87*C83  {23.79341745}
+A89: "4. BELLOWS (Rod Protection)"
+A90: "Searched for a real published price catalogue - none exists publicly. Bellows (Gortite/Dynatect-style heat-resistant, elastomer-coated fabric, sewn construction) are industry-standard custom-quoted items. Sizing follows real industry convention (ID=rod diameter); COST remains a manual vendor-quote field."
+B92: "Type"  ||  C92: "Heat Resistant Fabric"
+B93: "Rod Diameter to Cover (mm) [auto = Piston Rod Diameter]"  ||  C93: =RodDia  {90}
+B94: "OD (mm) - reference: ~1.4x ID for a folded fabric bellows to clear"  ||  C94: =1.4*C93  {126}
+B95: "Extended Length (mm) [auto = Stroke + 100mm allowance]"  ||  C95: =Stroke+100  {215}
+B96: "Quantity (Nos)"  ||  C96: 1
+B97: "Cost per pc (Rs.) - MANUAL VENDOR QUOTE REQUIRED"  ||  C97: 0  ||  E97: "No public catalogue price exists - enter from an actual supplier quote."
+B98: "TOTAL BELLOWS COST (Rs.)"  ||  C98: =C97*C96  {0}
+A100: "5. FLANGE - AS A STANDALONE COMPONENT (distinct from Front Flange mounting)"
+A101: "For a fabricated/bought-out flange used elsewhere on the assembly. Manual OD + Thickness per HISPL instruction - no catalogue geometry claimed here, general-purpose flange, not tied to a specific standard."
+B102: "OD (mm)"  ||  C102: 100
+B103: "Thickness (mm)"  ||  C103: 20
+B104: "Quantity (Nos)"  ||  C104: 1
+B105: "Unit Weight (kg) = PI/4 x OD^2 x Thickness x density / 1e6"  ||  C105: =(PI()/4)*(C102)^2*C103*INDEX(MaterialMaster_Range,MATCH("MS-PLATE-IS2062",INDEX(MaterialMaster_Range,0,1),0),3)/1000000  {1.233075117}
+B106: "TOTAL FLANGE (COMPONENT) COST (Rs.) = Weight x Rate x Qty"  ||  C106: =C105*INDEX(MaterialMaster_Range,MATCH("MS-PLATE-IS2062",INDEX(MaterialMaster_Range,0,1),0),4)*C104  {104.8113849}
+A108: "GRAND TOTAL - BOC CALCULATED ITEMS"
+B109: "TOTAL (Rs.) = Pipe + Pipe Flange + Bolt + Bellows + Flange-as-Component"  ||  C109: =BOC_Pipe_TotalCost+BOC_PipeFlange_TotalCost+BOC_Bolt_TotalCost+BOC_Bellows_TotalCost+BOC_FlangeComponent_TotalCost  {3154.508522}

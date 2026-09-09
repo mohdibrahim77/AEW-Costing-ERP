@@ -1,0 +1,38 @@
+A1: "SEAL MASTER"
+A2: "Source: seal_price (1).xlsx, sheet 'Uni' (Universal/Parker brand), 'Normal Glide Ring' (1Glide) piston seal rows. Uploaded by HISPL, 26-Aug-2026."
+A3: "Prices below are the SEAL KIT COST (piston seal + rod seal + wiper) at the catalogue's standard Rod Diameter for each Bore. Looked up by Bore (nearest match)."
+A4: "'Chevron' seal type has NO price in the source catalogue (all Chevron rows there are blank) - selecting Chevron returns 'PRICE NOT AVAILABLE', not a guessed number."
+A5: "'Freudenberg' brand in the source is only priced against Viton material - Freudenberg + PU has NO price in the source catalogue either, for the same reason."
+A6: "SALE PRICE = Seal Kit Cost x 1.25 (25% markup), applied per HISPL's instruction. The 25% is not itself stated in the source file - it is applied here as instructed."
+A8: "Bore (mm)"  ||  B8: "Catalogue Rod Dia (mm)"  ||  C8: "Others + PU (Rs.)"  ||  D8: "Others + Viton (Rs.)"  ||  E8: "Freudenberg + Viton (Rs.)"  ||  F8: "Source Row"
+A9: 40  ||  B9: 30  ||  C9: 866.8  ||  D9: 1733.6  ||  E9: 2383.7  ||  F9: "Uni sheet"
+A10: 50  ||  B10: 30  ||  C10: 981  ||  D10: 1962  ||  E10: 2697.75  ||  F10: "Uni sheet"
+A11: 60  ||  B11: 30  ||  C11: 1101.2  ||  D11: 2202.4  ||  E11: 3028.3  ||  F11: "Uni sheet"
+A12: 70  ||  B12: 40  ||  C12: 1379.4  ||  D12: 2758.8  ||  E12: 3793.35  ||  F12: "Uni sheet"
+A13: 80  ||  B13: 40  ||  C13: 1490.6  ||  D13: 2981.2  ||  E13: 4099.15  ||  F13: "Uni sheet"
+A14: 90  ||  B14: 50  ||  C14: 1857.8  ||  D14: 3715.6  ||  E14: 5108.95  ||  F14: "Uni sheet"
+A15: 100  ||  B15: 60  ||  C15: 2086  ||  D15: 4172  ||  E15: 5736.5  ||  F15: "Uni sheet"
+A16: 110  ||  B16: 70  ||  C16: 2616.2  ||  D16: 5232.4  ||  E16: 7194.55  ||  F16: "Uni sheet"
+A17: 120  ||  B17: 80  ||  C17: 3545.6  ||  D17: 7091.2  ||  E17: 9750.4  ||  F17: "Uni sheet"
+A18: 130  ||  B18: 80  ||  C18: 4246.9  ||  D18: 8493.8  ||  E18: 11678.975  ||  F18: "Uni sheet"
+A19: 140  ||  B19: 90  ||  C19: 4808.2  ||  D19: 9616.4  ||  E19: 13222.55  ||  F19: "Uni sheet"
+A20: 150  ||  B20: 100  ||  C20: 5249.5  ||  D20: 10499  ||  E20: 14436.125  ||  F20: "Uni sheet"
+A21: 160  ||  B21: 120  ||  C21: 5635.8  ||  D21: 11271.6  ||  E21: 15498.45  ||  F21: "Uni sheet"
+A22: 170  ||  B22: 120  ||  C22: 5867.1  ||  D22: 11734.2  ||  E22: 16134.525  ||  F22: "Uni sheet"
+A23: 180  ||  B23: 130  ||  C23: 6278.4  ||  D23: 12556.8  ||  E23: 17265.6  ||  F23: "Uni sheet"
+A24: 190  ||  B24: 140  ||  C24: 7089.7  ||  D24: 14179.4  ||  E24: 19496.675  ||  F24: "Uni sheet"
+A25: 200  ||  B25: 150  ||  C25: 8036  ||  D25: 16072  ||  E25: 22099  ||  F25: "Uni sheet"
+A26: 210  ||  B26: 160  ||  C26: 9530.5  ||  D26: 19061  ||  E26: 26208.875  ||  F26: "Uni sheet"
+A27: 220  ||  B27: 170  ||  C27: 9796  ||  D27: 19592  ||  E27: 26939  ||  F27: "Uni sheet"
+A28: 230  ||  B28: 180  ||  C28: 11261.5  ||  D28: 22523  ||  E28: 30969.125  ||  F28: "Uni sheet"
+A29: 240  ||  B29: 190  ||  C29: 11852  ||  D29: 23704  ||  E29: 32593  ||  F29: "Uni sheet"
+A30: 250  ||  B30: 200  ||  C30: 13442.5  ||  D30: 26885  ||  E30: 36966.875  ||  F30: "Uni sheet"
+A33: "CURRENT JOB - SEAL PRICE LOOKUP"
+A34: "Bore (mm)"  ||  B34: =Bore  {125}
+A35: "Seal Brand"  ||  B35: =SealBrand  {Freudenberg}
+A36: "Seal Material"  ||  B36: =SealMaterial  {Viton}
+A37: "Seal Type"  ||  B37: =SealType  {Normal Glide Ring}
+A39: "Seal Kit Cost (Rs.) [from catalogue, before markup]"  ||  B39: =IF(OR(B34<A9,B34>A30),"ENTER THE SEAL SIZE MANUALLY",IF(B37="Chevron","PRICE NOT AVAILABLE - Chevron not in source catalogue",IF(AND(B35="Freudenberg",B36="PU"),"PRICE NOT AVAILABLE - Freudenberg+PU not in source catalogue",IF(AND(B35="Others",B36="PU"),IFERROR(VLOOKUP(B34,SealMasterTable_Range,3,TRUE()),"PRICE NOT AVAILABLE"),IF(AND(B35="Others",B36="Viton"),IFERROR(VLOOKUP(B34,SealMasterTable_Range,4,TRUE()),"PRICE NOT AVAILABLE"),IF(AND(B35="Freudenberg",B36="Viton"),IFERROR(VLOOKUP(B34,SealMasterTable_Range,5,TRUE()),"PRICE NOT AVAILABLE"),"PRICE NOT AVAILABLE"))))))  {9750.4}
+A40: "Sale Markup"  ||  B40: 0.25  ||  C40: "Per HISPL instruction - editable if the % ever changes"
+A41: "SEAL SALE PRICE (Rs.)"  ||  B41: =IF(ISNUMBER(B39),B39*(1+B40),B39)  {12188}
+A43: =IF(OR(Bore<A9,Bore>A30),"⚠ ENTER THE SEAL SIZE MANUALLY - Bore "&Bore&"mm is outside the priced range ("&A9&"-"&A30&"mm)","")  {}

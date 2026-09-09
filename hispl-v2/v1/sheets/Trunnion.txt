@@ -1,0 +1,50 @@
+A1: "TRUNNION - COSTING SHEET"
+A2: "Costed as a rectangular block (Length x Width x Height). Rough Turning, Finish Turning and Pin Grinding are entered manually (Rs.); Milling and Drilling are auto-calculated as usual."
+A3: "SECTION A - MATERIAL INPUTS"
+A4: "New Material? (Yes/No)"  ||  B4: "Yes"  ||  C4: "Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero."
+A5: "Parameter"  ||  B5: "Value"  ||  C5: "Unit"  ||  G5: "APPROXIMATE COSTING GEOMETRY - FINAL DIMENSIONS SUBJECT TO GA/DESIGN (Tube OD driven, HISPL-approved stepped table)"
+A6: "Material Grade"  ||  B6: "MS-EN8"  ||  G6: "Source: ISO 6020-2 / NFPA MT1-MT4 trunnion proportions, rounded to standard round-bar sizes. Approved by HISPL."
+A7: "Length"  ||  B7: =H28  {95}  ||  C7: "Now = Trunnion Length from approved geometry table (Tube OD driven), row 25."  ||  G7: "Tube OD Bin Start"  ||  H7: "Pin Diameter"  ||  I7: "Trunnion OD"  ||  J7: "Thickness"  ||  K7: "Length"
+A8: "Width"  ||  B8: =H26  {170}  ||  C8: "Now = Trunnion OD from approved geometry table."  ||  G8: 70  ||  H8: 40  ||  I8: 80  ||  J8: 20  ||  K8: 45
+A9: "Height"  ||  B9: =H26  {170}  ||  C9: "Now = Trunnion OD (square bounding block for raw-material costing)."  ||  G9: 80  ||  H9: 45  ||  I9: 90  ||  J9: 22  ||  K9: 50
+A10: "Quantity (Nos)"  ||  B10: 2  ||  G10: 90  ||  H10: 50  ||  I10: 100  ||  J10: 25  ||  K10: 56
+G11: 100  ||  H11: 56  ||  I11: 112  ||  J11: 28  ||  K11: 63
+A12: "AUTO CALCULATE - MATERIAL"  ||  G12: 110  ||  H12: 63  ||  I12: 125  ||  J12: 32  ||  K12: 70
+A13: "Density (g/cm3)"  ||  B13: =INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),3)  {7.85}  ||  G13: 120  ||  H13: 70  ||  I13: 140  ||  J13: 35  ||  K13: 80
+A14: "Material Rate (Rs./kg)"  ||  B14: =IF(B6="MS-EN8",VLOOKUP(H26,EN8RateTable,3,TRUE()),INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),4))  {80}  ||  G14: 140  ||  H14: 80  ||  I14: 160  ||  J14: 40  ||  K14: 90
+A15: "Unit Weight (kg / pc)"  ||  B15: =(B7)*(B8)*(B9)*B13/1000000  {21.552175}  ||  G15: 150  ||  H15: 85  ||  I15: 170  ||  J15: 42  ||  K15: 95
+A16: "Total Weight for Qty (kg)"  ||  B16: =B15*B10  {43.10435}  ||  G16: 160  ||  H16: 90  ||  I16: 180  ||  J16: 45  ||  K16: 100
+A17: "Material Cost / pc (Rs.)"  ||  B17: =IF(B4="No",0,B15*B14)  {1724.174}  ||  G17: 180  ||  H17: 100  ||  I17: 200  ||  J17: 50  ||  K17: 112
+A18: "Total Material Cost for Qty (Rs.)"  ||  B18: =B17*B10  {3448.348}  ||  G18: 200  ||  H18: 115  ||  I18: 230  ||  J18: 58  ||  K18: 130
+A20: "Machined Width (mm) [for Milling]"  ||  B20: 40  ||  G20: "Manual Overrides (blank = use table above; enter a value here to force it from an actual GA/design drawing):"
+A21: "Machined Length (mm) [for Milling]"  ||  B21: 40  ||  G21: "Pin Dia Override"  ||  H21: "Trunnion OD Override"  ||  I21: "Thickness Override"  ||  J21: "Length Override"
+A22: "Hole Diameter (mm) [for Drilling]"  ||  B22: 12
+A23: "No. of Holes"  ||  B23: 2
+G24: "FINAL (Standard from table, or Override above if entered):"
+A25: "SECTION B - PROCESS ROUTING"  ||  G25: "Pin Diameter"  ||  H25: =IF(G22="",IFERROR(VLOOKUP(Tube_OD,TrunnionGeomTable,2,TRUE()),0),G22)  {85}
+A26: "Apply?"  ||  B26: "Process"  ||  C26: "Machine / Basis"  ||  D26: "Hours / Qty Basis"  ||  E26: "Rate (Rs.)"  ||  F26: "Cost (Rs.)"  ||  G26: "Trunnion OD"  ||  H26: =IF(H22="",IFERROR(VLOOKUP(Tube_OD,TrunnionGeomTable,3,TRUE()),0),H22)  {170}
+A27: "Yes"  ||  B27: "Rough Turning"  ||  C27: "Manual Entry"  ||  D27: "Manual"  ||  E27: "Manual"  ||  F27: 0  ||  G27: "Thickness"  ||  H27: =IF(I22="",IFERROR(VLOOKUP(Tube_OD,TrunnionGeomTable,4,TRUE()),0),I22)  {42}
+A28: "Yes"  ||  B28: "Finished Turning"  ||  C28: "Manual Entry"  ||  D28: "Manual"  ||  E28: "Manual"  ||  F28: 0  ||  G28: "Length"  ||  H28: =IF(J22="",IFERROR(VLOOKUP(Tube_OD,TrunnionGeomTable,5,TRUE()),0),J22)  {95}
+A29: "Yes"  ||  B29: "Pin Grinding"  ||  C29: "Manual Entry"  ||  D29: "Manual"  ||  E29: "Manual"  ||  F29: 0
+A30: "Yes"  ||  B30: "Milling"  ||  C30: "Milling Machine"  ||  D30: =VLOOKUP((B20)*(B21),MillingTable,3,TRUE())  {0.3}  ||  E30: =INDEX(MachineRateMaster_Range,MATCH("Milling Machine",INDEX(MachineRateMaster_Range,0,1),0),2)  {350}  ||  F30: =IF(A30="Yes",D30*E30,0)  {105}
+A31: "Yes"  ||  B31: "Drilling"  ||  C31: "Drilling Machine"  ||  D31: =VLOOKUP(B22,DrillingTable,3,TRUE())*B23  {0.1}  ||  E31: =INDEX(MachineRateMaster_Range,MATCH("Drilling Machine",INDEX(MachineRateMaster_Range,0,1),0),2)  {350}  ||  F31: =(shared//inherited)  {35}
+A33: "SUBTOTAL - PROCESS & VENDOR COST"
+A34: "Total Process & Vendor Cost / pc (Rs.)"  ||  B34: =F27+F28+F29+F30+F31  {140}
+A36: "SECTION D - ADDITIONAL COST (Manual Entry)"
+A37: "Additional Cost / pc (Rs.)"  ||  B37: 0
+A38: "Remarks"
+A40: "SECTION E - COMPONENT COST SUMMARY"
+A41: "Cost Head"  ||  B41: "Rs. / pc"
+A42: "Material Cost"  ||  B42: =B17  {1724.174}
+A43: "Process Cost"  ||  B43: =B34+B55  {1438.031496}
+A44: "Additional Cost"  ||  B44: =B37  {0}
+A45: "TOTAL TRUNNION COST / pc"  ||  B45: =B42+B43+B44  {3162.205496}
+A46: "TOTAL TRUNNION COST for Qty"  ||  B46: =B45*B10  {6324.410992}
+A48: "SECTION F - WELDING (per this instruction: Trunnion welding uses Tube OD, HISPL Simplified Rs./inch/bead)"
+A49: "WELDING - Trunnion Welding (auto = Tube OD)"
+A50: "Weld Diameter (mm) [auto = Tube_OD]"  ||  B50: =Tube_OD  {150}
+A51: "No. of Beads (auto, from Weld Bead Table)"  ||  B51: =VLOOKUP(B50,WeldBeadTable,3,TRUE())  {5}
+A52: "No. of Weld Locations"  ||  B52: 1
+A53: "Circumference (inch)"  ||  B53: =(B50*3.14)/25.4  {18.54330709}
+A54: "Welding Rate (Rs./inch/bead)"  ||  B54: =WeldRatePerInchBead  {14}
+A55: "Total Welding Cost (Rs.)"  ||  B55: =B53*B54*B51*B52  {1298.031496}

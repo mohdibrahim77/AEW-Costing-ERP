@@ -1,0 +1,43 @@
+A1: "FOOT LUG - COSTING SHEET (active only when Mounting = Rod Eye + Foot Lug)"
+A2: "Geometry approved by HISPL from NFPA MS2/MS7 side-lug mounting proportions (Tube OD driven), 4 lugs standard. Material/machining/welding now fully automatic - see chat approval."
+A4: "New Material? (Yes/No)"  ||  B4: "Yes"  ||  H4: "APPROXIMATE COSTING GEOMETRY - FINAL DIMENSIONS SUBJECT TO GA/DESIGN (Tube OD driven, HISPL-approved)"
+A5: "SECTION A - MATERIAL INPUTS"  ||  H5: "Source: NFPA MS2/MS7 side-lug proportions (Parker 2H Foot Mounting reference), rounded to standard plate/drill sizes. Approved by HISPL."
+A6: "Material Grade"  ||  B6: "MS-C45"  ||  H6: "Tube OD Bin Start"  ||  I6: "Thickness"  ||  J6: "Width"  ||  K6: "Length"  ||  L6: "Hole Diameter"
+A7: "Thickness (mm) [from approved geometry table]"  ||  B7: =Foot_Lug_Thickness  {22}  ||  H7: 70  ||  I7: 10  ||  J7: 40  ||  K7: 25  ||  L7: 9
+A8: "Width (mm) [from approved geometry table]"  ||  B8: =Foot_Lug_Width  {82}  ||  H8: 80  ||  I8: 12  ||  J8: 45  ||  K8: 28  ||  L8: 9
+A9: "Length (mm) [from approved geometry table]"  ||  B9: =Foot_Lug_Length  {53}  ||  H9: 90  ||  I9: 12  ||  J9: 50  ||  K9: 32  ||  L9: 11
+A10: "Hole Diameter (mm) [from approved geometry table]"  ||  B10: =Foot_Lug_HoleDia  {17}  ||  H10: 100  ||  I10: 16  ||  J10: 56  ||  K10: 35  ||  L10: 11
+A11: "Number of Lugs"  ||  B11: 4  ||  H11: 110  ||  I11: 16  ||  J11: 60  ||  K11: 40  ||  L11: 13
+A12: "Quantity (sets, Nos)"  ||  B12: 1  ||  H12: 120  ||  I12: 18  ||  J12: 66  ||  K12: 42  ||  L12: 13
+H13: 140  ||  I13: 20  ||  J13: 77  ||  K13: 49  ||  L13: 17
+A14: "AUTO CALCULATE - MATERIAL"  ||  H14: 150  ||  I14: 22  ||  J14: 82  ||  K14: 53  ||  L14: 17
+A15: "Density (g/cm3)"  ||  B15: =INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),3)  {7.85}  ||  H15: 160  ||  I15: 25  ||  J15: 88  ||  K15: 56  ||  L15: 17
+A16: "Material Rate (Rs./kg)"  ||  B16: =IF(B6="MS-C45",IFERROR(VLOOKUP(Foot_Lug_Thickness,C45RateTable,3,TRUE()),INDEX(C45RateTable,1,3)),INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),4))  {100}  ||  H16: 180  ||  I16: 28  ||  J16: 99  ||  K16: 63  ||  L16: 21
+A17: "Gross Volume per Lug (mm3) = W x L x T"  ||  B17: =B8*B9*B7  {95612}  ||  H17: 200  ||  I17: 30  ||  J17: 110  ||  K17: 70  ||  L17: 21
+A18: "Hole Volume per Lug (mm3) = PI/4 x HoleDia^2 x T"  ||  B18: =(PI()/4)*(B10)^2*B7  {4993.561523}
+A19: "Net Volume per Lug (mm3)"  ||  B19: =B17-B18  {90618.43848}  ||  H19: "Manual Overrides (blank = use table above; enter to force a value from an actual GA/design drawing):"
+A20: "Total Volume (mm3) = Net x No. of Lugs"  ||  B20: =B19*B11  {362473.7539}  ||  H20: "Thickness Override"  ||  I20: "Width Override"  ||  J20: "Length Override"  ||  K20: "Hole Dia Override"
+A21: "Unit Weight (kg / set)"  ||  B21: =B20*B15/1000000  {2.845418968}
+A22: "Material Cost / set (Rs.)"  ||  B22: =IF(B4="No",0,B21*B16)  {284.5418968}
+H23: "FINAL (Standard from table, or Override above if entered):"
+A24: "SECTION F - AUTOMATIC PROCESS ROUTING (existing Machine Time Master)"  ||  H24: "Thickness"  ||  I24: =IF(H21="",IFERROR(VLOOKUP(Tube_OD,FootLugGeomTable,2,TRUE()),0),H21)  {22}
+A25: "Route: Milling (lug faces) + Drilling (bolt holes, one per lug) - same methodology used for CEC Clevis / Rear Eye / Rod Eye."  ||  H25: "Width"  ||  I25: =IF(I21="",IFERROR(VLOOKUP(Tube_OD,FootLugGeomTable,3,TRUE()),0),I21)  {82}
+A26: "Apply?"  ||  B26: "Process"  ||  C26: "Machine / Basis"  ||  D26: "Hours / Qty Basis"  ||  E26: "Rate (Rs.)"  ||  F26: "Cost (Rs.)"  ||  H26: "Length"  ||  I26: =IF(J21="",IFERROR(VLOOKUP(Tube_OD,FootLugGeomTable,4,TRUE()),0),J21)  {53}
+A27: "Yes"  ||  B27: "Milling (lug faces)"  ||  C27: "Milling Machine"  ||  D27: =VLOOKUP((B8)*(B9),MillingTable,3,TRUE())  {0.3}  ||  E27: =INDEX(MachineRateMaster_Range,MATCH("Milling Machine",INDEX(MachineRateMaster_Range,0,1),0),2)  {350}  ||  F27: =IF(A27="Yes",D27*E27,0)  {105}  ||  H27: "Hole Diameter"  ||  I27: =IF(K21="",IFERROR(VLOOKUP(Tube_OD,FootLugGeomTable,5,TRUE()),0),K21)  {17}
+A28: "Yes"  ||  B28: "Drilling (bolt holes)"  ||  C28: "Drilling Machine"  ||  D28: =VLOOKUP(B10,DrillingTable,3,TRUE())*B11  {0.2}  ||  E28: =INDEX(MachineRateMaster_Range,MATCH("Drilling Machine",INDEX(MachineRateMaster_Range,0,1),0),2)  {350}  ||  F28: =(shared//inherited)  {70}
+A30: "SUBTOTAL - PROCESS COST (Rs.)"  ||  B30: =F27+F28  {175}
+A32: "SECTION G - WELDING (Tube OD driven, HISPL Simplified Rs./inch/bead, 4 weld locations = 4 lugs)"
+A33: "Weld Diameter (mm) [auto = Tube_OD]"  ||  B33: =Tube_OD  {150}
+A34: "No. of Beads (auto, from Weld Bead Table)"  ||  B34: =VLOOKUP(B33,WeldBeadTable,3,TRUE())  {5}
+A35: "No. of Weld Locations (= Number of Lugs)"  ||  B35: =B11  {4}
+A36: "Circumference (inch)"  ||  B36: =(B33*3.14)/25.4  {18.54330709}
+A37: "Welding Rate (Rs./inch/bead)"  ||  B37: =WeldRatePerInchBead  {14}
+A38: "Total Welding Cost (Rs.)"  ||  B38: =B36*B37*B34*B35  {5192.125984}
+A40: "SECTION D - ADDITIONAL COST (Manual Entry)"
+A41: "Additional Cost / set (Rs.)"  ||  B41: 0
+A43: "SECTION E - COMPONENT COST SUMMARY (gated by Mounting)"
+A44: "Material Cost"  ||  B44: =B22  {284.5418968}
+A45: "Process Cost (incl. welding)"  ||  B45: =B30+B38  {5367.125984}
+A46: "Additional Cost"  ||  B46: =B41  {0}
+A47: "TOTAL FOOT LUG COST / set"  ||  B47: =B44+B45+B41  {5651.667881}
+A48: "TOTAL FOOT LUG COST (Rs.) [gated by Mounting]"  ||  B48: =IF(Mounting_FootLug="Yes",B47*B12,0)  {0}

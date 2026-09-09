@@ -1,0 +1,43 @@
+A1: "CAP END COVER - COSTING SHEET"
+A3: "SECTION A - MATERIAL INPUTS"
+A4: "New Material? (Yes/No)"  ||  B4: "Yes"  ||  C4: "Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero."
+A5: "Raw Material Shape"  ||  B5: "Round"  ||  C5: "Round = solid round bar (uses Diameter). Profile / Cuboid Block = flat/rectangular stock (uses Width & Height). Fill only the dimensions that apply."
+A6: "Parameter"  ||  B6: "Value"  ||  C6: "Unit"
+A7: "Material Grade"  ||  B7: "MS-C45"
+A8: "Diameter"  ||  B8: =CEC_Dia  {168}  ||  C8: "mm - fill if Shape = Round"
+A9: "Width"  ||  B9: =CEC_Width  {165}  ||  C9: "mm - fill if Shape = Profile / Cuboid Block"
+A10: "Height"  ||  B10: =CEC_Height  {165}  ||  C10: "mm - fill if Shape = Profile / Cuboid Block"
+A11: "Thickness"  ||  B11: =CEC_Thickness  {44}  ||  C11: "mm"
+A12: "Finished OD"  ||  B12: =CEC_FinishedOD  {165}  ||  C12: "mm - used for Turning / Milling / Drilling below, regardless of raw shape chosen"
+A13: "Quantity (Nos)"  ||  B13: 1
+A15: "AUTO CALCULATE - MATERIAL"  ||  G15: "APPROXIMATE COSTING GEOMETRY - FINAL DIMENSIONS SUBJECT TO GA/DESIGN (Bore driven)"
+A16: "Density (g/cm3)"  ||  B16: =INDEX(MaterialMaster_Range,MATCH(B7,INDEX(MaterialMaster_Range,0,1),0),3)  {7.85}  ||  G16: "End caps confirmed bore-driven by multiple real sources (Tork Hydraulics: sizes correspond to tube bore). Finished OD=1.3x Bore, Thickness=0.35x Bore (pressure-bearing wall), Diameter(raw round)=1.35x Bore, Width/Height(if Cuboid)=1.3x Bore. Medium confidence - ratios are practical estimates."
+A17: "Material Rate (Rs./kg)"  ||  B17: =IF(B7="MS-C45",IFERROR(VLOOKUP(CEC_Thickness,C45RateTable,3,TRUE()),INDEX(C45RateTable,1,3)),INDEX(MaterialMaster_Range,MATCH(B7,INDEX(MaterialMaster_Range,0,1),0),4))  {100}  ||  G17: "Bore Bin"  ||  H17: "Diameter"  ||  I17: "Width"  ||  J17: "Height"  ||  K17: "Thickness"  ||  L17: "Finished OD"
+A18: "Unit Weight (kg / pc)"  ||  B18: =IF(B5="Round",(PI()/4)*(B8)^2*B11*B16/1000000,(B9)*(B10)*B11*B16/1000000)  {7.65650866}  ||  G18: 50  ||  H18: 68  ||  I18: 65  ||  J18: 65  ||  K18: 18  ||  L18: 65
+A19: "Total Weight for Qty (kg)"  ||  B19: =B18*B13  {7.65650866}  ||  G19: 63  ||  H19: 85  ||  I19: 82  ||  J19: 82  ||  K19: 23  ||  L19: 82
+A20: "Material Cost / pc (Rs.)"  ||  B20: =IF(B4="No",0,B18*B17)  {765.650866}  ||  G20: 80  ||  H20: 108  ||  I20: 105  ||  J20: 105  ||  K20: 28  ||  L20: 105
+A21: "Total Material Cost for Qty (Rs.)"  ||  B21: =B20*B13  {765.650866}  ||  G21: 100  ||  H21: 135  ||  I21: 130  ||  J21: 130  ||  K21: 35  ||  L21: 130
+G22: 125  ||  H22: 168  ||  I22: 165  ||  J22: 165  ||  K22: 44  ||  L22: 165
+A23: "Machined Width (mm) [for Milling]"  ||  B23: 40  ||  G23: 150  ||  H23: 200  ||  I23: 195  ||  J23: 195  ||  K23: 53  ||  L23: 195
+A24: "Machined Length (mm) [for Milling]"  ||  B24: 40  ||  G24: 160  ||  H24: 215  ||  I24: 210  ||  J24: 210  ||  K24: 56  ||  L24: 210
+A25: "Hole Diameter (mm) [for Drilling]"  ||  B25: 14  ||  G25: 180  ||  H25: 240  ||  I25: 235  ||  J25: 235  ||  K25: 63  ||  L25: 235
+A26: "No. of Holes"  ||  B26: 4  ||  G26: 200  ||  H26: 265  ||  I26: 260  ||  J26: 260  ||  K26: 70  ||  L26: 260
+A28: "SECTION B - PROCESS ROUTING"  ||  G28: "Manual Overrides (blank = use table):"
+A29: "Apply?"  ||  B29: "Process"  ||  C29: "Machine / Basis"  ||  D29: "Hours / Qty Basis"  ||  E29: "Rate (Rs.)"  ||  F29: "Cost (Rs.)"  ||  G29: "Dia Override"  ||  H29: "Width Override"  ||  I29: "Height Override"  ||  J29: "Thick Override"  ||  K29: "OD Override"
+A30: "Yes"  ||  B30: "Turning"  ||  C30: "CNC Lathe"  ||  D30: =INDEX(RoughTurningTable,MATCH(B12,TurningODBins,1),MATCH(B11,TurningLenBins,1))  {0.8}  ||  E30: =INDEX(MachineRateMaster_Range,MATCH("CNC Lathe",INDEX(MachineRateMaster_Range,0,1),0),2)  {550}  ||  F30: =IF(A30="Yes",D30*E30,0)  {440}
+A31: "Yes"  ||  B31: "Milling"  ||  C31: "Milling Machine"  ||  D31: =VLOOKUP((B23)*(B24),MillingTable,3,TRUE())  {0.3}  ||  E31: =INDEX(MachineRateMaster_Range,MATCH("Milling Machine",INDEX(MachineRateMaster_Range,0,1),0),2)  {350}  ||  F31: =(shared//inherited)  {105}
+A32: "Yes"  ||  B32: "Drilling"  ||  C32: "Drilling Machine"  ||  D32: =VLOOKUP(B25,DrillingTable,3,TRUE())*B26  {0.2}  ||  E32: =INDEX(MachineRateMaster_Range,MATCH("Drilling Machine",INDEX(MachineRateMaster_Range,0,1),0),2)  {350}  ||  F32: =(shared//inherited)  {70}  ||  G32: "FINAL:"
+G33: "Diameter"  ||  H33: =IF(G30="",IFERROR(VLOOKUP(Bore,CECGeomTable,2,TRUE()),0),G30)  {168}
+A34: "SUBTOTAL - PROCESS & VENDOR COST"  ||  G34: "Width"  ||  H34: =IF(H30="",IFERROR(VLOOKUP(Bore,CECGeomTable,3,TRUE()),0),H30)  {165}
+A35: "Total Process & Vendor Cost / pc (Rs.)"  ||  B35: =F30+F31+F32  {615}  ||  G35: "Height"  ||  H35: =IF(I30="",IFERROR(VLOOKUP(Bore,CECGeomTable,4,TRUE()),0),I30)  {165}
+G36: "Thickness"  ||  H36: =IF(J30="",IFERROR(VLOOKUP(Bore,CECGeomTable,5,TRUE()),0),J30)  {44}
+A37: "SECTION D - ADDITIONAL COST (Manual Entry)"  ||  G37: "FinishedOD"  ||  H37: =IF(K30="",IFERROR(VLOOKUP(Bore,CECGeomTable,6,TRUE()),0),K30)  {165}
+A38: "Additional Cost / pc (Rs.)"  ||  B38: 0
+A39: "Remarks"
+A41: "SECTION E - COMPONENT COST SUMMARY"
+A42: "Cost Head"  ||  B42: "Rs. / pc"
+A43: "Material Cost"  ||  B43: =B20  {765.650866}
+A44: "Process Cost"  ||  B44: =B35  {615}
+A45: "Additional Cost"  ||  B45: =B38  {0}
+A46: "TOTAL CAP END COVER COST / pc"  ||  B46: =B20+B35+B38  {1380.650866}
+A47: "TOTAL CAP END COVER COST for Qty"  ||  B47: =B46*B13  {1380.650866}

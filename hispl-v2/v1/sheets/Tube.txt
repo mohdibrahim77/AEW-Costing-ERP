@@ -1,0 +1,64 @@
+A1: "TUBE - COSTING SHEET"
+A3: "SECTION A - MATERIAL INPUTS"
+A4: "New Material? (Yes/No)"  ||  B4: "Yes"  ||  C4: "Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero."
+A5: "Parameter"  ||  B5: "Value"  ||  C5: "Unit"
+A6: "Material Grade"  ||  B6: "MS-ST52"
+A7: "Raw OD"  ||  B7: 185  ||  C7: "mm"
+A8: "Finished OD"  ||  B8: =TubeOD  {150}  ||  C8: "mm"
+A9: "Finished ID"  ||  B9: =Bore  {125}  ||  C9: "mm"  ||  G9: "Raw ID (mm) [Finished ID + Boring Allowance]"  ||  H9: =B9+TubeBoringAllowance  {130}
+A10: "Length"  ||  B10: 370  ||  C10: "mm"  ||  G10: "Raw Dimension Check:"  ||  H10: =IF(H9>=B7,"CHECK RAW OD","")  {}
+A11: "Quantity (Nos)"  ||  B11: 1  ||  G11: "Length vs Stroke Check:"  ||  H11: =IF(B10<Stroke,"CHECK TUBE LENGTH (shorter than Stroke)","")  {}
+A13: "AUTO CALCULATE - MATERIAL"
+A14: "Density (g/cm3)"  ||  B14: =INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),3)  {7.85}
+A15: "Material Rate (Rs./kg)"  ||  B15: =INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),4)  {160}
+A16: "Unit Weight (kg / pc)"  ||  B16: =(PI()/4)*((B7)^2-(H9)^2)*B10*B14/1000000  {39.52159883}
+A17: "Total Weight for Qty (kg)"  ||  B17: =B16*B11  {39.52159883}
+A18: "Material Cost / pc (Rs.)"  ||  B18: =IF(B4="No",0,B16*B15)  {6323.455813}
+A19: "Total Material Cost for Qty (Rs.)"  ||  B19: =B18*B11  {6323.455813}
+A21: "Hole Diameter (mm) [for Drilling]"  ||  B21: 0
+A22: "No. of Holes"  ||  B22: 2
+A24: "SECTION B - PROCESS ROUTING (auto machine hours from Machine Time Master)"
+A25: "Apply?"  ||  B25: "Process"  ||  C25: "Machine / Basis"  ||  D25: "Hours / Qty Basis"  ||  E25: "Rate (Rs.)"  ||  F25: "Cost (Rs.)"
+A26: "Yes"  ||  B26: "Cutting"  ||  C26: "Cutting Machine"  ||  D26: =INDEX(CuttingTable,MATCH(B7,CuttingODBins,1),MATCH(B10,CuttingLenBins,1))  {0.15}  ||  E26: =INDEX(MachineRateMaster_Range,MATCH("Cutting Machine",INDEX(MachineRateMaster_Range,0,1),0),2)  {350}  ||  F26: =IF(A26="Yes",D26*E26,0)  {52.5}
+A27: "Yes"  ||  B27: "Rough Turning"  ||  C27: "Conventional Lathe"  ||  D27: =INDEX(RoughTurningTable,MATCH(B8,TurningODBins,1),MATCH(B10,TurningLenBins,1))*VLOOKUP((B7-B8),StockRemovalTable,3,TRUE())  {0.8}  ||  E27: =VLOOKUP(B8,TurningRateTable,3,TRUE())  {550}  ||  F27: =(shared//inherited)  {440}
+A28: "Yes"  ||  B28: "Boring"  ||  C28: "Conventional Lathe"  ||  D28: =INDEX(BoringTable,MATCH(B9,BoringIDBins,1),MATCH(B10,BoringLenBins,1))  {0.7}  ||  E28: =INDEX(MachineRateMaster_Range,MATCH("Conventional Lathe",INDEX(MachineRateMaster_Range,0,1),0),2)  {500}  ||  F28: =(shared//inherited)  {350}
+A29: "Yes"  ||  B29: "Drilling"  ||  C29: "Drilling Machine"  ||  D29: =VLOOKUP(B21,DrillingTable,3,TRUE())*B22  {0.06}  ||  E29: =INDEX(MachineRateMaster_Range,MATCH("Drilling Machine",INDEX(MachineRateMaster_Range,0,1),0),2)  {350}  ||  F29: =(shared//inherited)  {21}
+A30: "Yes"  ||  B30: "Rough Honing"  ||  C30: "Honing Machine"  ||  D30: =PI()*B9*B10/100  {1452.986602}  ||  E30: =IF(AND(B10<=HoningLengthThreshold,B9<=HoningIDThreshold),HoningRateLow,HoningRateHigh)  {0.4}  ||  F30: =(shared//inherited)  {581.1946409}
+A31: "Yes"  ||  B31: "Finish Turning"  ||  C31: "CNC Lathe"  ||  D31: =INDEX(RoughTurningTable,MATCH(B8,TurningODBins,1),MATCH(B10,TurningLenBins,1))*0.7  {0.35}  ||  E31: =VLOOKUP(B8,TurningRateTable,4,TRUE())  {550}  ||  F31: =(shared//inherited)  {192.5}
+A32: "Yes"  ||  B32: "Finished Honing"  ||  C32: "Honing Machine"  ||  D32: =PI()*B9*B10/100  {1452.986602}  ||  E32: =IF(AND(B10<=HoningLengthThreshold,B9<=HoningIDThreshold),HoningRateLow,HoningRateHigh)  {0.4}  ||  F32: =(shared//inherited)  {581.1946409}
+A34: "SECTION C - WELDING (HISPL Auto Formula)"
+A35: "WELDING - Part Welding (Tube parts joint) (HISPL Simplified - Rs./inch/bead)"
+A36: "Weld Diameter (mm) [auto = Tube_OD]"  ||  B36: =Tube_OD  {150}
+A37: "No. of Beads (auto, from Weld Bead Table)"  ||  B37: =VLOOKUP(B36,WeldBeadTable,3,TRUE())  {5}
+A38: "No. of Weld Locations"  ||  B38: 1
+A39: "Circumference (inch)"  ||  B39: =(B36*3.14)/25.4  {18.54330709}
+A40: "Welding Rate (Rs./inch/bead)"  ||  B40: =WeldRatePerInchBead  {14}
+A41: "Wire Cost (Rs.)"  ||  B41: =B39*WeldDepositionRate*WeldWireRate  {5340.472441}
+A42: "Total Welding Cost (Rs.)"  ||  B42: =B39*B40*B37*B38  {1298.031496}
+A44: "WELDING - CEC Welding (HISPL Simplified - Rs./inch/bead)"
+A45: "Weld Diameter (mm) [auto = Tube_OD]"  ||  B45: =Tube_OD  {150}
+A46: "No. of Beads (auto, from Weld Bead Table)"  ||  B46: =VLOOKUP(B45,WeldBeadTable,3,TRUE())  {5}
+A47: "No. of Weld Locations"  ||  B47: 1
+A48: "Circumference (inch)"  ||  B48: =(B45*3.14)/25.4  {18.54330709}
+A49: "Welding Rate (Rs./inch/bead)"  ||  B49: =WeldRatePerInchBead  {14}
+A51: "Total Welding Cost (Rs.)"  ||  B51: =B48*B49*B46*B47  {1298.031496}
+A53: "WELDING - Rear Eye Welding (HISPL Simplified - Rs./inch/bead)"
+A54: "Weld Diameter (mm) [auto = Tube_OD]"  ||  B54: =Tube_OD  {150}
+A55: "No. of Beads (auto, from Weld Bead Table)"  ||  B55: =VLOOKUP(B54,WeldBeadTable,3,TRUE())  {5}
+A56: "No. of Weld Locations"  ||  B56: 1
+A57: "Circumference (inch)"  ||  B57: =(B54*3.14)/25.4  {18.54330709}
+A58: "Welding Rate (Rs./inch/bead)"  ||  B58: =WeldRatePerInchBead  {14}
+A59: "Wire Cost (Rs.)"  ||  B59: =B57*WeldDepositionRate*WeldWireRate  {5340.472441}
+A60: "Total Welding Cost (Rs.)"  ||  B60: =B57*B58*B55*B56  {1298.031496}
+A62: "SUBTOTAL - PROCESS & VENDOR COST"
+A63: "Total Process & Vendor Cost / pc (Rs.)"  ||  B63: =F26+F27+F28+F29+F30+F31+F32+B42+B51+B60  {6112.48377}
+A65: "SECTION D - ADDITIONAL COST (Manual Entry)"
+A66: "Additional Cost / pc (Rs.)"  ||  B66: 0
+A67: "Remarks"
+A69: "SECTION E - COMPONENT COST SUMMARY"
+A70: "Cost Head"  ||  B70: "Rs. / pc"
+A71: "Material Cost"  ||  B71: =B18  {6323.455813}
+A72: "Process Cost"  ||  B72: =B63  {6112.48377}
+A73: "Additional Cost"  ||  B73: =B66  {0}
+A74: "TOTAL TUBE COST / pc"  ||  B74: =IF(H10="CHECK RAW OD","INVALID - FIX RAW OD (see H10 warning above)",B18+B63+B66)  {12435.93958}
+A75: "TOTAL TUBE COST for Qty"  ||  B75: =IF(H10="CHECK RAW OD","INVALID - FIX RAW OD",B74*B11)  {12435.93958}

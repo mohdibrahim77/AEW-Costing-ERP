@@ -1,0 +1,36 @@
+A1: "STOP TUBE - COSTING SHEET"
+A2: "IMPORTANT: Costed using SOLID ROUND raw material as per HISPL standard."
+A3: "SECTION A - MATERIAL INPUTS"
+A4: "New Material? (Yes/No)"  ||  B4: "Yes"  ||  C4: "Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero."  ||  G4: "Stop Tube Applicable? (Yes/No)"  ||  H4: "Yes"
+A5: "Parameter"  ||  B5: "Value"  ||  C5: "Unit"
+A6: "Material Grade"  ||  B6: "MS-EN8"
+A7: "Raw Diameter"  ||  B7: =StopTube_RawDia  {122}  ||  C7: "mm"  ||  G7: "Raw Dimension Check:"  ||  H7: =IF(B8>=B7,"CHECK RAW DIAMETER","")  {}
+A8: "Finished Diameter"  ||  B8: =StopTube_FinishedDia  {113}  ||  C8: "mm"
+A9: "Length"  ||  B9: 150  ||  C9: "mm"
+A10: "Quantity (Nos)"  ||  B10: 1
+A12: "AUTO CALCULATE - MATERIAL"  ||  G12: "APPROXIMATE COSTING GEOMETRY - FINAL DIMENSIONS SUBJECT TO GA/DESIGN (Rod Diameter driven)"
+A13: "Density (g/cm3)"  ||  B13: =INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),3)  {7.85}  ||  G13: "Raw Dia=1.2x RodDia (collar around rod), Finished Dia=1.1x RodDia (slightly under raw for turning stock). LENGTH STAYS MANUAL - no defensible relationship found, application-specific, same as always."
+A14: "Material Rate (Rs./kg)"  ||  B14: =IF(B6="MS-EN8",VLOOKUP(StopTube_FinishedDia,EN8RateTable,3,TRUE()),INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),4))  {75}  ||  G14: "RodDia Bin"  ||  H14: "Raw Dia"  ||  I14: "Finished Dia"
+A15: "Unit Weight (kg / pc)"  ||  B15: =(PI()/4)*((B7)^2)*B9*B13/1000000  {13.76481753}  ||  G15: 40  ||  H15: 55  ||  I15: 50
+A16: "Total Weight for Qty (kg)"  ||  B16: =B15*B10  {13.76481753}  ||  G16: 45  ||  H16: 62  ||  I16: 56
+A17: "Material Cost / pc (Rs.)"  ||  B17: =IF(B4="No",0,B15*B14)  {1032.361314}  ||  G17: 50  ||  H17: 68  ||  I17: 62
+A18: "Total Material Cost for Qty (Rs.)"  ||  B18: =B17*B10  {1032.361314}  ||  G18: 56  ||  H18: 76  ||  I18: 70
+G19: 63  ||  H19: 86  ||  I19: 79
+A20: "SECTION B - PROCESS ROUTING"  ||  G20: 70  ||  H20: 95  ||  I20: 88
+A21: "Apply?"  ||  B21: "Process"  ||  C21: "Machine / Basis"  ||  D21: "Hours / Qty Basis"  ||  E21: "Rate (Rs.)"  ||  F21: "Cost (Rs.)"  ||  G21: 80  ||  H21: 108  ||  I21: 100
+A22: "Yes"  ||  B22: "Turning"  ||  C22: "CNC Lathe"  ||  D22: =INDEX(RoughTurningTable,MATCH(B8,TurningODBins,1),MATCH(B9,TurningLenBins,1))*VLOOKUP((B7-B8),StockRemovalTable,3,TRUE())  {0.675}  ||  E22: =INDEX(MachineRateMaster_Range,MATCH("CNC Lathe",INDEX(MachineRateMaster_Range,0,1),0),2)  {550}  ||  F22: =IF(A22="Yes",D22*E22,0)  {371.25}  ||  G22: 90  ||  H22: 122  ||  I22: 113
+G23: 100  ||  H23: 135  ||  I23: 125
+A24: "SUBTOTAL - PROCESS & VENDOR COST"
+A25: "Total Process & Vendor Cost / pc (Rs.)"  ||  B25: =F22  {371.25}  ||  G25: "Manual Overrides (blank = use table):"
+G26: "Raw Dia Override"  ||  H26: "Finished Dia Override"
+A27: "SECTION D - ADDITIONAL COST (Manual Entry)"
+A28: "Additional Cost / pc (Rs.)"  ||  B28: 0
+A29: "Remarks"  ||  G29: "FINAL:"
+G30: "RawDia"  ||  H30: =IF(G27="",IFERROR(VLOOKUP(RodDia,StopTubeGeomTable,2,TRUE()),0),G27)  {122}
+A31: "SECTION E - COMPONENT COST SUMMARY"  ||  G31: "FinishedDia"  ||  H31: =IF(H27="",IFERROR(VLOOKUP(RodDia,StopTubeGeomTable,3,TRUE()),0),H27)  {113}
+A32: "Cost Head"  ||  B32: "Rs. / pc"
+A33: "Material Cost"  ||  B33: =B17  {1032.361314}
+A34: "Process Cost"  ||  B34: =B25  {371.25}
+A35: "Additional Cost"  ||  B35: =B28  {0}
+A36: "TOTAL STOP TUBE COST / pc"  ||  B36: =IF(H4="No",0,B17+B25+B28)  {1403.611314}
+A37: "TOTAL STOP TUBE COST for Qty"  ||  B37: =IF(H4="No",0,B36*B10)  {1403.611314}

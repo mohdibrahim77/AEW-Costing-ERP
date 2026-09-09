@@ -1,0 +1,51 @@
+A1: "INQUIRY INPUT"
+A2: "For every new cylinder job, make a copy of this workbook and feed fresh details here."
+A4: "1. IDENTIFICATION"
+A5: "Inquiry No."  ||  B5: "INQ-0001"
+A6: "Inquiry Date"
+A7: "Cylinder No."  ||  B7: 2100870353
+A8: "Customer Name"
+A9: "Customer Location"  ||  B9: "Bengaluru"
+A10: "Cylinder Name / Application"
+A12: "2. CYLINDER SPECIFICATIONS"
+A13: "Bore / ID (mm)"  ||  B13: 125
+A14: "Piston Rod Diameter (mm)"  ||  B14: 90
+A15: "Stroke (mm)"  ||  B15: 115
+A16: "Tube OD (mm)"  ||  B16: 150
+A17: "Tube Boring Allowance (mm)"  ||  B17: 5
+A18: "Tube OD Turning Allowance (mm)"  ||  B18: 5  ||  C18: "Not wired into Raw OD - Raw OD remains fully manual, per instruction."
+A19: "Working Pressure (bar)"  ||  B19: 250  ||  C19: "Used to size Tie Rod diameter structurally. Not used elsewhere in costing."
+A20: "Mounting Type"  ||  B20: "Rod Eye + Trunnion"
+A21: "Tie Rod Quantity"  ||  B21: 4  ||  C21: "Only relevant when Mounting = Rod Eye + Tie Rod."
+A22: "Tie Rod Quantity (Active)"  ||  B22: =IF(Mounting_TieRod="Yes",B21,"N/A - not applicable for current Mounting")  {N/A - not applicable for current Mounting}
+A24: "3. PROCESS & SEAL CONFIGURATION"
+A25: "Piston Rod Process"  ||  B25: "Toughening and Induction Hardening"
+A26: "Seal Brand"  ||  B26: "Freudenberg"
+A27: "Seal Material"  ||  B27: "Viton"
+A28: "Seal Type"  ||  B28: "Normal Glide Ring"
+A30: "4. COMPONENT PRESENCE - CONFIRM WHICH OPTIONAL COMPONENTS APPLY TO THIS CYLINDER"
+A31: "Tube, Piston Rod, CEC, HEC, Gland, Rod Eye, Piston, and Flange are structurally essential to every cylinder and always costed. The 3 components below are genuinely optional - confirm Yes/No for each. Selecting No sets that component's cost to zero for this job (dimensions stay visible for reference)."
+A32: "Cushion Bush Present? (Yes/No)"  ||  B32: "Yes"
+A33: "Stop Tube Present? (Yes/No)"  ||  B33: "No"
+A34: "Rear Eye Present? (Yes/No)"  ||  B34: "No"
+A35: "Bought-Out Components (BOC) presence confirmation - deferred to a later phase, per HISPL instruction."
+A37: "5. NOTES"
+A38: "This sheet feeds Cylinder ID, Customer & Cylinder details automatically into Cost Summary and Cylinder Database."
+A39: "Every component sheet also has its own 'New Material?' Yes/No selector - choose 'No' to reuse an existing part (material cost zeroed)."
+A40: "See 'Bought Out & Seal Kit Master' sheet for Bearing/Transducer/Valve/etc. manual entries, and 'BOC Calculated Items' for Pipe/Bolt/Bellows/Pipe Flange."
+A43: "MOUNTING LOGIC - INTERNAL REFERENCE / CALCULATION PLUMBING - DO NOT EDIT (auto-determined from Mounting Type above)"
+A44: "Mounting Option"  ||  B44: "Rod Eye"  ||  C44: "Trunnion"  ||  D44: "CEC Clevis"  ||  E44: "Tie Rod"  ||  F44: "Foot Lug"  ||  G44: "Front Flange"
+A45: "Rod Eye"  ||  B45: "Yes"  ||  C45: "No"  ||  D45: "No"  ||  E45: "No"  ||  F45: "No"  ||  G45: "No"
+A46: "Rod Eye + Trunnion"  ||  B46: "Yes"  ||  C46: "Yes"  ||  D46: "No"  ||  E46: "No"  ||  F46: "No"  ||  G46: "No"
+A47: "Rod Eye + CEC Clevis"  ||  B47: "Yes"  ||  C47: "No"  ||  D47: "Yes"  ||  E47: "No"  ||  F47: "No"  ||  G47: "No"
+A48: "Trunnion"  ||  B48: "No"  ||  C48: "Yes"  ||  D48: "No"  ||  E48: "No"  ||  F48: "No"  ||  G48: "No"
+A49: "Rod Eye + Tie Rod"  ||  B49: "Yes"  ||  C49: "No"  ||  D49: "No"  ||  E49: "Yes"  ||  F49: "No"  ||  G49: "No"
+A50: "Rod Eye + Foot Lug"  ||  B50: "Yes"  ||  C50: "No"  ||  D50: "No"  ||  E50: "No"  ||  F50: "Yes"  ||  G50: "No"
+A51: "Front Flange"  ||  B51: "No"  ||  C51: "No"  ||  D51: "No"  ||  E51: "No"  ||  F51: "No"  ||  G51: "Yes"
+A53: "Selected Mounting:"  ||  B53: =B20  {Rod Eye + Trunnion}
+A54: "Rod Eye Required? (Yes/No)"  ||  B54: =INDEX($A$45:$G$51,MATCH($B$20,$A$45:$A$51,0),2)  {Yes}
+A55: "Trunnion Required? (Yes/No)"  ||  B55: =INDEX($A$45:$G$51,MATCH($B$20,$A$45:$A$51,0),3)  {Yes}
+A56: "CEC Clevis Required? (Yes/No)"  ||  B56: =INDEX($A$45:$G$51,MATCH($B$20,$A$45:$A$51,0),4)  {No}
+A57: "Tie Rod Required? (Yes/No)"  ||  B57: =INDEX($A$45:$G$51,MATCH($B$20,$A$45:$A$51,0),5)  {No}
+A58: "Foot Lug Required? (Yes/No)"  ||  B58: =INDEX($A$45:$G$51,MATCH($B$20,$A$45:$A$51,0),6)  {No}
+A59: "Front Flange Required? (Yes/No)"  ||  B59: =INDEX($A$45:$G$51,MATCH($B$20,$A$45:$A$51,0),7)  {No}

@@ -1,0 +1,53 @@
+A1: "PISTON ROD - COSTING SHEET"
+A3: "SECTION A - MATERIAL INPUTS"
+A4: "New Material? (Yes/No)"  ||  B4: "Yes"  ||  C4: "Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero."
+A5: "Parameter"  ||  B5: "Value"  ||  C5: "Unit"
+A6: "Material Grade"  ||  B6: "MS-EN19"
+A7: "Raw Diameter"  ||  B7: 95  ||  C7: "mm"  ||  G7: "Raw Dimension Check:"  ||  H7: =IF(B8>=B7,"CHECK RAW DIAMETER","")  {}
+A8: "Finished Diameter"  ||  B8: =RodDia  {90}  ||  C8: "mm"
+A9: "Length"  ||  B9: 610  ||  C9: "mm"
+A10: "Quantity (Nos)"  ||  B10: 1
+A12: "AUTO CALCULATE - MATERIAL"
+A13: "Density (g/cm3)"  ||  B13: =INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),3)  {7.85}
+A14: "Material Rate (Rs./kg)"  ||  B14: =INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),4)  {100}
+A15: "Unit Weight (kg / pc)"  ||  B15: =(PI()/4)*((B7)^2)*B9*B13/1000000  {33.94193393}
+A16: "Total Weight for Qty (kg)"  ||  B16: =B15*B10  {33.94193393}
+A17: "Material Cost / pc (Rs.)"  ||  B17: =IF(B4="No",0,B15*B14)  {3394.193393}
+A18: "Total Material Cost for Qty (Rs.)"  ||  B18: =B17*B10  {3394.193393}
+A20: "Machined Width (mm) [for Milling]"  ||  B20: 20
+A21: "Machined Length (mm) [for Milling]"  ||  B21: 40
+A22: "Deep Hole Drilling Vendor Cost (Rs.) [manual]"  ||  B22: 0
+A23: "Process Route"  ||  B23: =PRProcessSelection  {Toughening and Induction Hardening}  ||  C23: "Change 7B: now reads the central Inquiry Input dropdown - no longer a separate selection here."
+A24: "SECTION B - PROCESS ROUTING & SECTION C - VENDOR / AREA BASED COST"
+A25: "Apply?"  ||  B25: "Process"  ||  C25: "Machine / Basis"  ||  D25: "Hours / Qty Basis"  ||  E25: "Rate (Rs.)"  ||  F25: "Cost (Rs.)"
+A26: "Yes"  ||  B26: "Cutting"  ||  C26: "Cutting Machine"  ||  D26: =INDEX(CuttingTable,MATCH(B7,CuttingODBins,1),MATCH(B9,CuttingLenBins,1))  {0.15}  ||  E26: =INDEX(MachineRateMaster_Range,MATCH("Cutting Machine",INDEX(MachineRateMaster_Range,0,1),0),2)  {350}  ||  F26: =IF(A26="Yes",D26*E26,0)  {52.5}
+A27: "Yes"  ||  B27: "Rough Turning"  ||  C27: "CNC Lathe"  ||  D27: =INDEX(RoughTurningTable,MATCH(B8,TurningODBins,1),MATCH(B9,TurningLenBins,1))*VLOOKUP((B7-B8),StockRemovalTable,3,TRUE())  {1.035}  ||  E27: =VLOOKUP(B8,TurningRateTable,3,TRUE())  {300}  ||  F27: =(shared//inherited)  {310.5}
+A28: "-- vendor / area-based processes use Weight or Surface Area as basis (still auto-computed) --"
+A29: =IF($B$23="Toughening and Induction Hardening","Yes","No")  {Yes}  ||  B29: "Heat Treatment"  ||  C29: "Vendor (Rs./kg)"  ||  D29: =B15  {33.94193393}  ||  E29: =HeatTreatmentRate  {12}  ||  F29: =IF(A29="Yes",D29*E29,0)  {407.3032071}  ||  G29: "Induction Hardened Length (mm) - defaults to full rod length; edit if only part of the rod is hardened:"  ||  H29: =B9  {610}
+A30: =IF(OR($B$23="Toughening and Induction Hardening",$B$23="Only Induction Hardening"),"Yes","No")  {Yes}  ||  B30: "Induction Hardening"  ||  C30: "Vendor (Rs./cm2)"  ||  D30: =PI()*B8*H29/100  {1724.734367}  ||  E30: =InductionHardeningRate  {0.45}  ||  F30: =(shared//inherited)  {776.1304651}  ||  G30: "Hardening Depth (mm, reference only - not used in area-based cost formula):"  ||  H30: 2
+A31: "Yes"  ||  B31: "Finish Turning"  ||  C31: "CNC Lathe"  ||  D31: =INDEX(RoughTurningTable,MATCH(B8,TurningODBins,1),MATCH(B9,TurningLenBins,1))*0.7  {0.63}  ||  E31: =VLOOKUP(B8,TurningRateTable,4,TRUE())  {400}  ||  F31: =(shared//inherited)  {252}
+A32: "Yes"  ||  B32: "Grinding"  ||  C32: "In-house (Rs./cm2)"  ||  D32: =PI()*B8*B9/100  {1724.734367}  ||  E32: =GrindingRate  {0.4}  ||  F32: =(shared//inherited)  {689.8937467}
+A33: "Yes"  ||  B33: "Chrome Plating"  ||  C33: "Vendor (Rs./cm2)"  ||  D33: =PI()*B8*B9/100  {1724.734367}  ||  E33: =ChromePlatingRate  {0.6}  ||  F33: =(shared//inherited)  {1034.84062}
+A34: "Yes"  ||  B34: "Polishing"  ||  C34: "In-house (Rs./cm2)"  ||  D34: =PI()*B8*B9/100  {1724.734367}  ||  E34: =PolishingRate  {0.2}  ||  F34: =(shared//inherited)  {344.9468734}
+A35: "Yes"  ||  B35: "Milling"  ||  C35: "Milling Machine"  ||  D35: =VLOOKUP((B20)*(B21),MillingTable,3,TRUE())  {0.3}  ||  E35: =INDEX(MachineRateMaster_Range,MATCH("Milling Machine",INDEX(MachineRateMaster_Range,0,1),0),2)  {350}  ||  F35: =(shared//inherited)  {105}
+A36: =IF($B$23="Only Deep Hole Drilling","Yes","No")  {No}  ||  B36: "Deep Hole Drilling"  ||  C36: "Vendor Cost (manual)"  ||  D36: "Manual"  ||  E36: "Manual"  ||  F36: =B22  {0}
+A38: "SECTION C2 - WELDING (HISPL Auto Formula)"
+A39: "WELDING - Rod Eye Welding (HISPL Simplified - Rs./inch/bead)"
+A40: "Weld Diameter (mm) [auto = PistonRod_OD]"  ||  B40: =PistonRod_OD  {90}
+A41: "No. of Beads (auto, from Weld Bead Table)"  ||  B41: =IFERROR(VLOOKUP(B40,WeldBeadTable,3,TRUE()),INDEX(WeldBeadTable,1,3))  {4}
+A42: "No. of Weld Locations"  ||  B42: 1
+A43: "Circumference (inch)"  ||  B43: =(B40*3.14)/25.4  {11.12598425}
+A44: "Welding Rate (Rs./inch/bead)"  ||  B44: =WeldRatePerInchBead  {14}
+A46: "Total Welding Cost (Rs.)"  ||  B46: =IF(Mounting_RodEye="Yes",B43*B44*B41*B42,0)  {623.0551181}
+A48: "SUBTOTAL - PROCESS & VENDOR COST"
+A49: "Total Process & Vendor Cost / pc (Rs.)"  ||  B49: =F26+F27+F29+F30+F31+F32+F33+F34+F35+F36+B46  {4596.17003}
+A51: "SECTION D - ADDITIONAL COST (Manual Entry)"
+A52: "Additional Cost / pc (Rs.)"  ||  B52: 0
+A53: "Remarks"
+A55: "SECTION E - COMPONENT COST SUMMARY"
+A56: "Cost Head"  ||  B56: "Rs. / pc"
+A57: "Material Cost"  ||  B57: =B17  {3394.193393}
+A58: "Process Cost"  ||  B58: =B49  {4596.17003}
+A59: "Additional Cost"  ||  B59: =B52  {0}
+A60: "TOTAL PISTON ROD COST / pc"  ||  B60: =B17+B49+B52  {7990.363423}
+A61: "TOTAL PISTON ROD COST for Qty"  ||  B61: =B60*B10  {7990.363423}

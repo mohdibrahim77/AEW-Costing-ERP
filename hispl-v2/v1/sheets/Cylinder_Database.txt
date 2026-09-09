@@ -1,0 +1,6 @@
+A1: "CYLINDER DATABASE (Historical Costing Records)"
+A2: "Row 5 auto-pulls the CURRENT job from Inquiry Input / Cost Summary / Actual Cost Tracker. Copy row 5, Paste Special > Values into a new row below to permanently log this job to history."
+A4: "Cylinder ID"  ||  B4: "Inquiry No"  ||  C4: "Customer"  ||  D4: "Cylinder Name"  ||  E4: "Bore (mm)"  ||  F4: "Rod (mm)"  ||  G4: "Stroke (mm)"  ||  H4: "Mounting"  ||  I4: "Estimated Cost"  ||  J4: "Quoted Price"  ||  K4: "Actual Cost"  ||  L4: "Margin %"  ||  M4: "Date"
+A5: =CONCATENATE("CYL-",TEXT(InquiryDate,"YYYYMMDD"))  {CYL-18991230}  ||  B5: =InquiryNo  {INQ-0001}  ||  C5: =CustomerName  {}  ||  D5: =CylinderName  {}  ||  E5: =Bore  {125}  ||  F5: =RodDia  {90}  ||  G5: =Stroke  {115}  ||  H5: =Mounting  {Rod Eye + Trunnion}  ||  I5: =TotalManufacturingCost  {63384.10479}  ||  J5: 0  ||  K5: =IFERROR(ActualTotalCost,0)  {0}  ||  L5: =IF(J5=0,0,(J5-I5)/J5)  {0}  ||  M5: =InquiryDate  {}
+A18: "Quoted Price (column J) is entered manually once negotiated with the customer - no automatic profit % is applied anywhere in this workbook."
+A19: "Keep this Database sheet as your master job-history record. When you copy this workbook for a new cylinder job, you can remove this sheet from the per-job copy and keep it only in your master tracking file."

@@ -223,6 +223,167 @@ const spec = fs.readFileSync(path.join(ROOT, 'hispl-v2/SPECIFICATION.md'), 'utf8
 ok('SPECIFICATION.md states the three-way split',
    /three sources, three/i.test(spec) || /structure from the document/i.test(spec));
 
+/* ═══════════════════════════════════════════════════════════
+   THE v1 MODULES
+
+   assets/js/costing/v1/ is built from VERSION_1.xlsx, which supersedes
+   Trunion_Included.xlsx as the value source. The rule does not change
+   with the workbook: values and calculations come from the workbook,
+   structure from the document, nothing at all from the cost sheet.
+
+   These modules sat outside the readdir above, which is not recursive,
+   so until now the newest and largest part of the costing code was the
+   only part the source rule did not police.
+   ═══════════════════════════════════════════════════════════ */
+section('v1 modules — VERSION_1.xlsx');
+
+const V1_DIR = path.join(COSTING_DIR, 'v1');
+const V1 = fs.readdirSync(V1_DIR)
+  .filter(function (f) { return /\.js$/.test(f); })
+  .map(function (f) {
+    const raw = fs.readFileSync(path.join(V1_DIR, f), 'utf8');
+    return {
+      file: f, raw: raw,
+      /* Comments stripped: several of these deliberately quote a wrong
+         number in order to warn about it. */
+      code: raw.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '')
+    };
+  });
+
+ok('v1 modules found', V1.length === 4,
+   'got ' + V1.map(function (f) { return f.file; }).join(', '));
+
+const v1Masters = V1.filter(function (f) { return f.file === 'masters.js'; })[0];
+const v1Others  = V1.filter(function (f) { return f.file !== 'masters.js'; });
+const v1Engine = V1.filter(function (f) { return f.file === 'engine.js'; })[0];
+
+/* The document's shifted honing table prints 300/400/550/700 under the
+   honing heading. Those are turning rates. Honing is 0.30 and 0.40
+   Rs/cm2 and appears nowhere in that document. Building honing from the
+   document would over-price it roughly a thousandfold. */
+ok('v1 honing rates are the workbook\'s, not the document\'s shifted table',
+   /rateLow:\s*0\.30/.test(v1Masters.code) && /rateHigh:\s*0\.40/.test(v1Masters.code));
+/* Assert the honing rate card's actual contents rather than hunting for
+   loose integers near the word "honing". A first pass did the latter
+   and flagged the Honing Machine's Rs.550/hr line from the Machine Rate
+   Master — a legitimate figure that happens to collide with a turning
+   rate. Bare integers recur across unrelated tables, so matching on
+   them tests nothing except coincidence. */
+const honingBlock = (v1Masters.code.match(/var HONING = \{[^}]*\}/) || [''])[0];
+ok('the honing rate card holds only 0.30 and 0.40 Rs/cm2',
+   /rateLow:\s*0\.30/.test(honingBlock) && /rateHigh:\s*0\.40/.test(honingBlock) &&
+   !/\b(300|400|550|700)\b/.test(honingBlock.replace(/lengthThreshold:\s*4000/, '')));
+
+/* The four Rs/kg band targets are cost-sheet derived. They are
+   validation reporting only and must not appear in a costing path at
+   all — this build has no reporting use for them either. */
+[1003, 522, 352, 318].forEach(function (n) {
+  const hits = V1.filter(function (f) {
+    return new RegExp('\\b' + n + '\\b').test(f.code);
+  }).map(function (f) { return f.file; });
+  ok('cost-sheet band target ' + n + ' is absent from v1',
+     hits.length === 0, hits.join(', '));
+});
+
+/* Every rate lives in masters.js. A rate inlined into the engine is how
+   the frozen ERP ended up with eighteen operations hardcoded to 100
+   while the master labour rate did nothing at all. */
+/* Structural, not numeric. Every process routing row must take its rate
+   from a masters accessor, never a literal. That is the property worth
+   guarding — searching for the integer 650 instead flagged the Valve's
+   Rs.650 bought-out price, which is a real workbook value that merely
+   collides with the grinding machine's hourly rate. */
+/* Extract each row() call's last top-level argument. A regex cannot do
+   this: the rate argument is itself usually a call, so a non-greedy
+   ) stops inside M.cuttingHours(rawOD, len) and splits the arguments
+   in the wrong place. Balanced-paren scanning is the only way to read
+   the argument that is actually there. */
+function rateArgs(code) {
+  const out = [];
+  let k = 0;
+  while ((k = code.indexOf('row(', k)) >= 0) {
+    /* Skip the definition and any identifier ending in 'row'. */
+    const before = code.slice(Math.max(0, k - 9), k);
+    if (/function\s$/.test(before) || /[A-Za-z0-9_$]$/.test(before)) { k += 4; continue; }
+    let depth = 0, start = k + 4, p = start, args = [], argStart = start;
+    for (; p < code.length; p++) {
+      const ch = code[p];
+      if (ch === '(' || ch === '[' || ch === '{') depth++;
+      else if (ch === ')' && depth === 0) { args.push(code.slice(argStart, p)); break; }
+      else if (ch === ')' || ch === ']' || ch === '}') depth--;
+      else if (ch === ',' && depth === 0) { args.push(code.slice(argStart, p)); argStart = p + 1; }
+    }
+    if (args.length) out.push({ at: k, rate: args[args.length - 1].trim() });
+    k = p + 1;
+  }
+  return out;
+}
+
+const rowCalls = rateArgs(v1Engine.code);
+ok('the engine has process rows to check', rowCalls.length >= 25,
+   'found ' + rowCalls.length);
+const literalRate = rowCalls.filter(function (c) { return !/M./.test(c.rate); });
+ok('every process row takes its rate from masters', literalRate.length === 0,
+   literalRate.slice(0, 3).map(function (c) {
+     return c.rate.replace(/s+/g, ' ').slice(0, 60);
+   }).join(' // '));
+
+const V1_RATES = [
+  ['weld rate 14',     /ratePerInchBead\s*:\s*14/],
+  ['seal markup 0.25', /SEAL_MARKUP\s*=\s*0\.25/],
+  ['material density', /density:\s*7\.85/]
+];
+V1_RATES.forEach(function (r) {
+  ok(r[0] + ' is declared in v1/masters.js', r[1].test(v1Masters.code));
+  const leaks = v1Others.filter(function (f) { return r[1].test(f.code); })
+                        .map(function (f) { return f.file; });
+  ok('  ...and nowhere else', leaks.length === 0, 'found in ' + leaks.join(', '));
+});
+
+/* The engineering defaults are the one place literals are legitimate:
+   they are the working values HISPL's own sheets carry, seeded so a
+   costing runs from 22 inputs. They must be quarantined in that one
+   function and labelled as such, not scattered through the components. */
+ok('engineering seed values live in one declared function',
+   /function engineeringDefaults\(\)/.test(v1Engine.code));
+ok('  ...and the code says they are seeds, not derivations',
+   /Seeding is not the same as deriving/.test(v1Engine.raw));
+
+/* The engine must reach rates through the accessors rather than
+   reaching into the tables. */
+
+ok('v1 engine reads rates through masters accessors',
+   /M\.machineRate\(/.test(v1Engine.code) && /M\.processRate\(/.test(v1Engine.code));
+ok('v1 engine does not index master tables directly',
+   !/M\.tables\.(materials|machineRates|processRates|turning)\b/.test(v1Engine.code));
+
+/* Geometry carries dimensions, not money. A rupee figure in the
+   geometry module would mean a rate had been smuggled in as a
+   dimension, which is exactly the kind of thing that reads as fine. */
+const v1Geom = V1.filter(function (f) { return f.file === 'geometry.js'; })[0];
+ok('v1 geometry names no rate or cost',
+   !/\b(rate|cost|Rs\.|rupee)\b/i.test(v1Geom.code));
+
+/* Provenance must survive into the code. Every geometry table declares
+   where it came from and how much it can be trusted, because "ISO
+   6020-2, approved by HISPL" and "general proportion, no formal
+   published source found" must not look alike to whoever signs the
+   quotation. */
+ok('every v1 geometry table declares a confidence level',
+   (v1Geom.code.match(/confidence:\s*CONF\./g) || []).length >= 12);
+ok('every v1 geometry table declares its basis',
+   (v1Geom.code.match(/basis:\s*'/g) || []).length >= 12);
+ok('v1 geometry keeps the low-confidence wording verbatim',
+   /no formal published source found/i.test(v1Geom.raw));
+
+/* Defects are reproduced and reported, never silently corrected. */
+ok('v1 engine reports workbook defects rather than fixing them',
+   /level:\s*'defect'/.test(v1Engine.code));
+['W-1', 'P-1', 'T-1', 'A-1', 'A-2', 'FO-1', 'FO-2', 'TR-1'].forEach(function (ref) {
+  ok('defect ' + ref + ' is registered in the v1 engine',
+     new RegExp("ref:\\s*'" + ref + "'").test(v1Engine.code));
+});
+
 /* ═══════════════════════════════════════════════════════════ */
 console.log('\n' + '═'.repeat(56));
 if (fail) {

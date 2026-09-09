@@ -1,0 +1,40 @@
+A1: "GLAND - COSTING SHEET"
+A3: "SECTION A - MATERIAL INPUTS"
+A4: "New Material? (Yes/No)"  ||  B4: "Yes"  ||  C4: "Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero."
+A5: "Parameter"  ||  B5: "Value"  ||  C5: "Unit"
+A6: "Material Grade"  ||  B6: "MS-C45"
+A7: "OD"  ||  B7: =Gland_OD  {180}  ||  C7: "mm"
+A8: "ID"  ||  B8: =Gland_ID  {91}  ||  C8: "mm"
+A9: "Length"  ||  B9: =Gland_Length  {100}  ||  C9: "mm"
+A10: "Quantity (Nos)"  ||  B10: 1
+A12: "AUTO CALCULATE - MATERIAL"  ||  G12: "APPROXIMATE COSTING GEOMETRY - FINAL DIMENSIONS SUBJECT TO GA/DESIGN (RodDia driven)"
+A13: "Density (g/cm3)"  ||  B13: =INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),3)  {7.85}  ||  G13: "ID=RodDia+1mm clearance (rod slides through - confirmed by every seal-sizing source). OD=2.0x RodDia (typical gland flange for full seal package). Length=1.1x RodDia (standard-duty allowance, upper-end biased per HISPL). Medium confidence."
+A14: "Material Rate (Rs./kg)"  ||  B14: =IF(B6="MS-C45",IFERROR(VLOOKUP(Gland_Length,C45RateTable,3,TRUE()),INDEX(C45RateTable,1,3)),INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),4))  {100}  ||  G14: "RodDia Bin"  ||  H14: "ID"  ||  I14: "OD"  ||  J14: "Length"
+A15: "Unit Weight (kg / pc)"  ||  B15: =(PI()/4)*((B7)^2-(B8)^2)*B9*B13/1000000  {14.87026937}  ||  G15: 40  ||  H15: 41  ||  I15: 80  ||  J15: 45
+A16: "Total Weight for Qty (kg)"  ||  B16: =B15*B10  {14.87026937}  ||  G16: 45  ||  H16: 46  ||  I16: 90  ||  J16: 50
+A17: "Material Cost / pc (Rs.)"  ||  B17: =IF(B4="No",0,B15*B14)  {1487.026937}  ||  G17: 50  ||  H17: 51  ||  I17: 100  ||  J17: 56
+A18: "Total Material Cost for Qty (Rs.)"  ||  B18: =B17*B10  {1487.026937}  ||  G18: 56  ||  H18: 57  ||  I18: 112  ||  J18: 63
+G19: 63  ||  H19: 64  ||  I19: 125  ||  J19: 70
+A20: "Machined Width (mm)"  ||  B20: 30  ||  G20: 70  ||  H20: 71  ||  I20: 140  ||  J20: 80
+A21: "Machined Length (mm)"  ||  B21: 30  ||  G21: 80  ||  H21: 81  ||  I21: 160  ||  J21: 90
+A22: "Hole Diameter (mm)"  ||  B22: 10  ||  G22: 90  ||  H22: 91  ||  I22: 180  ||  J22: 100
+A23: "No. of Holes"  ||  B23: 2  ||  G23: 100  ||  H23: 101  ||  I23: 200  ||  J23: 112
+A25: "SECTION B - PROCESS ROUTING"  ||  G25: "Manual Overrides (blank = use table):"
+A26: "Apply?"  ||  B26: "Process"  ||  C26: "Machine / Basis"  ||  D26: "Hours / Qty Basis"  ||  E26: "Rate (Rs.)"  ||  F26: "Cost (Rs.)"  ||  G26: "ID Override"  ||  H26: "OD Override"  ||  I26: "Length Override"
+A27: "Yes"  ||  B27: "Turning"  ||  C27: "CNC Lathe"  ||  D27: =INDEX(RoughTurningTable,MATCH(B7,TurningODBins,1),MATCH(B9,TurningLenBins,1))  {0.8}  ||  E27: =INDEX(MachineRateMaster_Range,MATCH("CNC Lathe",INDEX(MachineRateMaster_Range,0,1),0),2)  {550}  ||  F27: =IF(A27="Yes",D27*E27,0)  {440}
+A28: "Yes"  ||  B28: "Milling"  ||  C28: "Milling Machine"  ||  D28: =VLOOKUP((B20)*(B21),MillingTable,3,TRUE())  {0.3}  ||  E28: =INDEX(MachineRateMaster_Range,MATCH("Milling Machine",INDEX(MachineRateMaster_Range,0,1),0),2)  {350}  ||  F28: =(shared//inherited)  {105}
+A29: "Yes"  ||  B29: "Drilling"  ||  C29: "Drilling Machine"  ||  D29: =VLOOKUP(B22,DrillingTable,3,TRUE())*B23  {0.06}  ||  E29: =INDEX(MachineRateMaster_Range,MATCH("Drilling Machine",INDEX(MachineRateMaster_Range,0,1),0),2)  {350}  ||  F29: =(shared//inherited)  {21}  ||  G29: "FINAL:"
+A30: "Yes"  ||  B30: "Grinding (ID bore)"  ||  C30: "In-house (Rs./cm2)"  ||  D30: =PI()*B8*B9/100  {285.8849315}  ||  E30: =GrindingRate  {0.4}  ||  F30: =(shared//inherited)  {114.3539726}  ||  G30: "ID"  ||  H30: =IF(G27="",IFERROR(VLOOKUP(RodDia,GlandGeomTable,2,TRUE()),0),G27)  {91}
+G31: "OD"  ||  H31: =IF(H27="",IFERROR(VLOOKUP(RodDia,GlandGeomTable,3,TRUE()),0),H27)  {180}
+A32: "SUBTOTAL - PROCESS & VENDOR COST"  ||  G32: "Length"  ||  H32: =IF(I27="",IFERROR(VLOOKUP(RodDia,GlandGeomTable,4,TRUE()),0),I27)  {100}
+A33: "Total Process & Vendor Cost / pc (Rs.)"  ||  B33: =F27+F28+F29+F30  {680.3539726}
+A35: "SECTION D - ADDITIONAL COST (Manual Entry)"
+A36: "Additional Cost / pc (Rs.)"  ||  B36: 0
+A37: "Remarks"
+A39: "SECTION E - COMPONENT COST SUMMARY"
+A40: "Cost Head"  ||  B40: "Rs. / pc"
+A41: "Material Cost"  ||  B41: =B17  {1487.026937}
+A42: "Process Cost"  ||  B42: =B33  {680.3539726}
+A43: "Additional Cost"  ||  B43: =B36  {0}
+A44: "TOTAL GLAND COST / pc"  ||  B44: =B17+B33+B36  {2167.380909}
+A45: "TOTAL GLAND COST for Qty"  ||  B45: =B44*B10  {2167.380909}

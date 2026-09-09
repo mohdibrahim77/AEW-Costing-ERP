@@ -1,0 +1,39 @@
+A1: "REAR EYE - COSTING SHEET"
+A3: "SECTION A - MATERIAL INPUTS"
+A4: "New Material? (Yes/No)"  ||  B4: "Yes"  ||  C4: "Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero."
+A5: "Parameter"  ||  B5: "Value"  ||  C5: "Unit"
+A6: "Material Grade"  ||  B6: "MS-PLATE-IS2062"
+A7: "Raw Plate Thickness"  ||  B7: =RearEye_Thickness  {23}  ||  C7: "mm"
+A8: "Width"  ||  B8: =RearEye_Width  {75}  ||  C8: "mm"
+A9: "Height"  ||  B9: =RearEye_Height  {90}  ||  C9: "mm"
+A10: "Pin Hole Diameter"  ||  B10: =RearEye_PinHole  {38}  ||  C10: "mm"
+A11: "Quantity (Nos)"  ||  B11: 1
+A13: "AUTO CALCULATE - MATERIAL"  ||  G13: "APPROXIMATE COSTING GEOMETRY - FINAL DIMENSIONS SUBJECT TO GA/DESIGN (Tube OD driven)"
+A14: "Density (g/cm3)"  ||  B14: =INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),3)  {7.85}  ||  G14: "Confirmed Tube-OD-driven by HISPL 31-Aug-2026. Thickness=0.15x, Width=0.5x, Height=0.6x, Pin Hole=0.25x Tube OD - same flat-plate-with-pin-hole methodology as Foot Lug. Lower confidence, general proportion."
+A15: "Material Rate (Rs./kg)"  ||  B15: =INDEX(MaterialMaster_Range,MATCH(B6,INDEX(MaterialMaster_Range,0,1),0),4)  {85}  ||  G15: "TubeOD Bin"  ||  H15: "Thickness"  ||  I15: "Width"  ||  J15: "Height"  ||  K15: "Pin Hole"
+A16: "Unit Weight (kg / pc)"  ||  B16: =(B8)*(B9)*(B7)*B14/1000000  {1.2187125}  ||  G16: 70  ||  H16: 11  ||  I16: 35  ||  J16: 42  ||  K16: 18
+A17: "Total Weight for Qty (kg)"  ||  B17: =B16*B11  {1.2187125}  ||  G17: 80  ||  H17: 12  ||  I17: 40  ||  J17: 48  ||  K17: 20
+A18: "Material Cost / pc (Rs.)"  ||  B18: =IF(B4="No",0,B16*B15)  {103.5905625}  ||  G18: 90  ||  H18: 14  ||  I18: 45  ||  J18: 54  ||  K18: 23
+A19: "Total Material Cost for Qty (Rs.)"  ||  B19: =B18*B11  {103.5905625}  ||  G19: 100  ||  H19: 15  ||  I19: 50  ||  J19: 60  ||  K19: 25
+G20: 110  ||  H20: 17  ||  I20: 55  ||  J20: 66  ||  K20: 28
+A21: "No. of Pin Holes"  ||  B21: 1  ||  G21: 120  ||  H21: 18  ||  I21: 60  ||  J21: 72  ||  K21: 30
+G22: 140  ||  H22: 21  ||  I22: 70  ||  J22: 84  ||  K22: 35
+A23: "SECTION B - PROCESS ROUTING"  ||  G23: 150  ||  H23: 23  ||  I23: 75  ||  J23: 90  ||  K23: 38
+A24: "Apply?"  ||  B24: "Process"  ||  C24: "Machine / Basis"  ||  D24: "Hours / Qty Basis"  ||  E24: "Rate (Rs.)"  ||  F24: "Cost (Rs.)"  ||  G24: 160  ||  H24: 24  ||  I24: 80  ||  J24: 96  ||  K24: 40
+A25: "Yes"  ||  B25: "Profile Cutting"  ||  C25: "Process Rate Master (Rs./kg)"  ||  D25: =B16  {1.2187125}  ||  E25: =ProfileCuttingRate  {1.25}  ||  F25: =IF(A25="Yes",D25*E25,0)  {1.523390625}  ||  G25: 180  ||  H25: 27  ||  I25: 90  ||  J25: 108  ||  K25: 45
+A26: "Yes"  ||  B26: "Milling"  ||  C26: "Milling Machine"  ||  D26: =VLOOKUP((B8)*(B9),MillingTable,3,TRUE())  {0.3}  ||  E26: =INDEX(MachineRateMaster_Range,MATCH("Milling Machine",INDEX(MachineRateMaster_Range,0,1),0),2)  {350}  ||  F26: =(shared//inherited)  {105}  ||  G26: 200  ||  H26: 30  ||  I26: 100  ||  J26: 120  ||  K26: 50
+A27: "Yes"  ||  B27: "Drilling"  ||  C27: "Drilling Machine"  ||  D27: =VLOOKUP(B10,DrillingTable,3,TRUE())*B21  {0.12}  ||  E27: =INDEX(MachineRateMaster_Range,MATCH("Drilling Machine",INDEX(MachineRateMaster_Range,0,1),0),2)  {350}  ||  F27: =(shared//inherited)  {42}
+G28: "Manual Overrides (blank = use table):"
+A29: "SUBTOTAL - PROCESS & VENDOR COST"  ||  G29: "Thick Override"  ||  H29: "Width Override"  ||  I29: "Height Override"  ||  J29: "PinHole Override"
+A30: "Total Process & Vendor Cost / pc (Rs.)"  ||  B30: =F25+F26+F27  {148.5233906}
+A32: "SECTION D - ADDITIONAL COST (Manual Entry)"  ||  G32: "FINAL:"
+A33: "Additional Cost / pc (Rs.)"  ||  B33: 0  ||  G33: "Thickness"  ||  H33: =IF(G30="",IFERROR(VLOOKUP(TubeOD,RearEyeGeomTable,2,TRUE()),0),G30)  {23}
+A34: "Remarks"  ||  G34: "Width"  ||  H34: =IF(H30="",IFERROR(VLOOKUP(TubeOD,RearEyeGeomTable,3,TRUE()),0),H30)  {75}
+G35: "Height"  ||  H35: =IF(I30="",IFERROR(VLOOKUP(TubeOD,RearEyeGeomTable,4,TRUE()),0),I30)  {90}
+A36: "SECTION E - COMPONENT COST SUMMARY"  ||  G36: "PinHole"  ||  H36: =IF(J30="",IFERROR(VLOOKUP(TubeOD,RearEyeGeomTable,5,TRUE()),0),J30)  {38}
+A37: "Cost Head"  ||  B37: "Rs. / pc"
+A38: "Material Cost"  ||  B38: =B18  {103.5905625}
+A39: "Process Cost"  ||  B39: =B30  {148.5233906}
+A40: "Additional Cost"  ||  B40: =B33  {0}
+A41: "TOTAL REAR EYE COST / pc"  ||  B41: =B18+B30+B33  {252.1139531}
+A42: "TOTAL REAR EYE COST for Qty"  ||  B42: =B41*B11  {252.1139531}
