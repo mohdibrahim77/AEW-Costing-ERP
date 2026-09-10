@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>Cylinder Costing — HISPL VERSION 1</title>
+<title>Cylinder Costing | AEW</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600..900&family=Geist:wght@300..700&family=Geist+Mono:wght@400..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/css/tokens.css">
 <style>
 /* ══════════════════════════════════════════════════════════════════
@@ -116,7 +116,7 @@ body{
 .f input[type=number]{font-family:var(--mono);font-variant-numeric:tabular-nums}
 .f input:focus,.f select:focus{
   outline:none;border-color:var(--emerald);
-  box-shadow:0 0 0 3px rgba(5,150,105,.12);
+  box-shadow:0 0 0 3px rgba(255,122,26,.18);
 }
 .f input:invalid{border-color:var(--red)}
 .f .hint{
@@ -133,9 +133,9 @@ body{
 /* ── validation ───────────────────────────────────────────────── */
 .errs{
   margin:0 0 var(--d-6);padding:var(--d-5);border-radius:var(--r8);
-  background:var(--red-l);border:1px solid rgba(220,38,38,.25);
+  background:var(--red-l);border:1px solid rgba(248,113,113,.35);
 }
-.errs.warn{background:var(--amber-l);border-color:rgba(217,119,6,.28)}
+.errs.warn{background:var(--amber-l);border-color:rgba(245,158,11,.35)}
 .errs h3{
   margin:0 0 var(--d-3);font-size:var(--fs-xs);font-weight:600;
   text-transform:uppercase;letter-spacing:var(--ls-wide);color:var(--red);
@@ -204,7 +204,7 @@ tr.comp.open .caret{transform:rotate(90deg)}
 }
 .chip-approved{background:var(--emerald-l);color:var(--emerald-d)}
 .chip-medium-high{background:var(--blueprint-l);color:var(--blueprint)}
-.chip-medium{background:#fef9c3;color:#854d0e}
+.chip-medium{background:rgba(245,158,11,.12);color:#fbbf24}
 .chip-low{background:var(--amber-l);color:var(--amber)}
 .chip-manual{background:var(--ink-100);color:var(--ink-500)}
 
@@ -347,7 +347,7 @@ details.eng .grid input{padding:6px 8px;font-size:var(--fs-xs)}
 .money,.dl dd{transition:color var(--dur-1) var(--ease)}
 .flash{animation:flash var(--dur-3) var(--ease)}
 @keyframes flash{
-  0%{background:rgba(5,150,105,.16)}
+  0%{background:rgba(255,122,26,.18)}
   100%{background:transparent}
 }
 /* ── per-component controls ─────────────────────────────────────
@@ -359,7 +359,7 @@ details.eng .grid input{padding:6px 8px;font-size:var(--fs-xs)}
 .ctl-row{display:flex;align-items:center;gap:var(--d-4);margin:0 0 var(--d-4)}
 .ctl-row label{flex:1;font-size:var(--fs-xs);color:var(--ink-600)}
 .ctl select,.ctl input{
-  font:inherit;font-size:var(--fs-xs);padding:4px 6px;
+  font:inherit;font-size:var(--fs-xs);padding:4px 6px;color:var(--ink-900);
   border:1px solid var(--ink-200);border-radius:var(--r4);background:var(--surface);
 }
 .ctl input{width:84px;font-family:var(--mono);text-align:right}
@@ -397,6 +397,7 @@ table.vt tr.tot td{font-weight:600;border-top:1px solid var(--ink-200);border-bo
 table.vt input{
   width:92px;font-family:var(--mono);font-size:var(--fs-xs);text-align:right;
   padding:3px 6px;border:1px solid var(--ink-200);border-radius:var(--r4);
+  color:var(--ink-900);background:var(--surface);
 }
 table.vt tr.ghost td{color:var(--ink-400)}
 .flag{font-family:var(--mono);font-size:9px;letter-spacing:var(--ls-wide);
@@ -442,21 +443,123 @@ tr.detail.open{display:table-row}
   .top .badge,.top .sub{display:none}
   .top-total .val{font-size:18px}
 }
+
+/* ══ SIGNED-IN PRODUCT ═══════════════════════════════════════════════
+   This page is the costing product since 2026-09-11, reached from the
+   dashboard after sign-in, so it carries the same session gate and
+   account controls as every other product page. */
+.top h1{font-family:var(--display)}
+.top-nav{display:flex;align-items:center;gap:6px;margin-left:var(--d-6)}
+.top-link{
+  display:inline-flex;align-items:center;min-height:36px;padding:0 12px;
+  font:500 12px var(--sans);color:var(--on-dark-muted);background:transparent;
+  border:1px solid var(--on-dark-border);border-radius:var(--r4);cursor:pointer;text-decoration:none;
+  transition:color var(--dur-1) var(--ease),border-color var(--dur-1) var(--ease);
+}
+.top-link:hover{color:var(--on-dark);border-color:rgba(255,255,255,.3)}
+.top-link:focus-visible{outline:2px solid var(--emerald-m);outline-offset:2px}
+/* Covers the tool until the session is confirmed, so a signed-out visitor
+   never sees a costing flash up before being sent to sign in. */
+.auth-loading{
+  position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:14px;background:var(--ink-950);color:var(--on-dark-muted);font:500 13px var(--sans);
+}
+.auth-loading[hidden]{display:none}
+.al-mark{
+  width:48px;height:48px;border-radius:12px;background:var(--emerald);color:var(--on-accent);
+  display:flex;align-items:center;justify-content:center;font:900 22px var(--display);
+  animation:alPulse 1.6s ease-in-out infinite;
+}
+@keyframes alPulse{0%,100%{opacity:1}50%{opacity:.55}}
+@media(max-width:960px){
+  .top{flex-wrap:wrap}
+  .top-nav{margin-left:0}
+  .top-link{min-height:40px}
+}
+
+/* A 1fr grid track still will not shrink below its widest child's
+   minimum. The five-column breakdown needs 569px, so on a 390px phone it
+   held the whole page at 635px: the browser zoomed out and every input
+   ran off the right edge. minmax(0,1fr) makes the track the screen. */
+@media(max-width:960px){
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .pane{min-width:0}
+}
+
+/* Five columns do not fit a phone at any type size, so each component
+   becomes a card: name and material, the provenance chip, then the three
+   figures side by side. The header row is hidden, so each figure carries
+   its own label. Rows are told apart by cell count because the render
+   code gives fitted, not-fitted and withheld rows the same class.
+   640, not 600: the table needs 569px plus the pane's 64px of padding. */
+@media(max-width:640px){
+  .pane-in,.pane-out{padding:var(--d-6) var(--d-5)}
+  .card-h{flex-wrap:wrap;padding:var(--d-5)}
+  table.bd,table.bd tbody{display:block}
+  table.bd thead{display:none}
+  table.bd tr.comp{
+    display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--d-3) var(--d-4);
+    padding:var(--d-5);border-bottom:1px solid var(--ink-100);
+  }
+  table.bd tr.comp>td{display:block;padding:0;border:none;min-width:0}
+
+  /* fitted: five cells */
+  table.bd tr.comp>td:first-child:nth-last-child(5),
+  table.bd tr.comp>td:nth-child(2):nth-last-child(4){grid-column:1/-1}
+  table.bd tr.comp>td.money:nth-child(3):nth-last-child(3),
+  table.bd tr.comp>td.money:nth-child(4){text-align:left}
+  table.bd tr.comp>td.money:nth-child(3):nth-last-child(3)::before,
+  table.bd tr.comp>td.money:nth-child(4)::before,
+  table.bd tr.comp>td.money:nth-child(5)::before{
+    display:block;margin-bottom:2px;font-size:9px;font-weight:500;
+    letter-spacing:var(--ls-wider);text-transform:uppercase;color:var(--ink-400);
+  }
+  table.bd tr.comp>td.money:nth-child(3):nth-last-child(3)::before{content:'Material'}
+  table.bd tr.comp>td.money:nth-child(4)::before{content:'Process'}
+  table.bd tr.comp>td.money:nth-child(5)::before{content:'Total'}
+
+  /* not fitted or withheld: three cells. Name beside the dash, and the
+     reason, when there is one, underneath at full width. */
+  table.bd tr.comp>td:first-child:nth-last-child(3){grid-column:1/3}
+  table.bd tr.comp>td:nth-child(3):last-child{order:1}
+  table.bd tr.comp>td:nth-child(2):nth-last-child(2){grid-column:1/-1;order:2}
+  table.bd tr.comp>td:nth-child(2):nth-last-child(2):empty{display:none}
+
+  table.bd tr.detail.open,table.bd tr.detail>td{display:block}
+  /* Same trap one level down: a 1fr track sized to the longest dimension
+     value pushed the list 56px past the card. */
+  .detail-in{padding:var(--d-5);grid-template-columns:minmax(0,1fr)}
+  .detail-in>*{min-width:0}
+  .dl dl{grid-template-columns:minmax(0,1fr) auto}
+  .dl dd{overflow-wrap:anywhere}
+  /* The routing table keeps every column, machine included, because that
+     is the workbook's own routing; it scrolls sideways inside its box
+     instead of pushing the whole detail off the screen. */
+  table.proc{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+}
 </style>
 </head>
 <body>
+
+<div class="auth-loading" id="authLoading" role="status">
+  <div class="al-mark" aria-hidden="true">A</div>
+  <span>Verifying your session</span>
+</div>
 
 <header class="top">
   <div>
     <h1>Cylinder Costing</h1>
     <span class="sub">HISPL · VERSION 1 workbook</span>
   </div>
-  <span class="badge">Preview — not wired to the ERP</span>
   <span class="spacer"></span>
   <div class="top-total">
     <span class="lab">Total manufacturing cost</span>
     <span class="val num" id="hero-total">—</span>
   </div>
+  <nav class="top-nav" aria-label="Account">
+    <a class="top-link" href="../../dashboard.html">Dashboard</a>
+    <button type="button" class="top-link" id="signOutBtn">Sign out</button>
+  </nav>
 </header>
 
 <div class="shell">
@@ -543,6 +646,33 @@ tr.detail.open{display:table-row}
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="../../assets/js/config.js?v=2026.09.11-1"></script>
+<script src="../../assets/js/supabase.js?v=2026.09.11-1"></script>
+<script src="../../assets/js/session.js?v=2026.09.11-1"></script>
+<script src="../../assets/js/router.js?v=2026.09.11-1"></script>
+<script src="../../assets/js/auth.js?v=2026.09.11-1"></script>
+<script src="../../assets/js/ui.js?v=2026.09.11-1"></script>
+<script src="../../assets/js/api.js?v=2026.09.11-1"></script>
+<script src="../../assets/js/common.js?v=2026.09.11-1"></script>
+<script>
+/* v1.html session gate. Same contract as the other product pages: the
+   router decides, this page only asks. A signed-out visitor is sent to
+   sign in by requireAuth and never reaches the callback. */
+(function () {
+  'use strict';
+  function start() {
+    var out = document.getElementById('signOutBtn');
+    if (out) out.addEventListener('click', function () { AEW.auth.logout(); });
+    AEW.auth.requireAuth(function () {
+      var ov = document.getElementById('authLoading');
+      if (ov) ov.hidden = true;
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+  else start();
+})();
+</script>
 <script src="../../assets/js/costing/v1/masters.js"></script>
 <script src="../../assets/js/costing/v1/geometry.js"></script>
 <script src="../../assets/js/costing/v1/inputs.js"></script>

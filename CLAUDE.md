@@ -3,7 +3,7 @@
 Context for any AI assistant working on this repository. Read this before
 changing anything.
 
-**Build** 2026.09.10-1 · **Status** Working prototype, pre-customer-demo
+**Build** 2026.09.11-1 · **Status** Working prototype, pre-customer-demo
 **Owner** Technical founder · **First customer** HISPL, Peenya Industrial Area, Bangalore
 
 ---
@@ -205,7 +205,7 @@ node tests/source-purity.js    # must print: ✓ SOURCE-PURITY
 #### The v1 costing modules
 
 `assets/js/costing/v1/` is built from `VERSION_1.xlsx` and validated by
-`tests/workbook-v1.js` — **222 assertions, every one a value read out of
+`tests/workbook-v1.js` — **312 assertions, every one a value read out of
 the workbook's own cached formula results.** Excel stores what it last
 computed in each formula cell; if the engine disagrees with that cached
 value, the engine is wrong. Both of the workbook's grand totals are
@@ -392,27 +392,75 @@ revised workbook fails on every value that changed.
   the existing event handlers. Use `createElement`.
 - **Comments explain *why*, never *what*.**
 
-### The landing page has its own visual system
+### One visual system, every page
 
-`index.html` defines its palette and type in its own `:root` block and
-does **not** load `assets/css/tokens.css`. Owner decision, 2026-09-10:
-graphite with a single molten-orange accent, one dark theme for every
-section, Archivo (expanded width) for headlines, Geist for text, Geist
-Mono for figures. The costing tools (`v1.html`, `preview.html`) still use
-`tokens.css` and the earlier emerald palette.
+Owner decision, 2026-09-10, extended to every page 2026-09-11 after
+"it is orange in the main site and green later": graphite with a single
+molten-orange accent (`#ff7a1a`), one dark theme, Archivo for headlines,
+Geist for text, Geist Mono for figures.
+
+| Where | How it gets the palette |
+|---|---|
+| `index.html` | Its own `:root` block; does not load `tokens.css` |
+| `products/costing/v1.html`, `preview.html` | `assets/css/tokens.css` |
+| `login`, `dashboard`, `reset-password`, product stubs | Inline `<style>` with the same values |
+| Old ERP, `products/costing/index.html` | Recoloured **outside** the frozen block only |
+
+Archivo is used at **normal width**. It was briefly expanded
+(`font-stretch:112%`) and the owner found it looked stretched; do not
+bring the width axis back.
 
 Token names such as `--emerald` and `--ink-900` were kept, but their
 **roles changed**: `--ink-900` is now primary text on dark, `--surface` is
 graphite, `--emerald` is the orange. White text on that orange is 2.9:1
-and fails AA, so filled buttons use `--on-accent` (near-black, 7.5:1).
-Every text token was checked in the browser against every surface; the
-lowest is 5.4:1.
+and fails AA, so anything filled orange uses `--on-accent` (`#140a04`,
+7.5:1) for its text. Every text token was checked in the browser against
+every surface; the lowest is 5.4:1.
+
+The old ERP's frozen block still contains about fifty colour literals of
+its own, `#059669` among them, in its PDF, print and chart code. They stay
+green: changing them would break rule 1 for a cosmetic reason.
+
+#### Keep it smooth
+
+The owner asked for no lag. These were each measurable costs and were
+removed; do not reintroduce them.
+
+- `backdrop-filter` over a WebGL canvas. It re-blurs the live scene every
+  frame. Use a near-opaque fill.
+- Full-screen grain or noise overlays.
+- Infinite CSS animations on pages people sit on (the login page had
+  pulsing circles).
+- `MeshPhysicalMaterial` and clearcoat, soft shadows, shadow maps above
+  512px, and device pixel ratio above 1.5.
+
+#### Grid tracks on phones
+
+A `1fr` grid track will not shrink below its widest child's minimum
+content width. In `v1.html` the five-column breakdown table held the
+whole page at 635px on a 390px phone, so the browser zoomed out and every
+input ran off the edge, while `scrollWidth` still equalled
+`innerWidth` and looked fine. Use `minmax(0,1fr)` for any track that holds
+a table, and check at a real device width, not only for sideways scroll.
+
+### The costing product is `v1.html`
+
+Since 2026-09-11 `ROUTES.products.costing` and the router send a signed-in
+user to `products/costing/v1.html`, the tool built from `VERSION_1.xlsx`.
+It carries the same session gate as every product page
+(`AEW.auth.requireAuth`, a covering overlay until the session is
+confirmed) and Dashboard and Sign out controls.
+
+The old ERP stays at `products/costing/index.html`, untouched in its
+frozen block, because most of the test suite exercises it. Nothing links
+to it any more. It has features `v1.html` does not yet have (PDF
+quotation, Save and History); say so before promising them.
 
 Two WebGL scenes share `three.min.js` r149 from cdnjs:
 
 | Scene | What it shows | Falls back to |
 |---|---|---|
-| Hero | The cylinder exploding on scroll, with a procedural reflection map, physical materials and pointer parallax | Sectioned SVG drawing (under 900px, no WebGL, reduced motion) |
+| Hero | The cylinder exploding on scroll, with a procedural reflection map, standard metal materials and pointer parallax | Sectioned SVG drawing (under 900px, no WebGL, reduced motion) |
 | `#breakdown` | Twelve steel columns sized by each component's cost; hover, tap or keyboard to inspect | The list beside it, which carries every figure |
 
 `#breakdown` reads `window.AEW_PARTS`, which the hero script sets from

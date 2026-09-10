@@ -6,61 +6,66 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Dashboard — AEW Platform</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Dashboard | AEW</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600..900&family=Geist:wght@300..700&family=Geist+Mono:wght@400..700&display=swap" rel="stylesheet">
 <style>
+html{color-scheme:dark}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',system-ui,sans-serif;background:#eef2f7;color:#0f172a;-webkit-font-smoothing:antialiased;min-height:100vh}
-/* HEADER */
-.hdr{background:linear-gradient(135deg,#0d1b2a,#1e3a5f);color:#fff;padding:0 32px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,.3)}
+
+:root{
+  --bg:#0a0b0d;--panel:#0e0f12;--raise:#121418;--line:#24272d;--line-2:#2e3238;
+  --txt:#eceef1;--txt-2:#b6bcc5;--mut:#9097a2;--faint:#858b96;
+  --acc:#ff7a1a;--acc-hi:#ffa15a;--acc-br:#ff8f3a;--on-acc:#140a04;
+  --display:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --sans:'Geist',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'Geist Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--txt);-webkit-font-smoothing:antialiased;min-height:100vh}
+.hdr{background:rgba(10,11,13,.94);border-bottom:1px solid var(--line);color:var(--txt);padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
 .hdr-l{display:flex;align-items:center;gap:12px}
-.hdr-logo{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#059669,#34d399);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.15)}
-.hdr-name{font-size:14px;font-weight:700;letter-spacing:-.01em}
+.hdr-logo{width:32px;height:32px;border-radius:8px;background:var(--acc);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:15px;font-weight:900;color:var(--on-acc)}
+.hdr-name{font-family:var(--display);font-size:15px;font-weight:700;letter-spacing:-.01em}
 .hdr-r{display:flex;align-items:center;gap:10px}
-.uchip{display:flex;align-items:center;gap:8px;padding:5px 12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:20px;font-size:12px;color:rgba(255,255,255,.8)}
-.uav{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff}
-.hdr-btn{padding:6px 14px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.8);border-radius:7px;cursor:pointer;font-size:12px;font-weight:500;transition:all .2s;font-family:inherit}
-.hdr-btn:hover{background:rgba(255,255,255,.16);color:#fff}
-/* BODY */
-.body{max-width:1080px;margin:0 auto;padding:32px 24px}
-.welcome{margin-bottom:32px}
-.welcome-tag{font-size:11px;font-weight:700;color:#059669;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
-.welcome-h{font-size:28px;font-weight:800;color:#0f172a;letter-spacing:-.02em;margin-bottom:4px}
-.welcome-sub{font-size:14px;color:#64748b}
-/* PRODUCT GRID */
-.section-t{font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
-.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px}
-.prod-card{background:#fff;border:1.5px solid #e2e8f0;border-radius:14px;padding:24px;transition:all .2s;cursor:pointer;position:relative;overflow:hidden;text-decoration:none;display:block}
-.prod-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:14px 14px 0 0}
-.pc-g::before{background:linear-gradient(90deg,#059669,#34d399)}
-.pc-a::before{background:linear-gradient(90deg,#d97706,#fbbf24)}
-.pc-b::before{background:linear-gradient(90deg,#2563eb,#60a5fa)}
-.pc-p::before{background:linear-gradient(90deg,#7c3aed,#a78bfa)}
-.prod-card:hover{border-color:#059669;box-shadow:0 8px 30px rgba(5,150,105,.1);transform:translateY(-2px)}
-.prod-card.locked{cursor:not-allowed;opacity:.55}
-.prod-card.locked:hover{transform:none;box-shadow:none;border-color:#e2e8f0}
-.prod-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px}
-.pi-g{background:#ecfdf5}.pi-a{background:#fffbeb}.pi-b{background:#eff6ff}.pi-p{background:#f5f3ff}
-.prod-h{font-size:16px;font-weight:700;color:#0f172a;margin-bottom:6px;letter-spacing:-.01em}
-.prod-p{font-size:13px;color:#64748b;line-height:1.6;margin-bottom:16px}
-.prod-status{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:12px}
-.ps-live{background:#ecfdf5;color:#064e3b}
-.ps-soon{background:#f1f5f9;color:#64748b}
-.prod-arrow{position:absolute;bottom:20px;right:20px;font-size:16px;color:#94a3b8;transition:all .2s}
-.prod-card:not(.locked):hover .prod-arrow{color:#059669;transform:translateX(3px)}
-/* STATS */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:32px}
-.stat{background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
-.stat-l{font-size:10px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
-.stat-v{font-size:22px;font-weight:800;color:#0f172a;letter-spacing:-.03em}
-.stat-s{font-size:11px;color:#94a3b8;margin-top:3px}
-/* LOADING */
-#loading{position:fixed;inset:0;background:#0d1b2a;display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column;gap:16px}
-.load-logo{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#1e3a5f,#059669);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.1),0 8px 24px rgba(5,150,105,.4);animation:pulse 2s ease-in-out infinite}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-.load-t{font-size:14px;font-weight:500;color:rgba(255,255,255,.5);font-family:'Inter',sans-serif}
-@media(max-width:768px){.prod-grid{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}}
-@media(max-width:500px){.prod-grid,.stats{grid-template-columns:1fr}}
+.uchip{display:flex;align-items:center;gap:8px;padding:5px 12px 5px 5px;background:var(--raise);border:1px solid var(--line);border-radius:20px;font-size:12px;color:var(--txt-2)}
+.uav{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--on-acc)}
+.hdr-btn{min-height:36px;padding:0 14px;background:transparent;border:1px solid var(--line-2);color:var(--txt-2);border-radius:8px;cursor:pointer;font-size:12.5px;font-weight:500;transition:border-color .15s,color .15s;font-family:inherit}
+.hdr-btn:hover{border-color:rgba(255,255,255,.3);color:var(--txt)}
+.body{max-width:1080px;margin:0 auto;padding:40px 24px 64px}
+.welcome{margin-bottom:36px}
+.welcome-tag{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--acc-br);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.welcome-h{font-family:var(--display);font-size:34px;font-weight:800;color:var(--txt);letter-spacing:-.03em;margin-bottom:6px;line-height:1.1}
+.welcome-sub{font-size:14px;color:var(--mut)}
+.section-t{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--mut);text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px}
+.prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:32px}
+.prod-card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:24px;transition:border-color .2s,transform .2s,background .2s;cursor:pointer;position:relative;overflow:hidden;text-decoration:none;display:block;color:inherit}
+.prod-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--line-2)}
+.pc-g::before{background:var(--acc)}
+.prod-card:hover{border-color:rgba(255,122,26,.5);background:var(--raise);transform:translateY(-2px)}
+.prod-card.locked{cursor:not-allowed;opacity:.6}
+.prod-card.locked:hover{transform:none;border-color:var(--line);background:var(--panel)}
+.prod-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:15px;font-weight:600;margin-bottom:16px;background:var(--raise);border:1px solid var(--line);color:var(--txt-2)}
+.pi-g{background:rgba(255,122,26,.10);border-color:rgba(255,122,26,.35);color:var(--acc-br)}
+.prod-h{font-family:var(--display);font-size:17px;font-weight:700;color:var(--txt);margin-bottom:6px;letter-spacing:-.01em}
+.prod-p{font-size:13px;color:var(--mut);line-height:1.6;margin-bottom:16px}
+.prod-status{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10.5px;font-weight:500;padding:3px 9px;border-radius:12px;text-transform:uppercase;letter-spacing:.04em}
+.ps-live{background:rgba(255,122,26,.12);color:var(--acc-hi)}
+.ps-soon{background:var(--raise);color:var(--mut)}
+.prod-arrow{position:absolute;bottom:20px;right:20px;font-size:16px;color:var(--mut);transition:color .2s,transform .2s}
+.prod-card:not(.locked):hover .prod-arrow{color:var(--acc-br);transform:translateX(3px)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:36px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.stat-l{font-family:var(--mono);font-size:10.5px;font-weight:500;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.stat-v{font-family:var(--display);font-size:24px;font-weight:800;color:var(--txt);letter-spacing:-.02em}
+.stat-s{font-size:11.5px;color:var(--faint);margin-top:4px}
+#loading{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:999;flex-direction:column;gap:16px}
+/* Opacity only: a scale pulse on a 56px box forces layout-adjacent
+   repaints every frame, and this is on screen during sign-in. */
+.load-logo{width:56px;height:56px;border-radius:14px;background:var(--acc);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:26px;font-weight:900;color:var(--on-acc);animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+.load-t{font-size:14px;font-weight:500;color:var(--mut)}
+@media(max-width:768px){.prod-grid{grid-template-columns:1fr 1fr}.stats{grid-template-columns:1fr 1fr}.hdr{padding:0 16px}.hdr-name{display:none}}
+@media(max-width:500px){.prod-grid,.stats{grid-template-columns:1fr}.uchip span{display:none}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
 </head>
 <body>
@@ -78,7 +83,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:#eef2f7;color:#0f172a;-
   </div>
   <div class="hdr-r">
     <div class="uchip">
-      <div class="uav" id="uav" style="background:#059669">A</div>
+      <div class="uav" id="uav" style="background:#ff7a1a">A</div>
       <span id="uname">Loading...</span>
     </div>
     <button class="hdr-btn" onclick="signOut()">Sign out</button>
@@ -88,7 +93,7 @@ body{font-family:'Inter',system-ui,sans-serif;background:#eef2f7;color:#0f172a;-
 <div class="body" id="body" style="display:none">
   <div class="welcome">
     <div class="welcome-tag" id="company-tag">Your Company</div>
-    <div class="welcome-h">Welcome back, <span id="first-name">there</span>. 👋</div>
+    <div class="welcome-h">Welcome back, <span id="first-name">there</span>.</div>
     <div class="welcome-sub" id="welcome-sub">Here are your tools and dashboards.</div>
   </div>
 
@@ -104,18 +109,18 @@ body{font-family:'Inter',system-ui,sans-serif;background:#eef2f7;color:#0f172a;-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="assets/js/config.js?v=2026.08.26-1"></script>
-<script src="assets/js/supabase.js?v=2026.08.26-1"></script>
-<script src="assets/js/session.js?v=2026.08.26-1"></script>
-<script src="assets/js/router.js?v=2026.08.26-1"></script>
-<script src="assets/js/auth.js?v=2026.08.26-1"></script>
-<script src="assets/js/ui.js?v=2026.08.26-1"></script>
-<script src="assets/js/api.js?v=2026.08.26-1"></script>
-<script src="assets/js/common.js?v=2026.08.26-1"></script>
+<script src="assets/js/config.js?v=2026.09.11-1"></script>
+<script src="assets/js/supabase.js?v=2026.09.11-1"></script>
+<script src="assets/js/session.js?v=2026.09.11-1"></script>
+<script src="assets/js/router.js?v=2026.09.11-1"></script>
+<script src="assets/js/auth.js?v=2026.09.11-1"></script>
+<script src="assets/js/ui.js?v=2026.09.11-1"></script>
+<script src="assets/js/api.js?v=2026.09.11-1"></script>
+<script src="assets/js/common.js?v=2026.09.11-1"></script>
 <script>
 /* dashboard.html */
 var _PRODS = {
-  costing:  { label:'Product Costing ERP',    icon:'₹', desc:'Calculates costs from dimensions. PDF quotations in 30 seconds.',  live:true,  cc:'pc-g', ic:'pi-g' },
+  costing:  { label:'Product Costing ERP',    icon:'₹', desc:'Costs a hydraulic cylinder from a few inputs, calculated exactly as the VERSION 1 workbook does.',  live:true,  cc:'pc-g', ic:'pi-g' },
   cbam:     { label:'Carbon Tracking (CBAM)', icon:'CO₂', desc:'CBAM carbon footprint per tonne. EU compliance declaration PDF.', live:false, cc:'pc-a', ic:'pi-a' },
   vibration:{ label:'Vibration AI',           icon:'~',      desc:'Upload an FFT photo. AI identifies faults before machines fail.',  live:false, cc:'pc-b', ic:'pi-b' },
   asset:    { label:'Asset Management',       icon:'⚙', desc:'QR codes per machine. Maintenance history. Depreciation.',         live:false, cc:'pc-p', ic:'pi-p' }
@@ -133,7 +138,9 @@ function renderDashboard(user) {
   var role    = meta.role    || 'viewer';
   var prods   = Array.isArray(meta.products) ? meta.products : ['costing'];
   var avatar  = meta.avatar  || first[0].toUpperCase();
-  var color   = meta.color   || '#059669';
+  /* Accounts created before 2026-09-11 carry the retired emerald as their
+     avatar colour; they get the current accent instead of a green chip. */
+  var color   = (!meta.color || meta.color === '#059669') ? '#ff7a1a' : meta.color;
 
   AEW.ui.setText('uname', name);       AEW.ui.setText('uav', avatar);
   AEW.ui.setStyle('uav','background',color);

@@ -6,64 +6,78 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Sign In — AEW Manufacturing Intelligence</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Sign in | AEW Manufacturing Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600..900&family=Geist:wght@300..700&family=Geist+Mono:wght@400..700&display=swap" rel="stylesheet">
 <style>
+html{color-scheme:dark}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Inter',system-ui,sans-serif;min-height:100vh;display:flex;background:#0d1b2a;-webkit-font-smoothing:antialiased}
+
+:root{
+  --bg:#0a0b0d;--panel:#0e0f12;--raise:#121418;--line:#24272d;--line-2:#2e3238;
+  --txt:#eceef1;--txt-2:#b6bcc5;--mut:#9097a2;--faint:#858b96;
+  --acc:#ff7a1a;--acc-hi:#ffa15a;--acc-br:#ff8f3a;--on-acc:#140a04;
+  --display:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --sans:'Geist',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'Geist Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+body{font-family:var(--sans);min-height:100vh;display:flex;background:var(--bg);color:var(--txt);-webkit-font-smoothing:antialiased}
 .left{flex:1;display:flex;flex-direction:column;padding:48px;position:relative;overflow:hidden}
-.lbg{position:absolute;inset:0;background:linear-gradient(135deg,#0d1b2a 0%,#1e3a5f 100%)}
-.lbg::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 20%,rgba(5,150,105,.12) 0%,transparent 60%)}
-.lc{position:absolute;border-radius:50%;animation:pulse 8s ease-in-out infinite}
-.lc1{width:500px;height:500px;background:rgba(5,150,105,.05);top:-200px;right:-150px}
-.lc2{width:300px;height:300px;background:rgba(37,99,235,.05);bottom:-100px;left:-80px;animation-delay:3s}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+/* Static light and a faint drawing grid. The two 500px circles that used
+   to pulse here ran forever and repainted the whole panel every frame. */
+.lbg{position:absolute;inset:0;background:radial-gradient(60% 55% at 78% 18%,rgba(255,122,26,.13),transparent 70%),radial-gradient(45% 45% at 8% 100%,rgba(255,122,26,.06),transparent 70%),var(--bg)}
+.lbg::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:44px 44px;-webkit-mask-image:linear-gradient(180deg,#000,transparent 85%);mask-image:linear-gradient(180deg,#000,transparent 85%)}
+.lc{display:none}
 .lz{position:relative;z-index:1;display:flex;flex-direction:column;height:100%;justify-content:space-between}
 .logo{display:flex;align-items:center;gap:12px}
-.logo-m{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#1e3a5f,#059669);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.1),0 6px 16px rgba(5,150,105,.4)}
-.logo-t{font-size:20px;font-weight:800;color:#fff;letter-spacing:-.02em}
-.logo-s{font-size:11px;color:rgba(255,255,255,.4);font-weight:400;display:block;margin-top:-2px}
+.logo-m{width:40px;height:40px;border-radius:10px;background:var(--acc);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:20px;font-weight:900;color:var(--on-acc)}
+.logo-t{font-family:var(--display);font-size:20px;font-weight:800;color:var(--txt);letter-spacing:-.02em}
+.logo-s{font-family:var(--sans);font-size:11px;color:var(--mut);font-weight:400;display:block;margin-top:-2px;letter-spacing:0}
 .lmid{padding:40px 0}
-.lm-tag{font-size:11px;font-weight:700;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.1em;margin-bottom:20px}
-.lm-h{font-size:36px;font-weight:800;color:#fff;line-height:1.15;letter-spacing:-.03em;margin-bottom:14px}
-.lm-h em{color:#34d399;font-style:normal}
-.lm-p{font-size:15px;color:rgba(255,255,255,.5);line-height:1.7;max-width:380px}
+.lm-tag{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--mut);text-transform:uppercase;letter-spacing:.08em;margin-bottom:20px}
+.lm-h{font-family:var(--display);font-size:42px;font-weight:800;color:var(--txt);line-height:1.06;letter-spacing:-.03em;margin-bottom:16px}
+.lm-h em{color:var(--acc-br);font-style:normal}
+.lm-p{font-size:15px;color:var(--txt-2);line-height:1.7;max-width:400px}
 .feats{display:flex;flex-direction:column;gap:14px;margin-top:36px}
 .feat{display:flex;align-items:flex-start;gap:14px}
-.fi{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;margin-top:1px}
-.ft h4{font-size:13px;font-weight:600;color:#fff;margin-bottom:2px}
-.ft p{font-size:12px;color:rgba(255,255,255,.4);line-height:1.5}
-.lbot{border-top:1px solid rgba(255,255,255,.08);padding-top:24px;display:flex;gap:20px}
-.lbot a{font-size:12px;color:rgba(255,255,255,.3);text-decoration:none;transition:color .15s}
-.lbot a:hover{color:rgba(255,255,255,.6)}
-.right{width:480px;background:#fff;display:flex;align-items:center;justify-content:center;padding:48px}
+.fi{width:38px;height:38px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;font-weight:600;color:var(--acc-br);flex-shrink:0;margin-top:1px}
+.ft h4{font-size:13.5px;font-weight:600;color:var(--txt);margin-bottom:2px}
+.ft p{font-size:12.5px;color:var(--mut);line-height:1.5}
+.lbot{border-top:1px solid var(--line);padding-top:24px;display:flex;gap:20px}
+.lbot a{font-size:12px;color:var(--mut);text-decoration:none;transition:color .15s}
+.lbot a:hover{color:var(--txt)}
+.right{width:480px;background:var(--panel);border-left:1px solid var(--line);display:flex;align-items:center;justify-content:center;padding:48px}
 .ri{width:100%;max-width:380px}
-.back{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#64748b;margin-bottom:36px;text-decoration:none;transition:color .15s}
-.back:hover{color:#0d1b2a}
-.back::before{content:'←';font-size:14px}
-.form-t{font-size:26px;font-weight:800;color:#0f172a;letter-spacing:-.03em;margin-bottom:4px}
-.form-s{font-size:14px;color:#64748b;margin-bottom:28px;line-height:1.5}
-.alert{border-radius:10px;padding:12px 14px;font-size:13px;margin-bottom:18px;display:none;align-items:center;gap:10px;line-height:1.5}
-.a-err{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c}
-.a-ok{background:#f0fdf4;border:1px solid #a7f3d0;color:#064e3b}
-.a-warn{background:#fffbeb;border:1.5px dashed #fde68a;color:#92400e}
+.back{display:inline-flex;align-items:center;gap:6px;min-height:32px;font-size:12px;color:var(--mut);margin-bottom:32px;text-decoration:none;transition:color .15s}
+.back:hover{color:var(--txt)}
+.back::before{content:'\2190';font-size:14px}
+.form-t{font-family:var(--display);font-size:32px;font-weight:800;color:var(--txt);letter-spacing:-.03em;margin-bottom:6px}
+.form-s{font-size:14px;color:var(--mut);margin-bottom:28px;line-height:1.5}
+.a-warn{background:rgba(245,158,11,.08);border:1px dashed rgba(245,158,11,.4);color:#fbbf24}
+.a-warn code{background:rgba(255,255,255,.06)!important;color:var(--txt)}
 .field{margin-bottom:18px}
-.field label{display:block;font-size:11px;font-weight:700;color:#374151;letter-spacing:.04em;text-transform:uppercase;margin-bottom:7px}
-.field input{width:100%;padding:11px 14px;border:1.5px solid #e2e8f0;border-radius:10px;font-size:14px;font-weight:500;color:#0f172a;font-family:inherit;transition:all .15s;background:#fff}
-.field input:focus{outline:none;border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,.1)}
-.field input.ferr{border-color:#dc2626;box-shadow:0 0 0 3px rgba(220,38,38,.1)}
-.field input::placeholder{color:#94a3b8;font-weight:400}
-.row{display:flex;justify-content:flex-end;margin-top:-12px;margin-bottom:20px}
-.fgt{font-size:12px;color:#64748b;text-decoration:none;font-weight:500;transition:color .15s}
-.fgt:hover{color:#059669}
-.sbtn{width:100%;padding:13px;border:none;border-radius:10px;font-size:15px;font-weight:700;color:#fff;background:linear-gradient(135deg,#059669,#047857);cursor:pointer;font-family:inherit;box-shadow:0 4px 16px rgba(5,150,105,.3);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
-.sbtn:hover:not(:disabled){box-shadow:0 6px 24px rgba(5,150,105,.45);transform:translateY(-1px)}
+
+.alert{border-radius:8px;padding:12px 14px;font-size:13px;margin-bottom:18px;display:none;align-items:center;gap:10px;line-height:1.5}
+.a-err{background:rgba(248,113,113,.10);border:1px solid rgba(248,113,113,.35);color:#fca5a5}
+.a-ok{background:rgba(255,122,26,.10);border:1px solid rgba(255,122,26,.40);color:var(--acc-hi)}
+.field label{display:block;font-family:var(--mono);font-size:11px;font-weight:500;color:var(--txt-2);letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+.field input{width:100%;height:46px;padding:0 14px;border:1px solid var(--line-2);border-radius:8px;font-size:15px;font-weight:500;color:var(--txt);font-family:inherit;background:var(--raise);transition:border-color .15s,box-shadow .15s}
+.field input:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px rgba(255,122,26,.18)}
+.field input.ferr{border-color:#f87171;box-shadow:0 0 0 3px rgba(248,113,113,.15)}
+.field input::placeholder{color:var(--faint);font-weight:400}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+.row{display:flex;justify-content:flex-end;margin-top:-10px;margin-bottom:20px}
+.fgt{display:inline-flex;align-items:center;min-height:32px;font-size:12px;color:var(--mut);text-decoration:none;font-weight:500;transition:color .15s}
+.fgt:hover{color:var(--acc-br)}
+.sbtn{width:100%;height:48px;border:none;border-radius:8px;font-size:15px;font-weight:600;color:var(--on-acc);background:var(--acc);cursor:pointer;font-family:inherit;transition:background .15s,transform .1s;display:flex;align-items:center;justify-content:center;gap:8px}
+.sbtn:hover:not(:disabled){background:var(--acc-hi)}
+.sbtn:active:not(:disabled){transform:translateY(1px)}
 .sbtn:disabled{opacity:.7;cursor:not-allowed;transform:none}
-.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:none}
+.sbtn:focus-visible{outline:2px solid var(--acc-br);outline-offset:3px}
+.spinner{width:16px;height:16px;border:2px solid rgba(20,10,4,.25);border-top-color:var(--on-acc);border-radius:50%;animation:spin .7s linear infinite;display:none}
 .sbtn.loading .spinner{display:block}
 @keyframes spin{to{transform:rotate(360deg)}}
-.sec{display:flex;align-items:center;justify-content:center;gap:8px;font-size:11px;color:#94a3b8;margin-top:20px}
-@media(max-width:900px){.left{display:none}.right{width:100%}}
+.sec{display:flex;align-items:center;justify-content:center;gap:8px;font-size:11.5px;color:var(--faint);margin-top:20px;text-align:center}
+@media(max-width:900px){.left{display:none}.right{width:100%;border-left:none;min-height:100vh}}
 </style>
 </head>
 <body>
@@ -75,11 +89,11 @@ body{font-family:'Inter',system-ui,sans-serif;min-height:100vh;display:flex;back
     <div class="lmid">
       <div class="lm-tag">Built for Peenya factories</div>
       <div class="lm-h">The costing tool<br>your factory <em>deserves.</em></div>
-      <p class="lm-p">Professional product costing, CBAM carbon tracking, and predictive maintenance — built for how Indian factories actually work.</p>
+      <p class="lm-p">Professional product costing, CBAM carbon tracking, and predictive maintenance, built for how Indian factories actually work.</p>
       <div class="feats">
-        <div class="feat"><div class="fi">₹</div><div class="ft"><h4>Product Costing ERP</h4><p>Auto-calculates from dimensions. Professional PDF quotations in 30 seconds.</p></div></div>
-        <div class="feat"><div class="fi">🌿</div><div class="ft"><h4>CBAM Carbon Tracking</h4><p>Get your EU carbon number. Stop losing contracts over missing data.</p></div></div>
-        <div class="feat"><div class="fi">〜</div><div class="ft"><h4>Vibration AI</h4><p>Photograph the graph. AI diagnoses faults before machines fail.</p></div></div>
+        <div class="feat"><div class="fi">₹</div><div class="ft"><h4>Product Costing ERP</h4><p>Enter bore, rod, stroke and a few specifications. Every other dimension and cost is derived.</p></div></div>
+        <div class="feat"><div class="fi">CO₂</div><div class="ft"><h4>CBAM Carbon Tracking</h4><p>Get your EU carbon number. Stop losing contracts over missing data.</p></div></div>
+        <div class="feat"><div class="fi">~</div><div class="ft"><h4>Vibration AI</h4><p>Photograph the graph. AI diagnoses faults before machines fail.</p></div></div>
       </div>
     </div>
     <div class="lbot"><a href="index.html">← Home</a><a href="mailto:hello@aew.in">Contact</a><a href="#">Privacy</a></div>
@@ -108,20 +122,20 @@ body{font-family:'Inter',system-ui,sans-serif;min-height:100vh;display:flex;back
       <span id="btn-text">Sign in →</span>
     </button>
 
-    <div class="sec">🔒 Passwords encrypted · Secured by Supabase · Never visible in source code</div>
+    <div class="sec">Passwords encrypted · Secured by Supabase · Never visible in source code</div>
     <div class="sec" id="build-stamp" style="opacity:.45;font-size:11px;margin-top:6px"></div>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="assets/js/config.js?v=2026.09.01-1"></script>
-<script src="assets/js/supabase.js?v=2026.09.01-1"></script>
-<script src="assets/js/session.js?v=2026.09.01-1"></script>
-<script src="assets/js/router.js?v=2026.09.01-1"></script>
-<script src="assets/js/auth.js?v=2026.09.01-1"></script>
-<script src="assets/js/ui.js?v=2026.09.01-1"></script>
-<script src="assets/js/api.js?v=2026.09.01-1"></script>
-<script src="assets/js/common.js?v=2026.09.01-1"></script>
+<script src="assets/js/config.js?v=2026.09.11-1"></script>
+<script src="assets/js/supabase.js?v=2026.09.11-1"></script>
+<script src="assets/js/session.js?v=2026.09.11-1"></script>
+<script src="assets/js/router.js?v=2026.09.11-1"></script>
+<script src="assets/js/auth.js?v=2026.09.11-1"></script>
+<script src="assets/js/ui.js?v=2026.09.11-1"></script>
+<script src="assets/js/api.js?v=2026.09.11-1"></script>
+<script src="assets/js/common.js?v=2026.09.11-1"></script>
 <script>
 /* login.html */
 document.addEventListener('DOMContentLoaded', function () {

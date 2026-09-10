@@ -5,21 +5,44 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Vibration AI — AEW</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,system-ui,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0d1b2a,#1e3a5f);color:#fff}#loading{position:fixed;inset:0;background:#0d1b2a;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px}.sp{width:40px;height:40px;border:3px solid rgba(255,255,255,.1);border-top-color:#34d399;border-radius:50%;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.lt{font-size:13px;color:rgba(255,255,255,.4)}.box{text-align:center;padding:48px;display:none}.ico{font-size:52px;margin-bottom:24px}h1{font-size:28px;font-weight:800;margin-bottom:10px}p{font-size:15px;color:rgba(255,255,255,.5);max-width:380px;line-height:1.7;margin:0 auto 32px}.btn{padding:12px 24px;background:linear-gradient(135deg,#059669,#047857);color:#fff;border-radius:10px;font-size:14px;font-weight:700;border:none;cursor:pointer;font-family:inherit}</style></head><body>
+<title>Vibration AI | AEW</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600..900&family=Geist:wght@300..700&family=Geist+Mono:wght@400..700&display=swap" rel="stylesheet">
+<style>
+html{color-scheme:dark}
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#0a0b0d;--panel:#0e0f12;--raise:#121418;--line:#24272d;--line-2:#2e3238;
+  --txt:#eceef1;--txt-2:#b6bcc5;--mut:#9097a2;--faint:#858b96;
+  --acc:#ff7a1a;--acc-hi:#ffa15a;--acc-br:#ff8f3a;--on-acc:#140a04;
+  --display:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --sans:'Geist',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'Geist Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+body{font-family:var(--sans);min-height:100vh;display:flex;align-items:center;justify-content:center;background:radial-gradient(60% 50% at 50% 0%,rgba(255,122,26,.10),transparent 70%),var(--bg);color:var(--txt);-webkit-font-smoothing:antialiased}
+#loading{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px}
+.sp{width:40px;height:40px;border:3px solid rgba(255,255,255,.08);border-top-color:var(--acc);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.lt{font-size:13px;color:var(--mut)}
+.box{text-align:center;padding:48px;display:none}
+.ico{display:inline-flex;align-items:center;justify-content:center;width:84px;height:84px;border-radius:18px;background:rgba(255,122,26,.10);border:1px solid rgba(255,122,26,.35);color:var(--acc-br);font-family:var(--mono);font-size:24px;font-weight:600;margin-bottom:24px}
+h1{font-family:var(--display);font-size:32px;font-weight:800;letter-spacing:-.02em;margin-bottom:10px}
+p{font-size:15px;color:var(--mut);max-width:380px;line-height:1.7;margin:0 auto 32px}
+.btn{min-height:46px;padding:0 24px;background:var(--acc);color:var(--on-acc);border-radius:8px;font-size:14px;font-weight:600;border:none;cursor:pointer;font-family:inherit;transition:background .15s}
+.btn:hover{background:var(--acc-hi)}
+</style></head><body>
 <div id="loading"><div class="sp"></div><div class="lt">Verifying session...</div></div>
 <div class="box" id="content"><div class="ico">~</div><h1>Vibration AI</h1><p>Vibration AI is in development. You will be notified when it is ready.</p><button class="btn" onclick="goBack()">Back to Dashboard</button></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="../../assets/js/config.js?v=2026.09.01-1"></script>
-<script src="../../assets/js/supabase.js?v=2026.09.01-1"></script>
-<script src="../../assets/js/session.js?v=2026.09.01-1"></script>
-<script src="../../assets/js/router.js?v=2026.09.01-1"></script>
-<script src="../../assets/js/auth.js?v=2026.09.01-1"></script>
-<script src="../../assets/js/ui.js?v=2026.09.01-1"></script>
-<script src="../../assets/js/api.js?v=2026.09.01-1"></script>
-<script src="../../assets/js/common.js?v=2026.09.01-1"></script>
+<script src="../../assets/js/config.js?v=2026.09.11-1"></script>
+<script src="../../assets/js/supabase.js?v=2026.09.11-1"></script>
+<script src="../../assets/js/session.js?v=2026.09.11-1"></script>
+<script src="../../assets/js/router.js?v=2026.09.11-1"></script>
+<script src="../../assets/js/auth.js?v=2026.09.11-1"></script>
+<script src="../../assets/js/ui.js?v=2026.09.11-1"></script>
+<script src="../../assets/js/api.js?v=2026.09.11-1"></script>
+<script src="../../assets/js/common.js?v=2026.09.11-1"></script>
 <script>
 /* vibration placeholder */
 document.addEventListener('DOMContentLoaded', function () {

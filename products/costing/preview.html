@@ -4,16 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<meta name="color-scheme" content="light">
-<meta name="theme-color" content="#0d1b2a">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0a0b0d">
 <title>Costing v2 — Engine Preview</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600..900&family=Geist:wght@300..700&family=Geist+Mono:wght@400..700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/css/tokens.css?v=2026.09.01-1">
 <style>
   *{box-sizing:border-box}
-  html{touch-action:manipulation;-webkit-tap-highlight-color:rgba(52,211,153,.24)}
+  html{touch-action:manipulation;-webkit-tap-highlight-color:rgba(255,143,58,.24)}
   body{
     margin:0;background:var(--surface-2);color:var(--ink-900);
     font:400 var(--fs-sm)/var(--lh-normal) var(--sans);
@@ -36,11 +36,11 @@
     font-family:var(--mono);font-size:var(--fs-xs);letter-spacing:var(--ls-wider);
     text-transform:uppercase;color:var(--on-dark-faint);margin:0 0 var(--d-5)}
   .dot{width:6px;height:6px;border-radius:50%;background:var(--emerald-m);
-    box-shadow:0 0 0 0 rgba(52,211,153,.6);animation:pulse 2.8s var(--ease) infinite}
+    box-shadow:0 0 0 0 rgba(255,143,58,.6);animation:pulse 2.8s var(--ease) infinite}
   @keyframes pulse{
-    0%{box-shadow:0 0 0 0 rgba(52,211,153,.5)}
-    70%{box-shadow:0 0 0 7px rgba(52,211,153,0)}
-    100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}}
+    0%{box-shadow:0 0 0 0 rgba(255,143,58,.5)}
+    70%{box-shadow:0 0 0 7px rgba(255,143,58,0)}
+    100%{box-shadow:0 0 0 0 rgba(255,143,58,0)}}
   h1{font-size:var(--fs-h3);line-height:var(--lh-snug);letter-spacing:var(--ls-tight);
     margin:0 0 var(--d-5);font-weight:700;max-width:22ch}
   .lede{color:var(--on-dark-muted);max-width:62ch;margin:0;font-size:var(--fs-base)}
@@ -75,7 +75,7 @@
     font-variant-numeric:tabular-nums;background:var(--surface);color:var(--ink-900);
     transition:border-color var(--dur-1) var(--ease),box-shadow var(--dur-1) var(--ease)}
   .f input:hover{border-color:var(--ink-400)}
-  .f input:focus{border-color:var(--emerald);box-shadow:0 0 0 3px rgba(5,150,105,.12);outline:none}
+  .f input:focus{border-color:var(--emerald);box-shadow:0 0 0 3px rgba(255,122,26,.18);outline:none}
   .f input[data-invalid="1"]{border-color:var(--red);background:var(--red-l)}
   .ferr{font-size:var(--fs-xs);color:var(--red);min-height:1em}
 
@@ -86,8 +86,8 @@
     transition:background var(--dur-1) var(--ease),border-color var(--dur-1) var(--ease),
       transform var(--dur-1) var(--ease),color var(--dur-1) var(--ease)}
   button:active{transform:translateY(1px)}
-  .btn-p{background:var(--emerald);color:#fff}
-  .btn-p:hover{background:#047857}
+  .btn-p{background:var(--emerald);color:var(--on-accent)}
+  .btn-p:hover{background:var(--emerald-d)}
   .btn-s{background:var(--surface);color:var(--ink-700);border-color:var(--ink-200)}
   .btn-s:hover{border-color:var(--ink-400);background:var(--ink-100)}
   .btn-s[aria-pressed="true"]{background:var(--emerald-l);border-color:var(--emerald);
@@ -147,8 +147,8 @@
     border-radius:99px;font-size:11px;font-weight:500;white-space:nowrap;
     font-family:var(--mono)}
   .tag.ok{background:var(--emerald-l);color:var(--emerald-d)}
-  .tag.no{background:var(--red-l);color:#991b1b}
-  .tag.hold{background:var(--amber-l);color:#92400e}
+  .tag.no{background:var(--red-l);color:#fca5a5}
+  .tag.hold{background:var(--amber-l);color:#fbbf24}
   .tag svg{width:11px;height:11px;flex:none}
 
   .detail td{background:var(--surface-2);padding:0;border-bottom:1px solid var(--ink-200)}
@@ -167,14 +167,14 @@
   .off{color:var(--ink-400)}
 
   /* ── gap panel ─────────────────────────────────────────── */
-  .gap{border:1px solid #f4d5d2;background:var(--red-l);border-radius:var(--r8);
+  .gap{border:1px solid rgba(248,113,113,.35);background:var(--red-l);border-radius:var(--r8);
     padding:var(--d-7)}
-  .gap.clear{border-color:#bbf7d0;background:var(--emerald-l)}
+  .gap.clear{border-color:rgba(255,122,26,.40);background:var(--emerald-l)}
   .gapgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
     gap:var(--d-6);margin-top:var(--d-6)}
   .gcomp b{display:block;font-size:var(--fs-xs);margin-bottom:var(--d-4);color:var(--ink-900)}
-  .chip{display:inline-block;background:var(--surface);border:1px solid #f0cfcb;
-    color:#7a2c25;border-radius:var(--r2);padding:2px 7px;margin:0 3px 4px 0;
+  .chip{display:inline-block;background:var(--surface);border:1px solid rgba(248,113,113,.35);
+    color:#fca5a5;border-radius:var(--r2);padding:2px 7px;margin:0 3px 4px 0;
     font-family:var(--mono);font-size:11px}
 
   /* ── rules ─────────────────────────────────────────────── */
@@ -656,7 +656,7 @@
     var p=el('p',null,'Every component dimension in the workbook is typed by the '+
       'estimator. No formula in any of its 24 sheets computes one from bore, rod or '+
       'stroke, so the engine asks rather than guesses.');
-    p.style.cssText='margin:var(--d-4) 0 0;font-size:var(--fs-xs);color:#7a2c25;max-width:70ch';
+    p.style.cssText='margin:var(--d-4) 0 0;font-size:var(--fs-xs);color:#fca5a5;max-width:70ch';
     d.appendChild(p);
     var grid=el('div','gapgrid');
     var by={};
@@ -688,7 +688,7 @@
     if(typeof w.bootERP!=='function'){
       $('run-state').textContent='the live tool redirected to sign-in — open it in a tab first';
       return; }
-    try{ w.bootERP({name:'P',avatar:'P',color:'#059669'}); }catch(e){}
+    try{ w.bootERP({name:'P',avatar:'P',color:'#ff7a1a'}); }catch(e){}
     var v=readInputs().values;
     setTimeout(function(){
       function set(id,val){ var e=d.getElementById(id);

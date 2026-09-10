@@ -3,6 +3,9 @@ const { makeEnv } = require('./harness');
 const LOGIN='http://127.0.0.1:5500/login.html';
 const DASH ='http://127.0.0.1:5500/dashboard.html';
 const ERP  ='http://127.0.0.1:5500/products/costing/index.html';
+/* Where a costing user lands after sign-in: the VERSION 1 workbook tool
+   since 2026-09-11. ERP above is still used for the navigation guards. */
+const COSTING='http://127.0.0.1:5500/products/costing/v1.html';
 const CBAM ='http://127.0.0.1:5500/products/cbam/index.html';
 const exp = Math.floor(Date.now()/1000)+3600;
 const S = m => ({ user:{ email:'u@x.com', user_metadata:m }, expires_at: exp });
@@ -17,11 +20,11 @@ console.log('\n━━━ Routing matrix (per SRS FR-D) ━━━');
 const cases = [
   ['admin, 1 product',      {role:'admin',    products:['costing']},            DASH],
   ['admin, all products',   {role:'admin',    products:['costing','cbam']},     DASH],
-  ['estimator, 1 product',  {role:'estimator',products:['costing']},            ERP ],
-  ['viewer, 1 product',     {role:'viewer',   products:['costing']},            ERP ],
+  ['estimator, 1 product',  {role:'estimator',products:['costing']},            COSTING],
+  ['viewer, 1 product',     {role:'viewer',   products:['costing']},            COSTING],
   ['viewer, 2 products',    {role:'viewer',   products:['costing','cbam']},     DASH],
   ['estimator, cbam only',  {role:'estimator',products:['cbam']},               CBAM],
-  ['no metadata at all',    {},                                                 ERP ],
+  ['no metadata at all',    {},                                                 COSTING],
 ];
 
 for (const [name, meta, expected] of cases) {
