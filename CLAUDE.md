@@ -392,6 +392,34 @@ revised workbook fails on every value that changed.
   the existing event handlers. Use `createElement`.
 - **Comments explain *why*, never *what*.**
 
+### The landing page has its own visual system
+
+`index.html` defines its palette and type in its own `:root` block and
+does **not** load `assets/css/tokens.css`. Owner decision, 2026-09-10:
+graphite with a single molten-orange accent, one dark theme for every
+section, Archivo (expanded width) for headlines, Geist for text, Geist
+Mono for figures. The costing tools (`v1.html`, `preview.html`) still use
+`tokens.css` and the earlier emerald palette.
+
+Token names such as `--emerald` and `--ink-900` were kept, but their
+**roles changed**: `--ink-900` is now primary text on dark, `--surface` is
+graphite, `--emerald` is the orange. White text on that orange is 2.9:1
+and fails AA, so filled buttons use `--on-accent` (near-black, 7.5:1).
+Every text token was checked in the browser against every surface; the
+lowest is 5.4:1.
+
+Two WebGL scenes share `three.min.js` r149 from cdnjs:
+
+| Scene | What it shows | Falls back to |
+|---|---|---|
+| Hero | The cylinder exploding on scroll, with a procedural reflection map, physical materials and pointer parallax | Sectioned SVG drawing (under 900px, no WebGL, reduced motion) |
+| `#breakdown` | Twelve steel columns sized by each component's cost; hover, tap or keyboard to inspect | The list beside it, which carries every figure |
+
+`#breakdown` reads `window.AEW_PARTS`, which the hero script sets from
+`PARTS` on its first lines. **Do not copy the array into the new
+section.** `tests/formulas.js` checks `PARTS` against the ERP, and a second
+copy would be free to drift from it.
+
 ### The landing page figure is derived from the ERP
 
 `index.html` shows a hydraulic cylinder costing **₹18,092** broken into
@@ -430,5 +458,7 @@ sum to what the ERP reports.
 1. Replace `ERP_RATE_CARD` with HISPL's actual costs
 2. Print one quotation and check it visually
 3. Deploy `aew-backend`, then set `BASE_URL` in `assets/js/api.js`
-4. Landing page — a 3D exploded-cylinder hero is designed but not built
+4. Landing page 3D is built (exploding hero, cost skyline). Verify it on a
+   low-end Android phone before HISPL's demo; only desktop and emulated
+   mobile have been checked
 5. Fix SEC-1 in the backend before any real data exists (see that repo)

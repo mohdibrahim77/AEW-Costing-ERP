@@ -6,46 +6,69 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="theme-color" content="#0d1b2a">
+<meta name="theme-color" content="#0a0b0d">
 <meta name="description" content="AEW. Manufacturing intelligence tools for Indian factories. Quote a hydraulic cylinder in 30 seconds, not 4 hours.">
 <title>AEW, Manufacturing Intelligence Platform</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,500..900&family=Geist:wght@300..700&family=Geist+Mono:wght@400..700&display=swap" rel="stylesheet">
 <style>
 /* ══════════════════════════════════════════════
    TOKENS
    ══════════════════════════════════════════════ */
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --ink-950:#0d1b2a;   /* primary dark zone bg — matches login.html body */
-  --ink-800:#1e3a5f;
-  --ink-700:#132234;
-  --ink-900:#0d1117;   /* body text on light surfaces */
-  --ink-600:#334155;
-  --ink-500:#64748b;
-  --ink-400:#6b7688;   /* was #94a3b8 — 2.56:1 on white, failed WCAG AA */
-  --ink-200:#e2e8f0;
-  --ink-100:#f1f5f9;
-  --surface:#ffffff;
-  --surface-2:#f8fafc;
+  /* ── Palette: graphite and molten orange ─────────────────────────
+     Owner decision, 2026-09-10. The landing page moves off emerald on
+     navy to one hot-metal accent on graphite, and every section is now
+     dark: one theme for the whole page, no mid-scroll flip to white.
+     Dark is also what lets machined steel in the 3D scenes read as metal.
 
-  --emerald:#059669;
-  --emerald-l:#ecfdf5;
-  --emerald-d:#064e3b;
-  --emerald-m:#34d399;
-  --blueprint:#0369a1;
-  --blueprint-l:#f0f9ff;
-  --blueprint-m:#0ea5e9;
+     Token NAMES are kept so the rest of the sheet did not need
+     rewriting, but their roles changed: --ink-900 is now primary text
+     on dark, --surface is graphite, --emerald is the orange accent.
+     White on this orange fails contrast, so text ON the accent is
+     --on-accent, a near-black, everywhere.
+
+     products/costing/v1.html and preview.html load assets/css/tokens.css
+     and keep the previous palette; this block belongs to this page. */
+  --ink-950:#0a0b0d;
+  --ink-800:#1b1e23;
+  --ink-700:#15171b;
+  --ink-900:#eceef1;
+  --ink-600:#b6bcc5;
+  --ink-500:#9097a2;
+  --ink-400:#858b96;
+  --ink-200:#24272d;
+  --ink-100:#16181c;
+  --surface:#0e0f12;
+  --surface-2:#121418;
+
+  --emerald:#ff7a1a;
+  --emerald-l:rgba(255,122,26,.10);
+  --emerald-d:#ffa15a;
+  --emerald-m:#ff8f3a;
+  --on-accent:#140a04;
+  --blueprint:#9aa4b2;
+  --blueprint-l:rgba(255,255,255,.04);
+  --blueprint-m:#c3cad4;
 
   /* reserved — dashboard/ERP status only, not used on this page */
   --amber:#d97706;
   --red:#dc2626;
 
-  --on-dark:#ffffff;
-  --on-dark-muted:rgba(255,255,255,.56);
-  --on-dark-faint:rgba(255,255,255,.50);   /* was .32 — 2.88:1 on the dark zone, failed AA */
-  --on-dark-border:rgba(255,255,255,.12);
+  --on-dark:#f4f5f7;
+  --on-dark-muted:rgba(244,245,247,.68);
+  --on-dark-faint:rgba(244,245,247,.54);
+  --on-dark-border:rgba(255,255,255,.10);
+
+  /* ── Type ───────────────────────────────────────────────────────
+     Archivo at an expanded width for headlines: engineering-plate
+     lettering rather than another neutral grotesk. Geist for text,
+     Geist Mono for every figure. */
+  --display:'Archivo','Arial Narrow',system-ui,sans-serif;
+  --sans:'Geist',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'Geist Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
 
   --r2:2px;--r4:4px;--r8:8px;--r12:12px;
 
@@ -78,7 +101,7 @@ html{
 }
 #compare,#products,#hispl{scroll-margin-top:84px} /* nav height (60px) + 24px clearance */
 body{
-  font-family:'Inter',system-ui,sans-serif;
+  font-family:var(--sans);
   font-size:var(--fs-base);line-height:var(--lh-normal);
   background:var(--surface);color:var(--ink-900);
   -webkit-font-smoothing:antialiased;overflow-x:hidden;
@@ -121,14 +144,14 @@ h1,h2,h3,h4{line-height:var(--lh-tight);text-wrap:balance}
 p{text-wrap:pretty}
 
 .num{
-  font-family:'IBM Plex Mono',ui-monospace,'Courier New',monospace;
+  font-family:var(--mono);
   font-variant-numeric:tabular-nums;
   font-feature-settings:'tnum' 1;
 }
 .measure{max-width:var(--measure)}
 
 .doc-tag{
-  font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;
+  font-family:var(--mono);font-size:11px;font-weight:500;
   letter-spacing:var(--ls-wider);text-transform:uppercase;
   color:var(--ink-400);display:inline-block;margin-bottom:var(--sp-4);
 }
@@ -307,7 +330,7 @@ p{text-wrap:pretty}
 .hero-copy{max-width:none}
 .hero-badge{
   display:inline-flex;align-items:center;gap:8px;color:var(--emerald-m);
-  font-family:'IBM Plex Mono',monospace;
+  font-family:var(--mono);
   font-size:11px;font-weight:600;letter-spacing:var(--ls-wider);text-transform:uppercase;
   margin-bottom:20px;
 }
@@ -343,7 +366,7 @@ p{text-wrap:pretty}
 }
 .cyl-label.drawn .lead{transform:scaleX(1);transition:transform .3s var(--ease)}
 .cyl-label .tag{
-  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.04em;
+  font-family:var(--mono);font-size:10px;letter-spacing:.04em;
   color:rgba(255,255,255,.82);white-space:nowrap;padding-left:8px;
   opacity:0;transform:translateX(-4px);
 }
@@ -385,13 +408,13 @@ p{text-wrap:pretty}
 .cylinder-sketch .cs-dim{stroke:var(--emerald-m);stroke-width:.9;fill:none;opacity:.9}
 .cylinder-sketch .cs-dim .cs-ext{opacity:.45}
 .cylinder-sketch .cs-tag text{
-  fill:var(--emerald-m);font-family:'IBM Plex Mono',ui-monospace,monospace;
+  fill:var(--emerald-m);font-family:var(--mono);
   font-size:11px;font-weight:600;letter-spacing:.02em;
 }
 .cylinder-mount-label{
   display:flex;flex-wrap:wrap;gap:2px var(--sp-4);
   padding:11px 16px;border-top:1px solid rgba(255,255,255,.10);
-  font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;
+  font-family:var(--mono);font-size:10px;font-weight:500;
   letter-spacing:var(--ls-wider);text-transform:uppercase;color:var(--on-dark-faint);
   line-height:1.6;
 }
@@ -405,7 +428,7 @@ p{text-wrap:pretty}
   position:absolute;left:0;right:0;bottom:88px;z-index:3;
   display:flex;justify-content:space-between;
   padding:6px 5vw 0;
-  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.05em;
+  font-family:var(--mono);font-size:10px;letter-spacing:.05em;
   color:var(--on-dark-faint);
 }
 .hero-scale::before{
@@ -453,7 +476,7 @@ p{text-wrap:pretty}
 
 .compare-grid{display:grid;grid-template-columns:minmax(200px,30%) 1fr;max-width:1080px;margin:0 auto;align-items:start}
 .compare-today{padding:4px 64px 4px 22px;border-left:2px solid var(--ink-200)}
-.compare-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:var(--ls-wider);text-transform:uppercase;color:var(--ink-400);margin-bottom:var(--sp-4)}
+.compare-eyebrow{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:var(--ls-wider);text-transform:uppercase;color:var(--ink-400);margin-bottom:var(--sp-4)}
 .compare-stat{font-weight:800;letter-spacing:var(--ls-tight);color:var(--ink-900);margin-bottom:2px}
 .compare-today .compare-stat{font-size:clamp(26px,2.8vw,34px);color:var(--ink-400)}
 .compare-stat-lbl{font-size:12px;color:var(--ink-500);margin-bottom:var(--sp-5)}
@@ -530,7 +553,7 @@ p{text-wrap:pretty}
 .parts-row-num{font-size:13px;font-weight:600;color:var(--ink-400)}
 .parts-row-name{font-size:15px;font-weight:700;color:var(--ink-900)}
 .parts-row-desc{font-size:13px;color:var(--ink-500);line-height:var(--lh-normal)}
-.parts-row-status{font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:var(--ls-wide);text-transform:uppercase;color:var(--ink-400);text-align:right}
+.parts-row-status{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:var(--ls-wide);text-transform:uppercase;color:var(--ink-400);text-align:right}
 .parts-row-status.is-next{color:var(--blueprint)}
 
 .motion-ready [data-plot="text"]{opacity:0;transform:translateY(12px)}
@@ -566,11 +589,11 @@ p{text-wrap:pretty}
 .tech-fig .tf-inner line{stroke:rgba(255,255,255,.16);stroke-width:1;stroke-dasharray:5 3}
 .tech-fig .tf-inner rect{fill:rgba(52,211,153,.16);stroke:var(--emerald-m);stroke-width:1}
 .tech-fig .tf-txt text{
-  font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;
   fill:var(--on-dark-faint);
 }
 .tech-fig figcaption{
-  font-family:'IBM Plex Mono',monospace;font-size:10px;line-height:1.6;
+  font-family:var(--mono);font-size:10px;line-height:1.6;
   letter-spacing:.04em;color:var(--on-dark-faint);margin-top:10px;max-width:44ch;
 }
 @media(max-width:820px){.tech-fig{margin-top:28px}}
@@ -621,7 +644,7 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
 .recon-section{background:var(--surface);padding:var(--sp-8) 0;border-top:1px solid var(--ink-200)}
 .recon-inner{max-width:1080px;margin:0 auto;padding:0 var(--sp-5)}
 .recon-head{max-width:62ch;margin-bottom:var(--sp-6)}
-.recon-kicker{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:var(--fs-xs);
+.recon-kicker{font-family:var(--mono);font-size:var(--fs-xs);
   letter-spacing:var(--ls-wider);text-transform:uppercase;color:var(--emerald);margin:0 0 var(--sp-3)}
 .recon-h2{font-size:var(--fs-h3);line-height:var(--lh-snug);letter-spacing:var(--ls-tight);
   margin:0 0 var(--sp-4);color:var(--ink-900);font-weight:700}
@@ -629,9 +652,9 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
 .recon-panel{border:1px solid var(--ink-200);border-radius:var(--r12);overflow:hidden;background:var(--surface-2)}
 .recon-bar{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-4);
   padding:var(--sp-4) var(--sp-5);background:var(--ink-950);flex-wrap:wrap}
-.recon-bar span{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:var(--fs-xs);
+.recon-bar span{font-family:var(--mono);font-size:var(--fs-xs);
   color:var(--on-dark-muted);letter-spacing:var(--ls-wide)}
-.recon-run{font:500 var(--fs-sm)/1 'Inter',system-ui,sans-serif;background:var(--emerald);
+.recon-run{font:500 var(--fs-sm)/1 var(--sans);background:var(--emerald);
   color:#fff;border:0;border-radius:var(--r4);padding:10px 18px;cursor:pointer;
   transition:background 140ms var(--ease),transform 140ms var(--ease);min-height:44px}
 .recon-run:hover{background:#047857}
@@ -643,11 +666,11 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
   display:flex;align-items:center;font-size:var(--fs-sm)}
 .recon-grid .rh{background:var(--ink-100);font-size:var(--fs-xs);color:var(--ink-500);
   font-weight:600;letter-spacing:var(--ls-wide);text-transform:uppercase}
-.recon-grid .rn{font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;
+.recon-grid .rn{font-family:var(--mono);font-variant-numeric:tabular-nums;
   justify-content:flex-end;color:var(--ink-900);font-weight:600}
 .recon-grid .rc{font-weight:600;color:var(--ink-900);flex-direction:column;align-items:flex-start;gap:2px}
 .recon-grid .rc small{font-weight:400;color:var(--ink-400);font-size:var(--fs-xs);
-  font-family:'IBM Plex Mono',ui-monospace,monospace}
+  font-family:var(--mono)}
 .recon-grid .rm{justify-content:center}
 .recon-row{opacity:.34;transition:opacity 380ms var(--ease),background 380ms var(--ease)}
 .recon-row.done{opacity:1}
@@ -686,19 +709,19 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
 }
 .hero-titleblock>div{display:flex;flex-direction:column;gap:3px}
 .hero-titleblock dt{
-  font-family:'IBM Plex Mono',ui-monospace,monospace;
+  font-family:var(--mono);
   font-size:10px;font-weight:500;letter-spacing:var(--ls-wider);
   text-transform:uppercase;color:var(--on-dark-faint);
 }
 .hero-titleblock dd{
-  margin:0;font-family:'IBM Plex Mono',ui-monospace,monospace;
+  margin:0;font-family:var(--mono);
   font-size:17px;font-weight:600;color:var(--on-dark);
   font-variant-numeric:tabular-nums;letter-spacing:var(--ls-snug);
 }
 /* The unit belongs to the row, not to each figure repeated four times. */
 .hero-titleblock::after{
   content:'mm';align-self:flex-end;padding-bottom:2px;
-  font-family:'IBM Plex Mono',ui-monospace,monospace;
+  font-family:var(--mono);
   font-size:10px;letter-spacing:var(--ls-wide);color:var(--on-dark-faint);
 }
 @media(max-width:640px){
@@ -737,7 +760,7 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
 /* Zone margin. Ticks sit ON the frame line, labels just inside it. */
 .sheet-zone{
   position:absolute;display:flex;justify-content:space-around;align-items:center;
-  font-family:'IBM Plex Mono',ui-monospace,monospace;
+  font-family:var(--mono);
   font-size:9px;letter-spacing:var(--ls-wider);color:rgba(255,255,255,.26);
 }
 .sheet-zone.top{left:0;right:0;top:0;height:17px}
@@ -794,7 +817,7 @@ footer{background:var(--ink-900);padding:56px 40px 32px}
 .dimline em{
   position:absolute;left:50%;top:10px;transform:translate(-50%,-50%);
   background:var(--ink-950);padding:0 8px;font-style:normal;
-  font-family:'IBM Plex Mono',ui-monospace,monospace;
+  font-family:var(--mono);
   font-size:11px;font-weight:600;letter-spacing:var(--ls-wide);
   color:var(--emerald-m);opacity:0;white-space:nowrap;
 }
@@ -827,12 +850,12 @@ html:not(.motion-ready) .dimline em{opacity:1}
 }
 .costfield-row:last-child{border-bottom:none}
 .costfield-k{
-  font-family:'IBM Plex Mono',ui-monospace,monospace;
+  font-family:var(--mono);
   font-size:9px;font-weight:500;letter-spacing:var(--ls-wider);
   text-transform:uppercase;color:var(--on-dark-faint);
 }
 .costfield-v{
-  margin-left:auto;font-family:'IBM Plex Mono',ui-monospace,monospace;
+  margin-left:auto;font-family:var(--mono);
   font-variant-numeric:tabular-nums;font-size:13px;font-weight:600;
   color:var(--on-dark);letter-spacing:var(--ls-snug);
 }
@@ -858,6 +881,128 @@ html:not(.motion-ready) .dimline em{opacity:1}
   .costfield{align-self:stretch;min-width:0;margin-top:24px;width:100%}
   .dimline{margin:18px 0 16px}
 }
+
+/* ══ 2026-09-10 VISUAL SYSTEM ════════════════════════════════════════
+   Appended rather than edited in place: same specificity, later wins, and
+   the diff stays readable. Everything below either re-points a literal
+   colour the token swap could not reach, or adds depth. */
+
+html{color-scheme:dark;-webkit-tap-highlight-color:rgba(255,122,26,.24)}
+
+/* White text on this orange is 2.9:1. Every filled button carries the
+   near-black instead. */
+.skip-link,.btn-solid,.nav-panel a.np-solid,.recon-run{color:var(--on-accent)}
+.recon-run:hover{background:var(--emerald-d)}
+
+.nav{background:rgba(10,11,13,.55)}
+.nav.is-light{background:rgba(10,11,13,.86);border-bottom-color:rgba(255,255,255,.08)}
+.costfield{background:rgba(10,11,13,.72)}
+.costfield.reconciled{border-color:rgba(255,143,58,.45)}
+.cylinder-mount{background:rgba(14,15,18,.6)}
+.compare-section{border-top-color:var(--ink-200)}
+.compare-aew{box-shadow:0 30px 80px -24px rgba(255,122,26,.22),inset 0 1px 0 rgba(255,255,255,.05)}
+.parts-row-status.is-next{color:var(--emerald-m)}
+.tech-fig .tf-inner rect{fill:rgba(255,122,26,.16)}
+footer{background:#070809}
+
+/* A low heat glow where the cylinder sits. Static: it is lighting, not
+   an effect, and a pulsing glow would pull the eye off the price. */
+.hero-stage{background:radial-gradient(52% 58% at 74% 56%,rgba(255,122,26,.09),transparent 72%),var(--ink-950)}
+
+/* ── type ───────────────────────────────────────────────────────── */
+body{font-feature-settings:'ss01' 1}
+.hero-h1,.section-h2,.parts-featured-top h3,.closing-h2,.recon-h2,.compare-stat,.sky-now-name{
+  font-family:var(--display);font-stretch:112%;
+}
+.hero-h1{font-size:clamp(2.2rem,4.6vw,4.4rem);font-weight:800;letter-spacing:-.035em;line-height:1}
+.section-h2{font-weight:800;letter-spacing:-.03em}
+.compare-aew .compare-stat{letter-spacing:-.04em}
+
+/* Film grain on a fixed, non-interactive layer only. On a scrolling
+   container it would repaint every frame. */
+body::after{
+  content:'';position:fixed;inset:0;z-index:150;pointer-events:none;opacity:.045;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .7 0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
+}
+
+/* ── depth: sections rise and tilt up into place ─────────────────────
+   A flat fade says "appeared". Tilting up from below says the content
+   was lying on the bench and has been stood up for inspection, which is
+   the register this page has used since the drawing-sheet hero. */
+.motion-ready [data-reveal]{
+  transform:perspective(1100px) rotateX(14deg) translateY(34px);transform-origin:50% 0;
+  transition:opacity .7s var(--ease),transform .9s var(--ease);
+}
+.motion-ready [data-reveal].is-visible{transform:none}
+.motion-ready .compare-aew{transform:perspective(1200px) rotateY(-16deg) translateX(56px);transform-origin:100% 50%}
+.motion-ready .compare-aew.arrived{transform:none;transition:opacity .6s var(--ease),transform .9s var(--ease)}
+
+/* ── pointer tilt + light, desktop only ─────────────────────────── */
+.tilt-glow::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  opacity:0;transition:opacity .35s var(--ease);
+  background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(255,122,26,.11),transparent 62%);
+}
+.tilt-glow.is-lit::after{opacity:1}
+.tech-fig{position:relative}
+
+/* ══ WHERE THE COST GOES ═════════════════════════════════════════════ */
+.sky-section{position:relative;overflow:hidden;background:var(--surface-2);padding:110px 40px 120px;border-top:1px solid var(--ink-200)}
+.sky-section::before{
+  content:'';position:absolute;left:-10%;right:-10%;bottom:-35%;height:75%;pointer-events:none;
+  background:radial-gradient(55% 55% at 38% 100%,rgba(255,122,26,.10),transparent 70%);
+}
+.sky-inner{position:relative;max-width:1180px;margin:0 auto}
+.sky-head{max-width:56ch;margin-bottom:40px}
+.sky-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:44px;align-items:center}
+.sky-stage{
+  position:relative;aspect-ratio:4/3;min-height:340px;border-radius:var(--r12);overflow:hidden;
+  background:radial-gradient(120% 90% at 50% 100%,#191b20 0%,var(--surface) 72%);
+  border:1px solid var(--ink-200);
+}
+#skyCanvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y}
+.sky-tag{
+  position:absolute;left:0;top:0;pointer-events:none;white-space:nowrap;
+  transform:translate3d(-999px,-999px,0);
+  font-family:var(--mono);font-size:11px;padding:6px 10px;border-radius:var(--r4);
+  background:rgba(10,11,13,.84);border:1px solid rgba(255,143,58,.45);color:var(--on-dark);
+}
+.sky-tag b{color:var(--emerald-m);font-weight:600;margin-left:8px}
+.sky-now{display:flex;flex-direction:column;gap:6px;margin-bottom:26px;min-height:132px}
+.sky-now-name{font-weight:800;font-size:clamp(22px,2.3vw,30px);color:var(--ink-900);line-height:1.1}
+.sky-now-cost{font-size:clamp(34px,3.8vw,50px);font-weight:600;color:var(--emerald-m);line-height:1;letter-spacing:-.02em}
+.sky-now-share{font-size:13px;color:var(--ink-500)}
+.sky-list{display:grid;grid-template-columns:1fr 1fr;gap:4px 8px}
+.sky-item{
+  appearance:none;-webkit-appearance:none;cursor:pointer;text-align:left;
+  display:grid;grid-template-columns:1fr auto;gap:3px 10px;align-items:baseline;
+  min-height:44px;padding:8px 10px;border-radius:var(--r4);border:1px solid transparent;
+  background:transparent;color:var(--ink-600);font:inherit;font-size:12.5px;line-height:1.3;
+  transition:background .15s var(--ease),border-color .15s var(--ease),color .15s var(--ease);
+}
+.sky-item .c{font-family:var(--mono);font-size:11.5px;color:var(--ink-500)}
+/* Share of the largest component. No background track: the bar is a
+   length, not a progress meter with an empty remainder. */
+.sky-item i{grid-column:1 / -1;display:block;height:2px;border-radius:1px;background:var(--emerald);opacity:.5;width:var(--w,0%)}
+.sky-item:hover{background:var(--ink-100);color:var(--ink-900)}
+.sky-item[aria-pressed="true"]{border-color:rgba(255,122,26,.5);background:rgba(255,122,26,.08);color:var(--ink-900)}
+.sky-item[aria-pressed="true"] i{opacity:1}
+.sky-item[aria-pressed="true"] .c{color:var(--emerald-m)}
+/* No WebGL, or reduced motion: the list is the whole chart. */
+.sky-section.is-static .sky-grid{grid-template-columns:1fr}
+.sky-section.is-static .sky-stage{display:none}
+.sky-section.is-static .sky-list{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+@media(max-width:900px){
+  .sky-section{padding:80px 24px 88px}
+  .sky-grid{grid-template-columns:1fr;gap:24px}
+  /* aspect-ratio with a min-height forced the stage to 373px wide inside a
+     343px column on a 375px phone, cutting the chart off at the right. A
+     fixed height lets the width follow the column instead. */
+  .sky-stage{aspect-ratio:auto;min-height:0;height:300px}
+  .skip-link{min-height:44px;display:inline-flex;align-items:center}
+  .sky-now{min-height:0}
+}
+@media(max-width:420px){ .sky-list{grid-template-columns:1fr} }
 </style>
 </head>
 <body>
@@ -1044,7 +1189,7 @@ html:not(.motion-ready) .dimline em{opacity:1}
         <li><svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>No record of how a number was reached</li>
       </ul>
     </div>
-    <div class="compare-aew">
+    <div class="compare-aew" data-tilt="5" data-tilt-wait="arrived">
       <div class="compare-eyebrow">With AEW</div>
       <div class="compare-stat num" data-count>30 sec</div>
       <div class="compare-stat-lbl">per quotation</div>
@@ -1054,6 +1199,30 @@ html:not(.motion-ready) .dimline em{opacity:1}
         <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3.5 3.5L13 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Every component costed and shown</li>
         <li><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3.5 3.5L13 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Full history, every quotation saved</li>
       </ul>
+    </div>
+  </div>
+</section>
+
+<!-- WHERE THE COST GOES -->
+<section class="sky-section" id="breakdown" aria-labelledby="sky-h">
+  <div class="sky-inner">
+    <div class="sky-head">
+      <h2 class="section-h2" id="sky-h" data-reveal>Where the <span id="skyTotal">₹18,092</span> goes.</h2>
+      <p class="section-sub" data-reveal>Twelve components from one real costing run, each column sized by what it costs. Hover or tap to inspect.</p>
+    </div>
+    <div class="sky-grid">
+      <div class="sky-stage" id="skyStage">
+        <canvas id="skyCanvas" aria-hidden="true"></canvas>
+        <div class="sky-tag" id="skyTag" aria-hidden="true"></div>
+      </div>
+      <div class="sky-readout">
+        <p class="sky-now" aria-live="off">
+          <span class="sky-now-name" id="skyName">&nbsp;</span>
+          <span class="sky-now-cost num" id="skyCost">&nbsp;</span>
+          <span class="sky-now-share" id="skyShare">&nbsp;</span>
+        </p>
+        <div class="sky-list" id="skyList" role="group" aria-label="Components by cost"></div>
+      </div>
     </div>
   </div>
 </section>
@@ -1137,7 +1306,7 @@ html:not(.motion-ready) .dimline em{opacity:1}
       dimensions straight out of the sheets and costed it independently. These are the four
       components their workbook still computes.</p>
     </div>
-    <div class="recon-panel">
+    <div class="recon-panel" data-tilt="2.2">
       <div class="recon-bar">
         <span>&Oslash;100 bore &middot; &Oslash;56 rod &middot; 800 stroke</span>
         <button class="recon-run" id="reconRun" type="button">Run the reconciliation</button>
@@ -1151,7 +1320,7 @@ html:not(.motion-ready) .dimline em{opacity:1}
       <div class="recon-foot">
         <b id="reconVerdict">Four of four, reproduced to the rupee.</b>
         <p class="recon-caveat">This shows the engine computes their methodology correctly. It is not a
-        claim that the sample cylinder was ever built &mdash; several of its dimensions look like
+        claim that the sample cylinder was ever built. Several of its dimensions look like
         placeholders, which is one of the questions currently with their engineer.</p>
       </div>
     </div>
@@ -1165,7 +1334,7 @@ html:not(.motion-ready) .dimline em{opacity:1}
       <h2 class="closing-h2" data-reveal>Built with HISPL</h2>
       <p class="closing-loc" data-reveal>Hydraulics India Services Pvt. Ltd., Peenya Industrial Area, Bangalore.</p>
 
-      <figure class="tech-fig" data-reveal>
+      <figure class="tech-fig" data-reveal data-tilt="7" data-tilt-wait="is-visible">
         <svg viewBox="0 0 420 190" role="img" aria-label="Dimensioned elevation of a double-acting hydraulic cylinder, 100 mm bore by 56 mm rod by 500 mm stroke" xmlns="http://www.w3.org/2000/svg">
           <g class="tf-thin">
             <!-- centreline -->
@@ -1267,7 +1436,7 @@ html:not(.motion-ready) .dimline em{opacity:1}
   </div>
 </footer>
 
-<script src="https://unpkg.com/three@0.149.0/build/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.149.0/three.min.js"></script>
 <script>
 (function(){
   'use strict';
@@ -1309,6 +1478,7 @@ html:not(.motion-ready) .dimline em{opacity:1}
     {key:'finish',  label:'Painting, freight & packing',       cost:1361, noMesh:true}
   ];
   var GRAND_TOTAL = PARTS.reduce(function(s,p){ return s + p.cost; }, 0); // 18092
+  window.AEW_PARTS = PARTS;
 
   function fmt(n){ return '₹' + Math.round(n).toLocaleString('en-IN'); }
 
@@ -1398,7 +1568,7 @@ html:not(.motion-ready) .dimline em{opacity:1}
     if(w > 40) dim.style.setProperty('--dim-w', Math.round(w) + 'px');
   }
   sizeDim();
-  /* Re-measure once webfonts land — Inter at 900 weight is materially
+  /* Re-measure once webfonts land — Archivo at an expanded width is far
      wider than the fallback, so a width taken before swap is wrong. */
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(sizeDim);
   window.addEventListener('resize', sizeDim);
@@ -1651,19 +1821,54 @@ html:not(.motion-ready) .dimline em{opacity:1}
 
   var renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true, alpha:true});
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+
+  /* A procedural workshop to reflect. Metal is defined almost entirely by
+     what it reflects; lit only by point sources, the old steel read as
+     grey plastic. Three emissive panels — an overhead softbox, a side
+     window, one strip of molten orange — rendered once into a
+     prefiltered environment map. Nothing is downloaded. */
+  function makeWorkshopEnv(r){
+    var env = new THREE.Scene();
+    env.background = new THREE.Color(0x06070a);
+    var box = new THREE.BoxGeometry(1, 1, 1);
+    function panel(hex, power, x, y, z, sx, sy, sz){
+      var m = new THREE.MeshBasicMaterial({color: new THREE.Color(hex).multiplyScalar(power)});
+      var p = new THREE.Mesh(box, m);
+      p.position.set(x, y, z); p.scale.set(sx, sy, sz);
+      env.add(p);
+    }
+    panel(0xffffff, 3.4,  0,  6,  0,  10, 0.2, 2.4);
+    panel(0xdfe7f0, 1.5, -7,  2,  3,  0.2, 3.2, 6);
+    panel(0xff7a1a, 2.6,  7,  1, -3,  0.2, 2.4, 7);
+    panel(0x8a9bb0, 0.45, 0, -5,  0,  14, 0.2, 14);
+    var pm = new THREE.PMREMGenerator(r);
+    var tex = pm.fromScene(env, 0.035).texture;
+    pm.dispose();
+    return tex;
+  }
   var scene  = new THREE.Scene();
   var camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
   camera.position.set(0.6, 2.4, 9.2);
   camera.lookAt(0, 0, 0);
 
-  scene.add(new THREE.AmbientLight(0x8fa8c0, 0.55));
-  var keyLight = new THREE.DirectionalLight(0xffffff, 0.95); keyLight.position.set(4, 6, 7); scene.add(keyLight);
-  var rimLight = new THREE.DirectionalLight(0x34d399, 0.50); rimLight.position.set(-6, -2, -4); scene.add(rimLight);
+  scene.environment = makeWorkshopEnv(renderer);
+  scene.add(new THREE.AmbientLight(0x9aa3ad, 0.22));
+  var keyLight = new THREE.DirectionalLight(0xfff2e6, 1.55); keyLight.position.set(4, 6, 7); scene.add(keyLight);
+  /* The rim is the accent colour, from behind and below: hot metal lit
+     from the furnace side, which is the one place orange belongs on steel. */
+  var rimLight = new THREE.DirectionalLight(0xff7a1a, 1.45); rimLight.position.set(-6, -1.5, -5); scene.add(rimLight);
+  var fillLight = new THREE.DirectionalLight(0x9db6d0, 0.35); fillLight.position.set(-5, 3, 6); scene.add(fillLight);
 
-  var steel  = new THREE.MeshStandardMaterial({color:0x9fb3c8, metalness:0.85, roughness:0.35});
-  var chrome = new THREE.MeshStandardMaterial({color:0xdce8f2, metalness:0.95, roughness:0.08});
-  var darkM  = new THREE.MeshStandardMaterial({color:0x2c3e50, metalness:0.50, roughness:0.60});
-  var brass  = new THREE.MeshStandardMaterial({color:0x8d9db0, metalness:0.90, roughness:0.30});
+  /* Turned ST52, hard-chromed EN8, bronze-tone gland and piston, and
+     black nitrile for the seals and bearings — the materials the cost
+     breakdown is actually pricing. */
+  var steel  = new THREE.MeshPhysicalMaterial({color:0x7f8894, metalness:1.0, roughness:0.34});
+  var chrome = new THREE.MeshPhysicalMaterial({color:0xe8edf2, metalness:1.0, roughness:0.05, clearcoat:1.0, clearcoatRoughness:0.03});
+  var darkM  = new THREE.MeshPhysicalMaterial({color:0x121417, metalness:0.15, roughness:0.62});
+  var brass  = new THREE.MeshPhysicalMaterial({color:0xc58a57, metalness:1.0, roughness:0.28});
 
   var rig = new THREE.Group(); scene.add(rig);
   function part(key){ for(var i=0;i<PARTS.length;i++) if(PARTS[i].key===key) return PARTS[i]; }
@@ -1696,7 +1901,7 @@ html:not(.motion-ready) .dimline em{opacity:1}
     }
     var g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.BufferAttribute(pos,3));
-    dust = new THREE.Points(g, new THREE.PointsMaterial({color:0xffffff, size:0.035, transparent:true, opacity:0.16, depthWrite:false}));
+    dust = new THREE.Points(g, new THREE.PointsMaterial({color:0xffb27a, size:0.035, transparent:true, opacity:0.22, depthWrite:false}));
     scene.add(dust);
   })();
 
@@ -1733,6 +1938,13 @@ html:not(.motion-ready) .dimline em{opacity:1}
   function clamp01(v){ return v < 0 ? 0 : v > 1 ? 1 : v; }
 
   var scrollP = 0, entranceP = 0, entranceT0 = null;
+  var camTX = 0, camTY = 0, camX = 0, camY = 0;
+  stage.addEventListener('mousemove', function(e){
+    var r = stage.getBoundingClientRect();
+    camTX = ((e.clientX - r.left) / r.width) * 2 - 1;
+    camTY = ((e.clientY - r.top) / r.height) * 2 - 1;
+  }, {passive:true});
+  stage.addEventListener('mouseleave', function(){ camTX = 0; camTY = 0; });
   var spin = 0, spinVel = 0;
   var lastScroll = window.scrollY;
   var vec = new THREE.Vector3();
@@ -1884,6 +2096,12 @@ html:not(.motion-ready) .dimline em{opacity:1}
       light.style.transform = 'translate3d('+lightX+'px,'+lightY+'px,0)';
       lightDirty = false;
     }
+
+    camX += (camTX - camX) * 0.055;
+    camY += (camTY - camY) * 0.055;
+    camera.position.x = 0.6 + camX * 0.9;
+    camera.position.y = 2.4 - camY * 0.55;
+    camera.lookAt(0, 0, 0);
 
     renderer.render(scene, camera);
 
@@ -2276,6 +2494,356 @@ html:not(.motion-ready) .dimline em{opacity:1}
      close. */
   window.addEventListener('resize', function () {
     if (open && window.innerWidth > 860) set(false);
+  });
+})();
+</script>
+<script>
+/* ══ COST SKYLINE ════════════════════════════════════════════════════
+   Twelve steel columns on an arc, one per component, each as tall as its
+   real share of the ERP's Rs.18,092. The hero shows the cylinder coming
+   apart; this shows what each piece of it costs, at a glance: the tube
+   and the rod stand head and shoulders over everything else.
+
+   Its own block, like the reveals and the menu. It reads window.AEW_PARTS,
+   which the hero's script exposes on its first lines; if that script ever
+   fails later on, this still runs. With no WebGL or with reduced motion
+   the list beside it is the whole chart, and nothing is lost. */
+(function(){
+  'use strict';
+  var parts   = window.AEW_PARTS;
+  var section = document.getElementById('breakdown');
+  if(!parts || !section) return;
+
+  var stage   = document.getElementById('skyStage');
+  var canvas  = document.getElementById('skyCanvas');
+  var tag     = document.getElementById('skyTag');
+  var list    = document.getElementById('skyList');
+  var nameEl  = document.getElementById('skyName');
+  var costEl  = document.getElementById('skyCost');
+  var shareEl = document.getElementById('skyShare');
+  var liveEl  = nameEl.parentNode;
+  var totalEl = document.getElementById('skyTotal');
+
+  function fmt(n){ return '\u20B9' + Math.round(n).toLocaleString('en-IN'); }
+  var total = parts.reduce(function(a, p){ return a + p.cost; }, 0);
+  if(totalEl) totalEl.textContent = fmt(total);
+
+  var items = parts.map(function(p){ return {label:p.label, cost:p.cost}; })
+                   .sort(function(a, b){ return b.cost - a.cost; });
+  var max = items[0].cost;
+
+  var btns = items.map(function(it){
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'sky-item'; b.setAttribute('aria-pressed', 'false');
+    var nm = document.createElement('span'); nm.textContent = it.label;
+    var c  = document.createElement('span'); c.className = 'c'; c.textContent = fmt(it.cost);
+    var bar = document.createElement('i'); bar.style.setProperty('--w', (it.cost / max * 100).toFixed(1) + '%');
+    b.appendChild(nm); b.appendChild(c); b.appendChild(bar);
+    list.appendChild(b);
+    return b;
+  });
+
+  var selected = -1, userDriven = false, onSelect = null;
+  function select(i, byUser){
+    /* The readout cycles on its own until someone takes over. Announcing
+       every automatic step would talk over a screen-reader user every
+       few seconds, so the live region only switches on once they act. */
+    if(byUser && !userDriven){ userDriven = true; liveEl.setAttribute('aria-live', 'polite'); }
+    if(i === selected) return;
+    selected = i;
+    var it = items[i];
+    nameEl.textContent  = it.label;
+    costEl.textContent  = fmt(it.cost);
+    shareEl.textContent = (it.cost / total * 100).toFixed(1) + '% of the cylinder';
+    for(var j = 0; j < btns.length; j++) btns[j].setAttribute('aria-pressed', j === i ? 'true' : 'false');
+    if(onSelect) onSelect(i);
+  }
+  btns.forEach(function(b, i){
+    b.addEventListener('click', function(){ select(i, true); });
+    b.addEventListener('focus', function(){ select(i, true); });
+    b.addEventListener('mouseenter', function(){ select(i, true); });
+  });
+  select(0, false);
+
+  var reduced = !document.documentElement.classList.contains('motion-ready');
+  function webglOK(){
+    try{
+      var t = document.createElement('canvas');
+      return !!(window.WebGLRenderingContext && (t.getContext('webgl') || t.getContext('experimental-webgl')));
+    }catch(e){ return false; }
+  }
+  if(reduced || typeof THREE === 'undefined' || !webglOK()){
+    section.classList.add('is-static');
+    return;
+  }
+
+  var small = window.innerWidth < 900;
+  var renderer;
+  try{
+    renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true, alpha:true});
+  }catch(e){ section.classList.add('is-static'); return; }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, small ? 1.5 : 2));
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.0;
+  if(!small){ renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap; }
+  canvas.addEventListener('webglcontextlost', function(e){
+    e.preventDefault(); section.classList.add('is-static');
+  });
+
+  var scene = new THREE.Scene();
+  /* Fog in the stage colour, so the floor and grid dissolve into the panel
+     instead of ending at a hard horizon across the middle of the chart. The
+     value is linear because the renderer outputs sRGB, which lifts it. */
+  scene.fog = new THREE.Fog(0x010101, 20, 32);
+  (function(){
+    var env = new THREE.Scene();
+    env.background = new THREE.Color(0x06070a);
+    var box = new THREE.BoxGeometry(1, 1, 1);
+    function panel(hex, power, x, y, z, sx, sy, sz){
+      var p = new THREE.Mesh(box, new THREE.MeshBasicMaterial({color: new THREE.Color(hex).multiplyScalar(power)}));
+      p.position.set(x, y, z); p.scale.set(sx, sy, sz); env.add(p);
+    }
+    panel(0xffffff, 3.2,  0,  8,  0, 16, 0.2, 8);
+    panel(0xe8eef5, 1.8,  0,  3, 11, 16, 5, 0.2);
+    panel(0xdfe7f0, 1.2, -10, 2,  0, 0.2, 5, 10);
+    panel(0xff7a1a, 2.4,  10, 1, -3, 0.2, 4, 10);
+    var pm = new THREE.PMREMGenerator(renderer);
+    scene.environment = pm.fromScene(env, 0.04).texture;
+    pm.dispose();
+  })();
+
+  var camera = new THREE.PerspectiveCamera(33, 4 / 3, 0.1, 100);
+  var group = new THREE.Group();
+  scene.add(group);
+
+  scene.add(new THREE.AmbientLight(0x9aa3ad, 0.16));
+  var key = new THREE.DirectionalLight(0xfff1e0, 1.5);
+  key.position.set(5, 10, 7);
+  if(!small){
+    key.castShadow = true;
+    key.shadow.mapSize.set(1024, 1024);
+    var sc = key.shadow.camera;
+    sc.left = -12; sc.right = 12; sc.top = 12; sc.bottom = -12; sc.near = 1; sc.far = 40;
+    key.shadow.bias = -0.0006;
+  }
+  scene.add(key);
+  var rim = new THREE.DirectionalLight(0xff7a1a, 1.25);
+  rim.position.set(-7, 3, -7);
+  scene.add(rim);
+
+  var floor = new THREE.Mesh(
+    new THREE.CircleGeometry(15, 72),
+    new THREE.MeshStandardMaterial({color:0x010102, metalness:0.0, roughness:0.96, envMapIntensity:0.08})
+  );
+  floor.rotation.x = -Math.PI / 2;
+  floor.receiveShadow = !small;
+  group.add(floor);
+  var grid = new THREE.GridHelper(28, 56, 0x2c3037, 0x17191d);
+  grid.position.y = 0.003;
+  grid.material.transparent = true; grid.material.opacity = 0.5;
+  group.add(grid);
+
+  var steelMat = new THREE.MeshPhysicalMaterial({color:0xb3bcc6, metalness:0.9, roughness:0.36, clearcoat:0.3, clearcoatRoughness:0.3, envMapIntensity:1.5});
+  var hotMat   = new THREE.MeshPhysicalMaterial({color:0xff7a1a, metalness:0.55, roughness:0.26, clearcoat:0.6, emissive:0xff5200, emissiveIntensity:0.32});
+  var geo = new THREE.BoxGeometry(0.78, 1, 0.78);
+  geo.translate(0, 0.5, 0);            /* grow from the floor, not from the middle */
+
+  var N = items.length, R = 7.2, SPAN = Math.PI * 0.5;
+  var bars = items.map(function(it, i){
+    var m = new THREE.Mesh(geo, steelMat);
+    var a = -SPAN / 2 + SPAN * (i / (N - 1));
+    m.position.set(Math.sin(a) * R, 0, (1 - Math.cos(a)) * R);
+    m.rotation.y = -a;
+    m.castShadow = !small; m.receiveShadow = !small;
+    m.scale.y = 0.0001;
+    m.userData = { i:i, h:0.3 + (it.cost / max) * 5.6, x:0, v:0, delay:i * 0.075 };
+    group.add(m);
+    return m;
+  });
+  group.position.z = 0;
+
+  onSelect = function(i){
+    for(var k = 0; k < bars.length; k++) bars[k].material = (k === i) ? hotMat : steelMat;
+    tag.textContent = '';
+    var nm = document.createElement('span'); nm.textContent = items[i].label;
+    var c  = document.createElement('b');    c.textContent  = fmt(items[i].cost);
+    tag.appendChild(nm); tag.appendChild(c);
+  };
+  onSelect(selected);
+
+  var camD = 17, camH = 7;
+  function fitCamera(){
+    var vHalf = THREE.MathUtils.degToRad(camera.fov / 2);
+    var hHalf = Math.atan(Math.tan(vHalf) * camera.aspect);
+    var halfW = R * Math.sin(SPAN / 2) + 1.3;
+    camD = Math.max(15, halfW / Math.tan(hHalf) + R * (1 - Math.cos(SPAN / 2)));
+    camH = camD * 0.42;
+    if(scene.fog){ scene.fog.near = camD + 1.5; scene.fog.far = camD + 12; }
+  }
+
+  var W = 0, H = 0;
+  function resize(){
+    var r = stage.getBoundingClientRect();
+    if(r.width < 2 || r.height < 2) return;
+    W = r.width; H = r.height;
+    renderer.setSize(W, H, false);
+    camera.aspect = W / H;
+    camera.updateProjectionMatrix();
+    fitCamera();
+  }
+  resize();
+  if(window.ResizeObserver) new ResizeObserver(resize).observe(stage);
+  else window.addEventListener('resize', resize);
+
+  /* Pointer: parallax always, hover-to-inspect on a mouse, tap on touch. */
+  var ptX = 0, ptY = 0, curX = 0, curY = 0;
+  var ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+  function hit(e){
+    var r = canvas.getBoundingClientRect();
+    ndc.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+    ndc.y = -((e.clientY - r.top) / r.height) * 2 + 1;
+    ray.setFromCamera(ndc, camera);
+    var hits = ray.intersectObjects(bars, false);
+    return hits.length ? hits[0].object.userData.i : -1;
+  }
+  canvas.addEventListener('pointermove', function(e){
+    var r = canvas.getBoundingClientRect();
+    ptX = ((e.clientX - r.left) / r.width) * 2 - 1;
+    ptY = ((e.clientY - r.top) / r.height) * 2 - 1;
+    if(e.pointerType !== 'mouse') return;
+    var i = hit(e);
+    canvas.style.cursor = i >= 0 ? 'pointer' : 'default';
+    if(i >= 0) select(i, true);
+  });
+  canvas.addEventListener('pointerleave', function(){ ptX = 0; ptY = 0; });
+  canvas.addEventListener('pointerdown', function(e){
+    var i = hit(e);
+    if(i >= 0) select(i, true);
+  });
+
+  /* The columns rise when the section is first seen, each on a spring
+     (zeta about .65: they overshoot a touch and settle, like a hydraulic
+     ram coming up to height). Staggered tallest-first, so the order of
+     arrival is the order of cost. */
+  var started = false, t0 = 0, last = 0, visible = false, looping = false;
+  var tagV = new THREE.Vector3();
+
+  function settleAll(){
+    for(var k = 0; k < bars.length; k++){
+      bars[k].userData.x = 1; bars[k].userData.v = 0;
+      bars[k].scale.y = bars[k].userData.h;
+    }
+  }
+
+  function frame(now){
+    if(!visible || document.hidden){ looping = false; return; }
+    requestAnimationFrame(frame);
+    var dt = Math.min((now - (last || now)) / 1000, 1 / 30);
+    last = now;
+    var t = (now - t0) / 1000;
+
+    for(var k = 0; k < bars.length; k++){
+      var u = bars[k].userData;
+      if(t < u.delay) continue;
+      if(Math.abs(1 - u.x) > 0.0008 || Math.abs(u.v) > 0.0008){
+        u.v += (-110 * (u.x - 1) - 13.5 * u.v) * dt;
+        u.x += u.v * dt;
+      } else { u.x = 1; u.v = 0; }
+      bars[k].scale.y = Math.max(0.0001, u.x * u.h);
+    }
+
+    curX += (ptX - curX) * 0.05;
+    curY += (ptY - curY) * 0.05;
+    group.rotation.y = Math.sin(t * 0.22) * 0.07 + curX * 0.16;
+    camera.position.set(0, camH - curY * 0.6, camD);
+    camera.lookAt(0, 2.2, 1.2);
+
+    var sb = bars[selected];
+    if(sb && W){
+      tagV.set(0, sb.scale.y + 0.35, 0);
+      sb.localToWorld(tagV);
+      tagV.project(camera);
+      var x = (tagV.x * 0.5 + 0.5) * W, y = (-tagV.y * 0.5 + 0.5) * H;
+      var tw = tag.offsetWidth || 160;
+      x = Math.max(8, Math.min(W - tw - 8, x - tw / 2));
+      y = Math.max(8, Math.min(H - 36, y - 34));
+      tag.style.transform = 'translate3d(' + (x | 0) + 'px,' + (y | 0) + 'px,0)';
+    }
+
+    renderer.render(scene, camera);
+  }
+
+  function startLoop(){
+    if(looping || !visible || document.hidden) return;
+    looping = true; last = 0;
+    requestAnimationFrame(frame);
+  }
+
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(entries){
+      visible = entries[0].isIntersecting;
+      if(visible && !started){
+        started = true; t0 = performance.now();
+        /* rAF can be throttled to nothing in a tab that reports itself
+           visible. The columns must end at their true heights regardless,
+           because their heights are the figures. */
+        setTimeout(settleAll, 3200);
+      }
+      startLoop();
+    }, {threshold:0.15}).observe(stage);
+  } else {
+    visible = true; started = true; t0 = performance.now(); settleAll(); startLoop();
+  }
+  document.addEventListener('visibilitychange', startLoop);
+
+  /* Until someone takes over, walk the components in cost order. */
+  setInterval(function(){
+    if(userDriven || !visible || document.hidden) return;
+    select((selected + 1) % items.length, false);
+  }, 2600);
+})();
+</script>
+<script>
+/* ══ POINTER TILT ═══════════════════════════════════════════════════
+   Panels that carry an argument lean a few degrees toward the pointer,
+   with a light following it. Desktop pointers only, never with reduced
+   motion. data-tilt holds the maximum angle; data-tilt-wait names a class
+   the element must have first, so the tilt never fights an entrance. */
+(function(){
+  'use strict';
+  if(!document.documentElement.classList.contains('motion-ready')) return;
+  if(!window.matchMedia || !matchMedia('(hover:hover) and (pointer:fine)').matches) return;
+
+  Array.prototype.forEach.call(document.querySelectorAll('[data-tilt]'), function(el){
+    var max = parseFloat(el.getAttribute('data-tilt')) || 4;
+    var wait = el.getAttribute('data-tilt-wait');
+    var px = 0, py = 0, raf = 0;
+    el.classList.add('tilt-glow');
+
+    function apply(){
+      raf = 0;
+      var r = el.getBoundingClientRect();
+      if(!r.width || !r.height) return;
+      var nx = (px - r.left) / r.width, ny = (py - r.top) / r.height;
+      el.style.setProperty('--mx', (nx * 100).toFixed(1) + '%');
+      el.style.setProperty('--my', (ny * 100).toFixed(1) + '%');
+      if(wait && !el.classList.contains(wait)) return;
+      el.style.transition = 'transform .08s linear';
+      el.style.transform = 'perspective(1100px) rotateX(' + ((0.5 - ny) * 2 * max).toFixed(2) +
+                           'deg) rotateY(' + ((nx - 0.5) * 2 * max).toFixed(2) + 'deg)';
+    }
+    el.addEventListener('pointermove', function(e){
+      px = e.clientX; py = e.clientY;
+      el.classList.add('is-lit');
+      if(!raf) raf = requestAnimationFrame(apply);
+    });
+    el.addEventListener('pointerleave', function(){
+      el.classList.remove('is-lit');
+      if(wait && !el.classList.contains(wait)) return;
+      el.style.transition = 'transform .5s cubic-bezier(0.22,1,0.36,1)';
+      el.style.transform = 'perspective(1100px) rotateX(0deg) rotateY(0deg)';
+    });
   });
 })();
 </script>
