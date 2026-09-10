@@ -87,7 +87,7 @@
     'MS-ST52':        { name: 'ST52 Seamless Tube',      density: 7.85, rate: 160 },
     'SS-410':         { name: 'SS 410 Stainless',        density: 7.7,  rate: 410 },
     'BR-SAE660':      { name: 'Bronze SAE 660',          density: 8.9,  rate: 1800 },
-    'MS-EN353':       { name: 'EN353 Case Hardening',    density: 7.85, rate: 140 },
+    'MS-EN353':       { name: 'EN353 Case Hardening Steel', density: 7.85, rate: 140 },
     'MS-PLATE-IS2062':{ name: 'IS2062 Plate',            density: 7.85, rate: 85 }
   };
 

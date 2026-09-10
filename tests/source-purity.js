@@ -250,7 +250,7 @@ const V1 = fs.readdirSync(V1_DIR)
     };
   });
 
-ok('v1 modules found', V1.length === 4,
+ok('v1 modules found', V1.length === 5,
    'got ' + V1.map(function (f) { return f.file; }).join(', '));
 
 const v1Masters = V1.filter(function (f) { return f.file === 'masters.js'; })[0];
@@ -375,6 +375,16 @@ ok('every v1 geometry table declares its basis',
    (v1Geom.code.match(/basis:\s*'/g) || []).length >= 12);
 ok('v1 geometry keeps the low-confidence wording verbatim',
    /no formal published source found/i.test(v1Geom.raw));
+
+/* views.js carries the three sheets that do not feed the estimate. It must
+   derive everything from a finished run: a view that looked up its own
+   rate or dimension would be a second costing engine nobody tests. */
+const v1Views = V1.filter(function (f) { return f.file === 'views.js'; })[0];
+ok('v1 views recompute no rate or dimension',
+   !/M\.(materialRate|turningRate|honingRate|weldBeads|processRate|sealKit|cuttingHours|roughTurnHours)\(/.test(v1Views.code) &&
+   !/G\.derive\(/.test(v1Views.code));
+ok('v1 views invent no machine hour',
+   /TIME STANDARD NOT AVAILABLE/.test(v1Views.raw));
 
 /* Defects are reproduced and reported, never silently corrected. */
 ok('v1 engine reports workbook defects rather than fixing them',

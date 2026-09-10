@@ -3,7 +3,7 @@
 Context for any AI assistant working on this repository. Read this before
 changing anything.
 
-**Build** 2026.09.09-1 · **Status** Working prototype, pre-customer-demo
+**Build** 2026.09.10-1 · **Status** Working prototype, pre-customer-demo
 **Owner** Technical founder · **First customer** HISPL, Peenya Industrial Area, Bangalore
 
 ---
@@ -221,6 +221,28 @@ with rupee impacts in `hispl-v2/v1/RECONCILIATION.md` §5.
 directory read is not recursive, which left the newest and largest part
 of the costing code the only part the rule did not police.
 
+#### Second pass — all 33 sheets, and her notes
+
+Every sheet is now accounted for, and the 195 annotation cells Aniktha
+typed beside the formulas were read as instructions. That pass added the
+"New Material?" toggle every component sheet carries, the manual
+geometry overrides, the end covers' Round/Cuboid raw shape, the tie rod's
+editable yield and overrides, lug and weld-location counts, and the
+Machine Time Calculator, Actual Cost Tracker and Cylinder Database as
+`views.js`.
+
+It also made the engine **withhold the total** when a raw dimension is not
+larger than its finished one — the workbook prints "INVALID - FIX RAW OD"
+there, and the first build flagged the fault and quoted anyway.
+
+`tests/freeze-check-v1.js` walks the workbook's own MASTER REVIEW - FREEZE
+CHECK sheet — HISPL's compiled index of every master and geometry table —
+straight out of the `.xlsx`. None of its expectations is typed by hand.
+
+Four statements in the workbook are contradicted by its own formulas
+(stale headers from earlier phases). The tool follows the formulas and
+records them as S-1 to S-4 in `hispl-v2/v1/RECONCILIATION.md` §9.
+
 ### 6. Do not touch authentication without a very good reason
 
 It took many iterations to stabilise. The current design works. See the
@@ -328,7 +350,7 @@ npm install          # jsdom — testing only; the app has zero dependencies
 bash run-all.sh
 ```
 
-**933 assertions across 25 suites. All must pass before any deployment.**
+**1723 assertions across 26 suites. All must pass before any deployment.**
 
 | Suite | Guards against |
 |---|---|
@@ -344,14 +366,16 @@ bash run-all.sh
 | `full` | Any blank or zero output across all 9 panels |
 | `source-purity` | A rate reaching the app from the document or the cost sheet |
 | `workbook-v1` | The v1 engine drifting from `VERSION_1.xlsx`'s cached values |
+| `freeze-check-v1` | The v1 masters and geometry drifting from the workbook's own MASTER REVIEW sheet |
 
 Every suite was written in response to a real defect. None are
 speculative.
 
-`workbook-v1` is the one whose expectations were not written by hand:
-all 222 are values read out of the workbook's own formula cache, so the
-suite fails whenever the engine and HISPL's spreadsheet disagree by more
-than two paise.
+`workbook-v1` and `freeze-check-v1` are the two whose expectations were
+not chosen by hand. The first checks the engine against the workbook's
+own formula cache and fails at a two-paise disagreement; the second reads
+the `.xlsx` at test time and walks HISPL's MASTER REVIEW sheet, so a
+revised workbook fails on every value that changed.
 
 ---
 

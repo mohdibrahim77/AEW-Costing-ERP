@@ -422,6 +422,208 @@ eq('no component costs zero', other.components.filter(
 eq('no component is blocked', other.components.filter(c => c.blocked).length, 0);
 eq('second size is cheaper than the 125 bore', other.grandTotal < r.grandTotal, true);
 
+/* ── 21. "NEW MATERIAL?" — every component sheet's cell B4 ───────── */
+/* IF(B4="No",0,weight*rate). HISPL reconditions cylinders; a rebuild that
+   reuses the tube and replaces the rod is ordinary work, and without this
+   the tool could only quote it as if every part were bought new. */
+const reused = engine.cost(JOB, { newMaterial: { tube: 'No' } });
+const rt = reused.components.filter(c => c.id === 'tube')[0];
+near('reused tube costs no material', rt.materialCost, 0);
+near('  ...but still weighs the same', rt.weight, 39.52159883);
+near('  ...and still costs its processing', rt.processCost, 6112.48377);
+near('  ...and the saving is exactly the material',
+     r.grandTotal - reused.grandTotal, by.tube.materialCost, 0.01);
+eq('an absent flag means new, as the sheets ship',
+   engine.cost(JOB, { newMaterial: {} }).grandTotal === r.grandTotal, true);
+eq('only an explicit "No" zeroes it',
+   engine.cost(JOB, { newMaterial: { tube: 'Yes' } }).grandTotal === r.grandTotal, true);
+['tube', 'pistonRod', 'cec', 'hec', 'gland', 'cushionBush', 'rodEye', 'piston', 'flange', 'trunnion']
+  .forEach(id => {
+    const flags = {}; flags[id] = 'No';
+    const c = engine.cost(JOB, { newMaterial: flags }).components.filter(x => x.id === id)[0];
+    eq(id + ' honours New Material = No', c.materialCost, 0);
+  });
+['stopTube', 'rearEye', 'cecClevis', 'tieRod', 'footLug', 'frontFlange'].forEach(id => {
+  const flags = {}; flags[id] = 'No';
+  const job = Object.assign({}, JOB, {
+    hasStopTube: 'Yes', hasRearEye: 'Yes',
+    mounting: id === 'cecClevis' ? 'Rod Eye + CEC Clevis'
+            : id === 'tieRod' ? 'Rod Eye + Tie Rod'
+            : id === 'footLug' ? 'Rod Eye + Foot Lug'
+            : id === 'frontFlange' ? 'Front Flange' : JOB.mounting
+  });
+  const c = engine.cost(job, { newMaterial: flags }).components.filter(x => x.id === id)[0];
+  eq(id + ' honours New Material = No', c.materialCost, 0);
+});
+
+/* ── 22. GEOMETRY OVERRIDES — the "Manual Overrides" block ───────── */
+/* "blank = use table above; enter a value here to force it from an actual
+   GA/design drawing". Blank must fall through; a value must win. */
+const ovRun = engine.cost(JOB, { geometry: { gland: { od: 200 } } });
+const ovG = ovRun.components.filter(c => c.id === 'gland')[0];
+eq('override replaces the table value', ovG.dims.od, 200);
+eq('  ...and is declared as overridden', ovG.geometry.overridden.indexOf('od') >= 0, true);
+eq('  ...while the rest still come from the table', ovG.dims.id, 91);
+eq('blank falls through to the table',
+   engine.cost(JOB, { geometry: { gland: { od: '' } } })
+     .components.filter(c => c.id === 'gland')[0].dims.od, 180);
+eq('a non-numeric override is ignored rather than trusted',
+   engine.cost(JOB, { geometry: { gland: { od: 'from drawing' } } })
+     .components.filter(c => c.id === 'gland')[0].dims.od, 180);
+eq('the override changes the gland cost', ovG.totalCost !== by.gland.totalCost, true);
+
+/* ── 23. SUMMARY MANUAL ENTRIES (Cost Summary B23, B35) ──────────── */
+const extra = engine.cost(JOB, { additionalCost: 5000, weightAdjustment: 12 });
+near('additional cost reaches the total', extra.grandTotal - r.grandTotal, 5000, 0.01);
+near('weight allowance reaches the weight', extra.totalWeight - r.totalWeight, 12, 0.001);
+
+/* ── 24. VALIDATION WITHHOLDING (freeze-check section 9d) ────────── */
+/* "Tube total cost withheld (shows INVALID text) until fixed." A total
+   that looks complete while resting on a tube with no wall is the more
+   dangerous output, so there is no total at all. */
+const noWall = engine.cost(JOB, { tubeRawOD: 120 });
+eq('an impossible tube withholds its own cost',
+   noWall.components.filter(c => c.id === 'tube')[0].totalCost, null);
+eq('  ...and the cylinder has no total', noWall.grandTotal, null);
+eq('  ...and says which component', noWall.withheld.length, 1);
+eq('  ...naming the tube', noWall.withheld[0].component, 'Tube');
+eq('  ...but the run still returns, so the fault is visible', noWall.ok, true);
+eq('a withheld cost is not silently counted as zero',
+   noWall.componentTotal < r.componentTotal, true);
+const thinRod = engine.cost(JOB, { rodRawDia: 80 });
+eq('a rod thinner than its finished size withholds too', thinRod.grandTotal, null);
+eq('  ...naming the rod', thinRod.withheld[0].component, 'Piston Rod');
+eq('a healthy job withholds nothing', r.withheld.length, 0);
+
+/* ── 25. THE THREE REMAINING SHEETS ──────────────────────────────── */
+const views = require('../assets/js/costing/v1/views.js');
+
+/* Machine Time Calculator — hours only, and silent where no hour
+   standard exists rather than inventing one from the rupees. */
+const mt = views.machineTime(r);
+eq('machine time reports hours', mt.totalHours > 0, true);
+eq('area- and weight-priced rows carry no hour', mt.withoutStandard > 0, true);
+eq('every no-standard row has a null hour',
+   mt.rows.filter(x => x.note && x.hours !== null).length, 0);
+eq('the no-standard wording is the sheet\'s own', views.NO_STANDARD, 'TIME STANDARD NOT AVAILABLE');
+eq('only real machines aggregate',
+   mt.machines.filter(m => typeof m.rate !== 'number').length, 0);
+
+/* Actual Cost Tracker — the sheet's own subtotals, per-piece and ungated. */
+const act = views.actualCost(r, {});
+near('tracker estimated material (B17)', act.totals.estMaterial, 25011.25369, 0.01);
+near('tracker estimated process (D17)', act.totals.estProcess, 17263.86235, 0.01);
+eq('tracker says which rows are not fitted',
+   act.rows.filter(x => x.countedButNotFitted).map(x => x.component).sort().join(','),
+   'Rear Eye,Stop Tube');
+eq('tracker flags the trunnion as per-piece only',
+   act.rows.filter(x => x.id === 'trunnion')[0].perPieceOnly, 2);
+const act2 = views.actualCost(r, { tube: { material: 7000, process: 6000 } });
+near('variance on the tube row',
+     act2.rows.filter(x => x.id === 'tube')[0].variance,
+     13000 - (by.tube.materialCost + by.tube.processCost), 0.01);
+
+/* Cylinder Database — one row per job, margin only once a price exists. */
+const dbRow = views.databaseRow(r, 0, 0);
+eq('database id follows the sheet with no date set', dbRow.cylinderId, 'CYL-18991230');
+eq('margin is zero until a price is negotiated', dbRow.marginPct, 0);
+const priced = views.databaseRow(r, 80000, 0);
+near('margin is on the quoted price, not on cost',
+     priced.marginPct, (80000 - r.grandTotal) / 80000, 1e-9);
+eq('the no-automatic-profit rule travels with the row',
+   /No automatic profit percentage/.test(priced.pricingNote), true);
+
+/* ── 26. WELD BEAD TABLE RANGE (Process Rate Master A44) ─────────── */
+eq('beads at 200 (top of the table)', masters.weldBeads(200), 6);
+eq('beads above the table carry the top row', masters.weldBeads(260), 6);
+
+/* ── 27. FROM ANIKTHA'S NOTES ────────────────────────────────────── */
+
+/* Cap End Cover!C5: "Round = solid round bar (uses Diameter). Profile /
+   Cuboid Block = flat/rectangular stock (uses Width & Height)."
+   Weight cell: IF(B5="Round", PI/4*Dia^2*T, W*H*T). */
+const cub = engine.cost(JOB, { coverShape: { cec: 'Profile / Cuboid Block', hec: 'Round' } });
+const cubC = cub.components.filter(c => c.id === 'cec')[0];
+const cubH = cub.components.filter(c => c.id === 'hec')[0];
+near('cuboid cover weight is W x H x T', cubC.weight, 165 * 165 * 44 * 7.85 / 1e6, 1e-9);
+near('  ...and its material follows', cubC.materialCost, 165 * 165 * 44 * 7.85 / 1e6 * 100, 1e-6);
+near('  ...while turning still uses the finished OD', cubC.processCost, by.cec.processCost, 1e-9);
+eq('  ...and it says which shape it used', cubC.shape, 'Profile / Cuboid Block');
+near('the other cover keeps its own shape', cubH.weight, by.hec.weight, 1e-9);
+eq('an unknown shape falls back to Round',
+   engine.cost(JOB, { coverShape: { cec: 'Hexagon' } }).components.filter(c => c.id === 'cec')[0].shape,
+   'Round');
+
+/* Tie Rod!B11 yield ("Editable if HISPL uses a different tie rod
+   steel/spec"), B12 safety factor, B20 and B27 overrides. */
+const TIE = Object.assign({}, JOB, { mounting: 'Rod Eye + Tie Rod' });
+const trStd = engine.cost(TIE).components.filter(c => c.id === 'tieRod')[0];
+eq('tie rod ships at yield 294 / SF 3', trStd.structural.allowableStress, 98);
+const trY = engine.cost(TIE, { tieRodYield: 360, tieRodSafety: 3 }).components.filter(c => c.id === 'tieRod')[0];
+eq('a stronger steel raises the allowable stress', trY.structural.allowableStress, 120);
+eq('  ...and a thinner rod follows from the physics', trY.dims.diameter, 30);
+const trD = engine.cost(TIE, { tieRodDiaOverride: 40 }).components.filter(c => c.id === 'tieRod')[0];
+eq('a diameter override from a drawing wins', trD.dims.diameter, 40);
+eq('  ...the calculated size is still reported', trD.structural.standardDia, 35);
+eq('  ...and flagged as overridden', trD.structural.diameterOverridden, true);
+near('  ...and the weight uses the drawing\'s diameter',
+     trD.weightPerRod, Math.PI / 4 * 40 * 40 * 265 * 7.85 / 1e6, 1e-9);
+const trL = engine.cost(TIE, { tieRodLengthOverride: 400 }).components.filter(c => c.id === 'tieRod')[0];
+eq('a length override wins', trL.dims.length, 400);
+eq('  ...and is flagged', trL.structural.lengthOverridden, true);
+eq('a blank override leaves the standard size',
+   engine.cost(TIE, { tieRodDiaOverride: null }).components.filter(c => c.id === 'tieRod')[0].dims.diameter, 35);
+
+/* CEC Clevis!B14 lugs — "a convention default, NOT a confirmed HISPL
+   standard - do not treat it as one." */
+const CLV = Object.assign({}, JOB, { mounting: 'Rod Eye + CEC Clevis' });
+const clv3 = engine.cost(CLV, { clevisLugs: 3 }).components.filter(c => c.id === 'cecClevis')[0];
+near('three lugs weigh three lugs', clv3.weight, 7.062675092 / 2 * 3, 1e-6);
+near('  ...and drill three pin holes',
+     clv3.processes.filter(p => /Drilling/.test(p.name))[0].basis, 0.12 * 3, 1e-9);
+eq('the clevis carries the lug-count warning',
+   engine.cost(CLV).notes.filter(x => x.note.ref === 'G-1').length, 1);
+
+/* Foot Lug!B11 — four standard; welds follow the lug count (=B11). */
+const LUG = Object.assign({}, JOB, { mounting: 'Rod Eye + Foot Lug' });
+const lug6 = engine.cost(LUG, { footLugs: 6 }).components.filter(c => c.id === 'footLug')[0];
+eq('six lugs mean six weld locations', lug6.welds[0].locations, 6);
+near('  ...priced as six', lug6.welds[0].cost, 5192.125984 / 4 * 6, 0.01);
+
+/* Trunnion!B10 quantity. */
+const tq1 = engine.cost(JOB, { trunnionQty: 1 }).components.filter(c => c.id === 'trunnion')[0];
+near('a single trunnion costs one unit', tq1.totalCost, tq1.unitCost, 1e-9);
+near('  ...which is half the pair', tq1.totalCost, 6324.410992 / 2, 0.01);
+
+/* "No. of Weld Locations" on every weld block. */
+const wl2 = engine.cost(JOB, { weldLocations: { tubePart: 2 } }).components.filter(c => c.id === 'tube')[0];
+eq('weld locations are an input', wl2.welds[0].locations, 2);
+near('  ...and double the weld cost', wl2.welds[0].cost, 1298.031496 * 2, 0.01);
+eq('  ...without touching the other tube welds', wl2.welds[1].locations, 1);
+
+/* BOC Calculated Items!B87/E86 and E97. */
+eq('the placeholder bolt rate is flagged', r.notes.filter(x => x.note.ref === 'B-1').length, 1);
+eq('the unquoted bellows is flagged',      r.notes.filter(x => x.note.ref === 'B-2').length, 1);
+
+/* Process Rate Master!A44: bead table covers 50-200mm only. */
+eq('a weld past 200mm is flagged',
+   engine.cost(Object.assign({}, JOB, { tubeOD: 220 })).notes.filter(x => x.note.ref === 'W-2').length, 1);
+eq('the reference job is inside the table', r.notes.filter(x => x.note.ref === 'W-2').length, 0);
+
+/* Final Output!A18, verbatim. */
+eq('the workbook\'s disclaimer travels with the result',
+   /^This is an approximate manufacturing cost estimate for quotation purposes\./.test(r.disclaimer), true);
+
+/* Statements the workbook's own formulas have overtaken. */
+eq('four overtaken workbook statements are recorded', r.workbookNotes.length, 4);
+eq('  ...each naming its cell', r.workbookNotes.filter(w => !w.cell).length, 0);
+eq('  ...and none of them is a job note',
+   r.notes.filter(x => /^S-/.test(x.note.ref || '')).length, 0);
+
+/* None of the new inputs moves the reference job at its shipped values. */
+near('shipped defaults still give the workbook total',
+     engine.cost(JOB, engine.engineeringDefaults()).grandTotal, 63384.10479, 0.5);
+
 /* ── report ─────────────────────────────────────────────────────── */
 if (fail) {
   console.log('\n  WORKBOOK-V1 FAILURES:');

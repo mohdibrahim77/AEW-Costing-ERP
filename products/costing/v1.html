@@ -350,8 +350,98 @@ details.eng .grid input{padding:6px 8px;font-size:var(--fs-xs)}
   0%{background:rgba(5,150,105,.16)}
   100%{background:transparent}
 }
+/* ── per-component controls ─────────────────────────────────────
+   The cells every component sheet lets an estimator set: New Material?,
+   raw shape on the end covers, and the Manual Overrides block. Shown in
+   the expanded row, beside the dimensions they change. */
+.ctl{margin-top:var(--d-6);padding-top:var(--d-5);border-top:1px solid var(--ink-200)}
+.ctl h4{margin:0 0 var(--d-4)}
+.ctl-row{display:flex;align-items:center;gap:var(--d-4);margin:0 0 var(--d-4)}
+.ctl-row label{flex:1;font-size:var(--fs-xs);color:var(--ink-600)}
+.ctl select,.ctl input{
+  font:inherit;font-size:var(--fs-xs);padding:4px 6px;
+  border:1px solid var(--ink-200);border-radius:var(--r4);background:var(--surface);
+}
+.ctl input{width:84px;font-family:var(--mono);text-align:right}
+.ctl input.is-ov{border-color:var(--blueprint);background:var(--blueprint-l)}
+.ctl .hint{margin:var(--d-2) 0 0;font-size:11px;color:var(--ink-400);line-height:1.45}
+.ov-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--d-3) var(--d-5)}
+.ov-grid .ctl-row{margin:0}
+
+/* ── withheld ───────────────────────────────────────────────────── */
+.top-total .val.is-withheld{font-size:13px;color:#fca5a5;letter-spacing:0}
+
+/* ── disclaimer ─────────────────────────────────────────────────── */
+.disclaimer{
+  margin:var(--d-6) 0 0;padding:var(--d-5) var(--d-6);font-size:11px;line-height:1.55;
+  color:var(--ink-500);background:var(--surface-2);border-radius:var(--r8);
+}
+
+/* ── views ──────────────────────────────────────────────────────── */
+.vsec{padding:var(--d-6);border-bottom:1px solid var(--ink-100)}
+.vsec:last-child{border-bottom:none}
+.vsec h3{
+  margin:0 0 var(--d-2);font-size:var(--fs-xs);font-weight:600;
+  text-transform:uppercase;letter-spacing:var(--ls-wide);color:var(--ink-600);
+}
+.vsec .src{margin:0 0 var(--d-5);font-size:11px;color:var(--ink-400);line-height:1.5}
+table.vt{width:100%;border-collapse:collapse;font-size:var(--fs-xs)}
+table.vt th{
+  text-align:left;padding:var(--d-2) var(--d-4);font-size:10px;font-weight:600;
+  text-transform:uppercase;letter-spacing:var(--ls-wide);color:var(--ink-400);
+  border-bottom:1px solid var(--ink-200);
+}
+table.vt td{padding:var(--d-3) var(--d-4);border-bottom:1px solid var(--ink-100)}
+table.vt th.r,table.vt td.r{text-align:right}
+table.vt tr.tot td{font-weight:600;border-top:1px solid var(--ink-200);border-bottom:none}
+table.vt input{
+  width:92px;font-family:var(--mono);font-size:var(--fs-xs);text-align:right;
+  padding:3px 6px;border:1px solid var(--ink-200);border-radius:var(--r4);
+}
+table.vt tr.ghost td{color:var(--ink-400)}
+.flag{font-family:var(--mono);font-size:9px;letter-spacing:var(--ls-wide);
+  text-transform:uppercase;color:var(--amber);margin-left:6px}
+.bars{display:grid;gap:var(--d-3)}
+.bar{display:grid;grid-template-columns:150px 1fr 70px;align-items:center;gap:var(--d-4);font-size:var(--fs-xs)}
+.bar i{display:block;height:6px;border-radius:3px;background:var(--emerald)}
+.bar span.v{font-family:var(--mono);text-align:right}
+.rec{display:grid;grid-template-columns:auto 1fr;gap:var(--d-3) var(--d-6);font-size:var(--fs-xs)}
+.rec dt{color:var(--ink-500)}
+.rec dd{margin:0;font-family:var(--mono)}
+details.sub>summary{cursor:pointer;font-size:var(--fs-xs);font-weight:600;color:var(--ink-600);
+  list-style:none;padding:var(--d-2) 0}
+details.sub>summary::-webkit-details-marker{display:none}
+details.sub>summary::before{content:'▸ ';color:var(--ink-400)}
+details.sub[open]>summary::before{content:'▾ '}
+
+/* ── workbook notes ─────────────────────────────────────────────── */
+.wbn{padding:var(--d-5) var(--d-6);border-top:1px solid var(--ink-100);font-size:var(--fs-xs);line-height:1.55}
+.wbn .cell{font-family:var(--mono);font-size:10px;color:var(--ink-400)}
+.wbn q{display:block;margin:var(--d-2) 0;color:var(--ink-500);font-style:italic}
+.wbn .but{color:var(--ink-600)}
+
 tr.detail{display:none}
 tr.detail.open{display:table-row}
+
+/* ── phones ─────────────────────────────────────────────────────────
+   Last in the sheet on purpose: the control rules above set font-size
+   and width, and a media block earlier in the file would lose to them.
+
+   The per-component controls and tracker inputs were 27-28px tall —
+   workable with a mouse, a miss waiting to happen with a thumb. 16px text
+   also stops iOS zooming the page every time one is focused. */
+@media(max-width:960px){
+  .ctl select,.ctl input,table.vt input,#views input{min-height:40px;font-size:16px}
+  .ctl input{width:120px}
+  .ov-grid{grid-template-columns:1fr}
+  details.sub>summary{min-height:44px;display:flex;align-items:center}
+  /* The masthead wrapped to three lines and held 123px of an 812px screen,
+     sticky, through every scroll. The preview badge and subtitle are what a
+     phone can spare; the running total is what it cannot. */
+  .top{padding:var(--d-4) var(--d-5);gap:var(--d-4)}
+  .top .badge,.top .sub{display:none}
+  .top-total .val{font-size:18px}
+}
 </style>
 </head>
 <body>
@@ -434,6 +524,14 @@ tr.detail.open{display:table-row}
       <div class="tot" id="totals"></div>
     </div>
 
+    <div class="card" id="views-card">
+      <div class="card-h">
+        <h2>Shop floor &amp; records</h2>
+        <span class="meta">the workbook's other three sheets</span>
+      </div>
+      <div id="views"></div>
+    </div>
+
     <div class="card" id="notes-card">
       <div class="card-h">
         <h2>Check before quoting</h2>
@@ -449,6 +547,7 @@ tr.detail.open{display:table-row}
 <script src="../../assets/js/costing/v1/geometry.js"></script>
 <script src="../../assets/js/costing/v1/inputs.js"></script>
 <script src="../../assets/js/costing/v1/engine.js"></script>
+<script src="../../assets/js/costing/v1/views.js"></script>
 <script>
 (function () {
   'use strict';
@@ -460,6 +559,10 @@ tr.detail.open{display:table-row}
   var state = IN.defaults();
   var eng   = EN.engineeringDefaults();
   var open  = {};        /* which component rows are expanded */
+  var VW    = window.HISPL_VIEWS_V1;
+  var actuals = {};      /* Actual Cost Tracker entries, per component */
+  var quoted  = 0;       /* Cylinder Database column J — typed, never derived */
+  var lastRun = null;
   var last  = {};        /* previous figures, so a change can be flashed */
 
   var $ = function (id) { return document.getElementById(id); };
@@ -536,8 +639,25 @@ tr.detail.open{display:table-row}
     ['assemblyRate',   'Assembly rate',          '₹/hr'],
     ['paintArea',      'Painted area',           'cm²'],
     ['packingWeight',  'Packing weight',         'kg'],
-    ['tieRodAllowance','Tie rod closed length',  'mm']
+    ['tieRodAllowance','Tie rod closed length',  'mm'],
+    /* Cost Summary B35 and B23 */
+    ['additionalCost',  'Additional cost',        '₹'],
+    ['weightAdjustment','Weight allowance',       'kg'],
+    /* Tie Rod B11, B12, B20, B27 */
+    ['tieRodYield',     'Tie rod yield stress',   'N/mm²'],
+    ['tieRodSafety',    'Tie rod safety factor',  ''],
+    ['tieRodDiaOverride',    'Tie rod dia override',    'mm'],
+    ['tieRodLengthOverride', 'Tie rod length override', 'mm'],
+    /* CEC Clevis B14, Foot Lug B11, Trunnion B10 */
+    ['clevisLugs',      'Clevis lugs',            ''],
+    ['footLugs',        'Foot lugs',              ''],
+    ['trunnionQty',     'Trunnions',              '']
   ];
+
+  /* Blank means "use the calculated value" on these, exactly as the
+     sheet's IF(cell="", standard, cell) reads it. Zero would be a real
+     entry, and a zero-diameter tie rod is not what an empty box means. */
+  function isOverrideKey(k) { return /Override$/.test(k); }
 
   function buildEng() {
     var h = '', i, f;
@@ -546,14 +666,15 @@ tr.detail.open{display:table-row}
       h += '<div class="f"><label for="e-' + f[0] + '">' + esc(f[1]) +
            (f[2] ? '<span class="unit">' + esc(f[2]) + '</span>' : '') + '</label>' +
            '<input id="e-' + f[0] + '" data-e="' + f[0] + '" type="number" step="any" min="0" value="' +
-           eng[f[0]] + '"></div>';
+           (eng[f[0]] === null || eng[f[0]] === undefined ? '' : eng[f[0]]) + '"' +
+           (isOverrideKey(f[0]) ? ' placeholder="calculated"' : '') + '></div>';
     }
     $('eng-grid').innerHTML = h;
     $('eng-grid').addEventListener('input', function (ev) {
       var key = ev.target.getAttribute('data-e');
       if (!key) return;
       var n = parseFloat(ev.target.value);
-      eng[key] = isNaN(n) ? 0 : n;
+      eng[key] = isNaN(n) ? (isOverrideKey(key) ? null : 0) : n;
       run();
     });
   }
@@ -588,12 +709,30 @@ tr.detail.open{display:table-row}
         '</ul></div>'
       : '';
 
-    $('hero-total').classList.remove('is-stale');
-    setFigure($('hero-total'), money(r.grandTotal), 'grand');
+    lastRun = r;
+    var hero = $('hero-total');
+    if (r.withheld && r.withheld.length) {
+      /* The workbook prints "INVALID - FIX RAW OD" where the total goes.
+         Showing a figure here would be showing one that is missing a part. */
+      $('validation').innerHTML =
+        '<div class="errs"><h3>No total — the workbook withholds it</h3><ul>' +
+        r.withheld.map(function (w) {
+          return '<li><b>' + esc(w.component) + ':</b> ' + esc(w.reason) + '</li>';
+        }).join('') + '</ul></div>' + $('validation').innerHTML;
+      hero.textContent = 'Withheld — see the left panel';
+      hero.classList.add('is-withheld');
+      hero.classList.remove('is-stale');
+      last.grand = undefined;
+    } else {
+      hero.classList.remove('is-stale');
+      hero.classList.remove('is-withheld');
+      setFigure(hero, money(r.grandTotal), 'grand');
+    }
 
     renderMeter(r);
     renderComponents(r);
     renderTotals(r);
+    renderViews(r);
     renderNotes(r);
   }
 
@@ -729,6 +868,7 @@ tr.detail.open{display:table-row}
     h += '<dt>Weight</dt><dd>' + c.weight.toFixed(3) + ' kg</dd>';
     h += '<dt>Material rate</dt><dd>' + money2(c.materialRate) + '/kg</dd>';
     h += '</dl>';
+    h += controlsHTML(c);
 
     if (c.geometry) {
       h += '<div class="basis"><b>' + esc(c.geometry.confidence.label) + '</b> · keyed on ' +
@@ -802,6 +942,67 @@ tr.detail.open{display:table-row}
     return h;
   }
 
+  /* The cells a component sheet lets the estimator set. */
+  function controlsHTML(c) {
+    var h = '<div class="ctl"><h4>Set on this component</h4>';
+    var nm = (eng.newMaterial || {})[c.id] === 'No' ? 'No' : 'Yes';
+    h += '<div class="ctl-row"><label for="nm-' + c.id + '">New material?</label>' +
+         '<select id="nm-' + c.id + '" data-nm="' + c.id + '">' +
+         '<option' + (nm === 'Yes' ? ' selected' : '') + '>Yes</option>' +
+         '<option' + (nm === 'No' ? ' selected' : '') + '>No</option></select></div>';
+    h += '<p class="hint">"No" for a reused or reconditioned part — material cost becomes zero, ' +
+         'weight and machining stay. The sheet\'s own B4.</p>';
+
+    if (c.id === 'cec' || c.id === 'hec') {
+      var sh = c.shape || 'Round';
+      h += '<div class="ctl-row" style="margin-top:var(--d-5)"><label for="sh-' + c.id +
+           '">Raw material shape</label><select id="sh-' + c.id + '" data-shape="' + c.id + '">' +
+           '<option' + (sh === 'Round' ? ' selected' : '') + '>Round</option>' +
+           '<option' + (sh !== 'Round' ? ' selected' : '') + '>Profile / Cuboid Block</option>' +
+           '</select></div>';
+    }
+
+    if (c.geometry && c.geometry.table) {
+      var base = GE.derive(c.geometry.table, c.geometry.driverValue);
+      var ovs = (eng.geometry || {})[c.id] || {};
+      h += '<h4 style="margin-top:var(--d-6)">Override from a GA drawing</h4><div class="ov-grid">';
+      var k;
+      for (k in c.geometry.values) {
+        if (!Object.prototype.hasOwnProperty.call(c.geometry.values, k)) continue;
+        var has = ovs[k] !== undefined && ovs[k] !== null && ovs[k] !== '';
+        h += '<div class="ctl-row"><label for="ov-' + c.id + '-' + k + '">' + esc(label(k)) +
+             '</label><input id="ov-' + c.id + '-' + k + '" data-ovc="' + c.id + '" data-ovk="' + k +
+             '" type="number" step="any" min="0" class="' + (has ? 'is-ov' : '') +
+             '" placeholder="' + (base.values ? base.values[k] : '') + '" value="' +
+             (has ? ovs[k] : '') + '"></div>';
+      }
+      h += '</div><p class="hint">Blank uses the table. A value replaces it — the sheet\'s ' +
+           '"Manual Overrides" block.</p>';
+    }
+    return h + '</div>';
+  }
+
+  function onCompControl(ev) {
+    var t = ev.target, id, k, v;
+    if ((id = t.getAttribute('data-nm'))) {
+      eng.newMaterial = eng.newMaterial || {};
+      eng.newMaterial[id] = t.value;
+    } else if ((id = t.getAttribute('data-shape'))) {
+      eng.coverShape = eng.coverShape || {};
+      eng.coverShape[id] = t.value;
+    } else if ((id = t.getAttribute('data-ovc'))) {
+      k = t.getAttribute('data-ovk');
+      eng.geometry = eng.geometry || {};
+      eng.geometry[id] = eng.geometry[id] || {};
+      v = parseFloat(t.value);
+      if (t.value === '' || isNaN(v)) delete eng.geometry[id][k];
+      else eng.geometry[id][k] = v;
+    } else {
+      return;
+    }
+    run();
+  }
+
   function fmtDim(v) {
     return typeof v === 'number' ? v + ' mm' : esc(String(v));
   }
@@ -855,8 +1056,105 @@ tr.detail.open{display:table-row}
            'components each sheet counts.</small>' +
            '</span><span class="money">' + money(r.totals.finalOutput.total) + '</span></div>';
     }
+    if ((eng.additionalCost || 0) !== 0) {
+      h = h.replace('<div class="tot-row grand">',
+        '<div class="tot-row"><span class="lab">Additional cost<small>Cost Summary B35 — freight, ' +
+        'special packaging, contingency</small></span><span class="money">' +
+        money(eng.additionalCost) + '</span></div><div class="tot-row grand">');
+    }
+    /* Final Output!A18, verbatim, under the figure it qualifies. */
+    h += '<p class="disclaimer">' + esc(r.disclaimer) + '</p>';
     $('totals').innerHTML = h;
     $('weight-meta').textContent = r.totalWeight.toFixed(1) + ' kg';
+  }
+
+  function renderViews(r) {
+    var h = '', i;
+
+    /* Machine Time Calculator */
+    var mt = VW.machineTime(r);
+    if (mt) {
+      var max = mt.machines.length ? mt.machines[0].hours : 1;
+      h += '<div class="vsec"><h3>Machine hours</h3><p class="src">Machine Time Calculator. ' +
+           'Hours only. ' + mt.withoutStandard + ' operations are priced by area or weight and ' +
+           'carry no hour standard — the sheet prints “TIME STANDARD NOT AVAILABLE” rather than ' +
+           'inventing one.</p><div class="bars">';
+      for (i = 0; i < mt.machines.length; i++) {
+        var m = mt.machines[i];
+        h += '<div class="bar"><span>' + esc(m.machine) + '</span><i style="width:' +
+             (m.hours / max * 100).toFixed(1) + '%"></i><span class="v">' + m.hours.toFixed(2) +
+             ' hr</span></div>';
+      }
+      h += '<div class="bar" style="font-weight:600"><span>Total</span><span></span><span class="v">' +
+           mt.totalHours.toFixed(2) + ' hr</span></div></div></div>';
+    }
+
+    /* Cylinder Database */
+    var rec = VW.databaseRow(r, quoted, null);
+    if (rec) {
+      h += '<div class="vsec"><h3>Job record</h3><p class="src">Cylinder Database, row 5. ' +
+           esc(rec.pricingNote) + '</p><dl class="rec">' +
+           '<dt>Cylinder ID</dt><dd>' + esc(rec.cylinderId) + '</dd>' +
+           '<dt>Inquiry</dt><dd>' + esc(rec.inquiryNo || '—') + '</dd>' +
+           '<dt>Specification</dt><dd>' + rec.bore + ' × ' + rec.rod + ' × ' + rec.stroke +
+             ' · ' + esc(rec.mounting) + '</dd>' +
+           '<dt>Estimated cost</dt><dd>' + money(rec.estimatedCost) + '</dd>' +
+           '<dt><label for="q-price">Quoted price</label></dt><dd><input id="q-price" data-q="1" ' +
+             'type="number" step="any" min="0" value="' + (quoted || '') + '" placeholder="typed once agreed" ' +
+             'style="width:130px;font-family:var(--mono);text-align:right;padding:3px 6px;' +
+             'border:1px solid var(--ink-200);border-radius:4px"></dd>' +
+           '<dt>Margin</dt><dd>' + (quoted ? (rec.marginPct * 100).toFixed(1) + '% of quoted price'
+             : '— until a price is typed') + '</dd>' +
+           '</dl></div>';
+    }
+
+    /* Actual Cost Tracker */
+    var ac = VW.actualCost(r, actuals);
+    if (ac) {
+      h += '<div class="vsec"><details class="sub"><summary>Actual cost tracker</summary>' +
+           '<p class="src">Actual Cost Tracker. Production enters what it really cost. Reproduced ' +
+           'as the sheet has it: per piece and ungated, so rows for parts not fitted still ' +
+           'appear, and its subtotal will not match the Cost Summary.</p>' +
+           '<div style="overflow-x:auto"><table class="vt"><thead><tr><th>Component</th>' +
+           '<th class="r">Est. material</th><th class="r">Actual</th>' +
+           '<th class="r">Est. process</th><th class="r">Actual</th>' +
+           '<th class="r">Variance</th></tr></thead><tbody>';
+      for (i = 0; i < ac.rows.length; i++) {
+        var a = ac.rows[i], cur = actuals[a.id] || {};
+        h += '<tr' + (a.countedButNotFitted ? ' class="ghost"' : '') + '><td>' + esc(a.component) +
+             (a.countedButNotFitted ? '<span class="flag">not fitted</span>' : '') +
+             (a.perPieceOnly ? '<span class="flag">per piece of ' + a.perPieceOnly + '</span>' : '') +
+             '</td><td class="r money">' + money(a.estMaterial) + '</td>' +
+             '<td class="r"><input data-act="' + a.id + '" data-actk="material" type="number" step="any" min="0" value="' +
+               (cur.material || '') + '"></td>' +
+             '<td class="r money">' + money(a.estProcess) + '</td>' +
+             '<td class="r"><input data-act="' + a.id + '" data-actk="process" type="number" step="any" min="0" value="' +
+               (cur.process || '') + '"></td>' +
+             '<td class="r money">' + ((cur.material || cur.process) ? money(a.variance) : '—') + '</td></tr>';
+      }
+      h += '<tr class="tot"><td>Total</td><td class="r money">' + money(ac.totals.estMaterial) +
+           '</td><td class="r money">' + money(ac.totals.actualMaterial) + '</td><td class="r money">' +
+           money(ac.totals.estProcess) + '</td><td class="r money">' + money(ac.totals.actualProcess) +
+           '</td><td class="r money">' + (ac.totals.actual ? money(ac.totals.variance) : '—') +
+           '</td></tr></tbody></table></div></details></div>';
+    }
+
+    $('views').innerHTML = h;
+  }
+
+  function onViewControl(ev) {
+    var t = ev.target, id;
+    if (t.getAttribute('data-q')) {
+      var q = parseFloat(t.value);
+      quoted = isNaN(q) ? 0 : q;
+    } else if ((id = t.getAttribute('data-act'))) {
+      var k = t.getAttribute('data-actk'), v = parseFloat(t.value);
+      actuals[id] = actuals[id] || {};
+      actuals[id][k] = isNaN(v) ? 0 : v;
+    } else {
+      return;
+    }
+    if (lastRun) renderViews(lastRun);
   }
 
   function renderNotes(r) {
@@ -872,8 +1170,22 @@ tr.detail.open{display:table-row}
            '<span class="body"><span class="who">' + esc(n.component) + '</span>' +
            esc(n.note.text) + '</span></div>';
     }
-    $('notes').innerHTML = h || '<div class="note info"><span class="tag">ok</span>' +
+    h = h || '<div class="note info"><span class="tag">ok</span>' +
       '<span class="body">Nothing outstanding on this configuration.</span></div>';
+    /* Not job notes, so not in the list above. Recorded so that anyone who
+       reads one of these cells does not conclude the tool is wrong. */
+    if (r.workbookNotes && r.workbookNotes.length) {
+      h += '<details class="sub" style="padding:0 var(--d-6) var(--d-5)"><summary>' +
+           r.workbookNotes.length + ' statements in the workbook its own formulas have overtaken' +
+           '</summary>';
+      for (i = 0; i < r.workbookNotes.length; i++) {
+        var w = r.workbookNotes[i];
+        h += '<div class="wbn"><span class="cell">' + esc(w.ref) + ' · ' + esc(w.cell) + '</span>' +
+             '<q>' + esc(w.says) + '</q><span class="but">' + esc(w.but) + '</span></div>';
+      }
+      h += '</details>';
+    }
+    $('notes').innerHTML = h;
     var defects = ns.filter(function (x) { return x.note.level === 'defect'; }).length;
     $('notes-meta').textContent = defects
       ? defects + ' workbook defect' + (defects === 1 ? '' : 's') + ' reproduced, not corrected'
@@ -882,6 +1194,10 @@ tr.detail.open{display:table-row}
 
   buildForm();
   buildEng();
+  /* Delegated, and on change rather than input: the rows are rebuilt on
+     every run, so an input listener would steal focus mid-keystroke. */
+  $('comp-body').addEventListener('change', onCompControl);
+  $('views').addEventListener('change', onViewControl);
   run();
 })();
 </script>

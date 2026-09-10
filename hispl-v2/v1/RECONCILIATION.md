@@ -265,3 +265,96 @@ Not wired into the live ERP. `products/costing/v1.html` is unlinked.
 6. **Bought-out placeholders** — the Unbrako bolt rate is flagged in the
    workbook itself as awaiting real vendor pricing, and bellows are
    costed at zero pending a quote.
+
+---
+
+## 9. Second pass — every sheet, and every note she typed (2026-09-10)
+
+The first build ported 29 of 33 sheets and never opened four. This pass
+accounts for all 33, and reads the 195 annotation cells Aniktha typed
+beside the formulas as instructions, not decoration.
+
+### Sheet coverage
+
+| Sheets | Count | Where |
+|---|---|---|
+| Tube, Piston Rod, Cap End Cover, Head End Cover, Gland, Cushion Bush, Stop Tube, Rear Eye, Piston, Rod Eye, CEC Clevis, Trunnion, Flange, Foot Lug, Tie Rod, Front Flange | 16 | `engine.js`, one function each |
+| Material, Machine Rate, Process Rate, Machine Time, Raw Material Rate masters | 5 | `masters.js` |
+| Inquiry Input, Geometry Master, Seal Master, Bought Out & Seal Kit Master, BOC Calculated Items, Assembly Painting Packing, Cost Summary, Final Output | 8 | `inputs.js`, `geometry.js`, `engine.js` |
+| Machine Time Calculator, Actual Cost Tracker, Cylinder Database | 3 | `views.js` — **new** |
+| MASTER REVIEW - FREEZE CHECK | 1 | `tests/freeze-check-v1.js` — **new** |
+
+The three new views do not feed the estimate; each derives from a
+finished costing run and recomputes nothing.
+
+- **Machine Time Calculator** reports hours only where a machine-time
+  table was read. Area- and weight-priced operations print the sheet's
+  own words, "TIME STANDARD NOT AVAILABLE", rather than an hour
+  back-calculated from rupees.
+- **Actual Cost Tracker** reproduces the sheet exactly — per piece and
+  ungated — so its estimated subtotals match B17 (₹25,011.25) and D17
+  (₹17,263.86). That is the same defect family as FO-1: it lists a stop
+  tube and rear eye that are not fitted, and counts the trunnion pair once.
+- **Cylinder Database** builds row 5, including the `CYL-18991230` id the
+  sheet prints when no date is set. Margin exists only once a quoted
+  price is typed: "no automatic profit % is applied anywhere in this
+  workbook."
+
+### The freeze-check sheet as a test
+
+`MASTER REVIEW - FREEZE CHECK` is 980 live references that HISPL compiled
+"for final review before freeze" — every master, rate card and geometry
+table in one place. `tests/freeze-check-v1.js` reads the `.xlsx` and walks
+it: **698 assertions, none typed by hand**, each geometry row checked to
+land on its own bin. It found one slip of mine — `MS-EN353` transcribed as
+"EN353 Case Hardening" instead of "…Hardening Steel". Fixed.
+
+### Built from her notes
+
+| Her cell | What it says | Built |
+|---|---|---|
+| B4 on every component sheet; Cost Summary A5 | "New Material? … set to No to zero out material cost for a reused part" | Toggle on all 16 components. Weight and machining stay. |
+| Override block on every geometry table | "enter a value here to force it from an actual GA/design drawing" | Overrides on all 12 tables; blank falls through, the UI marks what came from a drawing |
+| Cap / Head End Cover B5, C5 | "Round = solid round bar … Profile / Cuboid Block = flat/rectangular stock" | Raw shape per cover; turning still uses finished OD, as C12 says |
+| Cost Summary A23, A34 | Weight allowance; "ADDITIONAL COST (manual - e.g. special packaging, freight, contingency)" | Both, both reaching the totals |
+| Tie Rod C11, B20, B27 | Yield "Editable if HISPL uses a different tie rod steel/spec"; diameter and length overrides | Yield, safety factor, both overrides |
+| CEC Clevis B14; Geometry Master H104 | Lugs = 2 is "a convention default, NOT a confirmed HISPL standard - do not treat it as one" | Input, with that sentence as warning **G-1** |
+| Foot Lug B11, Trunnion B10 | 4 lugs standard; trunnions in pairs | Both inputs |
+| Every weld block | "No. of Weld Locations" | Input per weld; foot lug stays =lugs, as its cell is a formula |
+| Freeze-check §9d | "Tube total cost withheld (shows INVALID text) until fixed" | **No total** when a raw dimension is not larger than its finished one — tube, rod, stop tube (**V-1 to V-3**). The first build flagged and quoted anyway. |
+| Final Output A18 | "This is an approximate manufacturing cost estimate for quotation purposes…" | Verbatim, under the total |
+| BOC Calculated Items B87, E86, E97 | Bolt rate "PLACEHOLDER … do not treat as a real bolt price"; bellows "enter from an actual supplier quote" | Warnings **B-1**, **B-2** |
+| Process Rate Master A44 | Bead table "covers 50-200mm only … extend if a diameter outside this range is needed" | Warning **W-2** above 200 mm |
+
+### Confirmed by her notes, no change needed
+
+- Honing threshold "applies to BOTH Length (Stroke) AND ID together" (PRM A24) — the AND already implemented.
+- C-45 tiered pricing "applies to: CEC, HEC, Foot Lug, Gland, Flange, CEC Clevis" (RMRM A12) — exactly those six.
+- Rod eye weld on piston rod diameter, "verified NOT Tube OD" (PRM A40, freeze-check §9b).
+- Legacy welding constants "no longer used anywhere in the current model" (PRM A40).
+- Tube OD turning allowance "Not wired into Raw OD" (Inquiry C18).
+- BOC presence "deferred to a later phase, per HISPL instruction" (Inquiry A35).
+- Stop tube "Costed using SOLID ROUND raw material" (Stop Tube A2); rod eye weight "always calculated as a ring" (Rod Eye C5).
+
+### Statements the workbook's own formulas have overtaken
+
+Recorded, not acted on. None changes a cost; all four would make a
+careful reader think the tool is wrong.
+
+| | Cell | Says | But |
+|---|---|---|---|
+| S-1 | Inquiry Input A31 | Rod Eye is "always costed" | Cost Summary B15 gates it on mounting; freeze-check §9c confirms |
+| S-2 | CEC Clevis A2 | No approved table; "contributes Rs.0 until real dimensions are entered" | Its own C9–C13 read the HISPL-approved ISO 6022 table; B41 costs it at ₹2,307 |
+| S-3 | Geometry Master A2, G100, E62 | "Phase 1 … NOT connected"; Trunnion OD pending, "do not invent" a ratio | Trunnion sheet carries an approved table with a Trunnion OD column; freeze-check §8 records all seven as implemented 31-Aug-2026 |
+| S-4 | Geometry Master E40 | "no Applicable Yes/No flag yet" for stop tubes | Inquiry Input B33 now exists and the Cost Summary gates on it |
+
+Worth asking her to tidy these before the workbook is frozen — someone
+new reading A2 on the clevis sheet will believe the clevis is free.
+
+### Files added in this pass
+
+```
+assets/js/costing/v1/views.js       Machine Time Calculator, Actual Cost Tracker, Cylinder Database
+tests/freeze-check-v1.js            698 assertions walked from MASTER REVIEW - FREEZE CHECK
+hispl-v2/v1/ANNOTATIONS.txt         all 195 annotation cells, by sheet and cell
+```

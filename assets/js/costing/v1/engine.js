@@ -48,6 +48,29 @@
     };
   }
 
+  /* IF(B4="No", 0, cost). Anything other than an explicit "No" means the
+     part is new, which is the sheets' own default. */
+  /* The override block for one component, or undefined when none was
+     entered. Kept as a lookup so a missing block behaves exactly like an
+     empty one — the sheets treat blank as "use the table". */
+  function geomOv(man, id) {
+    return (man && man.geometry) ? man.geometry[id] : undefined;
+  }
+
+  /* "No. of Weld Locations" is a typed cell on every weld block, shipped
+     at 1. The foot lug is the one exception: its cell is =B11, the lug
+     count, so it is not an input there and is not read from here. */
+  function weldLoc(man, key) {
+    var w = (man && man.weldLocations) || {};
+    var v = w[key];
+    return (typeof v === 'number' && v > 0) ? v : 1;
+  }
+
+  function ifNewMaterial(man, id, cost) {
+    var flags = man.newMaterial || {};
+    return flags[id] === 'No' ? 0 : cost;
+  }
+
   /* A process routing row. Kept as data so the UI can show the basis
      and the rate that produced every rupee, not just the rupee. */
   function row(name, machine, basisLabel, basis, rate) {
@@ -96,9 +119,13 @@
     var qty    = 1;
     var notes  = [];
 
+    var invalid = null;
     if (rawID >= rawOD) {
-      notes.push({ level: 'error', text: 'Raw ID (' + rawID + 'mm) is not smaller than Raw OD (' +
-        rawOD + 'mm). The tube has no wall — the workbook prints "INVALID - FIX RAW OD" here.' });
+      invalid = 'Raw ID (' + rawID + 'mm) is not smaller than Raw OD (' + rawOD +
+                'mm). The tube has no wall.';
+      notes.push({ level: 'error', ref: 'V-1', text: invalid +
+        ' The workbook withholds the tube cost entirely until this is fixed — ' +
+        'Tube!B74 prints "INVALID - FIX RAW OD" instead of a number.' });
     }
     if (len < inp.stroke) {
       notes.push({ level: 'error', text: 'Tube length (' + len + 'mm) is shorter than the stroke (' +
@@ -109,7 +136,7 @@
 
     var weight = wAnnulus(rawOD, rawID, len, rho);
     var rate   = M.materialRate('MS-ST52', rawOD);
-    var matCost = weight * rate;
+    var matCost = ifNewMaterial(man, 'tube', weight * rate);
 
     var stock = M.stockRemovalFactor(rawOD - finOD);
     var rtHrs = M.roughTurnHours(finOD, len);
@@ -137,9 +164,9 @@
        pays Rs.1,298 to weld one on. Left as the workbook has it and
        raised as defect W-1. */
     var welds = [
-      weld(finOD, 1, 'Part Welding (tube parts joint)'),
-      weld(finOD, 1, 'CEC Welding'),
-      weld(finOD, 1, 'Rear Eye Welding')
+      weld(finOD, weldLoc(man, 'tubePart'),    'Part Welding (tube parts joint)'),
+      weld(finOD, weldLoc(man, 'tubeCEC'),     'CEC Welding'),
+      weld(finOD, weldLoc(man, 'tubeRearEye'), 'Rear Eye Welding')
     ];
     if (inp.hasRearEye !== 'Yes') {
       notes.push({ level: 'defect', ref: 'W-1', text:
@@ -156,8 +183,14 @@
                    finishedID: 'Bore input', rawID: 'Bore + boring allowance' },
       weight: weight, materialCost: matCost,
       processes: procs, welds: welds, processCost: procCost,
-      additionalCost: 0, unitCost: matCost + procCost,
-      totalCost: (matCost + procCost) * qty, notes: notes
+      additionalCost: 0,
+      /* Withheld, not zeroed. Zero would quietly make the cylinder
+         cheaper; null makes the total impossible to produce, which is
+         what the workbook does. */
+      invalid: invalid,
+      unitCost: invalid ? null : matCost + procCost,
+      totalCost: invalid ? null : (matCost + procCost) * qty,
+      notes: notes
     };
   }
 
@@ -165,18 +198,20 @@
   function pistonRod(inp, man, mount) {
     var mat = M.material('MS-EN19'), rho = mat.density;
     var rawDia = man.rodRawDia, finDia = inp.rodDia, len = man.rodLength, qty = 1;
-    var notes = [];
+    var notes = [], invalid = null;
     if (finDia >= rawDia) {
-      notes.push({ level: 'error', text: 'Finished rod diameter (' + finDia +
-        'mm) is not smaller than the raw bar (' + rawDia + 'mm). You cannot machine a rod ' +
-        'from stock narrower than itself.' });
+      invalid = 'Finished rod diameter (' + finDia + 'mm) is not smaller than the raw bar (' +
+                rawDia + 'mm).';
+      notes.push({ level: 'error', ref: 'V-2', text: invalid +
+        ' You cannot machine a rod from stock narrower than itself — ' +
+        'Piston Rod!H7 prints "CHECK RAW DIAMETER".' });
     }
 
     ceilingNotes(len, notes);
 
     var weight = wSolid(rawDia, len, rho);
     var rate = M.materialRate('MS-EN19', rawDia);
-    var matCost = weight * rate;
+    var matCost = ifNewMaterial(man, 'pistonRod', weight * rate);
 
     var proc = inp.rodProcess;
     var doHT = proc === 'Toughening and Induction Hardening';
@@ -217,7 +252,7 @@
     /* The rod eye is welded to the rod, so it is priced on the rod's
        diameter, not the tube's — a smaller circle and a lower bead
        count than every other weld in the model. */
-    var welds = mount.rodEye ? [weld(finDia, 1, 'Rod Eye Welding')] : [];
+    var welds = mount.rodEye ? [weld(finDia, weldLoc(man, 'rodEye'), 'Rod Eye Welding')] : [];
 
     var procCost = sum(procs) + sum(welds);
     return {
@@ -227,8 +262,10 @@
       dimSource: { rawDia: 'manual', length: 'manual', finishedDia: 'Rod diameter input' },
       weight: weight, materialCost: matCost, route: proc,
       processes: procs, welds: welds, processCost: procCost,
-      additionalCost: 0, unitCost: matCost + procCost,
-      totalCost: (matCost + procCost) * qty, notes: notes
+      additionalCost: 0, invalid: invalid,
+      unitCost: invalid ? null : matCost + procCost,
+      totalCost: invalid ? null : (matCost + procCost) * qty,
+      notes: notes
     };
   }
 
@@ -237,14 +274,17 @@
      formulas, identical geometry table, identical every cached value.
      One function serves both. */
   function endCover(inp, man, which) {
-    var g = G.derive('endCover', inp.bore);
+    var g = G.derive('endCover', inp.bore, geomOv(man, which.id));
     if (g.error) return blocked(which.id, which.name, which.sheet, g.error);
     var d = g.values;
     var mat = M.material('MS-C45'), rho = mat.density;
     var rate = M.materialRate('MS-C45', d.thickness);
-    /* Shape is 'Round' on both sheets: solid bar, turned down. */
-    var weight = wSolid(d.diameter, d.thickness, rho);
-    var matCost = weight * rate;
+    var shapes = man.coverShape || {};
+    var shape = shapes[which.id] === 'Profile / Cuboid Block' ? 'Profile / Cuboid Block' : 'Round';
+    var weight = shape === 'Round'
+      ? wSolid(d.diameter, d.thickness, rho)
+      : wBlock(d.width, d.height, d.thickness, rho);
+    var matCost = ifNewMaterial(man, which.id, weight * rate);
 
     var procs = [
       row('Turning', 'CNC Lathe', 'hours',
@@ -259,21 +299,24 @@
     return {
       id: which.id, name: which.name, sheet: which.sheet, present: true, qty: 1,
       material: mat.code, materialName: mat.name, density: rho, materialRate: rate,
-      dims: d, geometry: g, weight: weight, materialCost: matCost,
+      dims: d, geometry: g, weight: weight, materialCost: matCost, shape: shape,
       processes: procs, welds: [], processCost: procCost,
       additionalCost: 0, unitCost: matCost + procCost, totalCost: matCost + procCost,
-      notes: []
+      notes: shape === 'Round' ? [] : [{ level: 'info', text:
+        'Costed from profile / cuboid stock: ' + d.width + ' x ' + d.height + ' x ' +
+        d.thickness + 'mm. Turning, milling and drilling still use the ' + d.finishedOD +
+        'mm finished OD, as the sheet specifies.' }]
     };
   }
 
   /* ── GLAND ─────────────────────────────────────────────────────── */
   function gland(inp, man) {
-    var g = G.derive('gland', inp.rodDia);
+    var g = G.derive('gland', inp.rodDia, geomOv(man, 'gland'));
     if (g.error) return blocked('gland', 'Gland', 'Gland', g.error);
     var d = g.values, mat = M.material('MS-C45'), rho = mat.density;
     var rate = M.materialRate('MS-C45', d.length);
     var weight = wAnnulus(d.od, d.id, d.length, rho);
-    var matCost = weight * rate;
+    var matCost = ifNewMaterial(man, 'gland', weight * rate);
     var procs = [
       row('Turning', 'CNC Lathe', 'hours',
           M.roughTurnHours(d.od, d.length), M.machineRate('CNC Lathe')),
@@ -290,13 +333,13 @@
   }
 
   /* ── CUSHION BUSH ──────────────────────────────────────────────── */
-  function cushionBush(inp) {
-    var g = G.derive('cushionBush', inp.rodDia);
+  function cushionBush(inp, man) {
+    var g = G.derive('cushionBush', inp.rodDia, geomOv(man, 'cushionBush'));
     if (g.error) return blocked('cushionBush', 'Cushion Bush', 'Cushion Bush', g.error);
     var d = g.values, mat = M.material('BR-SAE660'), rho = mat.density;
     var rate = mat.rate;               /* bronze: no size banding */
     var weight = wAnnulus(d.od, d.id, d.length, rho);
-    var matCost = weight * rate;
+    var matCost = ifNewMaterial(man, 'cushionBush', weight * rate);
     var procs = [
       row('Turning', 'CNC Lathe', 'hours',
           M.roughTurnHours(d.od, d.length), M.machineRate('CNC Lathe')),
@@ -316,12 +359,12 @@
 
   /* ── PISTON ────────────────────────────────────────────────────── */
   function piston(inp, man) {
-    var g = G.derive('piston', inp.bore);
+    var g = G.derive('piston', inp.bore, geomOv(man, 'piston'));
     if (g.error) return blocked('piston', 'Piston', 'Piston', g.error);
     var d = g.values, mat = M.material('MS-EN8'), rho = mat.density;
     var rate = M.materialRate('MS-EN8', d.od);
     var weight = wSolid(d.od, d.length, rho);
-    var matCost = weight * rate;
+    var matCost = ifNewMaterial(man, 'piston', weight * rate);
     /* The sheet labels this row "Finish Turning" but prices it at the
        profile-cutting rate per kilo. Reproduced; raised as defect P-1. */
     var procs = [
@@ -344,14 +387,14 @@
 
   /* ── STOP TUBE ─────────────────────────────────────────────────── */
   function stopTube(inp, man) {
-    var g = G.derive('stopTube', inp.rodDia);
+    var g = G.derive('stopTube', inp.rodDia, geomOv(man, 'stopTube'));
     if (g.error) return blocked('stopTube', 'Stop Tube', 'Stop Tube', g.error);
     var d = g.values, mat = M.material('MS-EN8'), rho = mat.density;
     var len = man.stopTubeLength;
     var rate = M.materialRate('MS-EN8', d.finishedDia);
     /* Solid round stock, per the sheet's own header note. */
     var weight = wSolid(d.rawDia, len, rho);
-    var matCost = weight * rate;
+    var matCost = ifNewMaterial(man, 'stopTube', weight * rate);
     var rtHrs = M.roughTurnHours(d.finishedDia, len);
     var procs = [
       row('Turning', 'CNC Lathe', 'hours',
@@ -362,16 +405,23 @@
     var c = pack('stopTube', 'Stop Tube', 'Stop Tube', mat, rho, rate, dims, g,
                  weight, matCost, procs, [], sum(procs));
     c.dimSource = { rawDia: 'derived', finishedDia: 'derived', length: 'manual' };
+    if (d.finishedDia >= d.rawDia) {
+      c.invalid = 'Finished diameter (' + d.finishedDia + 'mm) is not smaller than the raw bar (' +
+                  d.rawDia + 'mm).';
+      c.unitCost = null; c.totalCost = null;
+      c.notes.push({ level: 'error', ref: 'V-3', text: c.invalid +
+        ' Stop Tube!H7 prints "CHECK RAW DIAMETER".' });
+    }
     return c;
   }
 
   /* ── REAR EYE ──────────────────────────────────────────────────── */
-  function rearEye(inp) {
-    var g = G.derive('rearEye', inp.tubeOD);
+  function rearEye(inp, man) {
+    var g = G.derive('rearEye', inp.tubeOD, geomOv(man, 'rearEye'));
     if (g.error) return blocked('rearEye', 'Rear Eye', 'Rear Eye', g.error);
     var d = g.values, mat = M.material('MS-PLATE-IS2062'), rho = mat.density;
     var weight = wBlock(d.width, d.height, d.thickness, rho);
-    var matCost = weight * mat.rate;
+    var matCost = ifNewMaterial(man, 'rearEye', weight * mat.rate);
     var procs = [
       row('Profile Cutting', 'Process Rate Master (Rs./kg)', 'kg',
           weight, M.processRate('profileCutting')),
@@ -386,13 +436,13 @@
 
   /* ── ROD EYE ───────────────────────────────────────────────────── */
   function rodEye(inp, man) {
-    var g = G.derive('rodEye', inp.rodDia);
+    var g = G.derive('rodEye', inp.rodDia, geomOv(man, 'rodEye'));
     if (g.error) return blocked('rodEye', 'Rod Eye', 'Rod Eye', g.error);
     var d = g.values, mat = M.material('MS-PLATE-IS2062'), rho = mat.density;
     /* Costed as a ring, not a block — HISPL Section 11. The milling
        area still uses the rectangular blank it is cut from. */
     var weight = wAnnulus(d.eyeOD, d.eyeID, d.thickness, rho);
-    var matCost = weight * mat.rate;
+    var matCost = ifNewMaterial(man, 'rodEye', weight * mat.rate);
     var procs = [
       row('Profile Cutting', 'Process Rate Master (Rs./kg)', 'kg',
           weight, M.processRate('profileCutting')),
@@ -410,12 +460,12 @@
 
   /* ── FLANGE (always present, gland retainer) ───────────────────── */
   function flange(inp, man) {
-    var g = G.derive('flange', inp.tubeOD);
+    var g = G.derive('flange', inp.tubeOD, geomOv(man, 'flange'));
     if (g.error) return blocked('flange', 'Flange', 'Flange', g.error);
     var d = g.values, mat = M.material('MS-C45'), rho = mat.density;
     var rate = M.materialRate('MS-C45', d.length);
     var weight = wSolid(d.od, d.length, rho);
-    var matCost = weight * rate;
+    var matCost = ifNewMaterial(man, 'flange', weight * rate);
     var procs = [
       row('Turning', 'CNC Lathe', 'hours',
           M.roughTurnHours(d.od, d.length), M.machineRate('CNC Lathe')),
@@ -425,14 +475,14 @@
           M.drillingHoursPerHole(man.flangeHoleDia) * man.flangeHoles,
           M.machineRate('Drilling Machine'))
     ];
-    var welds = [weld(inp.tubeOD, 1, 'Flange Welding')];
+    var welds = [weld(inp.tubeOD, weldLoc(man, 'flange'), 'Flange Welding')];
     return pack('flange', 'Flange', 'Flange', mat, rho, rate, d, g,
                 weight, matCost, procs, welds, sum(procs) + sum(welds));
   }
 
   /* ── TRUNNION ──────────────────────────────────────────────────── */
   function trunnion(inp, man) {
-    var g = G.derive('trunnion', inp.tubeOD);
+    var g = G.derive('trunnion', inp.tubeOD, geomOv(man, 'trunnion'));
     if (g.error) return blocked('trunnion', 'Trunnion', 'Trunnion', g.error);
     var d = g.values, mat = M.material('MS-EN8'), rho = mat.density;
     var rate = M.materialRate('MS-EN8', d.trunnionOD);
@@ -441,8 +491,9 @@
     var dims = { length: d.length, width: d.trunnionOD, height: d.trunnionOD,
                  pinDia: d.pinDia, trunnionOD: d.trunnionOD, thickness: d.thickness };
     var weight = wBlock(dims.length, dims.width, dims.height, rho);
-    var matCost = weight * rate;
-    var qty = 2;                        /* trunnions come in pairs */
+    var matCost = ifNewMaterial(man, 'trunnion', weight * rate);
+    /* Trunnion!B10, shipped at 2 — a trunnion mount is a pair. */
+    var qty = (typeof man.trunnionQty === 'number' && man.trunnionQty > 0) ? man.trunnionQty : 2;
     var procs = [
       { name: 'Rough Turning',    machine: 'Manual entry', basisLabel: 'manual',
         basis: null, rate: null, cost: man.trunnionRoughTurn || 0, manual: true },
@@ -456,7 +507,7 @@
           M.drillingHoursPerHole(man.trunnionHoleDia) * man.trunnionHoles,
           M.machineRate('Drilling Machine'))
     ];
-    var welds = [weld(inp.tubeOD, 1, 'Trunnion Welding')];
+    var welds = [weld(inp.tubeOD, weldLoc(man, 'trunnion'), 'Trunnion Welding')];
     var procCost = sum(procs) + sum(welds);
     var c = pack('trunnion', 'Trunnion', 'Trunnion', mat, rho, rate, dims, g,
                  weight, matCost, procs, welds, procCost);
@@ -466,21 +517,25 @@
       'Rough turning, finish turning and pin grinding are all manual and all default to Rs.0, ' +
       'so an unedited trunnion is machined for free. Only milling and drilling are automatic.' });
     c.notes.push({ level: 'info', text:
-      'Quantity 2 — a trunnion mount is a pair. Weight and cost below are per piece; the total is doubled.' });
+      'Quantity ' + qty + ' (Trunnion!B10). Weight and cost below are per piece; the total is multiplied by the quantity.' });
     return c;
   }
 
   /* ── CEC CLEVIS ────────────────────────────────────────────────── */
-  function cecClevis(inp) {
-    var g = G.derive('cecClevis', inp.bore);
+  function cecClevis(inp, man) {
+    var g = G.derive('cecClevis', inp.bore, geomOv(man, 'cecClevis'));
     if (g.error) return blocked('cecClevis', 'CEC Clevis', 'CEC Clevis', g.error);
     var d = g.values, mat = M.material('MS-C45'), rho = mat.density;
     var rate = M.materialRate('MS-C45', d.thickness);
-    var lugs = 2;
+    /* CEC Clevis!B14. The Geometry Master (H104) is blunt about it: "The
+       'Number of Lugs = 2' currently on the CEC Clevis sheet is a
+       convention default, NOT a confirmed HISPL standard - do not treat it
+       as one." So it is an input, and it says so. */
+    var lugs = (typeof man.clevisLugs === 'number' && man.clevisLugs > 0) ? man.clevisLugs : 2;
     var gross = d.length * d.width * d.thickness;
     var hole  = (PI / 4) * d.pinHole * d.pinHole * d.thickness;
     var weight = ((gross - hole) * lugs) * rho / 1e6;
-    var matCost = weight * rate;
+    var matCost = ifNewMaterial(man, 'cecClevis', weight * rate);
     var procs = [
       row('Profile Cutting', 'Process Rate Master (Rs./kg)', 'kg',
           weight, M.processRate('profileCutting')),
@@ -489,30 +544,33 @@
       row('Drilling (pin hole)', 'Drilling Machine', 'hours',
           M.drillingHoursPerHole(d.pinHole) * lugs, M.machineRate('Drilling Machine'))
     ];
-    var welds = [weld(inp.tubeOD, 1, 'CEC Clevis Welding')];
+    var welds = [weld(inp.tubeOD, weldLoc(man, 'cecClevis'), 'CEC Clevis Welding')];
     var c = pack('cecClevis', 'CEC Clevis', 'CEC Clevis', mat, rho, rate, d, g,
                  weight, matCost, procs, welds, sum(procs) + sum(welds));
     c.volumes = { grossPerLug: gross, holePerLug: hole, lugs: lugs };
+    c.notes.push({ level: 'warn', ref: 'G-1', text:
+      'Number of lugs is ' + lugs + '. HISPL\'s own Geometry Master says the default of 2 is ' +
+      '"a convention default, NOT a confirmed HISPL standard - do not treat it as one."' });
     return c;
   }
 
   /* ── FRONT FLANGE ──────────────────────────────────────────────── */
   function frontFlange(inp, man) {
-    var g = G.derive('frontFlange', inp.bore);
+    var g = G.derive('frontFlange', inp.bore, geomOv(man, 'frontFlange'));
     if (g.error) return blocked('frontFlange', 'Front Flange', 'Front Flange', g.error);
     var d = g.values, mat = M.material('MS-PLATE-IS2062'), rho = mat.density;
     var holes = man.frontFlangeHoles;
     var gross = d.width * d.width * d.thickness;      /* square flange */
     var hole  = (PI / 4) * d.holeDia * d.holeDia * d.thickness * holes;
     var weight = (gross - hole) * rho / 1e6;
-    var matCost = weight * mat.rate;
+    var matCost = ifNewMaterial(man, 'frontFlange', weight * mat.rate);
     var procs = [
       row('Milling (flange facing)', 'Milling Machine', 'hours',
           M.millingHours(d.width * d.width), M.machineRate('Milling Machine')),
       row('Drilling (bolt holes)', 'Drilling Machine', 'hours',
           M.drillingHoursPerHole(d.holeDia) * holes, M.machineRate('Drilling Machine'))
     ];
-    var welds = [weld(inp.tubeOD, 1, 'Front Flange Welding')];
+    var welds = [weld(inp.tubeOD, weldLoc(man, 'frontFlange'), 'Front Flange Welding')];
     var c = pack('frontFlange', 'Front Flange', 'Front Flange', mat, rho, mat.rate, d, g,
                  weight, matCost, procs, welds, sum(procs) + sum(welds));
     c.notes.push({ level: 'info', text:
@@ -521,16 +579,17 @@
   }
 
   /* ── FOOT LUG ──────────────────────────────────────────────────── */
-  function footLug(inp) {
-    var g = G.derive('footLug', inp.tubeOD);
+  function footLug(inp, man) {
+    var g = G.derive('footLug', inp.tubeOD, geomOv(man, 'footLug'));
     if (g.error) return blocked('footLug', 'Foot Lug', 'Foot Lug', g.error);
     var d = g.values, mat = M.material('MS-C45'), rho = mat.density;
     var rate = M.materialRate('MS-C45', d.thickness);
-    var lugs = 4;
+    /* Foot Lug!B11, "4 lugs standard" per the sheet's header note. */
+    var lugs = (typeof man.footLugs === 'number' && man.footLugs > 0) ? man.footLugs : 4;
     var gross = d.width * d.length * d.thickness;
     var hole  = (PI / 4) * d.holeDia * d.holeDia * d.thickness;
     var weight = ((gross - hole) * lugs) * rho / 1e6;
-    var matCost = weight * rate;
+    var matCost = ifNewMaterial(man, 'footLug', weight * rate);
     var procs = [
       row('Milling (lug faces)', 'Milling Machine', 'hours',
           M.millingHours(d.width * d.length), M.machineRate('Milling Machine')),
@@ -539,7 +598,7 @@
     ];
     /* Four lugs, four weld locations — and each is priced on the full
        tube circumference. That makes the welding 18x the material. */
-    var welds = [weld(inp.tubeOD, lugs, 'Foot Lug Welding (4 lugs)')];
+    var welds = [weld(inp.tubeOD, lugs, 'Foot Lug Welding (' + lugs + ' lugs)')];
     var c = pack('footLug', 'Foot Lug', 'Foot Lug', mat, rho, rate, d, g,
                  weight, matCost, procs, welds, sum(procs) + sum(welds));
     c.notes.push({ level: 'defect', ref: 'F-1', text:
@@ -556,19 +615,24 @@
        divided between the rods gives the tensile area, and the area
        gives a diameter rounded up to the next 5mm of stock. */
     var qty = (typeof inp.tieRodQty === 'number' && inp.tieRodQty > 0) ? inp.tieRodQty : 4;
-    var yieldStress = 294, safety = 3;
+    var yieldStress = (typeof man.tieRodYield === 'number' && man.tieRodYield > 0) ? man.tieRodYield : 294;
+    var safety = (typeof man.tieRodSafety === 'number' && man.tieRodSafety > 0) ? man.tieRodSafety : 3;
     var allowable = yieldStress / safety;
     var thrust = (PI / 4) * inp.bore * inp.bore * (inp.workingPressure / 10);
     var perRod = thrust / qty;
     var areaReq = perRod / allowable;
     var calcDia = Math.sqrt(4 * areaReq / PI);
     var stdDia = Math.ceil(calcDia / 5) * 5;
-    var len = inp.stroke + man.tieRodAllowance;
+    /* IF(B20="", B19, B20) and IF(B27="", B26, B27). */
+    var diaOv = man.tieRodDiaOverride, lenOv = man.tieRodLengthOverride;
+    var finalDia = (typeof diaOv === 'number' && diaOv > 0) ? diaOv : stdDia;
+    var stdLen = inp.stroke + man.tieRodAllowance;
+    var len = (typeof lenOv === 'number' && lenOv > 0) ? lenOv : stdLen;
 
     var mat = M.material('MS-ST52'), rho = mat.density;
-    var weightPerRod = wSolid(stdDia, len, rho);
+    var weightPerRod = wSolid(finalDia, len, rho);
     var weight = weightPerRod * qty;
-    var matCost = weight * mat.rate;
+    var matCost = ifNewMaterial(man, 'tieRod', weight * mat.rate);
 
     /* The workbook's cutting lookup here is broken. It calls
        VLOOKUP(diameter, CuttingTable, ...) against a range whose first
@@ -589,9 +653,11 @@
     return {
       id: 'tieRod', name: 'Tie Rod', sheet: 'Tie Rod', present: true, qty: qty,
       material: mat.code, materialName: mat.name, density: rho, materialRate: mat.rate,
-      dims: { diameter: stdDia, length: len },
+      dims: { diameter: finalDia, length: len },
       structural: { allowableStress: allowable, thrustN: thrust, forcePerRodN: perRod,
-                    areaRequiredMm2: areaReq, calculatedDia: calcDia, standardDia: stdDia,
+                    areaRequiredMm2: areaReq, calculatedDia: calcDia, standardDia: stdDia, finalDia: finalDia,
+                    standardLength: stdLen, diameterOverridden: finalDia !== stdDia,
+                    lengthOverridden: len !== stdLen, yieldStress: yieldStress, safetyFactor: safety,
                     closedLengthAllowance: man.tieRodAllowance },
       weight: weight, weightPerRod: weightPerRod, materialCost: matCost,
       processes: procs, welds: [], processCost: procCost,
@@ -758,6 +824,26 @@
       trunnionRoughTurn: 0, trunnionFinishTurn: 0, trunnionPinGrind: 0,
       frontFlangeHoles: 4,
       tieRodAllowance: 150, tieRodThreading: 25,
+      /* Tie Rod!B11, B12, B20, B27 — yield and safety as shipped, both
+         overrides blank so the calculated sizes stand. */
+      tieRodYield: 294, tieRodSafety: 3, tieRodDiaOverride: null, tieRodLengthOverride: null,
+      /* CEC Clevis!B14, Foot Lug!B11, Trunnion!B10. */
+      clevisLugs: 2, footLugs: 4, trunnionQty: 2,
+      /* Cap End Cover!B5 and Head End Cover!B5. */
+      coverShape: { cec: 'Round', hec: 'Round' },
+      /* Every weld block's "No. of Weld Locations", shipped at 1. */
+      weldLocations: { tubePart: 1, tubeCEC: 1, tubeRearEye: 1, rodEye: 1,
+                       flange: 1, trunnion: 1, cecClevis: 1, frontFlange: 1 },
+      /* Cost Summary B35 and B23. Both are the workbook's, both manual,
+         both default to zero exactly as the sheet ships them. */
+      additionalCost: 0, weightAdjustment: 0,
+      /* Cost Summary A5: "each component sheet has its own New Material?
+         Yes/No toggle - set to No to zero out material cost for a reused
+         part". Absent means Yes, which is how the sheets ship. */
+      newMaterial: {},
+      /* Per-component geometry overrides, keyed by component id then by
+         dimension name. Blank or missing falls through to the table. */
+      geometry: {},
       assemblyHours: 3, assemblyRate: 250,
       paintArea: 4500, packingType: 'Wooden Box', packingWeight: 150,
       boughtOut: [
@@ -805,7 +891,10 @@
     function gate(c, on, why) {
       c.present = on;
       if (!on) c.why = why;
-      c.billed = on ? c.totalCost : 0;
+      /* A withheld cost is null, and null must not silently become 0 in
+         the subtotal — that is the difference between "we cannot price
+         this" and "this is free". */
+      c.billed = (on && c.totalCost !== null) ? c.totalCost : 0;
       return c;
     }
 
@@ -815,21 +904,32 @@
     comps.push(gate(endCover(inp, man, { id: 'cec', name: 'Cap End Cover', sheet: 'Cap End Cover' }), true));
     comps.push(gate(endCover(inp, man, { id: 'hec', name: 'Head End Cover', sheet: 'Head End Cover' }), true));
     comps.push(gate(gland(inp, man), true));
-    comps.push(gate(cushionBush(inp), inp.hasCushionBush === 'Yes', 'Not fitted'));
+    comps.push(gate(cushionBush(inp, man), inp.hasCushionBush === 'Yes', 'Not fitted'));
     comps.push(gate(stopTube(inp, man), inp.hasStopTube === 'Yes', 'Not fitted'));
-    comps.push(gate(rearEye(inp), inp.hasRearEye === 'Yes', 'Not fitted'));
+    comps.push(gate(rearEye(inp, man), inp.hasRearEye === 'Yes', 'Not fitted'));
     comps.push(gate(rodEye(inp, man), mount.rodEye, 'Mounting has no rod eye'));
     comps.push(gate(piston(inp, man), true));
     comps.push(gate(flange(inp, man), true));
     comps.push(gate(trunnion(inp, man), mount.trunnion, 'Mounting has no trunnion'));
-    comps.push(gate(cecClevis(inp), mount.cecClevis, 'Mounting has no clevis'));
+    comps.push(gate(cecClevis(inp, man), mount.cecClevis, 'Mounting has no clevis'));
     comps.push(gate(tieRod(inp, man), mount.tieRod, 'Mounting has no tie rods'));
-    comps.push(gate(footLug(inp), mount.footLug, 'Mounting has no foot lugs'));
+    comps.push(gate(footLug(inp, man), mount.footLug, 'Mounting has no foot lugs'));
     comps.push(gate(frontFlange(inp, man), mount.frontFlange, 'Mounting has no front flange'));
 
-    var componentTotal = 0, totalWeight = 0, i;
+    /* A component whose cost is withheld makes the cylinder's total
+       impossible, exactly as an INVALID string breaks the Cost Summary's
+       SUM in the workbook. Reporting a number here would mean reporting
+       one that is missing a tube. */
+    var withheld = [], i;
     for (i = 0; i < comps.length; i++) {
-      componentTotal += comps[i].billed;
+      if (comps[i].present && comps[i].invalid) {
+        withheld.push({ component: comps[i].name, reason: comps[i].invalid });
+      }
+    }
+
+    var componentTotal = 0, totalWeight = 0;
+    for (i = 0; i < comps.length; i++) {
+      componentTotal += comps[i].billed || 0;
       /* Weight is per piece on every sheet; the trunnion's pair is the
          only place quantity moves it. */
       if (comps[i].present) {
@@ -843,7 +943,10 @@
     var fin = finishing(man, totalWeight);
 
     var otherTotal = sealKit.cost + bo.total + bocCalc.total + fin.total;
-    var grandTotal = componentTotal + otherTotal;
+    /* B38 = B19 + B32 + B35. The additional cost is a real term in the
+       workbook's total and was simply missing here. */
+    var grandTotal = componentTotal + otherTotal + (man.additionalCost || 0);
+    totalWeight += (man.weightAdjustment || 0);
 
     /* Notes are collected across the whole run so the UI can show a
        single "what to check before quoting" panel rather than making
@@ -866,6 +969,38 @@
     if (!sealKit.available) {
       allNotes.push({ component: 'Seal Kit',
                       note: { level: 'error', text: sealKit.reason } });
+    }
+
+    /* Bought-out figures the workbook itself refuses to vouch for. BOC
+       Calculated Items!B87: "Rate (Rs./kg) - PLACEHOLDER, awaiting real
+       Unbrako vendor price list", and E86: "do not treat as a real bolt
+       price". Bellows E97: "enter from an actual supplier quote". */
+    for (i = 0; i < bocCalc.items.length; i++) {
+      var bi = bocCalc.items[i];
+      if (!bi.placeholder) continue;
+      allNotes.push({ component: 'Bought-out (calculated)', note: {
+        level: 'warn', ref: /Bolt/.test(bi.name) ? 'B-1' : 'B-2',
+        text: /Bolt/.test(bi.name)
+          ? 'The bolt rate is a placeholder. The workbook: "Confirmed no public Unbrako pricing exists - do not treat as a real bolt price."'
+          : 'Bellows are costed at Rs.0 until a supplier quote is entered. The workbook: "No public catalogue price exists - enter from an actual supplier quote."' } });
+    }
+
+    /* Process Rate Master!A44: the bead table "currently covers 50-200mm
+       only, per HISPL instruction - extend if a diameter outside this
+       range is needed." Above 200 the lookup carries the top row. */
+    var bigWelds = [];
+    for (i = 0; i < comps.length; i++) {
+      if (!comps[i].present) continue;
+      for (var wi = 0; wi < (comps[i].welds || []).length; wi++) {
+        var wd = comps[i].welds[wi].diameter;
+        if (wd > 200 && bigWelds.indexOf(wd) < 0) bigWelds.push(wd);
+      }
+    }
+    if (bigWelds.length) {
+      allNotes.push({ component: 'Welding', note: { level: 'warn', ref: 'W-2', text:
+        'Weld diameter ' + bigWelds.join(', ') + 'mm is past the bead table, which HISPL has ' +
+        'set to cover 50-200mm only. The top row\'s bead count is being carried across; ' +
+        'the sheet says to extend the table if a larger diameter is needed.' } });
     }
 
     /* The two roll-ups disagree, and the gap is not a rounding artefact.
@@ -895,15 +1030,40 @@
               (missing.length === 1 ? 'it' : 'them') + '.' } });
     }
 
+    var workbookNotes = [
+      { ref: 'S-1', cell: "'Inquiry Input'!A31",
+        says: 'Tube, Piston Rod, CEC, HEC, Gland, Rod Eye, Piston, and Flange are structurally essential to every cylinder and always costed.',
+        but: 'Cost Summary B15 gates Rod Eye on the mounting, and the freeze-check sheet (section 9c) confirms it is excluded for Trunnion and Front Flange mountings. The tool follows the formula.' },
+      { ref: 'S-2', cell: "'CEC Clevis'!A2",
+        says: 'no approved HISPL geometry table exists yet - all dimensions below are ENGINEERING INPUT REQUIRED ... this component contributes Rs.0 until real dimensions are entered.',
+        but: 'The same sheet\'s cells C9-C13 now read the HISPL-approved table (E4, E5: ISO 6022 / ISO 8140), and B41 costs the clevis at Rs.2,307 on the reference job. The header predates Change 6. The tool follows the cells.' },
+      { ref: 'S-3', cell: "'Geometry Master'!A2, G100, E62",
+        says: 'Phase 1 ... NOT connected to any costing sheet; Trunnion OD PENDING HISPL ENGINEERING DATA - do not invent Tube-OD-to-Trunnion-OD ratio.',
+        but: 'The Trunnion sheet now carries an HISPL-approved stepped table with a Trunnion OD column (G5, G6: ISO 6020-2 / NFPA MT1-MT4), and the freeze-check sheet section 8 records all seven remaining components as implemented on 31-Aug-2026. The Geometry Master is the earlier phase. The tool follows the component sheets.' },
+      { ref: 'S-4', cell: "'Geometry Master'!E40",
+        says: 'no Applicable Yes/No flag yet for cylinders that don\'t need a Stop Tube',
+        but: 'Inquiry Input B33 "Stop Tube Present?" now exists and the Cost Summary gates on it. The tool uses that flag.' }
+    ];
+
     return {
       ok: true, warnings: check.warnings,
+      /* Final Output!A18, verbatim. It belongs on anything that shows the
+         figure to a customer. */
+      disclaimer: 'This is an approximate manufacturing cost estimate for quotation purposes. ' +
+                  'Final dimensions and engineering details are subject to the approved GA/design ' +
+                  'drawing. Seal prices maintained manually by HISPL.',
+      workbookNotes: workbookNotes,
+      /* Non-empty means no total can be quoted. The components are still
+         returned so the operator can see what is wrong and what the rest
+         would have cost. */
+      withheld: withheld,
       inputs: inp, engineering: man, mounting: mount,
       components: comps,
       componentTotal: componentTotal,
       totalWeight: totalWeight,
       sealKit: sealKit, boughtOut: bo, bocCalculated: bocCalc, finishing: fin,
       otherTotal: otherTotal,
-      grandTotal: grandTotal,
+      grandTotal: withheld.length ? null : grandTotal,
       notes: allNotes,
       /* The workbook's own two totals disagree, so both are reported
          rather than picking one. Final Output leaves out the calculated

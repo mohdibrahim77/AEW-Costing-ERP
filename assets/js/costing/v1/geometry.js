@@ -271,7 +271,16 @@
      The workbook's IFERROR would hand back 0 here, and a zero dimension
      costs the component at nothing while still printing a total. That
      is the failure mode the bore-63 bug had, so it refuses instead. */
-  function derive(tableName, driverValue) {
+  /* Overrides are the third argument because every component sheet has
+     them: a block of cells headed "Manual Overrides (blank = use table
+     above; enter a value here to force it from an actual GA/design
+     drawing)". The stepped tables are approximations for costing; once a
+     real drawing exists its dimensions must win.
+
+     Each sheet implements this as IF(override="", VLOOKUP(...), override),
+     so a blank falls through to the table and any value at all replaces
+     it. Reproduced: only null, undefined and '' fall through. */
+  function derive(tableName, driverValue, overrides) {
     var t = TABLES[tableName];
     if (!t) return { error: 'No geometry table named ' + tableName };
     if (typeof driverValue !== 'number' || isNaN(driverValue)) {
@@ -284,10 +293,24 @@
       return { error: EIR + ' — ' + t.driver + ' ' + driverValue +
                       'mm is below the table\'s first bin (' + starts[0] + 'mm)' };
     }
-    var row = t.rows[idx], values = {};
-    for (i = 0; i < t.cols.length; i++) values[t.cols[i]] = row[i + 1];
+    var row = t.rows[idx], values = {}, overridden = [];
+    for (i = 0; i < t.cols.length; i++) {
+      var key = t.cols[i];
+      var ov = overrides ? overrides[key] : undefined;
+      if (ov === undefined || ov === null || ov === '') {
+        values[key] = row[i + 1];
+      } else {
+        var num = typeof ov === 'number' ? ov : parseFloat(ov);
+        if (isNaN(num)) { values[key] = row[i + 1]; }
+        else { values[key] = num; overridden.push(key); }
+      }
+    }
     return {
-      values: values, driver: t.driver, driverValue: driverValue,
+      table: tableName, values: values, driver: t.driver, driverValue: driverValue,
+      /* Which dimensions came from a drawing rather than the table. The
+         UI has to say so: an overridden figure carries the drawing's
+         authority, not the table's confidence rating. */
+      overridden: overridden,
       bin: row[0], confidence: t.confidence, basis: t.basis,
       /* True when the driver sits past the last bin: the table stops
          rather than extrapolating, so the top row is being stretched. */

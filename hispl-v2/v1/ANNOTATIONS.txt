@@ -1,0 +1,389 @@
+[Actual Cost Tracker A2] Production team enters ACTUAL costs (yellow). Estimated values are pulled automatically from each component sheet. Variance is calculated automatically.
+
+[Assembly Painting Packing A2] Finishing costs applied to the fully assembled cylinder. Painting/Packing use Process Rate Master; Assembly is labour-hour based.
+
+[Assembly Painting Packing C10] PI() x OD x (Stroke+Bore) approx; enter measured/derived value
+
+[BOC Calculated Items A1] BOUGHT-OUT COMPONENTS - CALCULATED ITEMS (Bolts, Pipes, Pipe Flanges, Bellows, Flange as Component)
+
+[BOC Calculated Items A100] 5. FLANGE - AS A STANDALONE COMPONENT (distinct from Front Flange mounting)
+
+[BOC Calculated Items A101] For a fabricated/bought-out flange used elsewhere on the assembly. Manual OD + Thickness per HISPL instruction - no catalogue geometry claimed here, general-purpose flange, not tied to a specific standard.
+
+[BOC Calculated Items A2] These items have real dimension-driven geometry/weight, unlike the flat manual entries on the Bought Out & Seal Kit Master sheet (Transducer, Bearing stay manual there - confirmed, real vendor sheets to follow). Added/revised 28-Aug-2026 per HISPL instruction.
+
+[BOC Calculated Items A33] 2. PIPE FLANGE (ASME B16.5 Class 150 Slip-On, same DN as Pipe above)
+
+[BOC Calculated Items A34] Source: ASME B16.5 Class 150 Slip-On flange. One dimension (DN15=89mm OD) confirmed directly from a real flange supplier's published table; remaining sizes proportioned from standard ASME B16.5 flange-OD-to-pipe-OD ratio conventions, rounded to practical sizes.
+
+[BOC Calculated Items A4] 1. METALLIC PIPE (Material: ST52, Schedule 40 per ASME B36.10M)
+
+[BOC Calculated Items A5] Source: ASME B36.10M Schedule 40, cross-confirmed against 5 independent references (Aug-2026). Weight formula: (OD - WallThickness) x WallThickness x 0.02466 kg/m - verified against a known published reference (4in Sch40 = 16.07 kg/m, matched).
+
+[BOC Calculated Items A61] 3. BOLT (Unbrako Metric Socket Head Cap Screw, Property Class 12.9)
+
+[BOC Calculated Items A62] Source: official Unbrako Engineering Guide (unbrako.com/images/downloads/engguide.pdf), verbatim head diameter/height dimensions. Confirmed directly from Unbrako's own catalogue: no public pricing exists ("...at your fingertips except actual prices...see current price lists or call your distributor") - Rate stays a flagged placeholder until HISPL uploads real vendor pricing.
+
+[BOC Calculated Items A90] Searched for a real published price catalogue - none exists publicly. Bellows (Gortite/Dynatect-style heat-resistant, elastomer-coated fabric, sewn construction) are industry-standard custom-quoted items. Sizing follows real industry convention (ID=rod diameter); COST remains a manual vendor-quote field.
+
+[BOC Calculated Items B109] TOTAL (Rs.) = Pipe + Pipe Flange + Bolt + Bellows + Flange-as-Component
+
+[BOC Calculated Items B87] Rate (Rs./kg) - PLACEHOLDER, awaiting real Unbrako vendor price list
+
+[BOC Calculated Items B94] OD (mm) - reference: ~1.4x ID for a folded fabric bellows to clear
+
+[BOC Calculated Items E86] Confirmed no public Unbrako pricing exists - do not treat as a real bolt price.
+
+[BOC Calculated Items E97] No public catalogue price exists - enter from an actual supplier quote.
+
+[Bought Out & Seal Kit Master A2] Add bought-out items, seal kit components, and any other purchased part here. Set Include? = No to exclude an item without deleting it. All entries are manual.
+
+[Cap End Cover C12] mm - used for Turning / Milling / Drilling below, regardless of raw shape chosen
+
+[Cap End Cover C4] Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero.
+
+[Cap End Cover C5] Round = solid round bar (uses Diameter). Profile / Cuboid Block = flat/rectangular stock (uses Width & Height). Fill only the dimensions that apply.
+
+[Cap End Cover G15] APPROXIMATE COSTING GEOMETRY - FINAL DIMENSIONS SUBJECT TO GA/DESIGN (Bore driven)
+
+[Cap End Cover G16] End caps confirmed bore-driven by multiple real sources (Tork Hydraulics: sizes correspond to tube bore). Finished OD=1.3x Bore, Thickness=0.35x Bore (pressure-bearing wall), Diameter(raw round)=1.35x Bore, Width/Height(if Cuboid)=1.3x Bore. Medium confidence - ratios are practical estimates.
+
+[CEC Clevis A1] CEC CLEVIS - COSTING SHEET  (active only when Mounting = Rod Eye + CEC Clevis)
+
+[CEC Clevis A2] Built in Change 6. Geometry driven by Barrel ID / Bore per HISPL Section 16, but no approved HISPL geometry table exists yet - all dimensions below are ENGINEERING INPUT REQUIRED (manual, default blank). Weight/cost formulas are fully wired and ready; this component contributes Rs.0 until real dimensions are entered.
+
+[CEC Clevis A27] SECTION B - PROCESS COST (manual - pending Machine Time / CEC Geometry Master linkage)
+
+[CEC Clevis A44] SECTION F - AUTOMATIC PROCESS ROUTING (existing Machine Time Master, now driven by approved geometry)
+
+[CEC Clevis A45] Route: Profile Cutting (from plate) + Milling (fork/slot) + Drilling (pin hole) - same methodology already used for Rear Eye / Rod Eye / Piston.
+
+[CEC Clevis A53] SECTION G - WELDING (Tube OD driven, HISPL Simplified - Rs./inch/bead, same standard as CEC/Flange/Trunnion welding)
+
+[CEC Clevis C13] Now = approved geometry table value (Pin Dia + 0.5mm running clearance).
+
+[CEC Clevis C28] Now = automatic Section F subtotal (Profile Cutting + Milling + Drilling).
+
+[CEC Clevis C32] Now = automatic Section G Total Welding Cost (Tube OD driven).
+
+[CEC Clevis C9] Now = approved geometry table value (Bore driven), or override above.
+
+[CEC Clevis E17] Manual Overrides (blank = use table above; enter to force a value from an actual GA/design drawing):
+
+[CEC Clevis E4] APPROXIMATE COSTING GEOMETRY - FINAL DIMENSIONS SUBJECT TO GA/DESIGN (Bore driven, HISPL-approved stepped table)
+
+[CEC Clevis E5] Source: ISO 6022 clevis mount (MP1/MP3) proportions + ISO 8140 fork/clevis ratios, rounded to standard sizes. Approved by HISPL.
+
+[Cost Summary A20] of which CEC Clevis (already included above, only if Mounting = Rod Eye + CEC Clevis):
+
+[Cost Summary A23] Weight Adjustment / Allowance (manual, e.g. paint, fittings)
+
+[Cost Summary A25] of which Tie Rod (already included in Subtotal above, only if Mounting = Rod Eye + Tie Rod):
+
+[Cost Summary A33] of which Foot Lug (already included in Subtotal above, only if Mounting = Rod Eye + Foot Lug):
+
+[Cost Summary A34] ADDITIONAL COST (manual - e.g. special packaging, freight, contingency, other one-off costs)
+
+[Cost Summary A36] of which Front Flange (already included in Subtotal above, only if Mounting = Front Flange):
+
+[Cost Summary A5] COMPONENT COSTS (auto-pulled, Rs. for component Qty; each component sheet has its own New Material? Yes/No toggle - set to No to zero out material cost for a reused part)
+
+[Cushion Bush C4] Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero.
+
+[Cushion Bush G12] APPROXIMATE COSTING GEOMETRY - FINAL DIMENSIONS SUBJECT TO GA/DESIGN (Rod Diameter driven)
+
+[Cushion Bush G13] OD=1.4x RodDia, ID=RodDia+1mm clearance, Length=0.8x RodDia - general proportion, lower confidence, no formal published source found.
+
+[Final Output A18] This is an approximate manufacturing cost estimate for quotation purposes. Final dimensions and engineering details are subject to the approved GA/design drawing. Seal prices maintained manually by HISPL.
+
+[Flange A45] SECTION F - WELDING (HISPL Simplified - Rs./inch/bead) [NEW - added by Change 2]
+
+[Flange C4] Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero.
+
+[Flange G11] APPROXIMATE COSTING GEOMETRY - FINAL DIMENSIONS SUBJECT TO GA/DESIGN (Tube OD driven)
+
+[Flange G12] This is the always-present round Flange (likely gland-retainer flange), separate from Front Flange mounting. OD=1.5x Tube OD, Length=0.3x Tube OD - lower confidence, no formal published source found.
+
+[Foot Lug A1] FOOT LUG - COSTING SHEET (active only when Mounting = Rod Eye + Foot Lug)
+
+[Foot Lug A2] Geometry approved by HISPL from NFPA MS2/MS7 side-lug mounting proportions (Tube OD driven), 4 lugs standard. Material/machining/welding now fully automatic - see chat approval.
+
+[Foot Lug A24] SECTION F - AUTOMATIC PROCESS ROUTING (existing Machine Time Master)
+
+[Foot Lug A25] Route: Milling (lug faces) + Drilling (bolt holes, one per lug) - same methodology used for CEC Clevis / Rear Eye / Rod Eye.
+
+[Foot Lug A32] SECTION G - WELDING (Tube OD driven, HISPL Simplified Rs./inch/bead, 4 weld locations = 4 lugs)
+
+[Foot Lug H19] Manual Overrides (blank = use table above; enter to force a value from an actual GA/design drawing):
+
+[Foot Lug H4] APPROXIMATE COSTING GEOMETRY - FINAL DIMENSIONS SUBJECT TO GA/DESIGN (Tube OD driven, HISPL-approved)
+
+[Foot Lug H5] Source: NFPA MS2/MS7 side-lug proportions (Parker 2H Foot Mounting reference), rounded to standard plate/drill sizes. Approved by HISPL.
+
+[Front Flange A1] FRONT FLANGE - COSTING SHEET (active only when Mounting = Front Flange)
+
+[Front Flange A16] Gross Volume (mm3) = Width x Width x Thickness (square flange)
+
+[Front Flange A2] ISO 6020-1 MF1 (Head rectangular flange mounting). Excludes Rod Eye - a Front Flange-mounted cylinder carries its mounting load through this flange, not a rod-end pivot. Geometry approved 27-Aug-2026, rounded to the upper end deliberately since this is a costing tool, not final design.
+
+[Front Flange A22] SECTION F - AUTOMATIC PROCESS ROUTING (existing Machine Time Master)
+
+[Front Flange A23] Route: Milling (flange facing) + Drilling (bolt holes) - same methodology as CEC Clevis / Foot Lug.
+
+[Front Flange A30] SECTION G - WELDING (Tube OD driven, HISPL Simplified Rs./inch/bead)
+
+[Front Flange H18] Manual Overrides (blank = use table; enter to force from GA/drawing):
+
+[Front Flange H4] APPROXIMATE COSTING GEOMETRY - FINAL DIMENSIONS SUBJECT TO GA/DESIGN (Bore driven)
+
+[Front Flange H5] Source: ISO 6020-1 MF1 (Head rectangular flange), rounded UP to standard sizes per HISPL - costing tool, upper-end bias intentional.
+
+[Geometry Master A106] These tables will be populated once HISPL supplies actual multi-cylinder Rod Eye / Trunnion / CEC Clevis records. Not connected to any costing sheet - documentation only, per this step's scope.
+
+[Geometry Master A2] Phase 1 of geometry automation: a reference/documentation table only. NOT connected to any costing sheet yet - no costing formula was changed to build this.
+
+[Geometry Master A3] Dimension column shows a live formula (green) only where a genuine, already-existing link exists. Everything else is plain text describing the current manual/pending state - nothing is invented.
+
+[Geometry Master A4] Status legend: AUTOMATIC = comes directly from a primary input.  CALCULATED = an existing validated formula produces it.  ENGINEERING INPUT = must currently be entered manually (component-specific, no chart expected).  PENDING HISPL DATA = a chart/relationship SHOULD exist per HISPL's stated intent, but does not yet - flagged for follow-up, not guessed.
+
+[Geometry Master A76] MOUNTING (reference only - existing dropdown and Mounting Logic Table on Inquiry Input are unchanged)
+
+[Geometry Master A91] MOUNTING COMPONENT GEOMETRY - REFERENCE TABLES (checked against Cylinder Database for historical patterns)
+
+[Geometry Master A92] Source check performed: Cylinder Database (the only place multiple cylinders could be recorded) contains zero completed historical rows - only one live template row mirroring the current single example. No repeated dimension pattern exists anywhere in this workbook across more than one cylinder. Per instruction, every field below is therefore marked PENDING HISPL ENGINEERING DATA - nothing is guessed or derived from the single example.
+
+[Geometry Master E10] Explicitly kept manual per HISPL instruction - never automate
+
+[Geometry Master E32] Single example only; seal groove not modeled - awaits Seal Cost Chart
+
+[Geometry Master E40] No validated Stroke-to-Length allowance exists; also no Applicable Yes/No flag yet for cylinders that don't need a Stop Tube
+
+[Geometry Master E45] Costed on Piston Rod sheet (Rod Eye Welding block) - existing validated formula, confirms it uses Piston Rod Diameter NOT Tube OD
+
+[Geometry Master E46] Single example only - should ultimately relate to Piston Rod Diameter, but no validated ratio/chart exists
+
+[Geometry Master E58] Existing validated Mounting Logic Table (prior change) - drives zero-cost when inactive
+
+[Geometry Master E62] No Trunnion Geometry Master / chart exists - do not invent Tube-OD-to-Trunnion-OD ratio
+
+[Geometry Master E65] Intended to use Trunnion OD (not Tube OD) once available - explicitly not built yet, per this phase's scope
+
+[Geometry Master E66] Existing validated Mounting Logic Table (prior change) - drives zero-cost when inactive
+
+[Geometry Master G100] MIXED STATUS: Pin Diameter/Thickness/Length are CALCULATED (approved ratios, live in Trunnion!H6/H8/H9). Trunnion OD is PENDING HISPL ENGINEERING DATA - must come from an actual Tube-OD-to-Trunnion-OD lookup table, which has not been supplied. The earlier 2xPinDiameter derivation was removed per correction - do not re-derive it.
+
+[Geometry Master G96] PENDING HISPL ENGINEERING DATA - no multi-cylinder Rod Eye records exist in Cylinder Database to establish a range/pattern
+
+[Geometry Master H104] PENDING HISPL ENGINEERING DATA - no multi-cylinder CEC Clevis records exist. The 'Number of Lugs = 2' currently on the CEC Clevis sheet is a convention default, NOT a confirmed HISPL standard - do not treat it as one.
+
+[Gland C4] Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero.
+
+[Gland G12] APPROXIMATE COSTING GEOMETRY - FINAL DIMENSIONS SUBJECT TO GA/DESIGN (RodDia driven)
+
+[Gland G13] ID=RodDia+1mm clearance (rod slides through - confirmed by every seal-sizing source). OD=2.0x RodDia (typical gland flange for full seal package). Length=1.1x RodDia (standard-duty allowance, upper-end biased per HISPL). Medium confidence.
+
+[Head End Cover C12] mm - used for Turning / Milling / Drilling below, regardless of raw shape chosen
+
+[Head End Cover C4] Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero.
+
+[Head End Cover C5] Round = solid round bar (uses Diameter). Profile / Cuboid Block = flat/rectangular stock (uses Width & Height). Fill only the dimensions that apply.
+
+[Head End Cover G15] APPROXIMATE COSTING GEOMETRY - FINAL DIMENSIONS SUBJECT TO GA/DESIGN (Bore driven)
+
+[Head End Cover G16] End caps confirmed bore-driven by multiple real sources (Tork Hydraulics: sizes correspond to tube bore). Finished OD=1.3x Bore, Thickness=0.35x Bore (pressure-bearing wall), Diameter(raw round)=1.35x Bore, Width/Height(if Cuboid)=1.3x Bore. Medium confidence - ratios are practical estimates.
+
+[Inquiry Input A2] For every new cylinder job, make a copy of this workbook and feed fresh details here.
+
+[Inquiry Input A30] 4. COMPONENT PRESENCE - CONFIRM WHICH OPTIONAL COMPONENTS APPLY TO THIS CYLINDER
+
+[Inquiry Input A31] Tube, Piston Rod, CEC, HEC, Gland, Rod Eye, Piston, and Flange are structurally essential to every cylinder and always costed. The 3 components below are genuinely optional - confirm Yes/No for each. Selecting No sets that component's cost to zero for this job (dimensions stay visible for reference).
+
+[Inquiry Input A35] Bought-Out Components (BOC) presence confirmation - deferred to a later phase, per HISPL instruction.
+
+[Inquiry Input A38] This sheet feeds Cylinder ID, Customer & Cylinder details automatically into Cost Summary and Cylinder Database.
+
+[Inquiry Input A39] Every component sheet also has its own 'New Material?' Yes/No selector - choose 'No' to reuse an existing part (material cost zeroed).
+
+[Inquiry Input A40] See 'Bought Out & Seal Kit Master' sheet for Bearing/Transducer/Valve/etc. manual entries, and 'BOC Calculated Items' for Pipe/Bolt/Bellows/Pipe Flange.
+
+[Inquiry Input A43] MOUNTING LOGIC - INTERNAL REFERENCE / CALCULATION PLUMBING - DO NOT EDIT (auto-determined from Mounting Type above)
+
+[Inquiry Input C18] Not wired into Raw OD - Raw OD remains fully manual, per instruction.
+
+[Inquiry Input C19] Used to size Tie Rod diameter structurally. Not used elsewhere in costing.
+
+[Machine Rate Master A2] Hourly rates (Rs./Hr) used by every component sheet to cost machine hours. Machine names below are the ONLY names used across the whole workbook - keep them exactly as spelled here.
+
+[Machine Rate Master C4] Finish Turning (rate overridden by Turning Rate Card below); generic Turning on CEC/HEC/Flange/Piston
+
+[Machine Rate Master C5] Boring; Rough Turning (rate overridden by Turning Rate Card below)
+
+[Machine Rate Master C8] Rough Honing and Finished Honing (utilisation reference; cost via Honing Rate Card)
+
+[Machine Rate Master C9] Grinding (utilisation reference; cost via Process Rate Master Rs./cm2)
+
+[Machine Time Calculator A11] COMPONENT DIMENSIONS (only the labelled fields below apply to the selected component)
+
+[Machine Time Calculator A2] Standalone TIME-ONLY calculator. Does not calculate material cost, labour cost, welding cost, overheads, profit or quotation value.
+
+[Machine Time Calculator A3] All Machine Hours below are live formulas referencing the existing Machine Time Master / Machine Rate Master named ranges in this workbook - if those change, this sheet updates automatically.
+
+[Machine Time Calculator A4] Does not modify, redesign or overwrite any existing costing sheet. This sheet is purely additive.
+
+[Machine Time Calculator A5] Some line items on the main costing sheets (e.g. Honing, Grinding, Chrome Plating, Heat Treatment, Induction Hardening, Polishing) are costed by area/weight rate, not by an hourly Machine Time Master standard - these show 'TIME STANDARD NOT AVAILABLE' below, exactly as instructed (no value is invented).
+
+[Machine Time Master A12] SECTION 3 - ROUGH TURNING TIME (Hrs)  |  Inputs: Finished OD, Length. Stock Removal = Raw OD - Finished OD
+
+[Machine Time Master A2] Single source of machine time standards. Every component sheet looks up hours from these tables via INDEX/MATCH or VLOOKUP - never enter machine hours manually.
+
+[Machine Time Master A20] STOCK REMOVAL CORRECTION FACTOR (applied to Rough Turning Time)
+
+[Machine Time Master A27] SECTION 4 - Finish Turning Time = Rough Turning Time (looked up the same way) x 0.70  (applied directly in component sheets)
+
+[Machine Time Master A29] SECTION 5 - BORING TIME (Hrs)  |  Inputs: Finished ID, Bore Length
+
+[Machine Time Master A37] SECTION 6 - HONING TIME (Hrs, utilisation reference)  |  Cost is via Honing Rate Card (Process Rate Master), NOT this table
+
+[Machine Time Master A45] SECTION 7 - GRINDING TIME (Hrs, machine utilisation reference)  |  Surface Area(cm2) = PI() x OD x Length / 100
+
+[Machine Time Master A46] Grinding COST is charged via Process Rate Master (Rs./cm2). This table is for machine hour / utilisation tracking on the Dashboard.
+
+[Machine Time Master A54] SECTION 8 - MILLING TIME (Hrs)  |  Input: Machined Area (mm2) = Width x Length
+
+[Machine Time Master A61] SECTION 9 - DRILLING TIME (Hrs per hole)  |  Total Time = Time/Hole x No. of Holes
+
+[Machine Time Master A68] SECTION 10 - PROFILE CUTTING TIME (Hrs, utilisation reference)  |  Input: Weight (kg)
+
+[Machine Time Master A69] Profile Cutting COST is charged via Process Rate Master (Rs./kg). This table is for utilisation tracking.
+
+[Machine Time Master A76] SECTION 11 - SURFACE AREA MASTER (cm2) - referenced formulas, applied locally in each component sheet
+
+[Machine Time Master A78] Grinding / Chrome Plating / Dechrome Plating / Polishing / Painting / Induction Hardening (on OD)
+
+[Material Master A2] Add / edit materials here. Rates (blue) are inputs. Every component sheet looks up Density & Rate from this table only.
+
+[Piston A2] Only Outer Diameter and Length are taken for this component, per HISPL costing standard.
+
+[Piston C4] Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero.
+
+[Piston G5] APPROXIMATE COSTING GEOMETRY - FINAL DIMENSIONS SUBJECT TO GA/DESIGN (Bore driven)
+
+[Piston G6] OD = Bore (piston seals directly against bore - confirmed by every seal-sizing source). Length = 0.6x Bore (seal groove + wear band allowance, general design practice). Medium-high confidence.
+
+[Piston Rod A24] SECTION B - PROCESS ROUTING & SECTION C - VENDOR / AREA BASED COST
+
+[Piston Rod A28] -- vendor / area-based processes use Weight or Surface Area as basis (still auto-computed) --
+
+[Piston Rod A39] WELDING - Rod Eye Welding (HISPL Simplified - Rs./inch/bead)
+
+[Piston Rod C23] Change 7B: now reads the central Inquiry Input dropdown - no longer a separate selection here.
+
+[Piston Rod C4] Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero.
+
+[Piston Rod G29] Induction Hardened Length (mm) - defaults to full rod length; edit if only part of the rod is hardened:
+
+[Piston Rod G30] Hardening Depth (mm, reference only - not used in area-based cost formula):
+
+[Process Rate Master A16] TURNING RATE CARD (Conventional / CNC Lathe - by Finished Diameter)
+
+[Process Rate Master A17] Overrides the flat machine rate for Rough Turning and Finish Turning specifically, in Tube and Piston Rod sheets.
+
+[Process Rate Master A2] Rates for area/weight based finishing & vendor processes and welding constants. Referenced by every component sheet - edit only here.
+
+[Process Rate Master A24] Cost = Internal Surface Area (cm2) x Rate. Threshold applies to BOTH Length (Stroke) AND ID together.
+
+[Process Rate Master A40] Used for ALL welding in the workbook (CEC/Flange/Trunnion/CEC Clevis/Foot Lug/Front Flange welding via Tube OD, Rod Eye welding via Piston Rod Diameter, and Tube Part Welding + Rear Eye Welding - unified onto this single method). The legacy welding constants above (rows 30-37) are historical reference only and are no longer used anywhere in the current model.
+
+[Process Rate Master A43] STANDARD BEAD COUNT TABLE (circular welds, by Welding Diameter)
+
+[Process Rate Master A44] Bead count is looked up automatically from Weld Diameter (approximate match). Table currently covers 50-200mm only, per HISPL instruction - extend if a diameter outside this range is needed.
+
+[Raw Material Rate Master A1] RAW MATERIAL RATE MASTER - DIAMETER/THICKNESS TIERED PRICING
+
+[Raw Material Rate Master A12] C-45 PROFILES (by Thickness/Axial Dimension, mm) - applies to: CEC, HEC, Foot Lug, Gland, Flange, CEC Clevis
+
+[Raw Material Rate Master A2] Source: HISPL handwritten rate card, 3-Sep-2026. Larger raw stock costs more per kg - real procurement pricing, not a flat per-grade rate. Overrides Material Master's flat rate for EN8 (by diameter) and C45 (by thickness/axial dimension) on the components listed below.
+
+[Raw Material Rate Master A4] EN-8 (by Diameter, mm) - applies to: Stop Tube, Piston, Trunnion
+
+[Rear Eye C4] Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero.
+
+[Rear Eye G13] APPROXIMATE COSTING GEOMETRY - FINAL DIMENSIONS SUBJECT TO GA/DESIGN (Tube OD driven)
+
+[Rear Eye G14] Confirmed Tube-OD-driven by HISPL 31-Aug-2026. Thickness=0.15x, Width=0.5x, Height=0.6x, Pin Hole=0.25x Tube OD - same flat-plate-with-pin-hole methodology as Foot Lug. Lower confidence, general proportion.
+
+[Rod Eye C22] Now = approved geometry table value (Rod Diameter driven), or override above.
+
+[Rod Eye C4] Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero.
+
+[Rod Eye C5] Round = solid round bar (uses Diameter). Profile / Cuboid Block = flat/rectangular stock (uses Width & Height). Fill only the dimensions that apply. [Change 6: Raw material weight is now always calculated as a ring (OD/ID/Thickness) per HISPL Section 11 - this Shape selection no longer affects the weight formula. Width/Height below remain in use for the Milling area calculation only.]
+
+[Rod Eye E17] Manual Overrides (blank = use table above; enter to force a value from an actual GA/design drawing):
+
+[Rod Eye E4] APPROXIMATE COSTING GEOMETRY - FINAL DIMENSIONS SUBJECT TO GA/DESIGN (Piston Rod Diameter driven, HISPL-approved stepped table)
+
+[Rod Eye E5] Source: rod-end/clevis design guidance (pin dia 0.3-0.5x rod dia; eye OD/thickness/length ratios), rounded to standard sizes. Approved by HISPL.
+
+[Seal Master A2] Source: seal_price (1).xlsx, sheet 'Uni' (Universal/Parker brand), 'Normal Glide Ring' (1Glide) piston seal rows. Uploaded by HISPL, 26-Aug-2026.
+
+[Seal Master A3] Prices below are the SEAL KIT COST (piston seal + rod seal + wiper) at the catalogue's standard Rod Diameter for each Bore. Looked up by Bore (nearest match).
+
+[Seal Master A4] 'Chevron' seal type has NO price in the source catalogue (all Chevron rows there are blank) - selecting Chevron returns 'PRICE NOT AVAILABLE', not a guessed number.
+
+[Seal Master A5] 'Freudenberg' brand in the source is only priced against Viton material - Freudenberg + PU has NO price in the source catalogue either, for the same reason.
+
+[Seal Master A6] SALE PRICE = Seal Kit Cost x 1.25 (25% markup), applied per HISPL's instruction. The 25% is not itself stated in the source file - it is applied here as instructed.
+
+[Stop Tube A2] IMPORTANT: Costed using SOLID ROUND raw material as per HISPL standard.
+
+[Stop Tube C4] Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero.
+
+[Stop Tube G12] APPROXIMATE COSTING GEOMETRY - FINAL DIMENSIONS SUBJECT TO GA/DESIGN (Rod Diameter driven)
+
+[Stop Tube G13] Raw Dia=1.2x RodDia (collar around rod), Finished Dia=1.1x RodDia (slightly under raw for turning stock). LENGTH STAYS MANUAL - no defensible relationship found, application-specific, same as always.
+
+[Tie Rod A1] TIE ROD - COSTING SHEET (active only when Mounting = Rod Eye + Tie Rod)
+
+[Tie Rod A15] Total Hydraulic Thrust Force (N) = (pi/4 x Bore^2) x (Pressure/10)
+
+[Tie Rod A19] Standard Diameter (mm) [rounded UP to nearest 5mm stock size]
+
+[Tie Rod A2] Tie Rod diameter is structurally calculated from Bore + Working Pressure + Quantity (not a mounting-proportion guess like Trunnion/Foot Lug/Clevis). Length is Stroke + a documented closed-length allowance (overridable). See chat approval, 27-Aug-2026.
+
+[Tie Rod A20] Diameter Override (blank = use Standard above; enter to force from GA/drawing)
+
+[Tie Rod A37] SECTION F - MACHINING (Cutting to length + Threading both ends. No welding - tie rods are through-bolted with nuts.)
+
+[Tie Rod A46] SECTION D - ADDITIONAL COST (Manual, e.g. nuts/washers/locking compound)
+
+[Tie Rod C11] Standard ST52 yield reference. Editable if HISPL uses a different tie rod steel/spec.
+
+[Tie Rod C12] Source: hydraulic cylinder design reference - SF=3 on ST52 yield gives ~98 N/mm2 allowable, matches the figure cited.
+
+[Tie Rod C25] Assumption for head+cap+piston+gland+nut engagement. Not from a specific HISPL drawing - override once real GA data exists.
+
+[Tie Rod C41] No dedicated threading table in Machine Time Master - manual Rs./rod entry, same as Deep Hole Drilling pattern used on Piston Rod.
+
+[Trunnion A2] Costed as a rectangular block (Length x Width x Height). Rough Turning, Finish Turning and Pin Grinding are entered manually (Rs.); Milling and Drilling are auto-calculated as usual.
+
+[Trunnion A48] SECTION F - WELDING (per this instruction: Trunnion welding uses Tube OD, HISPL Simplified Rs./inch/bead)
+
+[Trunnion C4] Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero.
+
+[Trunnion C7] Now = Trunnion Length from approved geometry table (Tube OD driven), row 25.
+
+[Trunnion C9] Now = Trunnion OD (square bounding block for raw-material costing).
+
+[Trunnion G20] Manual Overrides (blank = use table above; enter a value here to force it from an actual GA/design drawing):
+
+[Trunnion G5] APPROXIMATE COSTING GEOMETRY - FINAL DIMENSIONS SUBJECT TO GA/DESIGN (Tube OD driven, HISPL-approved stepped table)
+
+[Trunnion G6] Source: ISO 6020-2 / NFPA MT1-MT4 trunnion proportions, rounded to standard round-bar sizes. Approved by HISPL.
+
+[Tube A24] SECTION B - PROCESS ROUTING (auto machine hours from Machine Time Master)
+
+[Tube A35] WELDING - Part Welding (Tube parts joint) (HISPL Simplified - Rs./inch/bead)
+
+[Tube A53] WELDING - Rear Eye Welding (HISPL Simplified - Rs./inch/bead)
+
+[Tube C4] Choose 'No' if this component is being reused / reconditioned (not newly purchased) - material cost below is then automatically set to zero.
