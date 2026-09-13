@@ -124,8 +124,7 @@
       invalid = 'Raw ID (' + rawID + 'mm) is not smaller than Raw OD (' + rawOD +
                 'mm). The tube has no wall.';
       notes.push({ level: 'error', ref: 'V-1', text: invalid +
-        ' The workbook withholds the tube cost entirely until this is fixed — ' +
-        'Tube!B74 prints "INVALID - FIX RAW OD" instead of a number.' });
+        ' Raise Raw OD above Raw ID to cost the tube.' });
     }
     if (len < inp.stroke) {
       notes.push({ level: 'error', text: 'Tube length (' + len + 'mm) is shorter than the stroke (' +
@@ -171,7 +170,7 @@
     if (inp.hasRearEye !== 'Yes') {
       notes.push({ level: 'defect', ref: 'W-1', text:
         'Rear Eye welding (Rs.' + Math.round(welds[2].cost) + ') is charged on the tube even though ' +
-        'no rear eye is fitted. The workbook applies all three tube welds unconditionally.' });
+        'no rear eye is fitted.' });
     }
 
     var procCost = sum(procs) + sum(welds);
@@ -203,8 +202,7 @@
       invalid = 'Finished rod diameter (' + finDia + 'mm) is not smaller than the raw bar (' +
                 rawDia + 'mm).';
       notes.push({ level: 'error', ref: 'V-2', text: invalid +
-        ' You cannot machine a rod from stock narrower than itself — ' +
-        'Piston Rod!H7 prints "CHECK RAW DIAMETER".' });
+        ' Use a larger raw bar.' });
     }
 
     ceilingNotes(len, notes);
@@ -305,7 +303,7 @@
       notes: shape === 'Round' ? [] : [{ level: 'info', text:
         'Costed from profile / cuboid stock: ' + d.width + ' x ' + d.height + ' x ' +
         d.thickness + 'mm. Turning, milling and drilling still use the ' + d.finishedOD +
-        'mm finished OD, as the sheet specifies.' }]
+        'mm finished OD.' }]
     };
   }
 
@@ -381,7 +379,7 @@
     c.notes.push({ level: 'defect', ref: 'P-1', text:
       'The "Finish Turning" row is priced at the profile-cutting rate (Rs.1.25/kg), not at a ' +
       'turning rate or machine hour. Rs.' + procs[0].cost.toFixed(2) + ' to finish-turn a piston ' +
-      'looks low. Reproduced as the workbook has it.' });
+      'looks low. Confirm it with HISPL.' });
     return c;
   }
 
@@ -410,7 +408,7 @@
                   d.rawDia + 'mm).';
       c.unitCost = null; c.totalCost = null;
       c.notes.push({ level: 'error', ref: 'V-3', text: c.invalid +
-        ' Stop Tube!H7 prints "CHECK RAW DIAMETER".' });
+        ' Use a larger raw bar.' });
     }
     return c;
   }
@@ -454,7 +452,7 @@
     var c = pack('rodEye', 'Rod Eye', 'Rod Eye', mat, rho, mat.rate, d, g,
                  weight, matCost, procs, [], sum(procs));
     c.notes.push({ level: 'info', text:
-      'The rod eye\'s weld is costed on the Piston Rod sheet, not here — it is welded to the rod.' });
+      'Its weld is included in the Piston Rod cost.' });
     return c;
   }
 
@@ -517,7 +515,7 @@
       'Rough turning, finish turning and pin grinding are all manual and all default to Rs.0, ' +
       'so an unedited trunnion is machined for free. Only milling and drilling are automatic.' });
     c.notes.push({ level: 'info', text:
-      'Quantity ' + qty + ' (Trunnion!B10). Weight and cost below are per piece; the total is multiplied by the quantity.' });
+      qty + ' fitted. Weight and cost are shown per piece; the total covers all of them.' });
     return c;
   }
 
@@ -549,8 +547,7 @@
                  weight, matCost, procs, welds, sum(procs) + sum(welds));
     c.volumes = { grossPerLug: gross, holePerLug: hole, lugs: lugs };
     c.notes.push({ level: 'warn', ref: 'G-1', text:
-      'Number of lugs is ' + lugs + '. HISPL\'s own Geometry Master says the default of 2 is ' +
-      '"a convention default, NOT a confirmed HISPL standard - do not treat it as one."' });
+      'Number of lugs is ' + lugs + '. Two is the usual default, not a confirmed standard. Check the drawing.' });
     return c;
   }
 
@@ -668,8 +665,7 @@
           allowable.toFixed(0) + ' N/mm2 allowable needs ' + calcDia.toFixed(1) +
           'mm, rounded up to ' + stdDia + 'mm stock.' },
         { level: 'defect', ref: 'TR-1', text:
-          'The cutting-time lookup reads the diameter against a column of HOURS, so it always ' +
-          'lands on the "Above 250mm" row whatever the rod size. Reproduced as-is.' },
+          'Cutting time always uses the largest size band, whatever the rod size, so it may be too high.' },
         { level: 'info', text: 'Tie rods are through-bolted with nuts, so no welding is costed.' }
       ]
     };
@@ -792,8 +788,7 @@
         Math.abs((man.packingWeight - totalWeight) * packRate).toFixed(0) + '.' });
     }
     notes.push({ level: 'defect', ref: 'A-2', text:
-      'Painting area is a typed ' + man.paintArea + ' cm2. The sheet\'s own note says it should ' +
-      'be PI x OD x (Stroke + Bore), which no formula computes.' });
+      'Painting area is a typed ' + man.paintArea + ' cm2, not worked out from the cylinder size. Check it.' });
     return {
       assembly: { hours: man.assemblyHours, rate: man.assemblyRate, cost: assembly },
       painting: { areaCm2: man.paintArea, rate: M.processRate('painting'), cost: painting },
@@ -981,8 +976,8 @@
       allNotes.push({ component: 'Bought-out (calculated)', note: {
         level: 'warn', ref: /Bolt/.test(bi.name) ? 'B-1' : 'B-2',
         text: /Bolt/.test(bi.name)
-          ? 'The bolt rate is a placeholder. The workbook: "Confirmed no public Unbrako pricing exists - do not treat as a real bolt price."'
-          : 'Bellows are costed at Rs.0 until a supplier quote is entered. The workbook: "No public catalogue price exists - enter from an actual supplier quote."' } });
+          ? 'The bolt rate is a placeholder, not a real supplier price.'
+          : 'Bellows are costed at Rs.0 until a supplier quote is entered.' } });
     }
 
     /* Process Rate Master!A44: the bead table "currently covers 50-200mm
@@ -999,8 +994,7 @@
     if (bigWelds.length) {
       allNotes.push({ component: 'Welding', note: { level: 'warn', ref: 'W-2', text:
         'Weld diameter ' + bigWelds.join(', ') + 'mm is past the bead table, which HISPL has ' +
-        'set to cover 50-200mm only. The top row\'s bead count is being carried across; ' +
-        'the sheet says to extend the table if a larger diameter is needed.' } });
+        'set to cover 50-200mm only, so the largest size is used.' } });
     }
 
     /* The two roll-ups disagree, and the gap is not a rounding artefact.
@@ -1012,21 +1006,19 @@
     if (!mount.rodEye)             phantom.push('Rod Eye');
     if (inp.hasCushionBush !== 'Yes') phantom.push('Cushion Bush');
     if (phantom.length) {
-      allNotes.push({ component: 'Final Output sheet', note: { level: 'defect', ref: 'FO-1',
-        text: 'The Final Output sheet adds ' + andList(phantom) +
-              ' to its raw-material and process lines without checking whether ' +
-              (phantom.length === 1 ? 'it is' : 'they are') + ' fitted. ' +
-              'That is why its total differs from the Cost Summary.' } });
+      allNotes.push({ component: 'Second total', note: { level: 'defect', ref: 'FO-1',
+        text: 'Includes ' + andList(phantom) + ' although ' +
+              (phantom.length === 1 ? 'it is' : 'they are') + ' not fitted, ' +
+              'which is why it differs from the main total.' } });
     }
     var missing = [];
     if (mount.tieRod)      missing.push('Tie Rod');
     if (mount.footLug)     missing.push('Foot Lug');
     if (mount.frontFlange) missing.push('Front Flange');
     if (missing.length) {
-      allNotes.push({ component: 'Final Output sheet', note: { level: 'defect', ref: 'FO-2',
+      allNotes.push({ component: 'Second total', note: { level: 'defect', ref: 'FO-2',
         text: andList(missing) + ' ' + (missing.length === 1 ? 'is' : 'are') +
-              ' fitted but absent from the Final Output sheet\'s formulas entirely, so that ' +
-              'sheet under-states this cylinder. The Cost Summary includes ' +
+              ' fitted but left out, so it is too low. The main total includes ' +
               (missing.length === 1 ? 'it' : 'them') + '.' } });
     }
 

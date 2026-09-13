@@ -443,6 +443,25 @@ input ran off the edge, while `scrollWidth` still equalled
 `innerWidth` and looked fine. Use `minmax(0,1fr)` for any track that holds
 a table, and check at a real device width, not only for sideways scroll.
 
+#### Words on screen
+
+Owner feedback, 2026-09-13: too much text about the workbook. Messages the
+tool shows a user are plain instructions ("Use a larger raw bar"), with no
+sheet names, cell references (`Tube!B74`) or note codes (`FO-1`). The
+codes stay in the engine because tests and `RECONCILIATION.md` key on
+them; the interface shows Fix, Check or Note instead. Traceability to the
+workbook belongs in code comments and `hispl-v2/v1/`, not in the UI.
+
+#### Every link must go somewhere
+
+There is no server to receive a form, and a bare `mailto:` does nothing on
+a PC without a desktop mail client, so the owner saw Contact and Book "not
+working". Contact, Request demo and Book a factory visit go to
+`contact.html`, which composes the message and offers Gmail, Outlook, the
+mail app and copy-to-clipboard. Legal links go to `legal.html#privacy`,
+`#terms`, `#security`. Never ship `href="#"` as a placeholder. Both pages'
+legal wording is a plain first draft and needs review before launch.
+
 ### The costing product is `v1.html`
 
 Since 2026-09-11 `ROUTES.products.costing` and the router send a signed-in

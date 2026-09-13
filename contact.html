@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Contact | AEW Manufacturing Intelligence</title>
+<meta name="description" content="Book a demo or a factory visit with AEW, or ask us a question.">
+<meta name="theme-color" content="#0a0b0d">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600..900&family=Geist:wght@300..700&family=Geist+Mono:wght@400..700&display=swap" rel="stylesheet">
+<style>
+html{color-scheme:dark}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0b0d;--panel:#0e0f12;--raise:#121418;--line:#24272d;--line-2:#2e3238;
+  --txt:#eceef1;--txt-2:#b6bcc5;--mut:#9097a2;--faint:#858b96;
+  --acc:#ff7a1a;--acc-hi:#ffa15a;--acc-br:#ff8f3a;--on-acc:#140a04;
+  --display:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --sans:'Geist',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'Geist Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+body{font-family:var(--sans);min-height:100vh;background:radial-gradient(55% 45% at 85% 0%,rgba(255,122,26,.10),transparent 70%),var(--bg);color:var(--txt);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.top{max-width:1080px;margin:0 auto;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand-m{width:34px;height:34px;border-radius:9px;background:var(--acc);color:var(--on-acc);display:flex;align-items:center;justify-content:center;font:900 16px var(--display)}
+.brand-t{font:800 16px var(--display);letter-spacing:-.01em}
+.top-l{display:inline-flex;align-items:center;min-height:38px;padding:0 14px;border:1px solid var(--line-2);border-radius:8px;font-size:13px;font-weight:500;color:var(--txt-2);text-decoration:none;transition:border-color .15s,color .15s}
+.top-l:hover{color:var(--txt);border-color:rgba(255,255,255,.3)}
+.wrap{max-width:1080px;margin:0 auto;padding:32px 24px 72px;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:48px;align-items:start}
+.kicker{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--acc-br);margin-bottom:14px}
+h1{font:800 44px/1.05 var(--display);letter-spacing:-.03em;margin-bottom:16px}
+.lede{font-size:16px;line-height:1.65;color:var(--txt-2);max-width:420px}
+.steps{list-style:none;margin:32px 0;display:grid;gap:16px}
+.steps li{display:flex;gap:14px;align-items:flex-start}
+.steps b{flex:none;width:28px;height:28px;border-radius:50%;border:1px solid var(--line-2);display:flex;align-items:center;justify-content:center;font:600 12px var(--mono);color:var(--acc-br)}
+.steps span{font-size:14px;line-height:1.55;color:var(--txt-2);padding-top:4px}
+.direct{border-top:1px solid var(--line);padding-top:24px}
+.direct .lab{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin-bottom:10px}
+.mailrow{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.mail{font:600 18px var(--mono);color:var(--txt);text-decoration:none}
+.mail:hover{color:var(--acc-hi)}
+.ghost{display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:0 12px;border:1px solid var(--line-2);border-radius:8px;background:transparent;color:var(--txt-2);font:500 12.5px var(--sans);cursor:pointer;text-decoration:none;transition:border-color .15s,color .15s}
+.ghost:hover{color:var(--txt);border-color:rgba(255,255,255,.3)}
+.ghost:focus-visible,.btn:focus-visible{outline:2px solid var(--acc-br);outline-offset:2px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:32px}
+.card h2{font:800 22px var(--display);letter-spacing:-.02em;margin-bottom:6px}
+.card .sub{font-size:13.5px;color:var(--mut);margin-bottom:24px}
+.topics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:20px;border:0}
+.topics legend{font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--txt-2);margin-bottom:8px}
+.topics input{position:absolute;opacity:0;pointer-events:none}
+.topics label{display:flex;align-items:center;justify-content:center;text-align:center;min-height:44px;padding:6px 8px;border:1px solid var(--line-2);border-radius:8px;font-size:13px;font-weight:500;color:var(--txt-2);cursor:pointer;transition:border-color .15s,color .15s,background .15s}
+.topics input:checked+label{border-color:var(--acc);color:var(--txt);background:rgba(255,122,26,.10)}
+.topics input:focus-visible+label{outline:2px solid var(--acc-br);outline-offset:2px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{margin-bottom:14px}
+.field label{display:block;font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--txt-2);margin-bottom:7px}
+.field label i{font-style:normal;color:var(--faint);text-transform:none;letter-spacing:0}
+.field input,.field textarea{width:100%;padding:12px 14px;border:1px solid var(--line-2);border-radius:8px;background:var(--raise);color:var(--txt);font:500 15px var(--sans);transition:border-color .15s,box-shadow .15s}
+.field textarea{min-height:110px;resize:vertical;line-height:1.5}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px rgba(255,122,26,.18)}
+.field input::placeholder,.field textarea::placeholder{color:var(--faint);font-weight:400}
+.field .err{display:none;margin-top:6px;font-size:12px;color:#fca5a5}
+.field.bad input{border-color:#f87171}
+.field.bad .err{display:block}
+.btn{width:100%;min-height:50px;border:0;border-radius:8px;background:var(--acc);color:var(--on-acc);font:600 15px var(--sans);cursor:pointer;transition:background .15s}
+.btn:hover{background:var(--acc-hi)}
+.send{margin-top:4px}
+.send[hidden]{display:none}
+.send h3{font:800 20px var(--display);margin-bottom:6px}
+.send p{font-size:13.5px;line-height:1.55;color:var(--txt-2);margin-bottom:18px}
+.send-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.send-grid .ghost{min-height:48px;font-size:14px}
+.send-grid .primary{background:var(--acc);border-color:var(--acc);color:var(--on-acc);font-weight:600}
+.send-grid .primary:hover{background:var(--acc-hi);color:var(--on-acc)}
+.status{min-height:20px;font-size:12.5px;color:var(--acc-hi)}
+.edit{background:none;border:0;color:var(--mut);font:500 13px var(--sans);cursor:pointer;min-height:36px;text-decoration:underline;text-underline-offset:3px}
+.edit:hover{color:var(--txt)}
+.foot{max-width:1080px;margin:0 auto;padding:24px;border-top:1px solid var(--line);display:flex;gap:20px;flex-wrap:wrap;font-size:12.5px;color:var(--mut)}
+.foot a{text-decoration:none;min-height:32px;display:inline-flex;align-items:center}
+.foot a:hover{color:var(--txt)}
+@media(max-width:860px){
+  .wrap{grid-template-columns:minmax(0,1fr);gap:32px;padding-top:12px}
+  h1{font-size:34px}
+  .steps{margin:24px 0}
+}
+@media(max-width:520px){
+  .card{padding:22px}
+  .row2,.send-grid{grid-template-columns:minmax(0,1fr)}
+  .topics{grid-template-columns:minmax(0,1fr)}
+  .field input,.field textarea{font-size:16px}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="brand" href="index.html"><span class="brand-m">A</span><span class="brand-t">AEW</span></a>
+  <a class="top-l" href="login.html">Sign in</a>
+</header>
+
+<main class="wrap">
+  <section>
+    <p class="kicker">Contact</p>
+    <h1>See it on your own cylinder.</h1>
+    <p class="lede">Tell us a little about your factory. We will reply within one working day to set up a demo or a visit to your shop floor.</p>
+    <ol class="steps">
+      <li><b>1</b><span>Fill in the form. It takes under a minute.</span></li>
+      <li><b>2</b><span>Send it from Gmail, Outlook or your email app. Nothing is sent until you press send there.</span></li>
+      <li><b>3</b><span>We come back to you with a time that suits your shift pattern.</span></li>
+    </ol>
+    <div class="direct">
+      <p class="lab">Or email us directly</p>
+      <div class="mailrow">
+        <a class="mail" href="mailto:hello@aew.in" id="mailLink">hello@aew.in</a>
+        <button type="button" class="ghost" id="copyMail">Copy address</button>
+      </div>
+      <p class="status" id="mailStatus" role="status"></p>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="form-h">
+    <form id="contactForm" novalidate>
+      <h2 id="form-h">How can we help?</h2>
+      <p class="sub">All fields except phone and message are needed.</p>
+
+      <fieldset class="topics">
+        <legend>I would like</legend>
+        <input type="radio" name="topic" id="t-demo" value="demo" checked><label for="t-demo">A demo</label>
+        <input type="radio" name="topic" id="t-visit" value="visit"><label for="t-visit">A factory visit</label>
+        <input type="radio" name="topic" id="t-question" value="question"><label for="t-question">To ask a question</label>
+      </fieldset>
+
+      <div class="row2">
+        <div class="field" id="f-name">
+          <label for="c-name">Your name</label>
+          <input id="c-name" name="name" autocomplete="name" placeholder="Ramesh Kumar">
+          <p class="err">Please enter your name.</p>
+        </div>
+        <div class="field" id="f-company">
+          <label for="c-company">Company</label>
+          <input id="c-company" name="company" autocomplete="organization" placeholder="Your factory">
+          <p class="err">Please enter your company.</p>
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field" id="f-email">
+          <label for="c-email">Work email</label>
+          <input id="c-email" name="email" type="email" autocomplete="email" placeholder="you@company.com">
+          <p class="err">Please enter a valid email.</p>
+        </div>
+        <div class="field">
+          <label for="c-phone">Phone <i>(optional)</i></label>
+          <input id="c-phone" name="phone" type="tel" autocomplete="tel" placeholder="+91">
+        </div>
+      </div>
+      <div class="field">
+        <label for="c-msg">Message <i>(optional)</i></label>
+        <textarea id="c-msg" name="message" placeholder="What do you make, and what takes longest to quote today?"></textarea>
+      </div>
+      <button type="submit" class="btn">Continue</button>
+    </form>
+
+    <div class="send" id="sendPanel" hidden>
+      <h3>Your message is ready</h3>
+      <p>Choose how to send it. It opens with everything filled in; press send there.</p>
+      <div class="send-grid">
+        <a class="ghost primary" id="sendGmail" target="_blank" rel="noopener">Send with Gmail</a>
+        <a class="ghost" id="sendOutlook" target="_blank" rel="noopener">Send with Outlook</a>
+        <a class="ghost" id="sendApp">Use my email app</a>
+        <button type="button" class="ghost" id="copyMsg">Copy message</button>
+      </div>
+      <p class="status" id="sendStatus" role="status"></p>
+      <button type="button" class="edit" id="editBtn">Edit details</button>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <a href="index.html">Home</a>
+  <a href="legal.html#privacy">Privacy</a>
+  <a href="legal.html#terms">Terms</a>
+  <span>© 2026 AEW. Made in Bangalore.</span>
+</footer>
+
+<script>
+/* The site has no server to receive a form, and a bare mailto: link does
+   nothing on a PC without a desktop mail client, which is most of them.
+   So the form composes the message and offers every route that works in
+   a browser: Gmail and Outlook on the web, the device's mail app, or the
+   text on the clipboard. */
+(function () {
+  'use strict';
+  var TO = 'hello@aew.in';
+  var TOPICS = {
+    demo:     'Demo request',
+    visit:    'Factory visit request',
+    question: 'Question'
+  };
+
+  var form = document.getElementById('contactForm');
+  var panel = document.getElementById('sendPanel');
+
+  /* Links from the landing page say what the visitor came for. */
+  var want = (location.search.match(/[?&]topic=(\w+)/) || [])[1];
+  if (want && TOPICS[want]) document.getElementById('t-' + want).checked = true;
+
+  function val(id) { return (document.getElementById(id).value || '').trim(); }
+
+  function copy(text, statusEl, done) {
+    function ok() { statusEl.textContent = done; }
+    function fail() { statusEl.textContent = 'Copy is blocked here. Select the text and copy it instead.'; }
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(ok, fail);
+      return;
+    }
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { if (document.execCommand('copy')) ok(); else fail(); } catch (e) { fail(); }
+    document.body.removeChild(ta);
+  }
+
+  document.getElementById('copyMail').addEventListener('click', function () {
+    copy(TO, document.getElementById('mailStatus'), 'Address copied.');
+  });
+
+  var subject = '', body = '';
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var checks = [
+      ['f-name', val('c-name') !== ''],
+      ['f-company', val('c-company') !== ''],
+      ['f-email', /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val('c-email'))]
+    ];
+    var firstBad = null;
+    checks.forEach(function (c) {
+      var box = document.getElementById(c[0]);
+      box.classList.toggle('bad', !c[1]);
+      if (!c[1] && !firstBad) firstBad = box.querySelector('input');
+    });
+    if (firstBad) { firstBad.focus(); return; }
+
+    var topic = form.querySelector('input[name="topic"]:checked').value;
+    subject = TOPICS[topic] + ' - ' + val('c-company');
+    body = [
+      'Hello AEW,',
+      '',
+      TOPICS[topic] + '.',
+      '',
+      'Name: ' + val('c-name'),
+      'Company: ' + val('c-company'),
+      'Email: ' + val('c-email'),
+      val('c-phone') ? 'Phone: ' + val('c-phone') : '',
+      '',
+      val('c-msg')
+    ].filter(function (line, i, all) {
+      /* Drop the empty phone line without collapsing the deliberate blanks. */
+      return !(line === '' && all[i - 1] === '');
+    }).join('\n').trim();
+
+    var s = encodeURIComponent(subject), b = encodeURIComponent(body), t = encodeURIComponent(TO);
+    document.getElementById('sendGmail').href =
+      'https://mail.google.com/mail/?view=cm&fs=1&to=' + t + '&su=' + s + '&body=' + b;
+    document.getElementById('sendOutlook').href =
+      'https://outlook.live.com/mail/0/deeplink/compose?to=' + t + '&subject=' + s + '&body=' + b;
+    document.getElementById('sendApp').href = 'mailto:' + TO + '?subject=' + s + '&body=' + b;
+    document.getElementById('sendStatus').textContent = '';
+
+    form.hidden = true;
+    panel.hidden = false;
+    document.getElementById('sendGmail').focus();
+  });
+
+  document.getElementById('copyMsg').addEventListener('click', function () {
+    copy('To: ' + TO + '\nSubject: ' + subject + '\n\n' + body,
+      document.getElementById('sendStatus'), 'Message copied. Paste it into an email to ' + TO + '.');
+  });
+
+  document.getElementById('editBtn').addEventListener('click', function () {
+    panel.hidden = true;
+    form.hidden = false;
+    document.getElementById('c-name').focus();
+  });
+
+  Array.prototype.forEach.call(form.querySelectorAll('input'), function (el) {
+    el.addEventListener('input', function () {
+      var box = el.closest('.field');
+      if (box) box.classList.remove('bad');
+    });
+  });
+})();
+</script>
+</body>
+</html>

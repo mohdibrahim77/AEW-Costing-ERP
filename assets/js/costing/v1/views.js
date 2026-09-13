@@ -201,8 +201,8 @@
          and zero until a price exists. */
       marginPct: (quoted === 0 || estimated === null) ? 0 : (quoted - estimated) / quoted,
       date: inp.inquiryDate || '',
-      pricingNote: 'No automatic profit percentage is applied anywhere in ' +
-                   'this workbook. Quoted price is entered manually once negotiated.'
+      pricingNote: 'No automatic profit percentage is added. ' +
+                   'Type the quoted price once it is agreed.'
     };
   }
 

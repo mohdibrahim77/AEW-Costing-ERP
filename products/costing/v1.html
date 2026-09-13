@@ -549,7 +549,7 @@ tr.detail.open{display:table-row}
 <header class="top">
   <div>
     <h1>Cylinder Costing</h1>
-    <span class="sub">HISPL · VERSION 1 workbook</span>
+    <span class="sub">HISPL</span>
   </div>
   <span class="spacer"></span>
   <div class="top-total">
@@ -572,11 +572,8 @@ tr.detail.open{display:table-row}
     <details class="eng" id="eng">
       <summary>Engineering inputs</summary>
       <p class="why">
-        The dimensions no lookup table derives. Each is seeded with the value
-        HISPL's own sheet carries, which is a starting point, not a
-        derivation — the workbook is explicit that no validated
-        stroke-to-length allowance exists, so the tool asks rather than
-        inventing one.
+        Dimensions that cannot be looked up from a size table. Each starts at
+        HISPL's usual value; change it to match the drawing.
       </p>
       <div class="grid" id="eng-grid"></div>
     </details>
@@ -630,7 +627,7 @@ tr.detail.open{display:table-row}
     <div class="card" id="views-card">
       <div class="card-h">
         <h2>Shop floor &amp; records</h2>
-        <span class="meta">the workbook's other three sheets</span>
+        <span class="meta">machine hours and job record</span>
       </div>
       <div id="views"></div>
     </div>
@@ -647,14 +644,14 @@ tr.detail.open{display:table-row}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="../../assets/js/config.js?v=2026.09.11-1"></script>
-<script src="../../assets/js/supabase.js?v=2026.09.11-1"></script>
-<script src="../../assets/js/session.js?v=2026.09.11-1"></script>
-<script src="../../assets/js/router.js?v=2026.09.11-1"></script>
-<script src="../../assets/js/auth.js?v=2026.09.11-1"></script>
-<script src="../../assets/js/ui.js?v=2026.09.11-1"></script>
-<script src="../../assets/js/api.js?v=2026.09.11-1"></script>
-<script src="../../assets/js/common.js?v=2026.09.11-1"></script>
+<script src="../../assets/js/config.js?v=2026.09.13-1"></script>
+<script src="../../assets/js/supabase.js?v=2026.09.13-1"></script>
+<script src="../../assets/js/session.js?v=2026.09.13-1"></script>
+<script src="../../assets/js/router.js?v=2026.09.13-1"></script>
+<script src="../../assets/js/auth.js?v=2026.09.13-1"></script>
+<script src="../../assets/js/ui.js?v=2026.09.13-1"></script>
+<script src="../../assets/js/api.js?v=2026.09.13-1"></script>
+<script src="../../assets/js/common.js?v=2026.09.13-1"></script>
 <script>
 /* v1.html session gate. Same contract as the other product pages: the
    router decides, this page only asks. A signed-out visitor is sent to
@@ -673,11 +670,11 @@ tr.detail.open{display:table-row}
   else start();
 })();
 </script>
-<script src="../../assets/js/costing/v1/masters.js"></script>
-<script src="../../assets/js/costing/v1/geometry.js"></script>
-<script src="../../assets/js/costing/v1/inputs.js"></script>
-<script src="../../assets/js/costing/v1/engine.js"></script>
-<script src="../../assets/js/costing/v1/views.js"></script>
+<script src="../../assets/js/costing/v1/masters.js?v=2026.09.13-1"></script>
+<script src="../../assets/js/costing/v1/geometry.js?v=2026.09.13-1"></script>
+<script src="../../assets/js/costing/v1/inputs.js?v=2026.09.13-1"></script>
+<script src="../../assets/js/costing/v1/engine.js?v=2026.09.13-1"></script>
+<script src="../../assets/js/costing/v1/views.js?v=2026.09.13-1"></script>
 <script>
 (function () {
   'use strict';
@@ -715,7 +712,7 @@ tr.detail.open{display:table-row}
     for (i = 0; i < IN.sections.length; i++) {
       s = IN.sections[i];
       html += '<section class="sec"><div class="sec-h"><h2>' + esc(s.title) + '</h2>' +
-              '<span class="cell">' + esc(s.cell) + '</span></div>';
+              '</div>';
       if (s.note) html += '<p class="sec-note">' + esc(s.note) + '</p>';
       for (j = 0; j < s.fields.length; j++) {
         f = s.fields[j];
@@ -845,7 +842,7 @@ tr.detail.open{display:table-row}
       /* The workbook prints "INVALID - FIX RAW OD" where the total goes.
          Showing a figure here would be showing one that is missing a part. */
       $('validation').innerHTML =
-        '<div class="errs"><h3>No total — the workbook withholds it</h3><ul>' +
+        '<div class="errs"><h3>No total yet. Fix this first</h3><ul>' +
         r.withheld.map(function (w) {
           return '<li><b>' + esc(w.component) + ':</b> ' + esc(w.reason) + '</li>';
         }).join('') + '</ul></div>' + $('validation').innerHTML;
@@ -1019,12 +1016,11 @@ tr.detail.open{display:table-row}
         if (c.dimSource[dk] === 'manual') manualDims.push(label(dk));
         else derivedFrom.push(label(dk) + ' ← ' + c.dimSource[dk]);
       }
-      h += '<div class="basis"><b>No geometry table.</b> ' +
+      h += '<div class="basis"><b>No size table.</b> ' +
            (derivedFrom.length ? derivedFrom.join(', ') + '. ' : '') +
            (manualDims.length
              ? '<br>Engineering input: ' + manualDims.join(', ') +
-               ' — the workbook has no validated allowance for ' +
-               (manualDims.length === 1 ? 'it' : 'these') + ', so the tool asks.'
+               '. Enter from the drawing.'
              : '') + '</div>';
     }
     if (c.structural) {
@@ -1081,7 +1077,7 @@ tr.detail.open{display:table-row}
          '<option' + (nm === 'Yes' ? ' selected' : '') + '>Yes</option>' +
          '<option' + (nm === 'No' ? ' selected' : '') + '>No</option></select></div>';
     h += '<p class="hint">"No" for a reused or reconditioned part — material cost becomes zero, ' +
-         'weight and machining stay. The sheet\'s own B4.</p>';
+         'weight and machining stay.</p>';
 
     if (c.id === 'cec' || c.id === 'hec') {
       var sh = c.shape || 'Round';
@@ -1106,8 +1102,7 @@ tr.detail.open{display:table-row}
              '" placeholder="' + (base.values ? base.values[k] : '') + '" value="' +
              (has ? ovs[k] : '') + '"></div>';
       }
-      h += '</div><p class="hint">Blank uses the table. A value replaces it — the sheet\'s ' +
-           '"Manual Overrides" block.</p>';
+      h += '</div><p class="hint">Leave blank to use the standard size. Type a value to replace it.</p>';
     }
     return h + '</div>';
   }
@@ -1180,15 +1175,14 @@ tr.detail.open{display:table-row}
     if (Math.abs(gap) > 1) {
       h += '<div class="tot-row" style="border-top:1px solid var(--ink-200);' +
            'margin-top:var(--d-4);padding-top:var(--d-4)">' +
-           '<span class="lab" style="color:var(--amber)">Workbook’s “Final Output” sheet' +
-           '<small>Disagrees with the Cost Summary above by ' + money(Math.abs(gap)) +
-           '. Both totals are the workbook’s own — see FO-1 and FO-2 below for which ' +
-           'components each sheet counts.</small>' +
+           '<span class="lab" style="color:var(--amber)">Second total' +
+           '<small>' + money(Math.abs(gap)) + ' different, because it counts some ' +
+           'components differently. See Check before quoting.</small>' +
            '</span><span class="money">' + money(r.totals.finalOutput.total) + '</span></div>';
     }
     if ((eng.additionalCost || 0) !== 0) {
       h = h.replace('<div class="tot-row grand">',
-        '<div class="tot-row"><span class="lab">Additional cost<small>Cost Summary B35 — freight, ' +
+        '<div class="tot-row"><span class="lab">Additional cost<small>Freight, ' +
         'special packaging, contingency</small></span><span class="money">' +
         money(eng.additionalCost) + '</span></div><div class="tot-row grand">');
     }
@@ -1205,10 +1199,8 @@ tr.detail.open{display:table-row}
     var mt = VW.machineTime(r);
     if (mt) {
       var max = mt.machines.length ? mt.machines[0].hours : 1;
-      h += '<div class="vsec"><h3>Machine hours</h3><p class="src">Machine Time Calculator. ' +
-           'Hours only. ' + mt.withoutStandard + ' operations are priced by area or weight and ' +
-           'carry no hour standard — the sheet prints “TIME STANDARD NOT AVAILABLE” rather than ' +
-           'inventing one.</p><div class="bars">';
+      h += '<div class="vsec"><h3>Machine hours</h3><p class="src">' + mt.withoutStandard + ' operations are priced by area or weight, ' +
+           'so they have no hours.</p><div class="bars">';
       for (i = 0; i < mt.machines.length; i++) {
         var m = mt.machines[i];
         h += '<div class="bar"><span>' + esc(m.machine) + '</span><i style="width:' +
@@ -1222,8 +1214,7 @@ tr.detail.open{display:table-row}
     /* Cylinder Database */
     var rec = VW.databaseRow(r, quoted, null);
     if (rec) {
-      h += '<div class="vsec"><h3>Job record</h3><p class="src">Cylinder Database, row 5. ' +
-           esc(rec.pricingNote) + '</p><dl class="rec">' +
+      h += '<div class="vsec"><h3>Job record</h3><p class="src">' + esc(rec.pricingNote) + '</p><dl class="rec">' +
            '<dt>Cylinder ID</dt><dd>' + esc(rec.cylinderId) + '</dd>' +
            '<dt>Inquiry</dt><dd>' + esc(rec.inquiryNo || '—') + '</dd>' +
            '<dt>Specification</dt><dd>' + rec.bore + ' × ' + rec.rod + ' × ' + rec.stroke +
@@ -1242,9 +1233,8 @@ tr.detail.open{display:table-row}
     var ac = VW.actualCost(r, actuals);
     if (ac) {
       h += '<div class="vsec"><details class="sub"><summary>Actual cost tracker</summary>' +
-           '<p class="src">Actual Cost Tracker. Production enters what it really cost. Reproduced ' +
-           'as the sheet has it: per piece and ungated, so rows for parts not fitted still ' +
-           'appear, and its subtotal will not match the Cost Summary.</p>' +
+           '<p class="src">Enter what each part really cost to compare it with the estimate. ' +
+           'Figures are per piece.</p>' +
            '<div style="overflow-x:auto"><table class="vt"><thead><tr><th>Component</th>' +
            '<th class="r">Est. material</th><th class="r">Actual</th>' +
            '<th class="r">Est. process</th><th class="r">Actual</th>' +
@@ -1292,33 +1282,21 @@ tr.detail.open{display:table-row}
     var ns = r.notes.slice().sort(function (a, b) {
       return order[a.note.level] - order[b.note.level];
     });
+    var TAG = { error: 'Fix', defect: 'Check', warn: 'Check', info: 'Note' };
     var h = '', i, n;
     for (i = 0; i < ns.length; i++) {
       n = ns[i];
       h += '<div class="note ' + n.note.level + '">' +
-           '<span class="tag">' + esc(n.note.ref || n.note.level) + '</span>' +
+           '<span class="tag">' + TAG[n.note.level] + '</span>' +
            '<span class="body"><span class="who">' + esc(n.component) + '</span>' +
            esc(n.note.text) + '</span></div>';
     }
     h = h || '<div class="note info"><span class="tag">ok</span>' +
       '<span class="body">Nothing outstanding on this configuration.</span></div>';
-    /* Not job notes, so not in the list above. Recorded so that anyone who
-       reads one of these cells does not conclude the tool is wrong. */
-    if (r.workbookNotes && r.workbookNotes.length) {
-      h += '<details class="sub" style="padding:0 var(--d-6) var(--d-5)"><summary>' +
-           r.workbookNotes.length + ' statements in the workbook its own formulas have overtaken' +
-           '</summary>';
-      for (i = 0; i < r.workbookNotes.length; i++) {
-        var w = r.workbookNotes[i];
-        h += '<div class="wbn"><span class="cell">' + esc(w.ref) + ' · ' + esc(w.cell) + '</span>' +
-             '<q>' + esc(w.says) + '</q><span class="but">' + esc(w.but) + '</span></div>';
-      }
-      h += '</details>';
-    }
     $('notes').innerHTML = h;
-    var defects = ns.filter(function (x) { return x.note.level === 'defect'; }).length;
-    $('notes-meta').textContent = defects
-      ? defects + ' workbook defect' + (defects === 1 ? '' : 's') + ' reproduced, not corrected'
+    var toCheck = ns.filter(function (x) { return x.note.level !== 'info'; }).length;
+    $('notes-meta').textContent = toCheck
+      ? toCheck + ' item' + (toCheck === 1 ? '' : 's') + ' to check'
       : '';
   }
 

@@ -39,7 +39,7 @@
         { id: 'boringAllowance', label: 'Tube Boring Allowance', type: 'number', unit: 'mm', cell: 'B17', seed: 5,
           drives: 'Tube raw ID = Bore + this' },
         { id: 'odTurningAllowance', label: 'Tube OD Turning Allowance', type: 'number', unit: 'mm', cell: 'B18', seed: 5,
-          note: 'Carried by the workbook but wired to nothing — Raw OD stays a manual entry. Kept so the field matches the sheet.' },
+          note: 'Not used in the cost yet. Raw OD is entered under Engineering inputs.' },
         { id: 'workingPressure', label: 'Working Pressure', type: 'number', unit: 'bar', cell: 'B19', seed: 250,
           drives: 'Tie rod diameter (structural calculation)' },
         { id: 'mounting',  label: 'Mounting Type', type: 'select', cell: 'B20', seed: 'Rod Eye + Trunnion',

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Privacy, terms and security | AEW</title>
+<meta name="description" content="How AEW handles your account and costing data, the terms of using the platform, and how it is secured.">
+<meta name="theme-color" content="#0a0b0d">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600..900&family=Geist:wght@300..700&family=Geist+Mono:wght@400..700&display=swap" rel="stylesheet">
+<style>
+html{color-scheme:dark;scroll-padding-top:84px}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0b0d;--panel:#0e0f12;--raise:#121418;--line:#24272d;--line-2:#2e3238;
+  --txt:#eceef1;--txt-2:#b6bcc5;--mut:#9097a2;--faint:#858b96;
+  --acc:#ff7a1a;--acc-hi:#ffa15a;--acc-br:#ff8f3a;--on-acc:#140a04;
+  --display:'Archivo',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --sans:'Geist',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'Geist Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--txt);-webkit-font-smoothing:antialiased}
+a{color:var(--acc-hi)}
+.top{position:sticky;top:0;z-index:10;background:rgba(10,11,13,.95);border-bottom:1px solid var(--line)}
+.top-in{max-width:880px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--txt)}
+.brand-m{width:32px;height:32px;border-radius:8px;background:var(--acc);color:var(--on-acc);display:flex;align-items:center;justify-content:center;font:900 15px var(--display)}
+.brand-t{font:800 15px var(--display)}
+.tabs{display:flex;gap:4px;flex-wrap:wrap}
+.tabs a{display:inline-flex;align-items:center;min-height:36px;padding:0 12px;border-radius:8px;font-size:13px;font-weight:500;color:var(--txt-2);text-decoration:none}
+.tabs a:hover{color:var(--txt);background:var(--raise)}
+.tabs a.on{color:var(--txt);background:rgba(255,122,26,.12)}
+main{max-width:880px;margin:0 auto;padding:40px 24px 64px}
+h1{font:800 40px/1.08 var(--display);letter-spacing:-.03em;margin-bottom:10px}
+.upd{font:500 12px var(--mono);color:var(--mut);margin-bottom:36px}
+section{padding:32px 0;border-top:1px solid var(--line)}
+h2{font:800 24px var(--display);letter-spacing:-.02em;margin-bottom:14px}
+h3{font-size:15px;font-weight:600;margin:20px 0 6px}
+p,li{font-size:15px;line-height:1.7;color:var(--txt-2)}
+ul{padding-left:20px;margin:6px 0}
+li{margin:4px 0}
+section:target h2{color:var(--acc-hi)}
+.foot{max-width:880px;margin:0 auto;padding:24px;border-top:1px solid var(--line);display:flex;gap:20px;flex-wrap:wrap;font-size:12.5px;color:var(--mut)}
+.foot a{color:var(--mut);text-decoration:none;min-height:32px;display:inline-flex;align-items:center}
+.foot a:hover{color:var(--txt)}
+@media(max-width:560px){
+  .top-in{flex-direction:column;align-items:flex-start;gap:6px}
+  h1{font-size:30px}
+  html{scroll-padding-top:120px}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="index.html"><span class="brand-m">A</span><span class="brand-t">AEW</span></a>
+    <nav class="tabs" aria-label="Sections">
+      <a href="#privacy">Privacy</a>
+      <a href="#terms">Terms</a>
+      <a href="#security">Data security</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <h1>Privacy, terms and security</h1>
+  <p class="upd">Last updated 13 September 2026</p>
+
+  <section id="privacy">
+    <h2>Privacy policy</h2>
+    <p>AEW builds costing and manufacturing tools for Indian factories. This explains what we collect and why.</p>
+    <h3>What we collect</h3>
+    <ul>
+      <li><b>Your account:</b> your email address, name, company and role, used to sign you in and show you the tools your company has access to.</li>
+      <li><b>What you send us:</b> anything you write to us by email, including through the contact page.</li>
+    </ul>
+    <h3>What we do not collect</h3>
+    <ul>
+      <li>The dimensions, rates and prices you enter in the costing tool are worked out in your browser and are not currently saved on our servers.</li>
+      <li>We do not use advertising trackers, and we do not sell or rent your information.</li>
+    </ul>
+    <h3>Who else handles it</h3>
+    <p>Sign-in is provided by Supabase and the website is served by Cloudflare. They process your data only to provide those services.</p>
+    <h3>Your choices</h3>
+    <p>You can ask us to correct or delete your account at any time by writing to <a href="mailto:hello@aew.in">hello@aew.in</a>.</p>
+  </section>
+
+  <section id="terms">
+    <h2>Terms of use</h2>
+    <ul>
+      <li><b>Accounts:</b> access is given to invited companies. Keep your password to yourself and tell us if you think someone else has used your account.</li>
+      <li><b>Estimates, not quotations:</b> the costing tool produces estimates from the rates and methods set up for your company. Review every figure before you quote a customer. You remain responsible for the prices you offer.</li>
+      <li><b>Early access:</b> the platform is being developed with our first customers. Features may change, and some are marked as coming soon.</li>
+      <li><b>Fair use:</b> do not try to break, overload or copy the service, or access data that is not yours.</li>
+      <li><b>Questions:</b> write to <a href="mailto:hello@aew.in">hello@aew.in</a>.</li>
+    </ul>
+  </section>
+
+  <section id="security">
+    <h2>Data security</h2>
+    <ul>
+      <li><b>Encrypted connection:</b> every page is served over HTTPS.</li>
+      <li><b>Passwords:</b> handled by Supabase and stored only as secure hashes. We never see them, and they are not in the website's code.</li>
+      <li><b>Sessions:</b> signing out clears your session from the browser immediately, even without a network connection.</li>
+      <li><b>Costing data:</b> stays in your browser while you work, so closing the tab clears it.</li>
+    </ul>
+    <p>If you find a security problem, please tell us at <a href="mailto:hello@aew.in">hello@aew.in</a>.</p>
+  </section>
+</main>
+
+<footer class="foot">
+  <a href="index.html">Home</a>
+  <a href="contact.html">Contact</a>
+  <a href="login.html">Sign in</a>
+  <span>© 2026 AEW. Made in Bangalore.</span>
+</footer>
+
+<script>
+/* Highlight the section tab the visitor arrived at or clicked, so a
+   footer link to "Terms of use" visibly lands on terms. */
+(function () {
+  'use strict';
+  var tabs = document.querySelectorAll('.tabs a');
+  function mark() {
+    var h = location.hash || '#privacy';
+    Array.prototype.forEach.call(tabs, function (a) {
+      a.classList.toggle('on', a.getAttribute('href') === h);
+    });
+  }
+  window.addEventListener('hashchange', mark);
+  mark();
+})();
+</script>
+</body>
+</html>

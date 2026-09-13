@@ -78,6 +78,18 @@ body{font-family:var(--sans);min-height:100vh;display:flex;background:var(--bg);
 @keyframes spin{to{transform:rotate(360deg)}}
 .sec{display:flex;align-items:center;justify-content:center;gap:8px;font-size:11.5px;color:var(--faint);margin-top:20px;text-align:center}
 @media(max-width:900px){.left{display:none}.right{width:100%;border-left:none;min-height:100vh}}
+
+/* Show / hide password. A text button, not only an icon: "Show" says what
+   it does to someone who has never seen the eye convention. */
+.pw{position:relative}
+.pw input{padding-right:84px}
+.pw-eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 10px;border:0;border-radius:6px;background:transparent;color:var(--txt-2);font:600 12.5px var(--sans);cursor:pointer;transition:color .15s,background .15s}
+.pw-eye:hover{color:var(--txt);background:rgba(255,255,255,.06)}
+.pw-eye:focus-visible{outline:2px solid var(--acc-br);outline-offset:1px}
+.pw-eye svg{width:16px;height:16px;flex:none}
+.pw-eye .off{display:none}
+.pw-eye[aria-pressed="true"] .on{display:none}
+.pw-eye[aria-pressed="true"] .off{display:block}
 </style>
 </head>
 <body>
@@ -96,7 +108,7 @@ body{font-family:var(--sans);min-height:100vh;display:flex;background:var(--bg);
         <div class="feat"><div class="fi">~</div><div class="ft"><h4>Vibration AI</h4><p>Photograph the graph. AI diagnoses faults before machines fail.</p></div></div>
       </div>
     </div>
-    <div class="lbot"><a href="index.html">← Home</a><a href="mailto:hello@aew.in">Contact</a><a href="#">Privacy</a></div>
+    <div class="lbot"><a href="index.html">← Home</a><a href="contact.html">Contact</a><a href="legal.html#privacy">Privacy</a></div>
   </div>
 </div>
 
@@ -114,7 +126,7 @@ body{font-family:var(--sans);min-height:100vh;display:flex;background:var(--bg);
     <div class="alert a-ok" id="a-ok"><span>✓</span><span id="ok-msg">Signed in. Redirecting...</span></div>
 
     <div class="field"><label>Email</label><input id="email" type="email" placeholder="you@yourfactory.com" autocomplete="email"></div>
-    <div class="field"><label>Password</label><input id="password" type="password" placeholder="Enter your password" autocomplete="current-password" onkeydown="if(event.key==='Enter')signIn()"></div>
+    <div class="field"><label for="password">Password</label><div class="pw"><input id="password" type="password" placeholder="Enter your password" autocomplete="current-password" onkeydown="if(event.key==='Enter')signIn()"><button type="button" class="pw-eye" data-pw="password" aria-controls="password" aria-pressed="false" aria-label="Show password"><svg class="on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><svg class="off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3l18 18"/><path d="M10.6 5.1A10.4 10.4 0 0 1 12 5c6.4 0 10 7 10 7a17 17 0 0 1-2.7 3.6M6.6 6.6C3.9 8.3 2 12 2 12s3.6 7 10 7a9.7 9.7 0 0 0 5.4-1.6"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg><span class="pw-t">Show</span></button></div></div>
     <div class="row"><a href="#" class="fgt" id="fgt-link">Forgot password?</a></div>
 
     <button class="sbtn" id="sbtn" onclick="signIn()">
@@ -127,15 +139,35 @@ body{font-family:var(--sans);min-height:100vh;display:flex;background:var(--bg);
   </div>
 </div>
 
+<script>
+/* Show / hide on password fields. Switching the input's type keeps the
+   value, the caret and the password manager's hooks, which a mirrored
+   text field would lose. */
+(function () {
+  'use strict';
+  Array.prototype.forEach.call(document.querySelectorAll('[data-pw]'), function (b) {
+    b.addEventListener('click', function () {
+      var el = document.getElementById(b.getAttribute('data-pw'));
+      if (!el) return;
+      var show = el.type === 'password';
+      el.type = show ? 'text' : 'password';
+      b.setAttribute('aria-pressed', show ? 'true' : 'false');
+      b.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+      b.querySelector('.pw-t').textContent = show ? 'Hide' : 'Show';
+      el.focus();
+    });
+  });
+})();
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-<script src="assets/js/config.js?v=2026.09.11-1"></script>
-<script src="assets/js/supabase.js?v=2026.09.11-1"></script>
-<script src="assets/js/session.js?v=2026.09.11-1"></script>
-<script src="assets/js/router.js?v=2026.09.11-1"></script>
-<script src="assets/js/auth.js?v=2026.09.11-1"></script>
-<script src="assets/js/ui.js?v=2026.09.11-1"></script>
-<script src="assets/js/api.js?v=2026.09.11-1"></script>
-<script src="assets/js/common.js?v=2026.09.11-1"></script>
+<script src="assets/js/config.js?v=2026.09.13-1"></script>
+<script src="assets/js/supabase.js?v=2026.09.13-1"></script>
+<script src="assets/js/session.js?v=2026.09.13-1"></script>
+<script src="assets/js/router.js?v=2026.09.13-1"></script>
+<script src="assets/js/auth.js?v=2026.09.13-1"></script>
+<script src="assets/js/ui.js?v=2026.09.13-1"></script>
+<script src="assets/js/api.js?v=2026.09.13-1"></script>
+<script src="assets/js/common.js?v=2026.09.13-1"></script>
 <script>
 /* login.html */
 document.addEventListener('DOMContentLoaded', function () {

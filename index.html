@@ -1011,11 +1011,11 @@ body{font-feature-settings:'ss01' 1}
   <div class="nav-links">
     <a href="#compare">Why AEW</a>
     <a href="#products">Products</a>
-    <a href="mailto:hello@aew.in">Contact</a>
+    <a href="contact.html">Contact</a>
   </div>
   <div class="nav-cta">
     <a class="btn-ghost" href="login.html">Sign in</a>
-    <a class="btn-solid" href="login.html">Request demo →</a>
+    <a class="btn-solid" href="contact.html?topic=demo">Request demo →</a>
   </div>
   <button class="nav-toggle" id="navToggle" type="button"
           aria-expanded="false" aria-controls="navPanel" aria-label="Open menu">
@@ -1025,9 +1025,9 @@ body{font-feature-settings:'ss01' 1}
 <div class="nav-panel" id="navPanel" hidden>
   <a href="#compare">Why AEW</a>
   <a href="#products">Products</a>
-  <a href="mailto:hello@aew.in">Contact</a>
+  <a href="contact.html">Contact</a>
   <a href="login.html">Sign in</a>
-  <a class="np-solid" href="login.html">Request demo</a>
+  <a class="np-solid" href="contact.html?topic=demo">Request demo</a>
 </div>
 
 <!-- HERO + EXPLODE TRACK -->
@@ -1293,27 +1293,24 @@ body{font-feature-settings:'ss01' 1}
   <div class="recon-inner">
     <div class="recon-head">
       <p class="recon-kicker">Checked, not asserted</p>
-      <h2 class="recon-h2" id="recon-h">We ran their spreadsheet&rsquo;s own cylinder through our engine.</h2>
-      <p class="recon-lede">HISPL&rsquo;s costing workbook holds one fully dimensioned cylinder. We read its
-      dimensions straight out of the sheets and costed it independently. These are the four
-      components their workbook still computes.</p>
+      <h2 class="recon-h2" id="recon-h">Same cylinder. Same answer.</h2>
+      <p class="recon-lede">We costed one of HISPL&rsquo;s own cylinders in AEW and compared it,
+      part by part, with their figures.</p>
     </div>
     <div class="recon-panel" data-tilt="2.2">
       <div class="recon-bar">
         <span>&Oslash;100 bore &middot; &Oslash;56 rod &middot; 800 stroke</span>
-        <button class="recon-run" id="reconRun" type="button">Run the reconciliation</button>
+        <button class="recon-run" id="reconRun" type="button">Run the check</button>
       </div>
       <div class="recon-grid" id="reconGrid">
         <div class="rh">Component</div>
-        <div class="rh rn">Their workbook</div>
+        <div class="rh rn">HISPL</div>
         <div class="rh rn">Our engine</div>
         <div class="rh rm">Match</div>
       </div>
       <div class="recon-foot">
-        <b id="reconVerdict">Four of four, reproduced to the rupee.</b>
-        <p class="recon-caveat">This shows the engine computes their methodology correctly. It is not a
-        claim that the sample cylinder was ever built. Several of its dimensions look like
-        placeholders, which is one of the questions currently with their engineer.</p>
+        <b id="reconVerdict">Four of four, matched to the rupee.</b>
+        <p class="recon-caveat">This checks that AEW follows HISPL&rsquo;s costing method. It is not a quotation.</p>
       </div>
     </div>
   </div>
@@ -1377,7 +1374,7 @@ body{font-feature-settings:'ss01' 1}
       <div class="closing-attrib" data-reveal>Costing methodology, validation in progress</div>
       <div class="closing-role" data-reveal>With HISPL, Peenya Industrial Area, Bangalore</div>
       <div class="closing-ctas" data-reveal>
-        <a class="btn-closing-p" href="mailto:hello@aew.in?subject=Demo Request">Book a factory visit →</a>
+        <a class="btn-closing-p" href="contact.html?topic=visit">Book a factory visit →</a>
         <a class="btn-closing-s" href="login.html">Sign in to your account</a>
       </div>
     </div>
@@ -1397,24 +1394,24 @@ body{font-feature-settings:'ss01' 1}
       <div class="footer-col">
         <h4>Products</h4>
         <a href="products/costing/v1.html">Product Costing ERP</a>
-        <a href="#">Carbon Tracking (CBAM)</a>
-        <a href="#">Vibration AI</a>
-        <a href="#">Asset Management</a>
-        <a href="#">BRSR &amp; ESG Reporting</a>
-        <a href="#">Quotation Manager</a>
+        <a href="#products">Carbon Tracking (CBAM)</a>
+        <a href="#products">Vibration AI</a>
+        <a href="#products">Asset Management</a>
+        <a href="#products">BRSR &amp; ESG Reporting</a>
+        <a href="#products">Quotation Manager</a>
       </div>
       <div class="footer-col">
         <h4>Company</h4>
         <a href="#compare">Why AEW</a>
         <a href="#products">Products</a>
         <a href="#hispl">Clients</a>
-        <a href="mailto:hello@aew.in">Contact</a>
+        <a href="contact.html">Contact</a>
       </div>
       <div class="footer-col">
         <h4>Legal</h4>
-        <a href="#">Privacy policy</a>
-        <a href="#">Terms of use</a>
-        <a href="#">Data security</a>
+        <a href="legal.html#privacy">Privacy policy</a>
+        <a href="legal.html#terms">Terms of use</a>
+        <a href="legal.html#security">Data security</a>
       </div>
     </div>
     <div class="footer-bottom">
@@ -2296,7 +2293,7 @@ body{font-feature-settings:'ss01' 1}
   var running = false;
   function run() {
     if (running) return;
-    running = true; btn.disabled = true; btn.textContent = 'Reconciling\u2026';
+    running = true; btn.disabled = true; btn.textContent = 'Checking\u2026';
     reset();
     var i = 0;
     (function next() {
